@@ -41,12 +41,11 @@ const styles = makeStyles((theme) => ({
     // height: '45px'
   },
   signInButton: {
-    // margin: theme.spacing.unit,
     background: theme.palette.primary.main,
-    // marginLeft: theme.spacing.unit,
-    marginTop: '10%',
+    marginTop: '7%',
+    padding: '0px',
+    fontSize: '24px',
     color: theme.palette.white,
-    fontSize: '16px',
     width: '70%',
     '&:hover': {
       background: theme.palette.primary.hover,
@@ -58,10 +57,7 @@ const initialValues = {
   mobileNumber: '',
 };
 const validationSchema = Yup.object().shape({
-  mobileNumber: Yup.number()
-    .max(10, 'Must be 10 digit')
-    .min(10, 'Must be 10 digit')
-    .required('Required'),
+  mobileNumber: Yup.number().required('Required'),
 });
 
 const onSubmit = (values) => {

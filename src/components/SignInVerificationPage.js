@@ -45,19 +45,15 @@ const styles = makeStyles((theme) => ({
     // height: '45px'
   },
   signUpButton: {
-    // margin: theme.spacing.unit,
     background: theme.palette.primary.main,
-    // marginLeft: theme.spacing.unit,
-    marginTop: '3%',
-    fontWeight: '600',
+    marginTop: '7%',
     padding: '0px',
-    fontSize: '20px',
+    fontSize: '24px',
     color: theme.palette.white,
     width: '70%',
     '&:hover': {
       background: theme.palette.primary.hover,
     },
-    // paddingBottom: 0
   },
 
   checkboxMessage: {
