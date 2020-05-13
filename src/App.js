@@ -2,16 +2,16 @@ import React from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
-import SignInPage from './Components/SignInPage';
-import SignInVerificationPage from './Components/SignInVerificationPage';
-import ForgotPasswordPage from './Components/ForgotPasswordPage';
-import OTPForgotPasswordPage from './Components/OTPForgotPasswordPage';
+import SignInPage from './components/SignInPage';
+import SignInVerificationPage from './components/SignInVerificationPage';
+import ForgotPasswordPage from './components/ForgotPasswordPage';
+import OTPForgotPasswordPage from './components/OTPForgotPasswordPage';
 
 const theme = createMuiTheme({
   palette: {
     primary: {
       main: '#417505',
-      hover: '#264503'
+      hover: '#264503',
     },
     // secondary: '#6cac69',
     // accent: '#f5a623',
@@ -31,7 +31,6 @@ const theme = createMuiTheme({
     color: 'white',
     fontFamily: ['Montserrat', 'sans-serif'].join(),
   },
-
 });
 
 function App() {
@@ -43,27 +42,23 @@ function App() {
             <Route
               exact
               path="/"
-              render={props => <SignInPage {...props} />}
+              render={(props) => <SignInPage {...props} />}
             />
-            <Route
-              exact
-              path="/sign-in"
-              component={SignInPage}
-            />
+            <Route exact path="/sign-in" component={SignInPage} />
             <Route
               exact
               path="/sign-in-verify"
-              render={props => <SignInVerificationPage {...props} />}
+              render={(props) => <SignInVerificationPage {...props} />}
             />
             <Route
               exact
               path="/forgot-password"
-              render={props => <ForgotPasswordPage {...props} />}
+              render={(props) => <ForgotPasswordPage {...props} />}
             />
             <Route
               exact
               path="/otp-forgot-password"
-              render={props => <OTPForgotPasswordPage {...props} />}
+              render={(props) => <OTPForgotPasswordPage {...props} />}
             />
           </Switch>
         </Router>
