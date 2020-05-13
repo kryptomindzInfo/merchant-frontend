@@ -4,54 +4,11 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
-
-const styles = makeStyles((theme) => ({
-  setupPageLeftSide: {
-    background: theme.palette.vGradient,
-    height: '100vh',
-    overflow: 'hidden',
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-    [theme.breakpoints.down('xs')]: {
-      display: 'none',
-    },
-  },
-  setupPageRightSide: {
-    paddingLeft: '10%',
-    overflow: 'hidden',
-
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: '20%',
-    },
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: '14%',
-    },
-  },
-  textField: {
-    // marginLeft: theme.spacing.unit,
-    // marginRight: theme.spacing.unit,
-    marginBottom: '0.03375rem',
-    width: '70%',
-    // height: '45px'
-  },
-  signInButton: {
-    background: theme.palette.primary.main,
-    marginTop: '7%',
-    padding: '0px',
-    fontSize: '24px',
-    color: theme.palette.white,
-    width: '70%',
-    '&:hover': {
-      background: theme.palette.primary.hover,
-    },
-  },
-}));
+import styles from '../styles/LandingPageCss';
 
 const initialValues = {
   mobileNumber: '',
@@ -75,7 +32,9 @@ const onSubmit = (values) => {
   //     notify('Something Went Wrong', 'error');
   //   });
   history.push('/otp-forgot-password');
+  window.location.reload();
 };
+
 const SignInVerificationPage = (props) => {
   const classes = styles();
   const formIk = useFormik({
@@ -110,11 +69,19 @@ const SignInVerificationPage = (props) => {
           xs={12}
           className={classes.setupPageRightSide}
         >
-          <Typography
-            variant="h4"
-            style={{ paddingBottom: '5%', fontWeight: '600' }}
-          >
+          <Typography variant="h4" style={{ fontWeight: '600' }}>
             Forgot Password
+          </Typography>
+          <Typography
+            variant="subtitle2"
+            style={{
+              fontSize: '14px',
+              color: '#9ea0a5',
+              paddingTop: '1%',
+              paddingBottom: '7%',
+            }}
+          >
+            Use your Mobile number to get OTP
           </Typography>
           <form onSubmit={formIk.handleSubmit}>
             <TextField

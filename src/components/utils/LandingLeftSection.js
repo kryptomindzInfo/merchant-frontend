@@ -50,7 +50,7 @@ function LandingLeftSection() {
         </Typography>
         <Typography variant="h5" className={classes.setupPageSubtitle2}>
           Welcome to E-wallet <br />
-          Create your wallet for easy transfering <br />
+          Create your wallet for easy transferring <br />
           of money to your friends and family
         </Typography>
       </Grid>
