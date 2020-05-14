@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -12,7 +12,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import LandingLeftSection from './utils/LandingLeftSection';
 import history from './utils/history';
-import styles from '../styles/LandingPageCss';
+import styles from '../assets/styles/LandingPageCss';
 
 const initialValues = {
   newPassword: '',
@@ -56,7 +56,7 @@ const SignInVerificationPage = (props) => {
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   return (
-    <>
+    <Fragment>
       <Helmet>
         <title>Merchant | Sign In Verification</title>
         <meta name="description" content="Description of SignUp page" />
@@ -192,7 +192,7 @@ const SignInVerificationPage = (props) => {
           </form>
         </Grid>
       </Grid>
-    </>
+    </Fragment>
   );
 };
 

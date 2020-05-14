@@ -2,10 +2,10 @@ import React from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
-import SignInPage from './components/SignInPage';
-import SignInVerificationPage from './components/SignInVerificationPage';
-import ForgotPasswordPage from './components/ForgotPasswordPage';
-import OTPForgotPasswordPage from './components/OTPForgotPasswordPage';
+import SignInPage from './SignInPage';
+import SignInVerificationPage from './SignInVerificationPage';
+import ForgotPasswordPage from './ForgotPasswordPage';
+import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 
 const theme = createMuiTheme({
   palette: {
@@ -22,14 +22,14 @@ const theme = createMuiTheme({
     vGradient: 'linear-gradient(to bottom, #6cac6a, #102910)',
     hGradient: 'linear-gradient(to right, #6cac6a 1%, #102910)',
     font: 'Roboto',
-    // fontSize: '14px',
+    fontSize: '14px',
   },
   status: {
     danger: orange,
   },
   typography: {
     color: 'white',
-    fontFamily: ['Montserrat', 'sans-serif'].join(),
+    fontFamily: ['Roboto', 'sans-serif'].join(),
   },
 });
 

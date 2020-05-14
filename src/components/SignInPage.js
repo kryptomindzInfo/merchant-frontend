@@ -10,52 +10,8 @@ import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
-import styles from '../styles/LandingPageCss';
+import styles from '../assets/styles/LandingPageCss';
 
-// const styles = makeStyles((theme) => ({
-//   root: {
-//     flexGrow: 1,
-//   },
-//   setupPageLeftSide: {
-//     background: theme.palette.vGradient,
-//     height: '100vh',
-//     overflow: 'hidden',
-//     [theme.breakpoints.down('sm')]: {
-//       display: 'none',
-//     },
-//     [theme.breakpoints.down('xs')]: {
-//       display: 'none',
-//     },
-//   },
-//   setupPageRightSide: {
-//     marginTop: '5%',
-//     paddingLeft: '10%',
-//     overflow: 'hidden',
-//
-//     [theme.breakpoints.down('sm')]: {
-//       paddingLeft: '20%',
-//     },
-//     [theme.breakpoints.down('sm')]: {
-//       paddingLeft: '14%',
-//     },
-//   },
-//   textField: {
-//     // marginLeft: theme.spacing.unit,
-//     marginBottom: '0.03375rem',
-//     width: '70%',
-//   },
-//   signInButton: {
-//     background: theme.palette.primary.main,
-//     marginTop: '7%',
-//     padding: '0px',
-//     fontSize: '24px',
-//     color: theme.palette.white,
-//     width: '70%',
-//     '&:hover': {
-//       background: theme.palette.primary.hover,
-//     },
-//   },
-// }));
 const initialValues = {
   username: '',
   password: '',
@@ -80,6 +36,7 @@ const onSubmit = (values) => {
   //     notify('Something Went Wrong', 'error');
   //   });
   history.push('/sign-in-verify');
+  window.location.reload();
 };
 const SignInPage = (props) => {
   const classes = styles();

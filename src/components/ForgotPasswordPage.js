@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
-import styles from '../styles/LandingPageCss';
+import styles from '../assets/styles/LandingPageCss';
 
 const initialValues = {
   mobileNumber: '',

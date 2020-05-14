@@ -1,10 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import App from './components/App';
+import './assets/styles/style.css';
 
-import App from './App';
+ReactDOM.render(React.createElement(App), document.getElementById('root'));
 
-const title = 'Merchant Ewallet';
-
-ReactDOM.render(<App title={title} />, document.getElementById('app'));
-
-module.hot.accept();
+// Check if hot reloading is enable. If it is, changes won't reload the page.
+// This is related to webpack-dev-server and works on development only.
+if (module.hot) {
+  module.hot.accept();
+}
