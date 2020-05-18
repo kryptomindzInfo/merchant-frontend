@@ -1,11 +1,12 @@
 import React from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { Router, Route, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
 import SignInPage from './SignInPage';
 import SignInVerificationPage from './SignInVerificationPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
+import history from './utils/history';
 
 const theme = createMuiTheme({
   palette: {
@@ -37,7 +38,7 @@ function App() {
   return (
     <div>
       <MuiThemeProvider theme={theme}>
-        <Router forceRefresh="true" basename="/">
+        <Router history={history} forceRefresh="true" basename="/">
           <Switch>
             <Route
               exact
