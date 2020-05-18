@@ -17,30 +17,27 @@ const validationSchema = Yup.object().shape({
   mobileNumber: Yup.number().required('Required'),
 });
 
-const onSubmit = (values) => {
-  // axios.post('', values)
-  //   .then(res => {
-  //     if (res.data.status === 1) {
-  //       if (res.data.error) {
-  //         notify(res.data.error, 'error');
-  //       } else {
-  //         // todo:
-  //       }
-  //     }
-  //   })
-  //   .catch(error => {
-  //     notify('Something Went Wrong', 'error');
-  //   });
-  history.push('/otp-forgot-password');
-  window.location.reload();
-};
-
 const SignInVerificationPage = (props) => {
   const classes = styles();
   const formIk = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: (values) => {
+      // axios.post('', values)
+      //   .then(res => {
+      //     if (res.data.status === 1) {
+      //       if (res.data.error) {
+      //         notify(res.data.error, 'error');
+      //       } else {
+      //         // todo:
+      //       }
+      //     }
+      //   })
+      //   .catch(error => {
+      //     notify('Something Went Wrong', 'error');
+      //   });
+      history.push('/otp-forgot-password');
+    },
   });
 
   return (

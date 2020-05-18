@@ -8,6 +8,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import PropTypes from 'prop-types';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../assets/styles/LandingPageCss';
@@ -21,34 +22,33 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required('Required'),
 });
 
-const onSubmit = (values) => {
-  // axios.post('', values)
-  //   .then(res => {
-  //     if (res.data.status === 1) {
-  //       if (res.data.error) {
-  //         notify(res.data.error, 'error');
-  //       } else {
-  //         // todo:
-  //       }
-  //     }
-  //   })
-  //   .catch(error => {
-  //     notify('Something Went Wrong', 'error');
-  //   });
-  history.push('/sign-in-verify');
-  window.location.reload();
-};
 const SignInPage = (props) => {
   const classes = styles();
+  const { dashboardUrl, verifyUrl } = props;
   const formIk = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: (values) => {
+      // axios.post('', values)
+      //   .then(res => {
+      //     if (res.data.status === 1) {
+      //       if (res.data.error) {
+      //         notify(res.data.error, 'error');
+      //       } else {
+      //         // todo:
+      //       }
+      //     }
+      //   })
+      //   .catch(error => {
+      //     notify('Something Went Wrong', 'error');
+      //   });
+      history.push(verifyUrl);
+    },
   });
   return (
     <Fragment>
       <Helmet>
-        <title>Merchant | Sign In</title>
+        <title>Merchant | Login In</title>
         <meta name="description" content="Description of SignIn Page" />
       </Helmet>
       <Grid
@@ -158,4 +158,8 @@ const SignInPage = (props) => {
   );
 };
 
+SignInPage.propTypes = {
+  dashboardUrl: PropTypes.string.isRequired,
+  verifyUrl: PropTypes.string.isRequired,
+};
 export default SignInPage;

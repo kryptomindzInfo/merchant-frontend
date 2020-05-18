@@ -2,6 +2,7 @@ import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import axios from 'axios';
 
+// eslint-disable-next-line react/prop-types
 const PrivateRoute = ({ component: Component, ...rest }) => {
   const token = localStorage.getItem('merchantLogged');
   axios.defaults.headers.common.Authorization = token;
@@ -17,6 +18,7 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
             to={{
               pathname: '/',
               state: {
+                // eslint-disable-next-line react/prop-types
                 from: props.location.pathname,
               },
             }}

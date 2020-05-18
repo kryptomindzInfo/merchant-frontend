@@ -42,23 +42,67 @@ function App() {
             <Route
               exact
               path="/"
-              render={(props) => <SignInPage {...props} />}
+              component={(props) => (
+                <SignInPage
+                  verifyUrl="/login-verify"
+                  dashboardUrl="/dashboard"
+                  {...props}
+                />
+              )}
             />
-            <Route exact path="/sign-in" component={SignInPage} />
             <Route
               exact
-              path="/sign-in-verify"
-              render={(props) => <SignInVerificationPage {...props} />}
+              path="/login"
+              component={(props) => (
+                <SignInPage
+                  verifyUrl="/login-verify"
+                  dashboardUrl="/dashboard"
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/login-verify"
+              component={(props) => (
+                <SignInVerificationPage
+                  dashboardUrl="/dashboard"
+                  loginUrl="/login"
+                  {...props}
+                />
+              )}
             />
             <Route
               exact
               path="/forgot-password"
-              render={(props) => <ForgotPasswordPage {...props} />}
+              component={(props) => <ForgotPasswordPage {...props} />}
             />
             <Route
               exact
               path="/otp-forgot-password"
-              render={(props) => <OTPForgotPasswordPage {...props} />}
+              component={(props) => <OTPForgotPasswordPage {...props} />}
+            />
+            <Route
+              exact
+              path="/merchant/login"
+              component={(props) => (
+                <SignInPage
+                  verifyUrl="/merchant/login-verify"
+                  dashboardUrl="/merchant/dashboard"
+                  {...props}
+                />
+              )}
+            />
+            <Route
+              exact
+              path="/merchant/login-verify"
+              component={(props) => (
+                <SignInVerificationPage
+                  loginUrl="/merchant/login"
+                  dashboardUrl="/merchant/dashboard"
+                  {...props}
+                />
+              )}
             />
           </Switch>
         </Router>

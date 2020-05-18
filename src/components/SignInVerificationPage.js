@@ -10,6 +10,7 @@ import Link from '@material-ui/core/Link';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
+import PropTypes from 'prop-types';
 import LandingLeftSection from './utils/LandingLeftSection';
 import history from './utils/history';
 import styles from '../assets/styles/LandingPageCss';
@@ -20,45 +21,47 @@ const initialValues = {
 };
 const validationSchema = Yup.object().shape({
   newPassword: Yup.mixed().required('Please enter the new password!'),
-  repeatPassword: Yup.mixed().when('newPassword', {
-    is: (val) => !!(val && val.length > 0),
-    then: Yup.string().oneOf(
-      [Yup.ref('newPassword')],
-      'Passwords do not match',
-    ),
-  }),
+  repeatPassword: Yup.mixed()
+    .when('newPassword', {
+      is: (val) => !!(val && val.length > 0),
+      then: Yup.string().oneOf(
+        [Yup.ref('newPassword')],
+        'Passwords do not match',
+      ),
+    })
+    .required('Please repeat the  new password!'),
 });
 
-// eslint-disable-next-line no-unused-vars
-const onSubmit = (values) => {
-  // axios.post('', values)
-  //   .then(res => {
-  //     if (res.data.status === 1) {
-  //       if (res.data.error) {
-  //         notify(res.data.error, 'error');
-  //       } else {
-  //         // todo:
-  //       }
-  //     }
-  //   })
-  //   .catch(error => {
-  //     notify('Something Went Wrong', 'error');
-  //   });
-  history.push('/sign-in');
-};
 const SignInVerificationPage = (props) => {
   const classes = styles();
+  const { dashboardUrl, loginUrl } = props;
   const formIk = useFormik({
     initialValues,
     validationSchema,
-    onSubmit,
+    onSubmit: (values) => {
+      // axios.post('', values)
+      //   .then(res => {
+      //     if (res.data.status === 1) {
+      //       if (res.data.error) {
+      //         notify(res.data.error, 'error');
+      //       } else {
+      //         // todo:
+      //       }
+      //     }
+      //   })
+      //   .catch(error => {
+      //     notify('Something Went Wrong', 'error');
+      //   });
+
+      history.push(loginUrl);
+    },
   });
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   return (
     <Fragment>
       <Helmet>
-        <title>Merchant | Sign In Verification</title>
+        <title>Merchant | Login Verification</title>
         <meta name="description" content="Description of SignUp page" />
       </Helmet>
       <Grid
@@ -131,7 +134,7 @@ const SignInVerificationPage = (props) => {
               margin="normal"
               variant="outlined"
               className={classes.textField}
-              type={showNewPassword ? 'text' : 'password'}
+              type={showRepeatPassword ? 'text' : 'password'}
               value={formIk.values.repeatPassword}
               onChange={formIk.handleChange}
               InputProps={{
@@ -194,6 +197,11 @@ const SignInVerificationPage = (props) => {
       </Grid>
     </Fragment>
   );
+};
+
+SignInVerificationPage.propTypes = {
+  dashboardUrl: PropTypes.string.isRequired,
+  loginUrl: PropTypes.string.isRequired,
 };
 
 export default SignInVerificationPage;
