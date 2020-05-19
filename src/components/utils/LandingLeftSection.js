@@ -3,6 +3,8 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
+import PropTypes from 'prop-types';
+import locale from 'yup/lib/locale';
 
 const styles = makeStyles((theme) => ({
   setupPageTitle: {
@@ -13,12 +15,14 @@ const styles = makeStyles((theme) => ({
     fontWeight: '600',
   },
   setupPageLogo: {
+    color: '#fff',
+    border: '2px solid #fff',
     marginTop: '27%',
     margin: '0 auto',
     marginBottom: '2%',
-    height: '150px',
-    width: '150px',
-    background: '#173316',
+    height: '130px',
+    width: '130px',
+    background: 'transparent',
   },
   setupPageSubtitle2: {
     color: theme.palette.white,
@@ -29,8 +33,9 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
-function LandingLeftSection() {
+const LandingLeftSection = (props) => {
   const classes = styles();
+  const { branchName, isBranch } = props;
   return (
     <div>
       <Grid
@@ -40,11 +45,13 @@ function LandingLeftSection() {
         alignContent="center"
         alignItems="center"
       >
-        <Avatar
-          alt="bank logo"
-          onClick={() => {}}
-          className={classes.setupPageLogo}
-        />
+        <Avatar alt="bank logo" src="" className={classes.setupPageLogo}>
+          <Typography style={{ fontWeight: 'bold', fontSize: '23px' }}>
+            {isBranch
+              ? branchName.toLocaleUpperCase(locale.default)
+              : 'Merchant'}
+          </Typography>
+        </Avatar>
         <Typography className={classes.setupPageTitle} variant="h1">
           E-WALLET
         </Typography>
@@ -56,6 +63,12 @@ function LandingLeftSection() {
       </Grid>
     </div>
   );
-}
-
+};
+LandingLeftSection.propTypes = {
+  branchName: PropTypes.string,
+  isBranch: PropTypes.bool.isRequired,
+};
+LandingLeftSection.defaultProps = {
+  branchName: 'Merchant',
+};
 export default LandingLeftSection;

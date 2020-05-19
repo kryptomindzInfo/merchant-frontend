@@ -4,7 +4,6 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
@@ -24,7 +23,9 @@ const validationSchema = Yup.object().shape({
 
 const SignInPage = (props) => {
   const classes = styles();
-  const { dashboardUrl, verifyUrl } = props;
+  // eslint-disable-next-line react/prop-types
+  const { dashboardUrl, isBranch, verifyUrl, match } = props;
+  const { branchName } = match.params;
   const formIk = useFormik({
     initialValues,
     validationSchema,
@@ -59,7 +60,7 @@ const SignInPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection />
+          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -144,7 +145,7 @@ const SignInPage = (props) => {
                       paddingTop: '5%',
                       fontWeight: '600',
                     }}
-                    href="/forgot-password"
+                    href="/merchant/forgot-password"
                   >
                     Forgot password?
                   </Link>
@@ -161,5 +162,6 @@ const SignInPage = (props) => {
 SignInPage.propTypes = {
   dashboardUrl: PropTypes.string.isRequired,
   verifyUrl: PropTypes.string.isRequired,
+  isBranch: PropTypes.bool.isRequired,
 };
 export default SignInPage;

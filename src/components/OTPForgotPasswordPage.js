@@ -5,6 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../assets/styles/LandingPageCss';
@@ -13,8 +14,11 @@ const initialValues = {
   otp: '',
 };
 
-const SignInVerificationPage = (props) => {
+const OTPForgotPasswordPage = (props) => {
   const classes = styles();
+  // eslint-disable-next-line react/prop-types
+  const { loginUrl, isBranch, branchLoginUrl, match } = props;
+  const { branchName } = match.params;
   const formIk = useFormik({
     initialValues,
     onSubmit: (values) => {
@@ -31,7 +35,7 @@ const SignInVerificationPage = (props) => {
       //   .catch(error => {
       //     notify('Something Went Wrong', 'error');
       //   });
-      history.push('/otp-forgot-password');
+      history.push('/merchant/login');
     },
   });
 
@@ -52,7 +56,7 @@ const SignInVerificationPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection />
+          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -103,4 +107,10 @@ const SignInVerificationPage = (props) => {
   );
 };
 
-export default SignInVerificationPage;
+OTPForgotPasswordPage.propTypes = {
+  loginUrl: PropTypes.string.isRequired,
+  branchLoginUrl: PropTypes.string.isRequired,
+  isBranch: PropTypes.bool.isRequired,
+};
+
+export default OTPForgotPasswordPage;

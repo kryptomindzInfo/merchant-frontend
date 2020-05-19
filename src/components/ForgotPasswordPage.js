@@ -6,6 +6,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import PropTypes from 'prop-types';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../assets/styles/LandingPageCss';
@@ -17,8 +18,11 @@ const validationSchema = Yup.object().shape({
   mobileNumber: Yup.number().required('Required'),
 });
 
-const SignInVerificationPage = (props) => {
+const ForgotPasswordPage = (props) => {
   const classes = styles();
+  // eslint-disable-next-line react/prop-types
+  const { otpUrl, isBranch, branchOtpUrl, match } = props;
+  const { branchName } = match.params;
   const formIk = useFormik({
     initialValues,
     validationSchema,
@@ -36,7 +40,7 @@ const SignInVerificationPage = (props) => {
       //   .catch(error => {
       //     notify('Something Went Wrong', 'error');
       //   });
-      history.push('/otp-forgot-password');
+      history.push('/merchant/otp-forgot-password');
     },
   });
 
@@ -57,7 +61,7 @@ const SignInVerificationPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection />
+          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -113,5 +117,9 @@ const SignInVerificationPage = (props) => {
     </Fragment>
   );
 };
-
-export default SignInVerificationPage;
+ForgotPasswordPage.propTypes = {
+  otpUrl: PropTypes.string.isRequired,
+  branchOtpUrl: PropTypes.string.isRequired,
+  isBranch: PropTypes.bool.isRequired,
+};
+export default ForgotPasswordPage;

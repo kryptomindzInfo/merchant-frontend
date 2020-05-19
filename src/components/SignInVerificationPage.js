@@ -34,7 +34,9 @@ const validationSchema = Yup.object().shape({
 
 const SignInVerificationPage = (props) => {
   const classes = styles();
-  const { dashboardUrl, loginUrl } = props;
+  // eslint-disable-next-line react/prop-types
+  const { dashboardUrl, loginUrl, isBranch, match } = props;
+  const { branchName } = match.params;
   const formIk = useFormik({
     initialValues,
     validationSchema,
@@ -72,7 +74,7 @@ const SignInVerificationPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection />
+          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -185,7 +187,7 @@ const SignInVerificationPage = (props) => {
                       fontSize: '14px',
                       paddingTop: '5%',
                     }}
-                    href="/forgot-password"
+                    href="/merchant/forgot-password"
                   >
                     Forgot password?
                   </Link>
@@ -202,6 +204,7 @@ const SignInVerificationPage = (props) => {
 SignInVerificationPage.propTypes = {
   dashboardUrl: PropTypes.string.isRequired,
   loginUrl: PropTypes.string.isRequired,
+  isBranch: PropTypes.bool.isRequired,
 };
 
 export default SignInVerificationPage;

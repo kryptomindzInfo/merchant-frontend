@@ -1,6 +1,6 @@
 import React from 'react';
 import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
-import { Router, Route, Switch } from 'react-router-dom';
+import { Route, Router, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
 import SignInPage from './SignInPage';
 import SignInVerificationPage from './SignInVerificationPage';
@@ -34,6 +34,16 @@ const theme = createMuiTheme({
   },
 });
 
+const dashboardUrl = '/merchant/dashboard';
+const verifyUrl = '/merchant/login-verify';
+const loginUrl = '/merchant/login';
+const otpUrl = '/merchant/otp-forgot-password';
+// branch URL's
+const branchLoginUrl = '/merchant/branch/:branchName';
+const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
+// const branchVerifyUrl = '/merchant/branch/login-verify';
+const branchOtpUrl = '/merchant/branch/otp-forgot-password';
+
 function App() {
   return (
     <div>
@@ -45,66 +55,83 @@ function App() {
               path="/"
               component={(props) => (
                 <SignInPage
-                  verifyUrl="/login-verify"
-                  dashboardUrl="/dashboard"
+                  isBranch="false"
+                  verifyUrl={verifyUrl}
+                  dashboardUrl={dashboardUrl}
                   {...props}
                 />
               )}
             />
             <Route
               exact
-              path="/login"
+              path={loginUrl}
               component={(props) => (
                 <SignInPage
-                  verifyUrl="/login-verify"
-                  dashboardUrl="/dashboard"
+                  isBranch={false}
+                  verifyUrl={verifyUrl}
+                  dashboardUrl={dashboardUrl}
                   {...props}
                 />
               )}
             />
             <Route
               exact
-              path="/login-verify"
+              path={verifyUrl}
               component={(props) => (
                 <SignInVerificationPage
-                  dashboardUrl="/dashboard"
-                  loginUrl="/login"
+                  dashboardUrl={dashboardUrl}
+                  loginUrl={loginUrl}
                   {...props}
                 />
               )}
             />
             <Route
               exact
-              path="/forgot-password"
-              component={(props) => <ForgotPasswordPage {...props} />}
+              path="/merchant/forgot-password"
+              component={(props) => (
+                <ForgotPasswordPage
+                  isBranch={false}
+                  otpUrl={otpUrl}
+                  {...props}
+                />
+              )}
             />
             <Route
               exact
-              path="/otp-forgot-password"
-              component={(props) => <OTPForgotPasswordPage {...props} />}
+              path={otpUrl}
+              component={(props) => (
+                <OTPForgotPasswordPage
+                  isBranch={false}
+                  loginUrl={loginUrl}
+                  branchLoginUrl={branchLoginUrl}
+                  {...props}
+                />
+              )}
             />
+            {/* Branch Routes */}
             <Route
               exact
-              path="/merchant/login"
+              path={branchLoginUrl}
               component={(props) => (
                 <SignInPage
-                  verifyUrl="/merchant/login-verify"
-                  dashboardUrl="/merchant/dashboard"
+                  isBranch
+                  verifyUrl=""
+                  dashboardUrl={branchDashboardUrl}
                   {...props}
                 />
               )}
             />
-            <Route
-              exact
-              path="/merchant/login-verify"
-              component={(props) => (
-                <SignInVerificationPage
-                  loginUrl="/merchant/login"
-                  dashboardUrl="/merchant/dashboard"
-                  {...props}
-                />
-              )}
-            />
+            {/* <Route */}
+            {/*  exact */}
+            {/*  path={branchVerifyUrl} */}
+            {/*  component={(props) => ( */}
+            {/*    <SignInVerificationPage */}
+            {/*      loginUrl={branchLoginUrl} */}
+            {/*      dashboardUrl={branchDashboardUrl} */}
+            {/*      {...props} */}
+            {/*    /> */}
+            {/*  )} */}
+            {/* /> */}
           </Switch>
         </Router>
       </MuiThemeProvider>
