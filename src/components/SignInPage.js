@@ -8,9 +8,12 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
+import { MERCHANT_API } from './constants';
+import notify from './utils/Notify';
 
 const initialValues = {
   username: '',
@@ -23,26 +26,28 @@ const validationSchema = Yup.object().shape({
 
 const SignInPage = (props) => {
   const classes = styles();
-  // eslint-disable-next-line react/prop-types
   const { dashboardUrl, isBranch, verifyUrl, match } = props;
   const { branchName } = match.params;
   const formIk = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      // axios.post('', values)
-      //   .then(res => {
-      //     if (res.data.status === 1) {
-      //       if (res.data.error) {
-      //         notify(res.data.error, 'error');
-      //       } else {
-      //         // todo:
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     notify('Something Went Wrong', 'error');
-      //   });
+      axios
+        .post(`${MERCHANT_API}/login`, values)
+        .then((res) => {
+          if (res.status === 200) {
+            if (res.data.status === 0) {
+              notify(res.data.error, 'error');
+            } else if (res.data.details.status === 1) {
+              history.push(verifyUrl);
+            } else {
+              history.push(dashboardUrl);
+            }
+          }
+        })
+        .catch((error) => {
+          notify('Something Went Wrong', 'error');
+        });
       history.push(verifyUrl);
     },
   });

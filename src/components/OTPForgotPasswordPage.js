@@ -6,9 +6,12 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
+import { MERCHANT_API } from './constants';
+import notify from './utils/Notify';
 
 const initialValues = {
   otp: '',
@@ -22,19 +25,22 @@ const OTPForgotPasswordPage = (props) => {
   const formIk = useFormik({
     initialValues,
     onSubmit: (values) => {
-      // axios.post('', values)
-      //   .then(res => {
-      //     if (res.data.status === 1) {
-      //       if (res.data.error) {
-      //         notify(res.data.error, 'error');
-      //       } else {
-      //         // todo:
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     notify('Something Went Wrong', 'error');
-      //   });
+      values.mobile = props.location.state.mobile;
+      values.user_type = 'merchant';
+      axios
+        .post(`${MERCHANT_API}/common/verifyForgotPasswordOTP`, values)
+        .then((res) => {
+          if (res.data.status === 1) {
+            if (res.data.error) {
+              notify(res.data.error, 'error');
+            } else {
+              history.push(loginUrl);
+            }
+          }
+        })
+        .catch((error) => {
+          notify('Something Went Wrong', 'error');
+        });
       history.push('/merchant/login');
     },
   });

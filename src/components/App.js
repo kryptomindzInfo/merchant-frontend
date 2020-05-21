@@ -1,15 +1,32 @@
 import React from 'react';
-import { createMuiTheme, MuiThemeProvider } from '@material-ui/core';
+import { createMuiTheme } from '@material-ui/core';
 import { Route, Router, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
+import { ThemeProvider } from 'styled-components';
 import SignInPage from './SignInPage';
 import SignInVerificationPage from './SignInVerificationPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
 import Dashboard from './dashboard/Dashboard';
-import Branch from './branch/Branch';
 import User from './user/User';
+import Branch from './branch/Branch';
+import BranchList from './branch/BranchList';
+
+const appTheme = {
+  primary: '#417505',
+  // primary: "#ff0000",
+  // secondary: "#ff0000",
+  secondary: '#6cac69',
+  accent: '#f5a623',
+  danger: '#f52828',
+  light: '#9ea0a5',
+  greyLine: '#666565 ',
+  vGradient: 'linear-gradient(to bottom, #6cac6a, #102910)',
+  hGradient: 'linear-gradient(to right, #6cac6a 1%, #102910)',
+  font: 'Roboto',
+  fontSize: '14px',
+};
 
 const theme = createMuiTheme({
   palette: {
@@ -56,7 +73,7 @@ const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
 function App() {
   return (
     <div>
-      <MuiThemeProvider theme={theme}>
+      <ThemeProvider theme={appTheme}>
         <Router history={history} forceRefresh="true" basename="/">
           <Switch>
             <Route
@@ -125,7 +142,7 @@ function App() {
             <Route
               exact
               path={branchUrl}
-              component={(props) => <Branch {...props} />}
+              component={(props) => <BranchList {...props} />}
             />
             <Route
               exact
@@ -159,7 +176,7 @@ function App() {
             {/* /> */}
           </Switch>
         </Router>
-      </MuiThemeProvider>
+      </ThemeProvider>
     </div>
   );
 }

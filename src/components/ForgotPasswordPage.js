@@ -7,15 +7,18 @@ import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
+import axios from 'axios';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
+import { MERCHANT_API } from './constants';
+import notify from './utils/Notify';
 
 const initialValues = {
-  mobileNumber: '',
+  mobile: '',
 };
 const validationSchema = Yup.object().shape({
-  mobileNumber: Yup.number().required('Required'),
+  mobile: Yup.number().required('Required'),
 });
 
 const ForgotPasswordPage = (props) => {
@@ -27,20 +30,21 @@ const ForgotPasswordPage = (props) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      // axios.post('', values)
-      //   .then(res => {
-      //     if (res.data.status === 1) {
-      //       if (res.data.error) {
-      //         notify(res.data.error, 'error');
-      //       } else {
-      //         // todo:
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     notify('Something Went Wrong', 'error');
-      //   });
-      history.push('/merchant/otp-forgot-password');
+      values.user_type = 'merchant';
+      axios
+        .post(`${MERCHANT_API}/common/forgotPassword`, values)
+        .then((res) => {
+          if (res.data.status === 1) {
+            if (res.data.error) {
+              notify(res.data.error, 'error');
+            } else {
+              history.push(otpUrl, { mobile: values.mobile });
+            }
+          }
+        })
+        .catch((error) => {
+          notify('Something Went Wrong', 'error');
+        });
     },
   });
 
@@ -91,14 +95,14 @@ const ForgotPasswordPage = (props) => {
               className={classes.textField}
               margin="normal"
               variant="outlined"
-              name="mobileNumber"
-              value={formIk.values.mobileNumber}
+              name="mobile"
+              value={formIk.values.mobile}
               onChange={formIk.handleChange}
               onBlur={formIk.handleBlur}
-              error={formIk.errors.mobileNumber && formIk.touched.mobileNumber}
+              error={formIk.errors.mobile && formIk.touched.mobile}
               helperText={
-                formIk.errors.mobileNumber && formIk.touched.mobileNumber
-                  ? formIk.errors.mobileNumber
+                formIk.errors.mobile && formIk.touched.mobile
+                  ? formIk.errors.mobile
                   : ''
               }
             />
