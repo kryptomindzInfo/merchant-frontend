@@ -1,2 +1,9 @@
 node_modules/
-package-lock.json
+.idea/.gitignore
+.idea/codeStyles/
+.idea/inspectionProfiles/
+.idea/merchant-frontend.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/vcs.xml
+!/package-lock.json
