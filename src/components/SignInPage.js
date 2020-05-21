@@ -10,7 +10,7 @@ import Link from '@material-ui/core/Link';
 import PropTypes from 'prop-types';
 import history from './utils/history';
 import LandingLeftSection from './utils/LandingLeftSection';
-import styles from '../assets/styles/LandingPageCss';
+import styles from '../styles/LandingPageCss';
 
 const initialValues = {
   username: '',

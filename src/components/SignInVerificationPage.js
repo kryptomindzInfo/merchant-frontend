@@ -13,7 +13,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import LandingLeftSection from './utils/LandingLeftSection';
 import history from './utils/history';
-import styles from '../assets/styles/LandingPageCss';
+import styles from '../styles/LandingPageCss';
 
 const initialValues = {
   newPassword: '',

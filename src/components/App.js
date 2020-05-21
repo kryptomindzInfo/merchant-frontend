@@ -7,6 +7,9 @@ import SignInVerificationPage from './SignInVerificationPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
+import Dashboard from './dashboard/Dashboard';
+import Branch from './branch/Branch';
+import User from './user/User';
 
 const theme = createMuiTheme({
   palette: {
@@ -14,15 +17,10 @@ const theme = createMuiTheme({
       main: '#417505',
       hover: '#264503',
     },
-    // secondary: '#6cac69',
-    // accent: '#f5a623',
-    // light: '#9ea0a5',
-    // greyLine: '#666565 ',
     white: 'white',
     main: '#417505',
     vGradient: 'linear-gradient(to bottom, #6cac6a, #102910)',
     hGradient: 'linear-gradient(to right, #6cac6a 1%, #102910)',
-    font: 'Roboto',
     fontSize: '14px',
   },
   status: {
@@ -30,7 +28,18 @@ const theme = createMuiTheme({
   },
   typography: {
     color: 'white',
-    fontFamily: ['Roboto', 'sans-serif'].join(),
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(),
   },
 });
 
@@ -38,11 +47,11 @@ const dashboardUrl = '/merchant/dashboard';
 const verifyUrl = '/merchant/login-verify';
 const loginUrl = '/merchant/login';
 const otpUrl = '/merchant/otp-forgot-password';
+const branchUrl = '/merchant/branch';
+const userUrl = '/merchant/user';
 // branch URL's
 const branchLoginUrl = '/merchant/branch/:branchName';
 const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
-// const branchVerifyUrl = '/merchant/branch/login-verify';
-const branchOtpUrl = '/merchant/branch/otp-forgot-password';
 
 function App() {
   return (
@@ -108,6 +117,22 @@ function App() {
                 />
               )}
             />
+            <Route
+              exact
+              path={dashboardUrl}
+              component={(props) => <Dashboard {...props} />}
+            />
+            <Route
+              exact
+              path={branchUrl}
+              component={(props) => <Branch {...props} />}
+            />
+            <Route
+              exact
+              path={userUrl}
+              component={(props) => <User {...props} />}
+            />
+
             {/* Branch Routes */}
             <Route
               exact

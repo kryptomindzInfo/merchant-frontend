@@ -2,7 +2,6 @@
   "name": "merchant-frontend",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "start": "webpack-dev-server --config=config/webpack.dev.js --hot",
     "build": "webpack --config=config/webpack.prod.js --color -p --progress --hide-modules --display-optimization-bailout",
@@ -67,10 +66,16 @@
     "prop-types": "^15.7.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
-    "react-helmet": "^6.0.0",
+    "react-helmet": "6.0.0-beta",
     "react-router-dom": "^5.2.0",
     "react-toastify": "^6.0.4",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
     "redux-saga": "^1.1.3",
+    "redux-thunk": "^2.3.0",
     "yup": "^0.28.5"
+  },
+  "resolutions": {
+    "babel-core": "7.0.0-bridge.0"
   }
 }

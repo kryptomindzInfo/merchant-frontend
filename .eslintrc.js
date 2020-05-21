@@ -7,7 +7,7 @@ const prettierOptions = JSON.parse(
 
 module.exports = {
   parser: 'babel-eslint',
-  extends: ['airbnb', 'prettier', 'prettier/react',  'plugin:react/recommended'],
+  extends: ['airbnb', 'prettier', 'prettier/react', 'plugin:react/recommended'],
   plugins: ['prettier', 'redux-saga', 'react', 'react-hooks', 'jsx-a11y'],
   env: {
     jest: true,
@@ -28,8 +28,12 @@ module.exports = {
     'import/no-extraneous-dependencies': 0,
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
-    "no-unused-vars":0,
+    "no-unused-vars": 0,
     "linebreak-style": ['error', 'unix'],
+    'redux-saga/no-yield-in-race': 2,
+    'redux-saga/yield-effects': 2,
+    'require-yield': 0,
+    'no-underscore-dangle': 0,
     indent: [
       2,
       2,
@@ -37,12 +41,5 @@ module.exports = {
         SwitchCase: 1,
       },
     ],
-  },
-  settings: {
-    'import/resolver': {
-      webpack: {
-        config: './internals/webpack/webpack.prod.babel.js',
-      },
-    },
   },
 };
