@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import NotificationIcon from '@material-ui/icons/Notifications';
 import history from '../../utils/history';
-import A from '../A';
 import SubNav from './SubNav';
+import A from '../A';
 
 const WelcomeWrap = styled.div`
   float: right;
   margin: 7px 0;
-  display: block;
+  display: flex;
   color: #fff;
   font-size: 18px;
   font-weight: normal;
@@ -33,9 +34,9 @@ class Welcome extends Component {
   };
 
   logoutBank = () => {
-    localStorage.removeItem('bankLogged');
-    localStorage.removeItem('bankName');
-    history.push('/bank');
+    localStorage.removeItem('merchantLogged');
+    localStorage.removeItem('merchantName');
+    history.push('/merchant/login');
   };
 
   logoutBranch = () => {
@@ -47,13 +48,14 @@ class Welcome extends Component {
   logoutCashier = () => {
     localStorage.removeItem('cashierLogged');
     history.push(`/cashier/${this.props.bankName}`);
+    // this.props.history.push('/bank');
   };
 
   render() {
     let name = '';
     let isAdmin = false;
-    if (this.props.from === 'bank') {
-      name = localStorage.getItem('bankName');
+    if (this.props.from === 'merchant') {
+      name = localStorage.getItem('merchantName');
     } else if (this.props.from === 'branch') {
       name = localStorage.getItem('branchName');
     } else if (this.props.from === 'cashier') {
@@ -66,23 +68,16 @@ class Welcome extends Component {
     const date = `${tempDate.getDate()}-${
       tempDate.getMonth() + 1
     }-${tempDate.getFullYear()} `;
-    // tempDate.getHours() +
-    // ':' +
-    // tempDate.getMinutes() +
-    // ':' +
-    // tempDate.getSeconds();
     const currDate = `${date}`;
 
     const { bankName } = this.props;
     return (
       <>
         <WelcomeWrap className="clr">
-          <span style={{ paddingRight: '7px' }}>{currDate}</span>
-          <Icon className="material-icons fl">notifications</Icon>
+          <Icon className="material-icons fl">
+            <NotificationIcon />
+          </Icon>
           <div className="dropdown fl">
-            {/* <Name>
-            <FormattedMessage {...messages.welcome} /> {name}
-          </Name> */}
             {this.props.infraNav ? (
               <>
                 <Name>
@@ -122,15 +117,16 @@ class Welcome extends Component {
             ) : (
               <>
                 <Name>
-                  <span>BANK:</span> {name}
+                  <span>MERCHANT:</span> {name}
                 </Name>
                 <SubNav className="bankSubNav">
-                  <A href="/bank/info">Settings</A>
+                  <A href="/merchant/info">Settings</A>
                   <span onClick={this.logoutBank}>Logout</span>
                 </SubNav>
               </>
             )}
           </div>
+          <span style={{ paddingRight: '7px' }}>{currDate}</span>
         </WelcomeWrap>
       </>
     );

@@ -3,6 +3,7 @@ import { createMuiTheme } from '@material-ui/core';
 import { Route, Router, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
 import { ThemeProvider } from 'styled-components';
+import WebFont from 'webfontloader';
 import SignInPage from './SignInPage';
 import SignInVerificationPage from './SignInVerificationPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
@@ -10,8 +11,11 @@ import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
 import Dashboard from './dashboard/Dashboard';
 import User from './user/User';
-import Branch from './branch/Branch';
 import BranchList from './branch/BranchList';
+import BranchProfile from './branch/BranchProfile/BranchProfile';
+import GlobalStyle from '../styles/global-styles';
+
+WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
 const appTheme = {
   primary: '#417505',
@@ -69,6 +73,7 @@ const userUrl = '/merchant/user';
 // branch URL's
 const branchLoginUrl = '/merchant/branch/:branchName';
 const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
+const branchProfileUrl = '/merchant/branch/info';
 
 function App() {
   return (
@@ -146,6 +151,11 @@ function App() {
             />
             <Route
               exact
+              path={branchProfileUrl}
+              component={(props) => <BranchProfile {...props} />}
+            />
+            <Route
+              exact
               path={userUrl}
               component={(props) => <User {...props} />}
             />
@@ -175,6 +185,7 @@ function App() {
             {/*  )} */}
             {/* /> */}
           </Switch>
+          <GlobalStyle />
         </Router>
       </ThemeProvider>
     </div>

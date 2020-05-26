@@ -2,7 +2,8 @@ import styled from 'styled-components';
 
 const ActionBar = styled.div`
   width: 100%;
-
+  display: flex;
+  justify-content: space-between;
   border-radius: 8px;
   box-shadow: 5px 5px 25px 0 rgba(179, 179, 179, 0.25);
   background-color: #ffffff;

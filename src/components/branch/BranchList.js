@@ -75,14 +75,14 @@ function BranchList() {
               flex
               onClick={() => handleBranchPopupClick('new', {})}
             >
-              <AddIcon/>
+              <AddIcon className="material-icons"/>
               <span>Add Branch</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
             <div className="cardHeader">
               <div className="cardHeaderLeft">
-                <SupervisedUserCircleIcon/>
+                <SupervisedUserCircleIcon className="material-icons"/>
               </div>
               <div className="cardHeaderRight">
                 <h3>Branch List</h3>

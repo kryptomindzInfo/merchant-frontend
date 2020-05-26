@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Table = styled.table`
   width: 100%;
   margin-top: ${(props) => (props.marginTop ? props.marginTop : '0')};
+  border-collapse: collapse;
 
   > thead > tr > th {
     font-size: 14px;

@@ -1,17 +1,18 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
-import TextField from '@material-ui/core/TextField';
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
-import Typography from '@material-ui/core/Typography';
 import { createBranch, editBranch } from './api/branchAPI';
 import Popup from '../shared/Popup';
 import FormGroup from '../shared/FormGroup';
-import UploadArea from '../shared/UploadArea';
-import { API_URL, CONTRACT_URL, STATIC_URL } from '../constants';
+import { API_URL, CURRENCY } from '../constants';
 import Button from '../shared/Button';
+import Row from '../shared/Row';
+import Col from '../shared/Col';
+import TextInput from '../shared/TextInput';
+import CountrySelectBox from '../shared/CountrySelectBox';
 
 function CreateBranchPopup(props) {
   const token = localStorage.getItem('bankLogged');
@@ -65,6 +66,7 @@ function CreateBranchPopup(props) {
             handleChange,
             handleBlur,
             handleSubmit,
+            handleFocus,
             setFieldValue,
           } = formikProps;
 
@@ -119,22 +121,22 @@ function CreateBranchPopup(props) {
                 {props.type === 'update' ? 'Update Merchant' : 'Add Merchant'}
               </h1>
               <Form>
-                <FormGroup>
+                {/* <FormGroup>
                   <TextField
                     size="small"
-                    name="merchant_id"
-                    label="Merchant ID"
+                    name="branch_name"
+                    label="Branch Name"
                     fullWidth
                     variant="outlined"
                     style={{ marginBottom: '14px' }}
                     type="text"
-                    value={values.merchant_id}
+                    value={values.branch_name}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     helperText={
                       <Typography variant="body2" color="error">
-                        {errors.merchant_id && touched.merchant_id
-                          ? errors.merchant_id
+                        {errors.branch_name && touched.branch_name
+                          ? errors.branch_name
                           : ''}
                       </Typography>
                     }
@@ -143,174 +145,494 @@ function CreateBranchPopup(props) {
                 <FormGroup>
                   <TextField
                     size="small"
-                    name="name"
-                    label="Merchant Name"
+                    name="branch_id"
+                    label="Branch ID"
                     fullWidth
                     variant="outlined"
                     style={{ marginBottom: '14px' }}
                     type="text"
+                    value={values.branch_id}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={
+                      <Typography variant="body2" color="error">
+                        {errors.branch_id && touched.branch_id
+                          ? errors.branch_id
+                          : ''}
+                      </Typography>
+                    }
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <TextField
+                    size="small"
+                    name="branch_admin"
+                    label="Branch Admin : User ID"
+                    fullWidth
+                    style={{ marginBottom: '14px' }}
+                    variant="outlined"
+                    type="text"
+                    value={values.branch_admin}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={
+                      <Typography variant="body2" color="error">
+                        {errors.branch_admin && touched.branch_admin
+                          ? errors.branch_admin
+                          : ''}
+                      </Typography>
+                    }
+                  />
+                </FormGroup>
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput
+                        readOnly
+                        label={CURRENCY}
+                        placeholder={CURRENCY}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="78%">
+                    <FormGroup>
+                      <TextField
+                        size="small"
+                        name="credit_limit"
+                        label="Credit Limit"
+                        fullWidth
+                        style={{ marginBottom: '14px' }}
+                        variant="outlined"
+                        type="text"
+                        value={values.credit_limit}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          <Typography variant="body2" color="error">
+                            {errors.credit_limit && touched.credit_limit
+                              ? errors.credit_limit
+                              : ''}
+                          </Typography>
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput
+                        readOnly
+                        label={CURRENCY}
+                        placeholder={CURRENCY}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="78%">
+                    <FormGroup>
+                      <TextField
+                        size="small"
+                        name="cash_in_hand"
+                        label="Cash in Hand"
+                        fullWidth
+                        style={{ marginBottom: '14px' }}
+                        variant="outlined"
+                        type="text"
+                        value={values.cash_in_hand}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          <Typography variant="body2" color="error">
+                            {errors.cash_in_hand && touched.cash_in_hand
+                              ? errors.cash_in_hand
+                              : ''}
+                          </Typography>
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <FormGroup>
+                  <TextField
+                    size="small"
+                    name="address"
+                    label="Address"
+                    fullWidth
+                    variant="outlined"
+                    style={{ marginBottom: '14px' }}
+                    type="text"
+                    value={values.address}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    helperText={
+                      <Typography variant="body2" color="error">
+                        {errors.address && touched.address
+                          ? errors.address
+                          : ''}
+                      </Typography>
+                    }
+                  />
+                </FormGroup>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <TextField
+                        size="small"
+                        name="state"
+                        label="State"
+                        fullWidth
+                        variant="outlined"
+                        style={{ marginBottom: '14px' }}
+                        type="text"
+                        value={values.state}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          <Typography variant="body2" color="error">
+                            {errors.state && touched.state ? errors.state : ''}
+                          </Typography>
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <TextField
+                        size="small"
+                        name="zip"
+                        label="Zip Code"
+                        fullWidth
+                        variant="outlined"
+                        style={{ marginBottom: '14px' }}
+                        type="text"
+                        value={values.zip}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          <Typography variant="body2" color="error">
+                            {errors.zip && touched.zip ? errors.zip : ''}
+                          </Typography>
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <CountrySelectBox />
+                    </FormGroup>
+                  </Col>
+
+                  <Col>
+                    <FormGroup>
+                      <TextField
+                        size="small"
+                        name="mobile"
+                        label="Authorized Mobile Number"
+                        fullWidth
+                        variant="outlined"
+                        style={{ marginBottom: '14px' }}
+                        type="text"
+                        value={values.mobile}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        helperText={
+                          <Typography variant="body2" color="error">
+                            {errors.mobile && touched.mobile
+                              ? errors.mobile
+                              : ''}
+                          </Typography>
+                        }
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput
+                        type="text"
+                        name="ccode"
+                        readOnly
+                        value={values.ccode}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="78%">
+                    <FormGroup>
+                      <label>Authorized Mobile Number</label>
+                      <TextInput
+                        type="text"
+                        pattern="[0-9]{10}"
+                        title="10 Digit numeric value"
+                        name="mobile"
+                        onBlur={handleBlur}
+                        value={values.mobile}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <label>Working Hours</label>
+                <Row>
+                  <Col cW="49%" mR="2%">
+                    <FormGroup>
+                      <label>From*</label>
+                      <TextInput
+                        type="time"
+                        name="working_from"
+                        onBlur={handleBlur}
+                        min="00:00"
+                        max="23:00"
+                        autoFocus
+                        value={values.working_from}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="49%">
+                    <FormGroup>
+                      <label>To*</label>
+                      <TextInput
+                        type="time"
+                        autoFocus
+                        min="00:00"
+                        max="23:00"
+                        name="working_to"
+                        onBlur={handleBlur}
+                        value={values.working_to}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row> */}
+
+                <FormGroup>
+                  <label>Branch Name*</label>
+                  <TextInput
+                    type="text"
+                    name="name"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
                     value={values.name}
                     onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={
-                      <Typography variant="body2" color="error">
-                        {errors.name && touched.name ? errors.name : ''}
-                      </Typography>
-                    }
+                    required
                   />
                 </FormGroup>
                 <FormGroup>
-                  <TextField
-                    size="small"
-                    name="description"
-                    label="Description"
-                    fullWidth
-                    style={{ marginBottom: '14px' }}
-                    variant="outlined"
+                  <label>Branch ID*</label>
+                  <TextInput
                     type="text"
-                    value={values.description}
-                    onChange={handleChange}
+                    name="bcode"
+                    onFocus={handleFocus}
                     onBlur={handleBlur}
+                    value={values.bcode}
+                    onChange={handleChange}
+                    required
                   />
                 </FormGroup>
                 <FormGroup>
-                  <TextField
-                    size="small"
-                    name="email"
-                    label="Contact Person Email"
-                    fullWidth
-                    variant="outlined"
-                    style={{ marginBottom: '14px' }}
+                  <label>Branch Admin: User ID*</label>
+                  <TextInput
                     type="text"
-                    value={values.email}
-                    onChange={handleChange}
+                    name="username"
+                    onFocus={handleFocus}
                     onBlur={handleBlur}
-                    helperText={
-                      <Typography variant="body2" color="error">
-                        {errors.email && touched.email ? errors.email : ''}
-                      </Typography>
-                    }
+                    value={values.username}
+                    onChange={handleChange}
+                    required
                   />
                 </FormGroup>
-                <FormGroup>
-                  <TextField
-                    size="small"
-                    name="mobile"
-                    label="Contact Person Phone Number"
-                    fullWidth
-                    variant="outlined"
-                    style={{ marginBottom: '14px' }}
-                    type="text"
-                    value={values.mobile}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    helperText={
-                      <Typography variant="body2" color="error">
-                        {errors.mobile && touched.mobile ? errors.mobile : ''}
-                      </Typography>
-                    }
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <UploadArea bgImg={STATIC_URL + values.logo_hash}>
-                    {values.logo_hash ? (
-                      <a
-                        className="uploadedImg"
-                        href={STATIC_URL + values.logo_hash}
-                        target="_BLANK"
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput
+                        readOnly
+                        label={CURRENCY}
+                        placeholder={CURRENCY}
                       />
-                    ) : (
-                      ' '
-                    )}
-                    <div
-                      className="uploadTrigger"
-                      onClick={() => triggerBrowse('logo_hash')}
-                    >
-                      <input
-                        type="file"
-                        id="logo_hash"
-                        onChange={(e) => onChange(e)}
-                        data-key="logo_hash"
-                        accept="image/jpeg, image/png, image/jpg"
+                    </FormGroup>
+                  </Col>
+                  <Col cW="78%">
+                    <FormGroup>
+                      <label>Credit Limit</label>
+                      <TextInput
+                        type="text"
+                        name="credit_limit"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.credit_limit}
+                        onChange={handleChange}
                       />
-                      {!values.logo_hash ? (
-                        <i className="material-icons">cloud_upload</i>
-                      ) : (
-                        ' '
-                      )}
-                      <label>
-                        {values.logo_hash === '' ? (
-                          <span> Upload Logo </span>
-                        ) : (
-                          <span>Change Logo</span>
-                        )}
-                        *
-                      </label>
-                    </div>
-                  </UploadArea>
-                  <Typography variant="body2" color="error">
-                    {errors.logo_hash && touched.logo_hash
-                      ? errors.logo_hash
-                      : ''}
-                  </Typography>
-                </FormGroup>
-                <FormGroup>
-                  <UploadArea bgImg={`${STATIC_URL}main/pdf-icon.png`}>
-                    {values.document_hash ? (
-                      <a
-                        className="uploadedImg"
-                        href={CONTRACT_URL + values.document_hash}
-                        target="_BLANK"
-                      />
-                    ) : (
-                      ' '
-                    )}
-                    <div
-                      className="uploadTrigger"
-                      onClick={() => triggerBrowse('document_hash')}
-                    >
-                      <input
-                        type="file"
-                        id="document_hash"
-                        onChange={(e) => onChange(e)}
-                        data-key="document_hash"
-                        accept=".pdf"
-                      />
-                      {!values.document_hash ? (
-                        <i className="material-icons">cloud_upload</i>
-                      ) : (
-                        ' '
-                      )}
+                    </FormGroup>
+                  </Col>
+                </Row>
 
-                      <label>
-                        <div className="tooltip">
-                          <i
-                            className="fa fa-info-circle"
-                            style={{ margin: '5px' }}
-                          />
-                          <span className="tooltiptext">
-                            This contract will be uploaded on Blockchain.
-                          </span>
-                        </div>
-                        {values.document_hash === '' ? (
-                          <span> Upload Contract </span>
-                        ) : (
-                          <span>Change Contract</span>
-                        )}
-                        *
-                        <p>
-                          <span style={{ color: 'red' }}>* </span>Only PDF
-                          allowed{' '}
-                        </p>
-                      </label>
-                    </div>
-                  </UploadArea>
-                  <Typography variant="body2" color="error">
-                    {errors.document_hash && touched.document_hash
-                      ? errors.document_hash
-                      : ''}
-                  </Typography>
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput
+                        readOnly
+                        label={CURRENCY}
+                        placeholder={CURRENCY}
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="78%">
+                    <FormGroup>
+                      <label>Cash in Hand</label>
+                      <TextInput
+                        type="text"
+                        name="cash_in_hand"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.cash_in_hand}
+                        onChange={handleChange}
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <FormGroup>
+                  <label>Address*</label>
+                  <TextInput
+                    type="text"
+                    name="address1"
+                    onFocus={handleFocus}
+                    onBlur={handleBlur}
+                    value={values.address1}
+                    onChange={handleChange}
+                    required
+                  />
                 </FormGroup>
+
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <label>State</label>
+                      <TextInput
+                        type="text"
+                        name="state"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.state}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <label>Zip Code</label>
+                      <TextInput
+                        type="text"
+                        name="zip"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.zip}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <FormGroup>
+                      <CountrySelectBox />
+                    </FormGroup>
+                  </Col>
+
+                  <Col>
+                    <FormGroup>
+                      <label>Authorized Email Id*</label>
+                      <TextInput
+                        type="email"
+                        name="email"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.email}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput
+                        type="text"
+                        name="ccode"
+                        readOnly
+                        value={values.ccode}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="78%">
+                    <FormGroup>
+                      <label>Authorized Mobile Number*</label>
+                      <TextInput
+                        type="text"
+                        pattern="[0-9]{10}"
+                        title="10 Digit numeric value"
+                        name="mobile"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.mobile}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
+
+                <label>Working Hours</label>
+                <Row>
+                  <Col cW="49%" mR="2%">
+                    <FormGroup>
+                      <label>From*</label>
+                      <TextInput
+                        type="time"
+                        name="working_from"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        min="00:00"
+                        max="23:00"
+                        autoFocus
+                        value={values.working_from}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="49%">
+                    <FormGroup>
+                      <label>To*</label>
+                      <TextInput
+                        type="time"
+                        autoFocus
+                        min="00:00"
+                        max="23:00"
+                        name="working_to"
+                        onFocus={handleFocus}
+                        onBlur={handleBlur}
+                        value={values.working_to}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <Button
                   type="submit"
                   disabled={isSubmitting}

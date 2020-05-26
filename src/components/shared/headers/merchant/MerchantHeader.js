@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-
 import MerchantNav from './MerchantNav';
+import TopBar from '../TopBar';
 import Welcome from '../Welcome';
 import Container from '../../Container';
 import A from '../../A';
 import { STATIC_URL } from '../../../constants';
-import TopBar from '../TopBar';
 
 const Link = styled.span`
   color: #fff;
@@ -19,22 +18,25 @@ const Link = styled.span`
   border: solid 2px #ffffff;
   padding: 5px 20px;
 `;
-
-const token = localStorage.getItem('bankLogged');
-const name = 'Airtel';
-const logo = 'sdjjdnnas.jpg';
+const MiddleTitle = styled.div`
+  display: flex;
+  justify-content: center;
+`;
+const token = localStorage.getItem('merchantLogged');
+const merchantName = localStorage.getItem('merchantName');
+const logo = localStorage.getItem('merchantLogo');
 
 let permissions = localStorage.getItem('permissions');
 if (permissions !== 'all' && permissions !== '') {
   permissions = JSON.parse(permissions);
 }
 
-class MerchantHeader extends Component {
+class BankHeader extends Component {
   constructor() {
     super();
     this.state = {
       logo,
-      name,
+      name: 'Demo',
     };
   }
 
@@ -44,16 +46,24 @@ class MerchantHeader extends Component {
     const { page } = this.props;
     return (
       <TopBar>
-        <Welcome from="bank" />
+        <Welcome from="merchant" />
         <Container>
-          <A href="/merchant/dashboard" float="left">
+          {page === 'branch' ? (
+            <A href={this.props.goto} float="left">
+              <Link>Back</Link>
+            </A>
+          ) : null}
+
+          <A href="/dashboard" float="left">
             <div className="bankLogo">
-              <img src={STATIC_URL + this.state.logo} alt="Bank Logo" />
+              <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
             </div>
             <h2>{this.state.name.toUpperCase()}</h2>
           </A>
           {this.props.middleTitle ? (
-            <div className="middleTitle">{this.props.middleTitle}</div>
+            <MiddleTitle className="middleTitle">
+              {this.props.middleTitle}
+            </MiddleTitle>
           ) : null}
           {page === 'branch' ? null : (
             <MerchantNav active={this.props.active} />
@@ -64,4 +74,4 @@ class MerchantHeader extends Component {
   }
 }
 
-export default MerchantHeader;
+export default BankHeader;

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import CloseIcon from '@material-ui/icons/Close';
 
 const PopupWrap = styled.div`
     position:fixed;
@@ -89,12 +90,10 @@ class Popup extends Component {
     return (
       <PopupWrap className="popupwrap" bigBody={this.props.bigBody}>
         <PopupBody id="popupBody" bigBody={this.props.bigBody}>
-          <i
+          <CloseIcon
             className="material-icons popClose"
             onClick={() => this.props.close()}
-          >
-            close
-          </i>
+          />
           {this.props.children}
         </PopupBody>
       </PopupWrap>
