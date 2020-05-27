@@ -18,23 +18,23 @@ const StaffList = () => {
   const [showStaffPopup, setStaffPopup] = useState(false);
   const [popupType, setPopupType] = React.useState('new');
   const [editingStaff, setEditingStaff] = React.useState({});
-  
+
   const handleStaffPopupClick = (type, staffObj) => {
     setEditingStaff(staffObj);
     setPopupType(type);
     setStaffPopup(true);
   };
-  
+
   const refreshStaffList = async () => {
     // const data = await fetchBranchList();
     // setBranchList(data.list);
     // setLoading(data.loading);
   };
-  
+
   const onPopupClose = () => {
     setStaffPopup(false);
   };
-  
+
   useEffect(() => {
     const getStaffList = () => {
       const list = [
@@ -53,7 +53,7 @@ const StaffList = () => {
     };
     getStaffList();
   }, []);
-  
+
   return (
     <Wrapper from='bank'>
       <Helmet>
@@ -75,7 +75,7 @@ const StaffList = () => {
               </i>
               <input type='text' placeholder='Search Staff'/>
             </div>
-            
+
             <Button className='addBankButton' flex onClick={() => handleStaffPopupClick('new', {})}>
               <i className='material-icons'>add</i>
               <span>Add Staff</span>
@@ -112,6 +112,15 @@ const StaffList = () => {
                     </Card>
                   );
                 }
+                return (
+                  <Card
+                    key={b._id}
+                    col
+                    horizontalMargin='10px'
+                    cardWidth='192px'
+                  >
+                  </Card>
+                );
               })
               : null}
           </div>

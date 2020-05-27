@@ -13,13 +13,13 @@ const EWalletBalanceSendAndClaimMoneyCard = (props) => {
       <div className="cardValue">XOF 500</div>
       <Row style={{ paddingTop: '20px' }}>
         <Col cW="100%">
-          <Button>
+          <Button flex style={{ padding: '5px' }}>
             <Send fontSize="small" />
             Send Money
           </Button>
         </Col>
         <Col cW="100%">
-          <Button>
+          <Button flex style={{ padding: '5px' }}>
             <Send fontSize="small" />
             Claim Money
           </Button>

@@ -1,7 +1,8 @@
 import { toast } from 'react-toastify';
+import 'react-toastify/scss/main.scss';
 
 toast.configure({
-  position: 'bottom-right',
+  position: toast.POSITION.BOTTOM_RIGHT,
   autoClose: 4000,
   hideProgressBar: false,
   closeOnClick: true,
