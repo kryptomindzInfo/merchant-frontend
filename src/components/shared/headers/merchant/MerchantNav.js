@@ -20,37 +20,26 @@ const Link = styled.span`
 class MerchantNav extends Component {
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
-    const branches = this.props.active === 'branches' ? 'true' : '';
+    const branches = this.props.active === 'branch' ? 'true' : '';
     const cashier = this.props.active === 'cashier' ? 'true' : '';
-    const merchants = this.props.active === 'merchants' ? 'true' : '';
-    const users = this.props.active === 'users' ? 'true' : '';
-    const bankusers = this.props.active === 'bankusers' ? 'true' : '';
+    const staff = this.props.active === 'staff' ? 'true' : '';
     const reports = this.props.active === 'reports' ? 'true' : '';
 
     return (
       <React.Fragment>
         <NavTag>
           <A href="/merchant/dashboard">
-            <Link
-              active={dashboard}
-              // style={`${props => props.theme.secondary}`}
-            >
-              Dashboard
-            </Link>
+            <Link active={dashboard}>Dashboard</Link>
           </A>
           <A href="/merchant/branches">
             <Link active={branches}>Branches</Link>
           </A>
-          <A href="/merchant/users">
-            <Link active={bankusers}>Merchant User</Link>
-          </A>
-
-          {/* <A>
-            <Link active={users}>Staff</Link>
+          <A href="/merchant/staff">
+            <Link active={staff}>Staff</Link>
           </A>
           <A>
             <Link active={reports}>Reports</Link>
-          </A> */}
+          </A>
         </NavTag>
       </React.Fragment>
     );

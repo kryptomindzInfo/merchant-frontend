@@ -7,3 +7,4 @@ yarn.lock
 package.json
 src/components/branch/BranchList.js
 src/components/shared/Card.js
+src/components/staff/StaffList.js

@@ -31,7 +31,7 @@ if (permissions !== 'all' && permissions !== '') {
   permissions = JSON.parse(permissions);
 }
 
-class BankHeader extends Component {
+class MerchantHeader extends Component {
   constructor() {
     super();
     this.state = {
@@ -74,4 +74,4 @@ class BankHeader extends Component {
   }
 }
 
-export default BankHeader;
+export default MerchantHeader;

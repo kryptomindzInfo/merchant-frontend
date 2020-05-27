@@ -58,7 +58,7 @@ function BranchList() {
         <meta charSet="utf-8" />
         <title>Branch</title>
       </Helmet>
-      <MerchantHeader active="merchants" />
+      <MerchantHeader active="branch" />
       <Container verticalMargin>
         <SideBar />
         <Main>

@@ -3,6 +3,8 @@ import styled from 'styled-components';
 const FormGroup = styled.div`
   display: block;
   position: relative;
+  margin-right: ${(props) => (props.mR ? props.mR : '0')};
+  margin-left: ${(props) => (props.mL ? props.mL : '0')};
   .bottomNote {
     color: ${(props) => props.theme.greyLine};
     font-size: 14px;

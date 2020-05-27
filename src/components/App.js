@@ -10,7 +10,7 @@ import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
 import Dashboard from './dashboard/Dashboard';
-import User from './user/User';
+import StaffList from './staff/StaffList';
 import BranchList from './branch/BranchList';
 import BranchProfile from './branch/BranchProfile/BranchProfile';
 import GlobalStyle from '../styles/global-styles';
@@ -69,7 +69,7 @@ const verifyUrl = '/merchant/login-verify';
 const loginUrl = '/merchant/login';
 const otpUrl = '/merchant/otp-forgot-password';
 const branchUrl = '/merchant/branches';
-const userUrl = '/merchant/users';
+const staffUrl = '/merchant/staff';
 // branch URL's
 const branchLoginUrl = '/merchant/branch/:branchName';
 const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
@@ -157,8 +157,8 @@ function App() {
             />
             <Route
               exact
-              path={userUrl}
-              component={(props) => <User {...props} />}
+              path={staffUrl}
+              component={(props) => <StaffList {...props} />}
             />
 
             {/* Branch Routes */}
