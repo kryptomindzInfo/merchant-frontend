@@ -12,6 +12,7 @@ import Row from '../shared/Row';
 import Col from '../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
 import { CONTRACT_URL, STATIC_URL } from '../constants';
+import SideBar from '../shared/SideBar';
 
 const StaffList = () => {
   const [staff, setStaff] = useState('');
@@ -58,11 +59,11 @@ const StaffList = () => {
     <Wrapper from='bank'>
       <Helmet>
         <meta charSet='utf-8'/>
-        <title>Bank Users | BANK | E-WALLET</title>
+        <title>Merchant | Staff</title>
       </Helmet>
       <MerchantHeader active='staff'/>
       <Container verticalMargin>
-        {/* <SidebarBank /> */}
+        <SideBar/>
         <Main>
           <ActionBar
             marginBottom='33px'
@@ -81,7 +82,7 @@ const StaffList = () => {
               <span>Add Staff</span>
             </Button>
           </ActionBar>
-          <div className='cardBody clr'>
+          <Row className="clr">
             {staff && staff.length > 0
               ? staff.map((b) => {
                 if (!b.isAdmin) {
@@ -104,7 +105,7 @@ const StaffList = () => {
                           <h4 className='hh'>{b.name}</h4>
                         </Col>
                         <Col cW='20%'>
-                          <Button noMin className='fr'>
+                          <Button flex noMin style={{padding: '5px'}}>
                             Edit
                           </Button>
                         </Col>
@@ -113,17 +114,11 @@ const StaffList = () => {
                   );
                 }
                 return (
-                  <Card
-                    key={b._id}
-                    col
-                    horizontalMargin='10px'
-                    cardWidth='192px'
-                  >
-                  </Card>
+                  <div key={b._id}></div>
                 );
               })
               : null}
-          </div>
+          </Row>
         </Main>
       </Container>
       {showStaffPopup ? <CreateStaffPopup

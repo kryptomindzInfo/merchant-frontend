@@ -16,7 +16,7 @@ const Dashboard = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Dashboard</title>
+        <title>Mercahant | Dashboard</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
       <MerchantHeader />

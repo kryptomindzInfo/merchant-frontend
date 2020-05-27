@@ -56,7 +56,7 @@ function BranchList() {
     <Wrapper from="merchant">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Branch</title>
+        <title>Merchant | Branches</title>
       </Helmet>
       <MerchantHeader active="branch" />
       <Container verticalMargin>
