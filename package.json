@@ -79,7 +79,7 @@
     "react-dom": "^16.13.0",
     "react-helmet": "^6.0.0-beta",
     "react-router-dom": "^5.2.0",
-    "react-toastify": "^6.0.4",
+    "react-toastify": "^6.0.5",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
     "redux-saga": "^1.1.3",

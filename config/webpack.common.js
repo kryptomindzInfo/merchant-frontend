@@ -3,7 +3,7 @@ const HtmlWebPackPlugin = require('html-webpack-plugin');
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, '../src', 'BranchProfile.js'),
+    main: path.resolve(__dirname, '../src', 'index.js'),
   },
   output: {
     filename: '[name].[hash].js',

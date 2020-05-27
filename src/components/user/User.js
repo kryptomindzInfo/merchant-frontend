@@ -6,7 +6,7 @@ import PaymentRecivedCard from '../utils/PaymentRecivedCard';
 import InvoiceNumberCard from '../utils/InvoiceNumberCard';
 import PendingInvoiceCard from '../utils/PendingInvoiceCard';
 import OverDueInvoiceCard from '../utils/OverDueInvoiceCard';
-import EWalletBalanceSendAndClaimMoneyCard from '../branch/EWalletBalanceSendAndClaimMoneyCard';
+import EWalletBalanceSendAndClaimMoneyCard from '../shared/EWalletBalanceSendAndClaimMoneyCard';
 
 const styles = makeStyles((theme) => ({
   gridMargin: {

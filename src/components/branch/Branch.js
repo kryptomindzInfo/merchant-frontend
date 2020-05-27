@@ -2,12 +2,13 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import { Grid, makeStyles } from '@material-ui/core';
 import MainHeader from '../utils/MainHeader';
-import EWalletBalanceSendAndClaimMoneyCard from './EWalletBalanceSendAndClaimMoneyCard';
+import EWalletBalanceSendAndClaimMoneyCard from '../shared/EWalletBalanceSendAndClaimMoneyCard';
 import PaymentRecivedCard from '../utils/PaymentRecivedCard';
 import InvoiceNumberCard from '../utils/InvoiceNumberCard';
 import PendingInvoiceCard from '../utils/PendingInvoiceCard';
 import OverDueInvoiceCard from '../utils/OverDueInvoiceCard';
 import MerchantHeader from '../shared/headers/merchant/MerchantHeader';
+import SideBar from '../shared/SideBar';
 
 const styles = makeStyles((theme) => ({
   gridMargin: {
@@ -33,22 +34,7 @@ const Branch = () => {
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
       <MerchantHeader />
-      <Grid container>
-        <Grid item md={3} sm={12} xs={12}>
-          <Grid item className={classes.gridMargin}>
-            <EWalletBalanceSendAndClaimMoneyCard />
-          </Grid>
-        </Grid>
-        <Grid item md={12} sm={12} xs={12}>
-          <Grid container direction="column">
-            <Grid
-              container
-              direction="row"
-              className={`${classes.gridMargin} ${classes.gridMarginSides}`}
-            ></Grid>
-          </Grid>
-        </Grid>
-      </Grid>
+      <SideBar />
     </Fragment>
   );
 };

@@ -6,10 +6,8 @@ import {
   Tabs,
   Typography,
   withStyles,
-  Paper,
 } from '@material-ui/core';
 import PropTypes from 'prop-types';
-import Icon from '@material-ui/core/Icon';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
@@ -24,6 +22,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableCell from '@material-ui/core/TableCell';
 import { PlaylistAddCheckRounded } from '@material-ui/icons';
+import Card from '../shared/Card';
 
 const DashBoardTabs = withStyles({
   indicator: {
@@ -193,121 +192,112 @@ const HistoryCard = () => {
     }
   };
   return (
-    <div>
-      <Paper elevation={1}>
+    <Card bigPadding>
+      <div className="cardHeader">
+        <div className="cardHeaderLeft">
+          <PlaylistAddCheckRounded
+            fontSize="large"
+            style={{ color: '#417505' }}
+          />
+        </div>
+        <div className="cardHeaderRight">
+          <h3>Merchant Activity</h3>
+          <h5>Daily activity</h5>
+        </div>
+      </div>
+      <div className="cardBody">
         <Grid container>
-          <Grid container className={classes.paper}>
-            <Grid container direction="row">
-              <Icon
-                color="primary"
-                style={{ fontSize: 40, paddingRight: '2%' }}
-              >
-                <PlaylistAddCheckRounded style={{ fontSize: 40 }} />
-              </Icon>
-              <Typography
-                variant="h4"
-                style={{ textAlign: 'start', fontWeight: '600' }}
-              >
-                Branch Activity
-              </Typography>
-            </Grid>
-            <Grid container>
-              <DashBoardTabs
-                style={{ width: '100%' }}
-                variant="scrollable"
-                scrollButtons="auto"
-                onChange={handleChange}
-                value={value}
-              >
-                <DashboardTab
-                  disableFocusRipple
-                  disableRipple
-                  label="All"
-                  className={classes.allTab}
-                />
-                <DashboardTab label="Payment Sent" className={classes.tab} />
-                <DashboardTab
-                  label="Payment Recieved"
-                  className={classes.tab}
-                />
-              </DashBoardTabs>
-            </Grid>
-            <Grid container className={classes.paper}>
-              <TableContainer style={{ color: '#417505', border: 'none' }}>
-                <Table
-                  aria-label="custom pagination table"
-                  style={{ color: '#417505', border: 'none' }}
+          <DashBoardTabs
+            style={{ width: '100%' }}
+            variant="scrollable"
+            scrollButtons="auto"
+            onChange={handleChange}
+            value={value}
+          >
+            <DashboardTab
+              disableFocusRipple
+              disableRipple
+              label="All"
+              className={classes.allTab}
+            />
+            <DashboardTab label="Payment Sent" className={classes.tab} />
+            <DashboardTab label="Payment Recieved" className={classes.tab} />
+          </DashBoardTabs>
+        </Grid>
+        <Grid container className={classes.paper}>
+          <TableContainer style={{ color: '#417505', border: 'none' }}>
+            <Table
+              aria-label="custom pagination table"
+              style={{ color: '#417505', border: 'none' }}
+            >
+              <TableBody style={{ color: '#417505', border: 'none' }}>
+                {/* {rowsPerPage.map((row,index) => ( */}
+                <TableRow
+                  style={{ color: '#417505', borderColor: 'transparent' }}
                 >
-                  <TableBody style={{ color: '#417505', border: 'none' }}>
-                    {/* {rowsPerPage.map((row,index) => ( */}
-                    <TableRow
-                      style={{ color: '#417505', borderColor: 'transparent' }}
-                    >
-                      <TableCell>
-                        <Typography variant="subtitle1"></Typography>
-                        <Typography variant="subtitle1"></Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography
-                          variant="subtitle1"
-                          style={{ maxWidth: '100px' }}
-                          noWrap
-                        ></Typography>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Typography
-                          style={{ color: '#4a90e2' }}
-                          variant="h6"
-                        ></Typography>
-                        <Typography
-                          color="primary"
-                          variant="subtitle1"
-                        ></Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="subtitle1"></Typography>
-                      </TableCell>
-                      <TableCell>
-                        <Typography variant="h6"></Typography>
-                      </TableCell>
-                    </TableRow>
-                    {/* ))} */}
-                    {/* {emptyRows > 0 && (
+                  <TableCell>
+                    <Typography variant="subtitle1"></Typography>
+                    <Typography variant="subtitle1"></Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography
+                      variant="subtitle1"
+                      style={{ maxWidth: '100px' }}
+                      noWrap
+                    ></Typography>
+                  </TableCell>
+                  <TableCell component="th" scope="row">
+                    <Typography
+                      style={{ color: '#4a90e2' }}
+                      variant="h6"
+                    ></Typography>
+                    <Typography
+                      color="primary"
+                      variant="subtitle1"
+                    ></Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="subtitle1"></Typography>
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="h6"></Typography>
+                  </TableCell>
+                </TableRow>
+                {/* ))} */}
+                {/* {emptyRows > 0 && (
                     <TableRow style={{ height: 53 * emptyRows }}>
                       <TableCell colSpan={6} />
                     </TableRow>
                   )} */}
-                  </TableBody>
-                  <TableFooter>
-                    <TableRow>
-                      <TablePagination
-                        style={{ color: '#417505', border: 'none' }}
-                        rowsPerPageOptions={[
-                          5,
-                          10,
-                          25,
-                          { label: 'All', value: -1 },
-                        ]}
-                        count={fullRow.length}
-                        rowsPerPage={rowsPerPage}
-                        page={page}
-                        SelectProps={{
-                          inputProps: { 'aria-label': 'rows per page' },
-                          native: true,
-                        }}
-                        onChangePage={handleChangePage}
-                        onChangeRowsPerPage={handleChangeRowsPerPage}
-                        ActionsComponent={TablePaginationActions}
-                      />
-                    </TableRow>
-                  </TableFooter>
-                </Table>
-              </TableContainer>
-            </Grid>
-          </Grid>
+              </TableBody>
+              <TableFooter>
+                <TableRow>
+                  <TablePagination
+                    style={{ color: '#417505', border: 'none' }}
+                    rowsPerPageOptions={[
+                      5,
+                      10,
+                      25,
+                      { label: 'All', value: -1 },
+                    ]}
+                    count={fullRow.length}
+                    rowsPerPage={rowsPerPage}
+                    page={page}
+                    SelectProps={{
+                      inputProps: { 'aria-label': 'rows per page' },
+                      native: true,
+                    }}
+                    onChangePage={handleChangePage}
+                    onChangeRowsPerPage={handleChangeRowsPerPage}
+                    ActionsComponent={TablePaginationActions}
+                  />
+                </TableRow>
+              </TableFooter>
+            </Table>
+          </TableContainer>
         </Grid>
-      </Paper>
-    </div>
+      </div>
+    </Card>
   );
 };
 

@@ -1,12 +1,9 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import { useFormik } from 'formik';
+import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Link from '@material-ui/core/Link';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import history from './utils/history';
@@ -14,6 +11,12 @@ import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
 import { MERCHANT_API } from './constants';
 import notify from './utils/Notify';
+import Button from './shared/Button';
+import TextInput from './shared/TextInput';
+import A from './shared/A';
+import Loader from './shared/Loader';
+import FormField from './shared/FormField';
+import ErrorText from './shared/ErrorText';
 
 const initialValues = {
   username: '',
@@ -28,29 +31,6 @@ const SignInPage = (props) => {
   const classes = styles();
   const { dashboardUrl, isBranch, verifyUrl, match } = props;
   const { branchName } = match.params;
-  const formIk = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => {
-      axios
-        .post(`${MERCHANT_API}/login`, values)
-        .then((res) => {
-          if (res.status === 200) {
-            if (res.data.status === 0) {
-              notify(res.data.error, 'error');
-            } else if (res.data.details.status === 1) {
-              history.push(verifyUrl);
-            } else {
-              history.push(dashboardUrl);
-            }
-          }
-        })
-        .catch((error) => {
-          notify('Something Went Wrong', 'error');
-        });
-      history.push(verifyUrl);
-    },
-  });
   return (
     <Fragment>
       <Helmet>
@@ -88,76 +68,81 @@ const SignInPage = (props) => {
           >
             Use your Mobile number to Login
           </Typography>
-          <form onSubmit={formIk.handleSubmit}>
-            <TextField
-              error={formIk.errors.username && formIk.touched.username}
-              label="Mobile Number"
-              placeholder="Mobile Number"
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-              name="username"
-              value={formIk.values.username}
-              onChange={formIk.handleChange}
-              onBlur={formIk.handleBlur}
-              helperText={
-                formIk.errors.username && formIk.touched.username
-                  ? formIk.errors.username
-                  : ''
-              }
-            />
-            <TextField
-              error={formIk.errors.password && formIk.touched.password}
-              name="password"
-              label="Password"
-              className={classes.textField}
-              type="password"
-              autoComplete="current-password"
-              margin="normal"
-              variant="outlined"
-              value={formIk.values.password}
-              onChange={formIk.handleChange}
-              onBlur={formIk.handleBlur}
-              helperText={
-                formIk.errors.password && formIk.touched.password
-                  ? formIk.errors.password
-                  : ''
-              }
-            />
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={formIk.isSubmitting}
-              className={classes.signInButton}
-            >
-              SIGN IN
-            </Button>
-            <Grid container>
-              <Grid item md={6} sm={12} xs={12}>
-                <Typography
-                  style={{
-                    fontSize: '14px',
-                    paddingTop: '5%',
-                    // textAlign: 'end'
-                    // paddingLeft: '5%',
-                  }}
-                >
-                  <Link
-                    color="primary"
-                    style={{
-                      fontWeightBold: '900',
-                      fontSize: '14px',
-                      paddingTop: '5%',
-                      fontWeight: '600',
-                    }}
-                    href="/merchant/forgot-password"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              axios
+                .post(`${MERCHANT_API}/login`, values)
+                .then((res) => {
+                  if (res.status === 200) {
+                    if (res.data.status === 0) {
+                      notify(res.data.error, 'error');
+                    } else if (res.data.details.status === 1) {
+                      history.push(verifyUrl);
+                    } else {
+                      history.push(dashboardUrl);
+                    }
+                  }
+                })
+                .catch((error) => {
+                  notify('Something Went Wrong', 'error');
+                });
+              history.push(verifyUrl);
+            }}
+          >
+            {(formikProps) => {
+              const { isSubmitting } = formikProps;
+              return (
+                <Form>
+                  <FormField>
+                    <label htmlFor="username">Username</label>
+                    <Field
+                      noMargin
+                      name="username"
+                      type="text"
+                      placeholder="Username"
+                      as={TextInput}
+                    />
+                    <ErrorMessage name="username" component={ErrorText} />
+                  </FormField>
+                  <FormField className="form-control">
+                    <label htmlFor="password">Password</label>
+                    <Field
+                      noMargin
+                      name="password"
+                      type="password"
+                      placeholder="Password"
+                      as={TextInput}
+                    />
+                    <ErrorMessage name="password" component={ErrorText} />
+                  </FormField>
+                  <Button
+                    filledBtn
+                    variant="contained"
+                    type="submit"
+                    style={{ padding: '2%', marginTop: '5%' }}
                   >
-                    Forgot password?
-                  </Link>
-                </Typography>
-              </Grid>
-            </Grid>
-          </form>
+                    {isSubmitting ? <Loader /> : 'SIGN IN'}
+                  </Button>
+                  <Grid container>
+                    <Grid item md={6} sm={12} xs={12}>
+                      <Typography
+                        style={{
+                          fontSize: '14px',
+                          paddingTop: '5%',
+                          // textAlign: 'end'
+                          // paddingLeft: '5%',
+                        }}
+                      >
+                        <A href="/merchant/forgot-password">Forgot password?</A>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Form>
+              );
+            }}
+          </Formik>
         </Grid>
       </Grid>
     </Fragment>

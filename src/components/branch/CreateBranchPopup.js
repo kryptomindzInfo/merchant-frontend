@@ -2,8 +2,8 @@ import React from 'react';
 import { Form, Formik } from 'formik';
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import notify from '../utils/Notify';
 import { createBranch, editBranch } from './api/branchAPI';
 import Popup from '../shared/Popup';
 import FormGroup from '../shared/FormGroup';
@@ -105,7 +105,7 @@ function CreateBranchPopup(props) {
                 }
               })
               .catch((err) => {
-                toast.error('something went wrong!');
+                notify('something went wrong!', 'error');
               });
           };
 

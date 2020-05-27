@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
+import notify from '../../utils/Notify';
 import { API_URL } from '../../constants';
 
 const createBranch = async (props, values, token) => {
@@ -10,17 +10,17 @@ const createBranch = async (props, values, token) => {
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
-        toast.error(res.data.message);
+        notify(res.data.message, 'error');
       } else {
-        toast.success(res.data.message);
+        notify(res.data.message, 'success');
         props.refreshMerchantList();
         props.onClose();
       }
     } else {
-      toast.error(res.data.message);
+      notify(res.data.message, 'error');
     }
   } catch (err) {
-    toast.error('Something went wrong');
+    notify('Something went wrong', 'error');
   }
 };
 
@@ -34,17 +34,17 @@ const editBranch = async (props, values, token) => {
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
-        toast.error(res.data.message);
+        notify(res.data.message, 'error');
       } else {
-        toast.success(res.data.message);
+        notify(res.data.message, 'success');
         props.refreshMerchantList();
         props.onClose();
       }
     } else {
-      toast.error(res.data.message);
+      notify(res.data.message, 'error');
     }
   } catch (e) {
-    toast.error('Something went wrong');
+    notify('Something went wrong', 'error');
   }
 };
 
@@ -56,15 +56,15 @@ const fetchBranchList = async () => {
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
-        toast.error(res.data.message);
+        notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
       return { list: res.data.list, loading: false };
     }
-    toast.error(res.data.message);
+    notify(res.data.message, 'error');
     return { list: [], loading: false };
   } catch (err) {
-    toast.error('Something went wrong');
+    notify('Something went wrong', 'error');
     return { list: [], loading: false };
   }
 };

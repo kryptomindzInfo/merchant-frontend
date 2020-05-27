@@ -18,29 +18,21 @@ const styles = makeStyles((theme) => ({
   setupPageRightSide: {
     marginTop: '5%',
     paddingLeft: '10%',
+    paddingRight: '10%',
     overflow: 'hidden',
-
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: '20%',
-    },
-    [theme.breakpoints.down('sm')]: {
-      paddingLeft: '14%',
-    },
   },
   textField: {
-    // marginLeft: theme.spacing.unit,
-    marginBottom: '0.03375rem',
-    width: '70%',
+    border: `1px solid ${theme.primary}`,
   },
   signInButton: {
-    background: theme.palette.primary.main,
+    backgroundColor: theme.primary,
     marginTop: '7%',
     padding: '0px',
     fontSize: '24px',
-    color: theme.palette.white,
+    color: '#fff',
     width: '70%',
     '&:hover': {
-      background: theme.palette.primary.hover,
+      background: '#1c3302',
     },
   },
 }));

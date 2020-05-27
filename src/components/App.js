@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createMuiTheme } from '@material-ui/core';
 import { Route, Router, Switch } from 'react-router-dom';
 import { orange } from '@material-ui/core/colors';
@@ -32,7 +32,7 @@ const appTheme = {
   fontSize: '14px',
 };
 
-const theme = createMuiTheme({
+const muiTheme = createMuiTheme({
   palette: {
     primary: {
       main: '#417505',
@@ -68,17 +68,18 @@ const dashboardUrl = '/merchant/dashboard';
 const verifyUrl = '/merchant/login-verify';
 const loginUrl = '/merchant/login';
 const otpUrl = '/merchant/otp-forgot-password';
-const branchUrl = '/merchant/branch';
-const userUrl = '/merchant/user';
+const branchUrl = '/merchant/branches';
+const userUrl = '/merchant/users';
 // branch URL's
 const branchLoginUrl = '/merchant/branch/:branchName';
 const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
-const branchProfileUrl = '/merchant/branch/info';
+const branchProfileUrl = '/merchant/branch/info/:id';
 
 function App() {
+  const [theme, setTheme] = useState(appTheme);
   return (
     <div>
-      <ThemeProvider theme={appTheme}>
+      <ThemeProvider theme={theme}>
         <Router history={history} forceRefresh="true" basename="/">
           <Switch>
             <Route
@@ -86,7 +87,7 @@ function App() {
               path="/"
               component={(props) => (
                 <SignInPage
-                  isBranch="false"
+                  isBranch={false}
                   verifyUrl={verifyUrl}
                   dashboardUrl={dashboardUrl}
                   {...props}

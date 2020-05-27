@@ -5,6 +5,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import locale from 'yup/lib/locale';
+import styled from 'styled-components';
 
 const styles = makeStyles((theme) => ({
   setupPageTitle: {
@@ -17,7 +18,6 @@ const styles = makeStyles((theme) => ({
   setupPageLogo: {
     color: '#fff',
     border: '2px solid #fff',
-    marginTop: '27%',
     margin: '0 auto',
     marginBottom: '2%',
     height: '130px',
@@ -33,11 +33,25 @@ const styles = makeStyles((theme) => ({
   },
 }));
 
+const FrontLeftWrap = styled.section`
+  background-image: ${(props) => props.theme.vGradient};
+  width: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  align-items: center;
+  justify-content: center;
+`;
+
 const LandingLeftSection = (props) => {
   const classes = styles();
   const { branchName, isBranch } = props;
   return (
-    <div>
+    <FrontLeftWrap>
       <Grid
         container
         direction="column"
@@ -61,7 +75,7 @@ const LandingLeftSection = (props) => {
           of money to your friends and family
         </Typography>
       </Grid>
-    </div>
+    </FrontLeftWrap>
   );
 };
 LandingLeftSection.propTypes = {

@@ -14,6 +14,7 @@ import { fetchBranchList } from './api/branchAPI';
 import CreateBranchPopup from './CreateBranchPopup';
 import Button from '../shared/Button';
 import Card from '../shared/Card';
+import SideBar from '../shared/SideBar';
 
 function BranchList() {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
@@ -55,10 +56,11 @@ function BranchList() {
     <Wrapper from="merchant">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Banks | INFRA | E-WALLET</title>
+        <title>Branch</title>
       </Helmet>
       <MerchantHeader active="merchants" />
       <Container verticalMargin>
+        <SideBar />
         <Main>
           <ActionBar
             marginBottom="33px"
@@ -111,7 +113,7 @@ function BranchList() {
                           <td className='tac'>{branch.bills_raised}</td>
                           <td className='tac'>{branch.amount_collected}</td>
                           <td className='tac'>{branch.amount_due}</td>
-          
+
                           <td className='tac bold'>
                             <div
                               style={{

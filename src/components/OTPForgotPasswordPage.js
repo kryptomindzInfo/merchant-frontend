@@ -1,10 +1,8 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import { useFormik } from 'formik';
+import { Field, Form, Formik, ErrorMessage } from 'formik';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import history from './utils/history';
@@ -12,6 +10,12 @@ import LandingLeftSection from './utils/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
 import { MERCHANT_API } from './constants';
 import notify from './utils/Notify';
+import Button from './shared/Button';
+import TextInput from './shared/TextInput';
+import A from './shared/A';
+import Loader from './shared/Loader';
+import FormField from './shared/FormField';
+import ErrorText from './shared/ErrorText';
 
 const initialValues = {
   otp: '',
@@ -22,28 +26,6 @@ const OTPForgotPasswordPage = (props) => {
   // eslint-disable-next-line react/prop-types
   const { loginUrl, isBranch, branchLoginUrl, match } = props;
   const { branchName } = match.params;
-  const formIk = useFormik({
-    initialValues,
-    onSubmit: (values) => {
-      values.mobile = props.location.state.mobile;
-      values.user_type = 'merchant';
-      axios
-        .post(`${MERCHANT_API}/common/verifyForgotPasswordOTP`, values)
-        .then((res) => {
-          if (res.data.status === 1) {
-            if (res.data.error) {
-              notify(res.data.error, 'error');
-            } else {
-              history.push(loginUrl);
-            }
-          }
-        })
-        .catch((error) => {
-          notify('Something Went Wrong', 'error');
-        });
-      history.push('/merchant/login');
-    },
-  });
 
   return (
     <Fragment>
@@ -85,28 +67,69 @@ const OTPForgotPasswordPage = (props) => {
           >
             Enter the OTP received on your Mobile Number
           </Typography>
-          <form onSubmit={formIk.handleSubmit}>
-            <TextField
-              label="OTP"
-              placeholder="OTP"
-              className={classes.textField}
-              margin="normal"
-              variant="outlined"
-              name="otp"
-              value={formIk.values.otp}
-              onChange={formIk.handleChange}
-              onBlur={formIk.handleBlur}
-            />
-
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={formIk.isSubmitting}
-              className={classes.signInButton}
-            >
-              SUBMIT
-            </Button>
-          </form>
+          <Formik
+            initialValues={initialValues}
+            onSubmit={(values) => {
+              values.mobile = props.location.state.mobile;
+              values.user_type = 'merchant';
+              axios
+                .post(`${MERCHANT_API}/common/verifyForgotPasswordOTP`, values)
+                .then((res) => {
+                  if (res.data.status === 1) {
+                    if (res.data.error) {
+                      notify(res.data.error, 'error');
+                    } else {
+                      history.push(loginUrl);
+                    }
+                  }
+                })
+                .catch((error) => {
+                  notify('Something Went Wrong', 'error');
+                });
+              history.push('/merchant/login');
+            }}
+          >
+            {(formikProps) => {
+              const { isSubmitting } = formikProps;
+              return (
+                <Form>
+                  <FormField>
+                    <label htmlFor="otp">OTP</label>
+                    <Field
+                      noMargin
+                      name="otp"
+                      type="text"
+                      placeholder="Enter OTP"
+                      as={TextInput}
+                    />
+                    <ErrorMessage name="username" component={ErrorText} />
+                  </FormField>{' '}
+                  <Button
+                    filledBtn
+                    variant="contained"
+                    type="submit"
+                    style={{ padding: '2%', marginTop: '5%' }}
+                  >
+                    {isSubmitting ? <Loader /> : 'SUBMIT'}
+                  </Button>
+                  <Grid container>
+                    <Grid item md={6} sm={12} xs={12}>
+                      <Typography
+                        style={{
+                          fontSize: '14px',
+                          paddingTop: '5%',
+                          // textAlign: 'end'
+                          // paddingLeft: '5%',
+                        }}
+                      >
+                        <A href="/merchant/forgot-password">Forgot password?</A>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Form>
+              );
+            }}
+          </Formik>
         </Grid>
       </Grid>
     </Fragment>

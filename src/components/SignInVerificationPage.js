@@ -1,11 +1,10 @@
 import React, { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { useFormik } from 'formik';
+import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import InputAdornment from '@material-ui/core/InputAdornment';
 import IconButton from '@material-ui/core/IconButton';
@@ -14,6 +13,12 @@ import PropTypes from 'prop-types';
 import LandingLeftSection from './utils/LandingLeftSection';
 import history from './utils/history';
 import styles from '../styles/LandingPageCss';
+import Button from './shared/Button';
+import TextInput from './shared/TextInput';
+import A from './shared/A';
+import Loader from './shared/Loader';
+import FormField from './shared/FormField';
+import ErrorText from './shared/ErrorText';
 
 const initialValues = {
   newPassword: '',
@@ -37,27 +42,6 @@ const SignInVerificationPage = (props) => {
   // eslint-disable-next-line react/prop-types
   const { dashboardUrl, loginUrl, isBranch, match } = props;
   const { branchName } = match.params;
-  const formIk = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => {
-      // axios.post('', values)
-      //   .then(res => {
-      //     if (res.data.status === 1) {
-      //       if (res.data.error) {
-      //         notify(res.data.error, 'error');
-      //       } else {
-      //         // todo:
-      //       }
-      //     }
-      //   })
-      //   .catch(error => {
-      //     notify('Something Went Wrong', 'error');
-      //   });
-
-      history.push(loginUrl);
-    },
-  });
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   return (
@@ -97,104 +81,79 @@ const SignInVerificationPage = (props) => {
           >
             Enter your new password
           </Typography>
-          <form onSubmit={formIk.handleSubmit}>
-            <TextField
-              id="newPassword"
-              label="New Password"
-              name="newPassword"
-              margin="normal"
-              variant="outlined"
-              className={classes.textField}
-              type={showNewPassword ? 'text' : 'password'}
-              value={formIk.values.newPassword}
-              onChange={formIk.handleChange}
-              error={formIk.errors.newPassword && formIk.touched.newPassword}
-              helperText={
-                formIk.errors.newPassword && formIk.touched.newPassword
-                  ? formIk.errors.newPassword
-                  : ''
-              }
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      color="primary"
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowNewPassword(!showNewPassword)}
-                      edge="end"
-                    >
-                      {showNewPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
-            <TextField
-              id="repeatPassword"
-              label="Repeat Password"
-              name="repeatPassword"
-              margin="normal"
-              variant="outlined"
-              className={classes.textField}
-              type={showRepeatPassword ? 'text' : 'password'}
-              value={formIk.values.repeatPassword}
-              onChange={formIk.handleChange}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton
-                      color="primary"
-                      aria-label="toggle password visibility"
-                      onClick={() => setShowRepeatPassword(!showRepeatPassword)}
-                      edge="end"
-                    >
-                      {showRepeatPassword ? <Visibility /> : <VisibilityOff />}
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-              error={
-                formIk.errors.repeatPassword && formIk.touched.repeatPassword
-              }
-              helperText={
-                formIk.errors.repeatPassword && formIk.touched.repeatPassword
-                  ? formIk.errors.repeatPassword
-                  : ''
-              }
-            />
-            <Button
-              variant="contained"
-              type="submit"
-              disabled={formIk.isSubmitting}
-              className={classes.signInButton}
-            >
-              SUBMIT
-            </Button>
-            <Grid container>
-              <Grid item md={6} sm={12} xs={12}>
-                <Typography
-                  style={{
-                    fontSize: '14px',
-                    paddingTop: '5%',
-                    // textAlign: 'end'
-                    // paddingLeft: '5%',
-                  }}
-                >
-                  <Link
-                    color="primary"
-                    style={{
-                      fontWeight: '600',
-                      fontSize: '14px',
-                      paddingTop: '5%',
-                    }}
-                    href="/merchant/forgot-password"
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(values) => {
+              // axios.post('', values)
+              //   .then(res => {
+              //     if (res.data.status === 1) {
+              //       if (res.data.error) {
+              //         notify(res.data.error, 'error');
+              //       } else {
+              //         // todo:
+              //       }
+              //     }
+              //   })
+              //   .catch(error => {
+              //     notify('Something Went Wrong', 'error');
+              //   });
+
+              history.push(loginUrl);
+            }}
+          >
+            {(formikProps) => {
+              const { isSubmitting } = formikProps;
+              return (
+                <Form>
+                  <FormField>
+                    <label htmlFor="newPassword">New Password</label>
+                    <Field
+                      noMargin
+                      name="newPassword"
+                      type="password"
+                      placeholder="New Password"
+                      as={TextInput}
+                    />
+                    <ErrorMessage name="newPassword" component={ErrorText} />
+                  </FormField>
+                  <FormField className="form-control">
+                    <label htmlFor="repeatPassword">Password</label>
+                    <Field
+                      noMargin
+                      name="repeatPassword"
+                      type="password"
+                      placeholder="Repeat Password"
+                      as={TextInput}
+                    />
+                    <ErrorMessage name="repeatPassword" component={ErrorText} />
+                  </FormField>
+                  <Button
+                    filledBtn
+                    variant="contained"
+                    type="submit"
+                    style={{ padding: '2%', marginTop: '5%' }}
                   >
-                    Forgot password?
-                  </Link>
-                </Typography>
-              </Grid>
-            </Grid>
-          </form>
+                    {isSubmitting ? <Loader /> : 'SIGN IN'}
+                  </Button>
+                  <Grid container>
+                    <Grid item md={6} sm={12} xs={12}>
+                      <Typography
+                        style={{
+                          fontSize: '14px',
+                          paddingTop: '5%',
+                          // textAlign: 'end'
+                          // paddingLeft: '5%',
+                        }}
+                      >
+                        <A href="/merchant/forgot-password">Forgot password?</A>
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </Form>
+              );
+            }}
+          </Formik>
         </Grid>
       </Grid>
     </Fragment>

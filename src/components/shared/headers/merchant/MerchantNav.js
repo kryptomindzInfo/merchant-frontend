@@ -30,7 +30,7 @@ class MerchantNav extends Component {
     return (
       <React.Fragment>
         <NavTag>
-          <A href="/bank/dashboard">
+          <A href="/merchant/dashboard">
             <Link
               active={dashboard}
               // style={`${props => props.theme.secondary}`}
@@ -38,19 +38,19 @@ class MerchantNav extends Component {
               Dashboard
             </Link>
           </A>
-          <A href="/bank/branches">
+          <A href="/merchant/branches">
             <Link active={branches}>Branches</Link>
           </A>
-          <A href="/bank/users">
-            <Link active={bankusers}>Bank User</Link>
+          <A href="/merchant/users">
+            <Link active={bankusers}>Merchant User</Link>
           </A>
 
-          <A>
+          {/* <A>
             <Link active={users}>Staff</Link>
           </A>
           <A>
             <Link active={reports}>Reports</Link>
-          </A>
+          </A> */}
         </NavTag>
       </React.Fragment>
     );
