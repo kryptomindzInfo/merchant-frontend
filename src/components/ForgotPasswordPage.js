@@ -99,7 +99,7 @@ const ForgotPasswordPage = (props) => {
               const { isSubmitting, handleChange, handleBlur } = formikProps;
               return (
                 <Form>
-                  <FormField mB="14%">
+                  <FormField mB="14px">
                     <label htmlFor="mobile">Mobile No</label>
                     <Field
                       noMargin

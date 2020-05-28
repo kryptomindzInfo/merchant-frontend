@@ -97,7 +97,7 @@ const SignInPage = (props) => {
               const { isSubmitting, handleBlur, handleChange } = formikProps;
               return (
                 <Form>
-                  <FormField mB="14%">
+                  <FormField mB="14px">
                     <label htmlFor="username">Username</label>
                     <Field
                       onFocus={(e) => {
@@ -116,7 +116,7 @@ const SignInPage = (props) => {
                     />
                     <ErrorMessage name="username" component={ErrorText} />
                   </FormField>
-                  <FormField mB="14%">
+                  <FormField mB="14px">
                     <label htmlFor="password">Password</label>
                     <Field
                       onFocus={inputFocus}

@@ -102,7 +102,7 @@ const SignInVerificationPage = (props) => {
               const { isSubmitting, handleBlur, handleChange } = formikProps;
               return (
                 <Form>
-                  <FormField mB="14%">
+                  <FormField mB="14px">
                     <label htmlFor="newPassword">New Password</label>
                     <Field
                       noMargin
@@ -114,7 +114,7 @@ const SignInVerificationPage = (props) => {
                     />
                     <ErrorMessage name="newPassword" component={ErrorText} />
                   </FormField>
-                  <FormField mB="14%">
+                  <FormField mB="14px">
                     <label htmlFor="repeatPassword">Password</label>
                     <Field
                       noMargin

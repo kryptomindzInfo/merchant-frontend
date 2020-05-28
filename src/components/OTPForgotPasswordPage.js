@@ -94,7 +94,7 @@ const OTPForgotPasswordPage = (props) => {
               const { isSubmitting } = formikProps;
               return (
                 <Form>
-                  <FormField mB="14%">
+                  <FormField mB="14px">
                     <label htmlFor="otp">OTP</label>
                     <Field
                       noMargin
@@ -105,7 +105,7 @@ const OTPForgotPasswordPage = (props) => {
                       as={TextInput}
                     />
                     <ErrorMessage name="username" component={ErrorText} />
-                  </FormField>{' '}
+                  </FormField>
                   <Button
                     filledBtn
                     variant="contained"
