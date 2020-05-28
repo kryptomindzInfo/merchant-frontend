@@ -1,5 +1,12 @@
 import React, { Fragment, useState } from 'react';
-import { Grid, makeStyles, Tab, Tabs, Typography, withStyles, } from '@material-ui/core';
+import {
+  Grid,
+  makeStyles,
+  Tab,
+  Tabs,
+  Typography,
+  withStyles,
+} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
