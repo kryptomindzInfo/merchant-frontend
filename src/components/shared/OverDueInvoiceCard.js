@@ -1,6 +1,6 @@
 import React from 'react';
-import Card from '../shared/Card';
-import Col from '../shared/Col';
+import Card from './Card';
+import Col from './Col';
 
 const OverDueInvoiceCard = () => {
   return (

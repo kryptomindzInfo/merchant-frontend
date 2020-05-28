@@ -30,6 +30,7 @@ const appTheme = {
   hGradient: 'linear-gradient(to right, #6cac6a 1%, #102910)',
   font: 'Roboto',
   fontSize: '14px',
+  background: '#f5f5f5',
 };
 
 const muiTheme = createMuiTheme({

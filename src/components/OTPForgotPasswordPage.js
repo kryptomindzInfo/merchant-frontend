@@ -16,6 +16,7 @@ import A from './shared/A';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
+import { inputBlur, inputFocus } from './utils/handleInputFocus';
 
 const initialValues = {
   otp: '',
@@ -93,13 +94,14 @@ const OTPForgotPasswordPage = (props) => {
               const { isSubmitting } = formikProps;
               return (
                 <Form>
-                  <FormField>
+                  <FormField mB="14%">
                     <label htmlFor="otp">OTP</label>
                     <Field
                       noMargin
                       name="otp"
                       type="text"
-                      placeholder="Enter OTP"
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
                       as={TextInput}
                     />
                     <ErrorMessage name="username" component={ErrorText} />

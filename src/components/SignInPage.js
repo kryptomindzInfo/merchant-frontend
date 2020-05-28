@@ -17,6 +17,7 @@ import A from './shared/A';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
+import { inputBlur, inputFocus } from './utils/handleInputFocus';
 
 const initialValues = {
   username: '',
@@ -31,6 +32,7 @@ const SignInPage = (props) => {
   const classes = styles();
   const { dashboardUrl, isBranch, verifyUrl, match } = props;
   const { branchName } = match.params;
+
   return (
     <Fragment>
       <Helmet>
@@ -92,27 +94,36 @@ const SignInPage = (props) => {
             }}
           >
             {(formikProps) => {
-              const { isSubmitting } = formikProps;
+              const { isSubmitting, handleBlur, handleChange } = formikProps;
               return (
                 <Form>
-                  <FormField>
+                  <FormField mB="14%">
                     <label htmlFor="username">Username</label>
                     <Field
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       noMargin
                       name="username"
                       type="text"
-                      placeholder="Username"
                       as={TextInput}
                     />
                     <ErrorMessage name="username" component={ErrorText} />
                   </FormField>
-                  <FormField className="form-control">
+                  <FormField mB="14%">
                     <label htmlFor="password">Password</label>
                     <Field
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
                       noMargin
                       name="password"
                       type="password"
-                      placeholder="Password"
                       as={TextInput}
                     />
                     <ErrorMessage name="password" component={ErrorText} />

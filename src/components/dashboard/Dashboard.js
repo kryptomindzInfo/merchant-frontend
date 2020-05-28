@@ -1,9 +1,9 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import PaymentRecivedCard from '../utils/PaymentRecivedCard';
-import InvoiceNumberCard from '../utils/InvoiceNumberCard';
-import PendingInvoiceCard from '../utils/PendingInvoiceCard';
-import OverDueInvoiceCard from '../utils/OverDueInvoiceCard';
+import PaymentRecivedCard from '../shared/PaymentRecivedCard';
+import InvoiceNumberCard from '../shared/InvoiceNumberCard';
+import PendingInvoiceCard from '../shared/PendingInvoiceCard';
+import OverDueInvoiceCard from '../shared/OverDueInvoiceCard';
 import HistoryCard from './HistoryCard';
 
 import MerchantHeader from '../shared/headers/merchant/MerchantHeader';

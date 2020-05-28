@@ -4,11 +4,6 @@ import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import { Visibility, VisibilityOff } from '@material-ui/icons';
 import PropTypes from 'prop-types';
 import LandingLeftSection from './utils/LandingLeftSection';
 import history from './utils/history';
@@ -19,6 +14,7 @@ import A from './shared/A';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
+import { inputBlur, inputFocus } from './utils/handleInputFocus';
 
 const initialValues = {
   newPassword: '',
@@ -103,27 +99,36 @@ const SignInVerificationPage = (props) => {
             }}
           >
             {(formikProps) => {
-              const { isSubmitting } = formikProps;
+              const { isSubmitting, handleBlur, handleChange } = formikProps;
               return (
                 <Form>
-                  <FormField>
+                  <FormField mB="14%">
                     <label htmlFor="newPassword">New Password</label>
                     <Field
                       noMargin
                       name="newPassword"
                       type="password"
-                      placeholder="New Password"
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
                       as={TextInput}
                     />
                     <ErrorMessage name="newPassword" component={ErrorText} />
                   </FormField>
-                  <FormField className="form-control">
+                  <FormField mB="14%">
                     <label htmlFor="repeatPassword">Password</label>
                     <Field
                       noMargin
                       name="repeatPassword"
                       type="password"
-                      placeholder="Repeat Password"
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       as={TextInput}
                     />
                     <ErrorMessage name="repeatPassword" component={ErrorText} />

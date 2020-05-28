@@ -16,12 +16,16 @@ import TextInput from './shared/TextInput';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
+import { inputBlur, inputFocus } from './utils/handleInputFocus';
 
 const initialValues = {
   mobile: '',
 };
 const validationSchema = Yup.object().shape({
-  mobile: Yup.number().required('Required'),
+  mobile: Yup.string()
+    .min(10, 'Minimum 10 digits required.')
+    .max(10, 'Maximum 10 digits only.')
+    .required('Required'),
 });
 
 const ForgotPasswordPage = (props) => {
@@ -92,16 +96,24 @@ const ForgotPasswordPage = (props) => {
             }}
           >
             {(formikProps) => {
-              const { isSubmitting } = formikProps;
+              const { isSubmitting, handleChange, handleBlur } = formikProps;
               return (
                 <Form>
-                  <FormField>
+                  <FormField mB="14%">
                     <label htmlFor="mobile">Mobile No</label>
                     <Field
                       noMargin
                       name="mobile"
                       type="number"
-                      placeholder="Mobile No"
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       as={TextInput}
                     />
                     <ErrorMessage name="mobile" component={ErrorText} />
