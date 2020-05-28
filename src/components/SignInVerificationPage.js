@@ -5,7 +5,7 @@ import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import LandingLeftSection from './utils/LandingLeftSection';
+import LandingLeftSection from './shared/headers/LandingLeftSection';
 import history from './utils/history';
 import styles from '../styles/LandingPageCss';
 import Button from './shared/Button';
