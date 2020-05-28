@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 import history from './utils/history';
-import LandingLeftSection from './shared/headers/LandingLeftSection';
+import LandingLeftSection from './shared/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
 import { MERCHANT_API } from './constants';
 import notify from './utils/Notify';
