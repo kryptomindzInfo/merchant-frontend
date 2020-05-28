@@ -5,6 +5,7 @@ internals/scripts/
 package-lock.json
 yarn.lock
 package.json
-src/components/branch/BranchList.js
+src/components/branch/cashier/CashierList.js
 src/components/shared/Card.js
-src/components/staff/StaffList.js
+src/components/merchant/staff/StaffList.js
+src/components/merchant/branch/BranchList.js

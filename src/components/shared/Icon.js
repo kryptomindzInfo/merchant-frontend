@@ -5,7 +5,7 @@ const Icon = styled.i`
   font-size: 45px;
   color: #716f6f;
   text-align: center;
-  .svg.MuiSvgIcon-root {
+  .svg.MuiSvgIcon-root.material-icons {
     font-size: 45px;
   }
 `;

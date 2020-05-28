@@ -5,8 +5,8 @@ import BlockIcon from '@material-ui/icons/Block';
 import FolderIcon from '@material-ui/icons/Folder';
 import EditIcon from '@material-ui/icons/Edit';
 import ChartIcon from '@material-ui/icons/InsertChartOutlined';
-import A from '../../shared/A';
-import Card from '../../shared/Card';
+import A from '../A';
+import Card from '../Card';
 
 const SidebarStyle = styled.aside`
   width: 260px;
@@ -55,7 +55,7 @@ const H1 = styled.h1`
   text-align: center;
 `;
 
-class Sidebar extends Component {
+class InfoSidebar extends Component {
   editSignal = (event) => {
     this.props.edit();
   };
@@ -71,6 +71,7 @@ class Sidebar extends Component {
     const edit = this.props.active === 'edit';
     const block = this.props.active === 'block';
     const bt = this.props.blockTxt === 1 ? 'Block' : 'Unblock';
+    const infoType = this.props.type;
     return (
       <SidebarStyle marginRight>
         <A href={`/bank/branch/${this.props.branchId}`}>
@@ -78,18 +79,20 @@ class Sidebar extends Component {
             <i className="material-icons">
               <PersonIcon />
             </i>
-            <h3>Branch Info</h3>
+            <h3>{infoType} Info</h3>
           </Card>
         </A>
-        <A href={`/bank/cashiers/${this.props.branchId}`}>
-          <Card rounded selected={cashier} className="sideNav">
-            <i className="material-icons">
-              <FolderIcon />
-            </i>
+        {infoType === 'Branch' ? (
+          <A href={`/bank/cashiers/${this.props.branchId}`}>
+            <Card rounded selected={cashier} className="sideNav">
+              <i className="material-icons">
+                <FolderIcon />
+              </i>
 
-            <h3>Cashier</h3>
-          </Card>
-        </A>
+              <h3>Cashier</h3>
+            </Card>
+          </A>
+        ) : null}
         <A href="/reports/">
           <Card rounded selected={reports} className="sideNav">
             <i className="material-icons">
@@ -128,4 +131,4 @@ class Sidebar extends Component {
   }
 }
 
-export default Sidebar;
+export default InfoSidebar;

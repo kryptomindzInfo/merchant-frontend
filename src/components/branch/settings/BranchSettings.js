@@ -3,14 +3,13 @@ import React from 'react';
 import Wrapper from '../../shared/Wrapper';
 import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
-import Sidebar from './Sidebar';
+import ProfileSidebar from '../../shared/sidebars/ProfileSidebar';
 import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
-import CreateBranchPopup from '../CreateBranchPopup';
 
-function BranchProfile(props) {
+function BranchSettings(props) {
   /* if (isLoading) {
     return <Loader fullPage />;
   } */
@@ -20,13 +19,9 @@ function BranchProfile(props) {
         <meta charSet="utf-8" />
         <title>Branch | Merchant | E-WALLET</title>
       </Helmet>
-      <MerchantHeader
-        page="branch"
-        middleTitle="Branch Profile"
-        goto="/bank/branches/"
-      />
+      <MerchantHeader page="info" goto="/branch/dashboard" />
       <Container verticalMargin>
-        <Sidebar active="info" bankName="Kotak" />
+        <ProfileSidebar active="info" bankName="Kotak" />
         <Main>
           <Card bigPadding bordered>
             <div className="cardBody">
@@ -79,13 +74,16 @@ function BranchProfile(props) {
                 <Col className="infoLeft">Phone Number</Col>
                 <Col className="infoRight">8147218480</Col>
               </Row>
+              <Row>
+                <Col className="infoLeft">Branch Users</Col>
+                <Col className="infoRight">Yusuf Jk</Col>
+              </Row>
             </div>
           </Card>
         </Main>
       </Container>
-      {false ? <CreateBranchPopup type="update" /> : null}
     </Wrapper>
   );
 }
 
-export default BranchProfile;
+export default BranchSettings;

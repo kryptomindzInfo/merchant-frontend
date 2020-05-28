@@ -1,12 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import {
-  Grid,
-  makeStyles,
-  Tab,
-  Tabs,
-  Typography,
-  withStyles,
-} from '@material-ui/core';
+import { Grid, makeStyles, Tab, Tabs, Typography, withStyles, } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -22,7 +15,7 @@ import TableRow from '@material-ui/core/TableRow';
 import TablePagination from '@material-ui/core/TablePagination';
 import TableCell from '@material-ui/core/TableCell';
 import { PlaylistAddCheckRounded } from '@material-ui/icons';
-import Card from '../shared/Card';
+import Card from '../../shared/Card';
 
 const DashBoardTabs = withStyles({
   indicator: {

@@ -9,11 +9,14 @@ import SignInVerificationPage from './SignInVerificationPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
-import Dashboard from './dashboard/Dashboard';
-import StaffList from './staff/StaffList';
-import BranchList from './branch/BranchList';
-import BranchProfile from './branch/BranchProfile/BranchProfile';
+import Dashboard from './merchant/dashboard/Dashboard';
+import StaffList from './merchant/staff/StaffList';
+import BranchList from './merchant/branch/BranchList';
+import BranchInfo from './merchant/branch/BranchInfo';
 import GlobalStyle from '../styles/global-styles';
+import CashierList from './branch/cashier/CashierList';
+import CashierInfo from './branch/cashier/CashierInfo';
+import BranchSettings from './branch/settings/BranchSettings';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -65,16 +68,22 @@ const muiTheme = createMuiTheme({
   },
 });
 
-const dashboardUrl = '/merchant/dashboard';
+// merchant URL's
+
+const merchantDashboardUrl = '/merchant/dashboard';
 const verifyUrl = '/merchant/login-verify';
 const loginUrl = '/merchant/login';
 const otpUrl = '/merchant/otp-forgot-password';
 const branchUrl = '/merchant/branches';
 const staffUrl = '/merchant/staff';
-// branch URL's
 const branchLoginUrl = '/merchant/branch/:branchName';
-const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
 const branchProfileUrl = '/merchant/branch/info/:id';
+
+// branch URL's
+const cashierUrl = '/branch/cashiers';
+const branchDashboardUrl = '/branch/:branchName/dashboard';
+const branchSettingsUrl = '/branch/settings';
+const cashierInfoUrl = '/branch/cashier/info/:id';
 
 function App() {
   const [theme, setTheme] = useState(appTheme);
@@ -90,7 +99,7 @@ function App() {
                 <SignInPage
                   isBranch={false}
                   verifyUrl={verifyUrl}
-                  dashboardUrl={dashboardUrl}
+                  dashboardUrl={merchantDashboardUrl}
                   {...props}
                 />
               )}
@@ -102,7 +111,7 @@ function App() {
                 <SignInPage
                   isBranch={false}
                   verifyUrl={verifyUrl}
-                  dashboardUrl={dashboardUrl}
+                  dashboardUrl={merchantDashboardUrl}
                   {...props}
                 />
               )}
@@ -112,7 +121,7 @@ function App() {
               path={verifyUrl}
               component={(props) => (
                 <SignInVerificationPage
-                  dashboardUrl={dashboardUrl}
+                  dashboardUrl={merchantDashboardUrl}
                   loginUrl={loginUrl}
                   {...props}
                 />
@@ -143,7 +152,7 @@ function App() {
             />
             <Route
               exact
-              path={dashboardUrl}
+              path={merchantDashboardUrl}
               component={(props) => <Dashboard {...props} />}
             />
             <Route
@@ -154,7 +163,7 @@ function App() {
             <Route
               exact
               path={branchProfileUrl}
-              component={(props) => <BranchProfile {...props} />}
+              component={(props) => <BranchInfo {...props} />}
             />
             <Route
               exact
@@ -174,6 +183,22 @@ function App() {
                   {...props}
                 />
               )}
+            />
+
+            <Route
+              exact
+              path={cashierUrl}
+              component={(props) => <CashierList {...props} />}
+            />
+            <Route
+              exact
+              path={cashierInfoUrl}
+              component={(props) => <CashierInfo {...props} />}
+            />
+            <Route
+              exact
+              path={branchSettingsUrl}
+              component={(props) => <BranchSettings {...props} />}
             />
             {/* <Route */}
             {/*  exact */}

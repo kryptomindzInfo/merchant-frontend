@@ -3,17 +3,17 @@ import { Formik } from 'formik';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
-import Popup from '../shared/Popup';
-import FormGroup from '../shared/FormGroup';
-import { API_URL, STATIC_URL } from '../constants';
-import Button from '../shared/Button';
-import Row from '../shared/Row';
-import Col from '../shared/Col';
-import TextInput from '../shared/TextInput';
-import Loader from '../shared/Loader';
-import UploadArea from '../shared/UploadArea';
-import SelectInput from '../shared/SelectInput';
-import Icon from '../shared/Icon';
+import Popup from '../../shared/Popup';
+import FormGroup from '../../shared/FormGroup';
+import { API_URL, STATIC_URL } from '../../constants';
+import Button from '../../shared/Button';
+import Row from '../../shared/Row';
+import Col from '../../shared/Col';
+import TextInput from '../../shared/TextInput';
+import Loader from '../../shared/Loader';
+import UploadArea from '../../shared/UploadArea';
+import SelectInput from '../../shared/SelectInput';
+import Icon from '../../shared/Icon';
 
 function CreateStaffPopup(props) {
   const token = localStorage.getItem('staffLogged');
@@ -233,14 +233,22 @@ function CreateStaffPopup(props) {
                 </UploadArea>
               </FormGroup>
               <Icon className="material-icons">
-                <FingerprintIcon className="material-icons" />
+                <FingerprintIcon style={{ fontSize: '45px' }} />
               </Icon>
               {values.addUserLoading ? (
                 <Button filledBtn marginTop="20px" disabled>
                   <Loader />
                 </Button>
               ) : (
-                <Button filledBtn marginTop="20px">
+                <Button
+                  filledBtn
+                  marginTop="20px"
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                  }}
+                >
                   <span>Add User</span>
                 </Button>
               )}

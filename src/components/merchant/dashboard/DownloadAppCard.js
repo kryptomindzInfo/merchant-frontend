@@ -1,8 +1,8 @@
 import React from 'react';
-import { Grid, Typography, withStyles, Paper } from '@material-ui/core';
+import { Grid, Paper, Typography, withStyles } from '@material-ui/core';
 
-import appStore from '../../assets/images/appStore.png';
-import GooglePlayLogo from '../../assets/images/GooglePlayLogo.png';
+import appStore from '../../../assets/images/appStore.png';
+import GooglePlayLogo from '../../../assets/images/GooglePlayLogo.png';
 
 const styles = (theme) => ({
   mainContainer: {

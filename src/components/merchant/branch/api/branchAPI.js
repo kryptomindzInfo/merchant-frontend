@@ -1,6 +1,6 @@
 import axios from 'axios';
-import notify from '../../utils/Notify';
-import { API_URL } from '../../constants';
+import notify from '../../../utils/Notify';
+import { API_URL } from '../../../constants';
 
 const createBranch = async (props, values, token) => {
   try {

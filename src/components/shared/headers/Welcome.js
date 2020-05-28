@@ -64,6 +64,7 @@ class Welcome extends Component {
       isAdmin = localStorage.getItem('isAdmin');
       name = localStorage.getItem('name');
     }
+    name = 'Airtel';
     const tempDate = new Date();
     const date = `${tempDate.getDate()}-${
       tempDate.getMonth() + 1

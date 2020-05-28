@@ -3,16 +3,17 @@ import { Form, Formik } from 'formik';
 import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
-import notify from '../utils/Notify';
+import TextField from '@material-ui/core/TextField';
+import notify from '../../utils/Notify';
 import { createBranch, editBranch } from './api/branchAPI';
-import Popup from '../shared/Popup';
-import FormGroup from '../shared/FormGroup';
-import { API_URL } from '../constants';
-import Button from '../shared/Button';
-import Row from '../shared/Row';
-import Col from '../shared/Col';
-import TextInput from '../shared/TextInput';
-import CountrySelectBox from '../shared/CountrySelectBox';
+import Popup from '../../shared/Popup';
+import FormGroup from '../../shared/FormGroup';
+import { API_URL } from '../../constants';
+import Button from '../../shared/Button';
+import Row from '../../shared/Row';
+import Col from '../../shared/Col';
+import TextInput from '../../shared/TextInput';
+import CountrySelectBox from '../../shared/CountrySelectBox';
 
 function CreateBranchPopup(props) {
   const token = localStorage.getItem('bankLogged');
@@ -257,35 +258,43 @@ function CreateBranchPopup(props) {
                 <Row>
                   <Col cW="49%" mR="2%">
                     <FormGroup>
-                      <label>From*</label>
-                      <TextInput
+                      <TextField
+                        label="From"
                         type="time"
-                        name="working_from"
+                        value={values.working_from}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
-                        min="00:00"
-                        max="23:00"
-                        autoFocus
-                        value={values.working_from}
                         onChange={handleChange}
                         required
+                        fullWidth
+                        min="00:00"
+                        variant="outlined"
+                        max="23:00"
+                        margin="dense"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
                       />
                     </FormGroup>
                   </Col>
                   <Col cW="49%">
                     <FormGroup>
-                      <label>To*</label>
-                      <TextInput
+                      <TextField
+                        label="To"
                         type="time"
-                        autoFocus
-                        min="00:00"
-                        max="23:00"
-                        name="working_to"
+                        value={values.working_to}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
-                        value={values.working_to}
                         onChange={handleChange}
                         required
+                        fullWidth
+                        min="00:00"
+                        variant="outlined"
+                        max="23:00"
+                        margin="dense"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
                       />
                     </FormGroup>
                   </Col>
@@ -295,6 +304,11 @@ function CreateBranchPopup(props) {
                   disabled={isSubmitting}
                   filledBtn
                   marginTop="10px"
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                  }}
                 >
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />

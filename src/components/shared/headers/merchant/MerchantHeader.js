@@ -48,7 +48,7 @@ class MerchantHeader extends Component {
       <TopBar>
         <Welcome from="merchant" />
         <Container>
-          {page === 'branch' ? (
+          {page === 'info' ? (
             <A href={this.props.goto} float="left">
               <Link>Back</Link>
             </A>
@@ -65,9 +65,7 @@ class MerchantHeader extends Component {
               {this.props.middleTitle}
             </MiddleTitle>
           ) : null}
-          {page === 'branch' ? null : (
-            <MerchantNav active={this.props.active} />
-          )}
+          {page === 'info' ? null : <MerchantNav active={this.props.active} />}
         </Container>
       </TopBar>
     );

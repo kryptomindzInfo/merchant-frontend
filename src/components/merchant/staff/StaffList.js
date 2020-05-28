@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import Wrapper from '../shared/Wrapper';
-import MerchantHeader from '../shared/headers/merchant/MerchantHeader';
-import Container from '../shared/Container';
-import ActionBar from '../shared/ActionBar';
-import Main from '../shared/Main';
-import Button from '../shared/Button';
-import Card from '../shared/Card';
-import Row from '../shared/Row';
-import Col from '../shared/Col';
+import Wrapper from '../../shared/Wrapper';
+import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
+import Container from '../../shared/Container';
+import ActionBar from '../../shared/ActionBar';
+import Main from '../../shared/Main';
+import Button from '../../shared/Button';
+import Card from '../../shared/Card';
+import Row from '../../shared/Row';
+import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
-import { CONTRACT_URL, STATIC_URL } from '../constants';
-import SideBar from '../shared/SideBar';
+import { CONTRACT_URL, STATIC_URL } from '../../constants';
+import SideBar from '../../shared/SideBar';
 
 const StaffList = () => {
   const [staff, setStaff] = useState('');

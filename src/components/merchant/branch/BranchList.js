@@ -3,18 +3,18 @@ import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import AddIcon from '@material-ui/icons/Add';
-import Wrapper from '../shared/Wrapper';
-import MerchantHeader from '../shared/headers/merchant/MerchantHeader';
-import Loader from '../shared/Loader';
-import Container from '../shared/Container';
-import ActionBar from '../shared/ActionBar';
-import Table from '../shared/Table';
-import Main from '../shared/Main';
+import Wrapper from '../../shared/Wrapper';
+import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
+import Loader from '../../shared/Loader';
+import Container from '../../shared/Container';
+import ActionBar from '../../shared/ActionBar';
+import Table from '../../shared/Table';
+import Main from '../../shared/Main';
 import { fetchBranchList } from './api/branchAPI';
 import CreateBranchPopup from './CreateBranchPopup';
-import Button from '../shared/Button';
-import Card from '../shared/Card';
-import SideBar from '../shared/SideBar';
+import Button from '../../shared/Button';
+import Card from '../../shared/Card';
+import SideBar from '../../shared/SideBar';
 
 function BranchList() {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
@@ -68,7 +68,9 @@ function BranchList() {
             className="clr"
           >
             <div className="iconedInput fl">
-              <i className="material-icons"><SearchIcon/></i>
+              <i className="material-icons">
+                <SearchIcon />
+              </i>
               <input type="text" placeholder="Search Merchants" />
             </div>
 
@@ -77,14 +79,14 @@ function BranchList() {
               flex
               onClick={() => handleBranchPopupClick('new', {})}
             >
-              <AddIcon className="material-icons"/>
+              <AddIcon className="material-icons" />
               <span>Add Branch</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
             <div className="cardHeader">
               <div className="cardHeaderLeft">
-                <SupervisedUserCircleIcon className="material-icons"/>
+                <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
                 <h3>Branch List</h3>
@@ -108,31 +110,26 @@ function BranchList() {
                     ? branchList.map((branch) => {
                       return (
                         <tr key={branch._id}>
-                          <td className='tac'>{branch.name}</td>
-                          <td className='tac'>{branch.bills_paid}</td>
-                          <td className='tac'>{branch.bills_raised}</td>
-                          <td className='tac'>{branch.amount_collected}</td>
-                          <td className='tac'>{branch.amount_due}</td>
+                          <td className="tac">{branch.name}</td>
+                          <td className="tac">{branch.bills_paid}</td>
+                          <td className="tac">{branch.bills_raised}</td>
+                          <td className="tac">{branch.amount_collected}</td>
+                          <td className="tac">{branch.amount_due}</td>
 
-                          <td className='tac bold'>
+                          <td className="tac bold">
                             <div
                               style={{
                                 display: 'flex',
                                 justifyContent: 'center',
                               }}
                             >
-                              <td className='tac'>
-                                {branch.fee_generated}
-                              </td>
-                              <span className='absoluteMiddleRight primary popMenuTrigger'>
-                                <i className='material-icons '>more_vert</i>
-                                <div className='popMenu'>
+                              <td className="tac">{branch.fee_generated}</td>
+                              <span className="absoluteMiddleRight primary popMenuTrigger">
+                                <i className="material-icons ">more_vert</i>
+                                <div className="popMenu">
                                   <span
                                     onClick={() =>
-                                      handleBranchPopupClick(
-                                        'update',
-                                        branch,
-                                      )
+                                      handleBranchPopupClick('update', branch)
                                     }
                                   >
                                       Edit
