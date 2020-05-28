@@ -147,7 +147,7 @@ function EditCashierPopup(props) {
                     padding: '5px',
                     fontFamily: 'Roboto, sans-serif',
                     fontWeight: 500,
-                    marginRight: '10%',
+                    width: '80%',
                     marginLeft: '10%',
                   }}
                   filledBtn
@@ -162,7 +162,7 @@ function EditCashierPopup(props) {
                     padding: '5px',
                     fontFamily: 'Roboto, sans-serif',
                     fontWeight: 500,
-                    marginRight: '10%',
+                    width: '80%',
                     marginLeft: '10%',
                   }}
                   filledBtn

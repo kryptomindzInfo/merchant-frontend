@@ -39,7 +39,7 @@ function CashierList() {
   };
   
   const onEditingPopupClose = () => {
-    setEditingCashier(false);
+    setEditCashierPopup(false);
   };
 
   useEffect(() => {
@@ -180,9 +180,9 @@ function CashierList() {
           </Card>
         </Main>
       </Container>
-      {assignUserPopup ? <AssignUserPopup onClose={onAssignUserPopupClose} user={userList} /> : null}
+      {assignUserPopup ? <AssignUserPopup onClose={() => onAssignUserPopupClose()} user={userList} /> : null}
 
-      {editCashierPopup ? <EditCashierPopup onClose={onEditingPopupClose} cashier={cashierList} /> : null}
+      {editCashierPopup ? <EditCashierPopup onClose={() => onEditingPopupClose()} cashier={cashierList} /> : null}
     </Wrapper>
   );
 }

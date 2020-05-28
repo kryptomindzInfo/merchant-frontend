@@ -20,6 +20,12 @@ function AssignUserPopup(props) {
           email: props.user.email || '',
           mobile: props.user.mobile || '',
           user_id: props.user.username || '',
+          users: [
+            {
+              _id: '2sdnjs',
+              name: 'Yusuf',
+            },
+          ],
         }}
         onSubmit={{}}
       >
@@ -39,7 +45,7 @@ function AssignUserPopup(props) {
           return (
             <div>
               <h1>Assign User</h1>
-              <FormGroup>
+              <FormGroup mR="10%" mL="10%">
                 <label>Cashier Name*</label>
                 <TextInput
                   type="text"
@@ -53,7 +59,7 @@ function AssignUserPopup(props) {
                   required
                 />
               </FormGroup>
-              <FormGroup>
+              <FormGroup mR="10%" mL="10%">
                 <label>Cashier Code*</label>
                 <TextInput
                   type="text"
@@ -67,7 +73,7 @@ function AssignUserPopup(props) {
                   required
                 />
               </FormGroup>
-              <FormGroup>
+              <FormGroup mR="10%" mL="10%">
                 <label>Assign User*</label>
                 <SelectInput
                   onFocus={handleFocus}
@@ -91,11 +97,32 @@ function AssignUserPopup(props) {
               </FormGroup>
 
               {values.assignLoading ? (
-                <Button filledBtn marginTop="50px" disabled>
+                <Button
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                    width: '80%',
+                    marginLeft: '10%',
+                  }}
+                  filledBtn
+                  marginTop="50px"
+                  disabled
+                >
                   <Loader />
                 </Button>
               ) : (
-                <Button filledBtn marginTop="50px">
+                <Button
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                    width: '80%',
+                    marginLeft: '10%',
+                  }}
+                  filledBtn
+                  marginTop="50px"
+                >
                   <span>Assign User</span>
                 </Button>
               )}
