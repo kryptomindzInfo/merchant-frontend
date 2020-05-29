@@ -8,6 +8,7 @@ const Row = styled.div`
   margin-top: ${(props) => (props.marginTop ? '24px' : '0')};
   flex-direction: row;
   align-items: ${(props) => (props.vAlign ? props.vAlign : 'center')};
-  justify-content: center;
+  text-align: ${(props) => (props.textAlign ? props.textAlign : 'center')};
+  justify-content: ${(props) => (props.justify ? props.justify : 'center')};
 `;
 export default Row;

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import Wrapper from '../../shared/Wrapper';
-import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
+import BranchHeader from '../../shared/headers/branch/BranchHeader';
 import Loader from '../../shared/Loader';
 import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
@@ -14,8 +14,11 @@ import { CURRENCY } from '../../constants';
 import A from '../../shared/A';
 import AssignUserPopup from './AssignUserPopup';
 import EditCashierPopup from './EditCashierPopup';
+import BranchSideBar from '../../shared/sidebars/BranchSideBar';
 
-function CashierList() {
+function CashierList(props) {
+  const { match } = props;
+  const { branchName } = match.params;
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
   const [cashierList, setCashierList] = React.useState([]);
@@ -32,12 +35,12 @@ function CashierList() {
   const onAssignUserPopupClose = () => {
     setAssignUserPopup(false);
   };
-  
+
   const handleEditCashierPopupClick = (cashier) => {
     setEditingCashier(cashier);
     setEditCashierPopup(true)
   };
-  
+
   const onEditingPopupClose = () => {
     setEditCashierPopup(false);
   };
@@ -83,14 +86,15 @@ function CashierList() {
     <Wrapper from="merchant">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Cashiers | BRANCH | E-WALLET</title>
+        <title>{ `${branchName} | Cashiers` }</title>
       </Helmet>
-      <MerchantHeader active="cashier" />
+      <BranchHeader active="cashier" branchName={branchName} />
       <Container verticalMargin>
-        <Main>
+        <BranchSideBar />
+        <Main fullWidth>
           <ActionBar
             marginBottom="33px"
-            inputWidth="calc(100% - 241px)"
+            inputWidth="100%"
             className="clr"
           >
             <div className="iconedInput fl">

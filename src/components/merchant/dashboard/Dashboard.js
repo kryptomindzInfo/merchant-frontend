@@ -10,7 +10,7 @@ import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
-import SideBar from '../../shared/SideBar';
+import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 
 const Dashboard = () => {
   return (
@@ -21,7 +21,7 @@ const Dashboard = () => {
       </Helmet>
       <MerchantHeader />
       <Container verticalMargin>
-        <SideBar />
+        <MerchantSideBar />
         <Main>
           <Row>
             <PaymentRecivedCard />

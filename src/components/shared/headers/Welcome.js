@@ -42,7 +42,7 @@ class Welcome extends Component {
   logoutBranch = () => {
     localStorage.removeItem('branchLogged');
     localStorage.removeItem('branchName');
-    history.push(`/branch/${this.props.bankName}`);
+    history.push(`/merchant/branch/${this.props.bankName}`);
   };
 
   logoutCashier = () => {
@@ -98,7 +98,7 @@ class Welcome extends Component {
                 </Name>
                 <SubNav className="infraSubNav">
                   {/* { isAdmin ?  */}
-                  <A href={`/branch/${bankName}/info`}>Settings</A>
+                  <A href={`/merchant/branch/info/${bankName}`}>Settings</A>
                   {/* //  : null } */}
                   <span onClick={this.logoutBranch}>Logout</span>
                 </SubNav>

@@ -12,7 +12,33 @@ import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
 import { CONTRACT_URL, STATIC_URL } from '../../constants';
-import SideBar from '../../shared/SideBar';
+import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
+
+const  mappedCards = (staff) =>{
+  return staff.map((b) => {
+    if (!b.isAdmin) {
+      const pic = b.logo && b.logo !== '' && b.logo !== undefined
+        ? STATIC_URL + b.logo
+        : `${CONTRACT_URL}main/default-profile.png`;
+      return (<Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
+        <div className="profile">
+          <img src={pic} />
+        </div>
+        <Row>
+          <Col cW="80%">
+            <h4 className="hh">{b.name}</h4>
+          </Col>
+          <Col cW="20%">
+            <Button flex noMin style={{ padding: '5px' }}>
+              Edit
+            </Button>
+          </Col>
+        </Row>
+      </Card>);
+    }
+    return <div key={b._id}></div>;
+  });
+}
 
 const StaffList = () => {
   const [staff, setStaff] = useState('');
@@ -63,7 +89,7 @@ const StaffList = () => {
       </Helmet>
       <MerchantHeader active='staff'/>
       <Container verticalMargin>
-        <SideBar/>
+        <MerchantSideBar/>
         <Main>
           <ActionBar
             marginBottom='33px'
@@ -84,39 +110,7 @@ const StaffList = () => {
           </ActionBar>
           <Row className="clr">
             {staff && staff.length > 0
-              ? staff.map((b) => {
-                if (!b.isAdmin) {
-                  const pic =
-                    b.logo && b.logo !== '' && b.logo !== undefined
-                      ? STATIC_URL + b.logo
-                      : `${CONTRACT_URL}main/default-profile.png`;
-                  return (
-                    <Card
-                      key={b._id}
-                      col
-                      horizontalMargin='10px'
-                      cardWidth='192px'
-                    >
-                      <div className='profile'>
-                        <img src={pic}/>
-                      </div>
-                      <Row>
-                        <Col cW='80%'>
-                          <h4 className='hh'>{b.name}</h4>
-                        </Col>
-                        <Col cW='20%'>
-                          <Button flex noMin style={{padding: '5px'}}>
-                            Edit
-                          </Button>
-                        </Col>
-                      </Row>
-                    </Card>
-                  );
-                }
-                return (
-                  <div key={b._id}></div>
-                );
-              })
+              ? mappedCards(staff)
               : null}
           </Row>
         </Main>

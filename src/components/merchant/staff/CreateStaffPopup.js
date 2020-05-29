@@ -14,6 +14,7 @@ import Loader from '../../shared/Loader';
 import UploadArea from '../../shared/UploadArea';
 import SelectInput from '../../shared/SelectInput';
 import Icon from '../../shared/Icon';
+import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
 
 function CreateStaffPopup(props) {
   const token = localStorage.getItem('staffLogged');
@@ -99,8 +100,15 @@ function CreateStaffPopup(props) {
                   name="name"
                   pattern=".{4,15}"
                   title="Minimum 4 characters"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.name}
                   onChange={handleChange}
                   required
@@ -111,8 +119,15 @@ function CreateStaffPopup(props) {
                 <TextInput
                   type="email"
                   name="email"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.email}
                   onChange={handleChange}
                   required
@@ -126,8 +141,15 @@ function CreateStaffPopup(props) {
                     <TextInput
                       type="text"
                       name="ccode"
-                      onFocus={handleFocus}
-                      onBlur={handleBlur}
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       value={values.ccode}
                       onChange={handleChange}
                       required
@@ -142,8 +164,15 @@ function CreateStaffPopup(props) {
                       pattern="[0-9]{10}"
                       title="10 Digit numeric value"
                       name="mobile"
-                      onFocus={handleFocus}
-                      onBlur={handleBlur}
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       value={values.mobile}
                       onChange={handleChange}
                       required
@@ -159,8 +188,15 @@ function CreateStaffPopup(props) {
                   name="username"
                   pattern=".{4,15}"
                   title="Minimum 4 characters"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.username}
                   onChange={handleChange}
                   required
@@ -174,8 +210,15 @@ function CreateStaffPopup(props) {
                   pattern=".{8,}"
                   title="Minimum 8 Characters"
                   name="password"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.password}
                   onChange={handleChange}
                   required

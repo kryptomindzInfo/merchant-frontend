@@ -7,6 +7,7 @@ import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
 import Loader from '../../shared/Loader';
+import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
 
 function EditCashierPopup(props) {
   const token = localStorage.getItem('bankLogged');
@@ -45,8 +46,15 @@ function EditCashierPopup(props) {
                 <TextInput
                   type="text"
                   name="name"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   autoFocus
                   value={values.name}
                   onChange={handleChange}
@@ -59,8 +67,15 @@ function EditCashierPopup(props) {
                   type="text"
                   autoFocus
                   name="bcode"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.bcode}
                   onChange={handleChange}
                   required
@@ -77,8 +92,15 @@ function EditCashierPopup(props) {
                       type="text"
                       autoFocus
                       name="working_from"
-                      onFocus={handleFocus}
-                      onBlur={handleBlur}
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       value={values.working_from}
                       onChange={handleChange}
                       required
@@ -93,8 +115,15 @@ function EditCashierPopup(props) {
                       autoFocus
                       title="10 Digit numeric value"
                       name="working_to"
-                      onFocus={handleFocus}
-                      onBlur={handleBlur}
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       value={values.working_to}
                       onChange={handleChange}
                       required
@@ -108,8 +137,15 @@ function EditCashierPopup(props) {
                   type="text"
                   name="per_trans_amt"
                   autoFocus
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.per_trans_amt}
                   onChange={handleChange}
                   required
@@ -120,8 +156,15 @@ function EditCashierPopup(props) {
                 <TextInput
                   type="text"
                   name="max_trans_amt"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   autoFocus
                   value={values.max_trans_amt}
                   onChange={handleChange}
@@ -133,8 +176,15 @@ function EditCashierPopup(props) {
                 <TextInput
                   type="text"
                   name="max_trans_count"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.max_trans_count}
                   autoFocus
                   onChange={handleChange}
@@ -148,7 +198,6 @@ function EditCashierPopup(props) {
                     fontFamily: 'Roboto, sans-serif',
                     fontWeight: 500,
                     width: '80%',
-                    marginLeft: '10%',
                   }}
                   filledBtn
                   marginTop="50px"
@@ -163,7 +212,6 @@ function EditCashierPopup(props) {
                     fontFamily: 'Roboto, sans-serif',
                     fontWeight: 500,
                     width: '80%',
-                    marginLeft: '10%',
                   }}
                   filledBtn
                   marginTop="50px"

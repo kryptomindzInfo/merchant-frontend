@@ -14,7 +14,7 @@ import { fetchBranchList } from './api/branchAPI';
 import CreateBranchPopup from './CreateBranchPopup';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
-import SideBar from '../../shared/SideBar';
+import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 
 function BranchList() {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
@@ -60,7 +60,7 @@ function BranchList() {
       </Helmet>
       <MerchantHeader active="branch" />
       <Container verticalMargin>
-        <SideBar />
+        <MerchantSideBar />
         <Main>
           <ActionBar
             marginBottom="33px"

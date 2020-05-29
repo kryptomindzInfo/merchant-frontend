@@ -17,6 +17,7 @@ import GlobalStyle from '../styles/global-styles';
 import CashierList from './branch/cashier/CashierList';
 import CashierInfo from './branch/cashier/CashierInfo';
 import BranchSettings from './branch/settings/BranchSettings';
+import BranchDashboard from './branch/dashboard/BranchDashboard';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -69,7 +70,6 @@ const muiTheme = createMuiTheme({
 });
 
 // merchant URL's
-
 const merchantDashboardUrl = '/merchant/dashboard';
 const verifyUrl = '/merchant/login-verify';
 const loginUrl = '/merchant/login';
@@ -80,7 +80,7 @@ const branchLoginUrl = '/merchant/branch/:branchName';
 const branchProfileUrl = '/merchant/branch/info/:id';
 
 // branch URL's
-const cashierUrl = '/branch/cashiers';
+const cashierUrl = '/branch/cashiers/:branchName';
 const branchDashboardUrl = '/branch/:branchName/dashboard';
 const branchSettingsUrl = '/branch/settings';
 const cashierInfoUrl = '/branch/cashier/info/:id';
@@ -183,6 +183,12 @@ function App() {
                   {...props}
                 />
               )}
+            />
+
+            <Route
+              exact
+              path={branchDashboardUrl}
+              component={(props) => <BranchDashboard {...props} />}
             />
 
             <Route
