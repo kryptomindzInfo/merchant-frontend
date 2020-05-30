@@ -19,7 +19,8 @@ import CashierInfo from './branch/cashier/CashierInfo';
 import BranchSettings from './branch/settings/BranchSettings';
 import BranchDashboard from './branch/dashboard/BranchDashboard';
 import CashierDashboard from './cashier/dashboard/CashierDashboard';
-import URL from './url';
+import URL from './Url';
+import InvoiceList from './cashier/invoice/InvoiceList';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -209,6 +210,12 @@ function App() {
               exact
               path={URL.cashierDashboardUrl}
               component={(props) => <CashierDashboard {...props} />}
+            />
+
+            <Route
+              exact
+              path={URL.invoiceUrl}
+              component={(props) => <InvoiceList {...props} />}
             />
           </Switch>
           <GlobalStyle />

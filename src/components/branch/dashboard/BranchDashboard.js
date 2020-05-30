@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import BranchHistoryCard from './BranchHistoryCard';
-import BranchSideBar from '../../shared/sidebars/BranchSideBar';
 import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
@@ -21,7 +20,6 @@ const BranchDashboard = (props) => {
       </Helmet>
       <BranchHeader branchName={branchName} />
       <Container verticalMargin>
-        <BranchSideBar />
         <Main fullWidth>
           <Row textAlign="start" justify="start">
             <CashInHandCard />

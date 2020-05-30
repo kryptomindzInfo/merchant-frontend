@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
-import CashierHistoryCard from './CashierHistoryCard';
+import GroupListCard from './GroupListCard';
 
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Container from '../../shared/Container';
@@ -27,7 +27,7 @@ const CashierDashboard = () => {
             <PendingInvoiceCard />
             <CreateGroupCard />
           </Row>
-          <CashierHistoryCard />
+          <GroupListCard />
         </Main>
       </Container>
     </Fragment>

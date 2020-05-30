@@ -16,6 +16,7 @@ const cashierInfoUrl = '/branch/cashier/info/:id';
 
 // cashier URL's
 const cashierDashboardUrl = '/cashier/:branchName/dashboard';
+const invoiceUrl = '/cashier/invoice/:groupId';
 
 export default {
   merchantDashboardUrl,
@@ -31,4 +32,5 @@ export default {
   branchSettingsUrl,
   cashierInfoUrl,
   cashierDashboardUrl,
+  invoiceUrl,
 };

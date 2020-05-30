@@ -1,9 +1,7 @@
 import React from 'react';
-import { Send } from '@material-ui/icons';
+import AddIcon from '@material-ui/icons/Add';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
-import Row from '../../shared/Row';
-import Col from '../../shared/Col';
 import Wrapper from '../../shared/Wrapper';
 import CreateGroupPopup from './CreateGroupPopup';
 
@@ -21,18 +19,20 @@ const CreateGroupCard = (props) => {
   return (
     <Wrapper>
       <Card
+        style={{ backgroundColor: '#0000', boxShadow: 'none' }}
         textAlign="center"
-        marginBottom="54px"
-        buttonMarginTop="32px"
+        marginBottom="85px"
         bigPadding
       >
         <Button
           width="100%"
           flex
+          className="addBankButton"
           style={{ padding: '10px' }}
           onClick={handlePopupClick}
         >
-          Create Gorup
+          <AddIcon className="material-icons" />
+          <span>Create Group</span>
         </Button>
       </Card>
       {addGroupPopup ? (

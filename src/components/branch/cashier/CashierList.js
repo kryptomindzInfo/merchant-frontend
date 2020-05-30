@@ -14,7 +14,6 @@ import { CURRENCY } from '../../constants';
 import A from '../../shared/A';
 import AssignUserPopup from './AssignUserPopup';
 import EditCashierPopup from './EditCashierPopup';
-import BranchSideBar from '../../shared/sidebars/BranchSideBar';
 
 function CashierList(props) {
   const { match } = props;
@@ -90,7 +89,6 @@ function CashierList(props) {
       </Helmet>
       <BranchHeader active="cashier" branchName={branchName} />
       <Container verticalMargin>
-        <BranchSideBar />
         <Main fullWidth>
           <ActionBar
             marginBottom="33px"

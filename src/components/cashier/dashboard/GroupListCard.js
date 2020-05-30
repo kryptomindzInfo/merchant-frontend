@@ -1,13 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import {
-  Grid,
-  makeStyles,
-  Tab,
-  Tabs,
-  Typography,
-  withStyles,
-  TableHead,
-} from '@material-ui/core';
+import { Grid, makeStyles, Tab, Tabs, withStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -15,15 +7,9 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { useTheme } from '@material-ui/core/styles';
-import TableContainer from '@material-ui/core/TableContainer';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableFooter from '@material-ui/core/TableFooter';
-import TableRow from '@material-ui/core/TableRow';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableCell from '@material-ui/core/TableCell';
-import { PlaylistAddCheckRounded } from '@material-ui/icons';
+import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import Card from '../../shared/Card';
+import Table from '../../shared/Table';
 
 const DashBoardTabs = withStyles({
   indicator: {
@@ -152,13 +138,21 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const CashierHistoryCard = () => {
+const GroupListCard = () => {
   const classes = useStyles();
   const [fullRow, setRow] = useState([]);
   const [allRow, setAllRow] = useState([]);
   const [transferRow, setTransferRow] = useState([]);
   const [receiveRow, setReceiveRow] = useState([]);
   const [value, setValue] = useState(0);
+  const [groupList, setGroupList] = useState([
+    {
+      name: 'Group 1',
+      total_invoice: '100',
+      paid_invoice: '30',
+      due_invoice: '70',
+    },
+  ]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
@@ -192,20 +186,39 @@ const CashierHistoryCard = () => {
         setRow(allRow);
     }
   };
+
+  const getGroups = () => {
+    return groupList.map((group) => {
+      return (
+        <tr key={group.name}>
+          <td>{group.name}</td>
+          <td>{group.total_invoice}</td>
+          <td>{group.paid_invoice}</td>
+          <td>
+            {group.paid_invoice}
+            <span> View </span>
+          </td>
+        </tr>
+      );
+    });
+  };
+
   return (
     <Card bigPadding>
       <div className="cardHeader">
         <div className="cardHeaderLeft">
-          <PlaylistAddCheckRounded
+          <SupervisedUserCircleIcon
             style={{ color: '#417505', fontSize: '50' }}
+            className="material-icons"
           />
         </div>
         <div className="cardHeaderRight" style={{ paddingLeft: '10px' }}>
-          <h3>Cashier Activity</h3>
+          <h3>Group List</h3>
+          <h5>List of your groups</h5>
         </div>
       </div>
       <div className="cardBody">
-        <Grid container>
+        {/*  <Grid container>
           <DashBoardTabs
             style={{ width: '100%' }}
             variant="scrollable"
@@ -222,93 +235,24 @@ const CashierHistoryCard = () => {
             <DashboardTab label="Payment Recieved" className={classes.tab} />
             <DashboardTab label="Payment Pending" className={classes.tab} />
           </DashBoardTabs>
-        </Grid>
-        <Grid container className={classes.paper}>
-          <TableContainer style={{ color: '#417505', border: 'none' }}>
-            <Table
-              aria-label="custom pagination table"
-              style={{ color: '#417505', border: 'none' }}
-            >
-              <TableHead>
-                <TableRow style={{ background: 'orange' }}>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" style={{ color: '#fff' }}>
-                      Group Name
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" style={{ color: '#fff' }}>
-                      No of Invoices
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" style={{ color: '#fff' }}>
-                      No of Paid Invoices
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" style={{ color: '#fff' }}>
-                      No of Due Invoices
-                    </Typography>
-                  </TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody style={{ color: '#417505', border: 'none' }}>
-                {/* {rowsPerPage.map((row,index) => ( */}
-                <TableRow
-                  style={{ color: '#417505', borderColor: 'transparent' }}
-                >
-                  <TableCell align="center">
-                    <Typography variant="subtitle1">Jp</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1" noWrap>
-                      50
-                    </Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1">45</Typography>
-                  </TableCell>
-                  <TableCell align="center">
-                    <Typography variant="subtitle1"> 5</Typography>
-                  </TableCell>
-                </TableRow>
-                {/* ))} */}
-                {/* {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )} */}
-              </TableBody>
-              <TableFooter>
-                <TableRow>
-                  <TablePagination
-                    style={{ color: '#417505', border: 'none' }}
-                    rowsPerPageOptions={[
-                      5,
-                      10,
-                      25,
-                      { label: 'All', value: -1 },
-                    ]}
-                    count={fullRow.length}
-                    rowsPerPage={rowsPerPage}
-                    page={page}
-                    SelectProps={{
-                      inputProps: { 'aria-label': 'rows per page' },
-                      native: true,
-                    }}
-                    onChangePage={handleChangePage}
-                    onChangeRowsPerPage={handleChangeRowsPerPage}
-                    ActionsComponent={TablePaginationActions}
-                  />
-                </TableRow>
-              </TableFooter>
-            </Table>
-          </TableContainer>
-        </Grid>
+        </Grid> */}
+
+        <Table marginTop="34px" smallTd>
+          <thead>
+            <tr>
+              <th>Group Name</th>
+              <th>No. of Invoices</th>
+              <th>No. of Paid Invoices</th>
+              <th>No. of Due Invoices</th>
+            </tr>
+          </thead>
+          <tbody>
+            {groupList && groupList.length > 0 ? getGroups() : null}
+          </tbody>
+        </Table>
       </div>
     </Card>
   );
 };
 
-export default CashierHistoryCard;
+export default GroupListCard;
