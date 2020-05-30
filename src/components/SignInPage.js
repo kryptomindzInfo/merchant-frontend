@@ -119,8 +119,15 @@ const SignInPage = (props) => {
                   <FormField mB="14px">
                     <label htmlFor="password">Password</label>
                     <Field
-                      onFocus={inputFocus}
-                      onBlur={inputBlur}
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
                       noMargin
                       name="password"
                       type="password"

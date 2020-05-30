@@ -3,6 +3,7 @@ import styled from 'styled-components';
 const Button = styled.button`
   min-width: ${(props) => (props.filledBtn ? '100%' : '110px')};
   min-width: ${(props) => (props.noMin ? '0' : 'sdd')};
+  width: ${(props) => (props.width ? props.width : 'sdd')};
   padding: ${(props) => (props.accentedBtn ? '7px' : '5px')};
   text-align: center;
   border-radius: 4px;
