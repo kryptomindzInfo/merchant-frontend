@@ -52,7 +52,7 @@ function BranchList() {
   if (isLoading) {
     return <Loader fullPage />;
   }
-  
+
   const getBranchList = () => {
     return branchList.map((branch) => {
       return (
@@ -62,7 +62,7 @@ function BranchList() {
           <td className="tac">{branch.bills_raised}</td>
           <td className="tac">{branch.amount_collected}</td>
           <td className="tac">{branch.amount_due}</td>
-      
+
           <td className="tac bold">
             <div
               style={{
@@ -94,7 +94,7 @@ function BranchList() {
       );
     })
   };
-  
+
   return (
     <Wrapper from="merchant">
       <Helmet>
@@ -103,7 +103,7 @@ function BranchList() {
       </Helmet>
       <MerchantHeader active="branch" />
       <Container verticalMargin>
-        <MerchantSideBar />
+        <MerchantSideBar showClaimButton />
         <Main>
           <ActionBar
             marginBottom="33px"

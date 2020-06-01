@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
+import EWalletBalanceSendAndClaimMoneyCard from '../EWalletBalanceSendAndClaimMoneyCard';
 import Sidebar from './Sidebar';
-import MerchantOperationalWallet from '../../merchant/dashboard/MerchantOperationalWallet';
 
-class MerchantSideBar extends Component {
-  render() {
-    return (
-      <Sidebar marginRight>
-        <MerchantOperationalWallet activateNeeded />
-      </Sidebar>
-    );
-  }
-}
+const MerchantSideBar = (props) => {
+  const { showClaimButton } = props;
+
+  return (
+    <Sidebar marginRight>
+      <EWalletBalanceSendAndClaimMoneyCard showClaimButton={showClaimButton} />
+    </Sidebar>
+  );
+};
 
 export default MerchantSideBar;

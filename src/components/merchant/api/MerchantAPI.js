@@ -1,5 +1,4 @@
 import axios from 'axios';
-import * as toast from 'react-toastify';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
@@ -9,13 +8,35 @@ const getWalletBalance = async () => {
     const res = await axios.get(`${API_URL}/merchant/getWalletBalance`);
     if (res.status === 200) {
       if (res.data.status === 0) {
-        toast.error(res.data.message);
-      } else {
-        return res.data.amount;
+        notify(res.data.message, 'error');
+        return 0;
       }
+      return res.data.amount;
     }
   } catch (e) {
-    toast.error('Could not fetch balance!');
+    notify('Could not fetch balance!', 'error');
+    return 0;
+  }
+};
+
+const fetchDashboardHistory = async () => {
+  try {
+    const token = localStorage.getItem('merchantLogged');
+    const res = await axios.post(`${API_URL}/merchant/history`, {
+      token,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.list, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Could not fetch history!', 'error');
+    return { list: [], loading: false };
   }
 };
 
@@ -119,4 +140,5 @@ export {
   staffAPI,
   getWalletBalance,
   fetchStaffList,
+  fetchDashboardHistory,
 };

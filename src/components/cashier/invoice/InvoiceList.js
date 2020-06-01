@@ -29,6 +29,11 @@ function InvoiceList(props) {
   const [invoiceType, setInvoiceType] = React.useState('new');
   const [editingInvoice, setEditingInvoice] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
+  const [value, setValue] = React.useState(0);
+  const [page, setPage] = React.useState(0);
+  const [allRow, setAllRow] = React.useState([]);
+  const [transferRow, setTransferRow] = React.useState([]);
+  const [receiveRow, setReceiveRow] = React.useState([]);
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);
@@ -68,6 +73,25 @@ function InvoiceList(props) {
         </tr>
       );
     });
+  };
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+    switch (newValue) {
+      case 0:
+        setInvoiceList(allRow);
+        break;
+      case 1:
+        setPage(0);
+        setInvoiceList(transferRow);
+        break;
+      case 2:
+        setPage(0);
+        setInvoiceList(receiveRow);
+        break;
+      default:
+        setInvoiceList(allRow);
+    }
   };
 
   useEffect(() => {
@@ -153,6 +177,8 @@ function InvoiceList(props) {
                   style={{ width: '100%' }}
                   variant="scrollable"
                   scrollButtons="auto"
+                  onChange={handleChange}
+                  value={value}
                 >
                   <TabItem
                     disableFocusRipple

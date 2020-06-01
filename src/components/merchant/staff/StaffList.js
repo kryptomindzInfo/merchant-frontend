@@ -48,8 +48,8 @@ const StaffList = () => {
     };
     getStaffList();
   }, []);
-  
-  
+
+
   const  mappedCards = () =>{
     return staff.map((b) => {
       if (!b.isAdmin) {
@@ -75,12 +75,12 @@ const StaffList = () => {
       return <div key={b._id}></div>;
     });
   };
-  
-  
+
+
   if (isLoading) {
     return <Loader fullPage />;
   }
-  
+
   return (
     <Wrapper from='merchant'>
       <Helmet>
@@ -89,7 +89,7 @@ const StaffList = () => {
       </Helmet>
       <MerchantHeader active='staff'/>
       <Container verticalMargin>
-        <MerchantSideBar/>
+        <MerchantSideBar showClaimButton />
         <Main>
           <ActionBar
             marginBottom='33px'
