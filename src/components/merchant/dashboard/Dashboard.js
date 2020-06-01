@@ -11,7 +11,6 @@ import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-import Col from '../../shared/Col';
 
 const Dashboard = () => {
   return (

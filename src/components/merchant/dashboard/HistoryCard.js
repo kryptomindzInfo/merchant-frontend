@@ -225,7 +225,7 @@ const HistoryCard = () => {
               style={{ color: '#417505', border: 'none' }}
             >
               <TableBody style={{ color: '#417505', border: 'none' }}>
-                {historyRows(rowsPerPage)}
+                {historyRows()}
               </TableBody>
               <TableFooter>
                 <TableRow>

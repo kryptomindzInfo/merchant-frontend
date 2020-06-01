@@ -1,12 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import {
-  Grid,
-  makeStyles,
-  Tab,
-  Tabs,
-  Typography,
-  withStyles,
-} from '@material-ui/core';
+import { Grid, makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -23,38 +16,9 @@ import TablePagination from '@material-ui/core/TablePagination';
 import TableCell from '@material-ui/core/TableCell';
 import { PlaylistAddCheckRounded } from '@material-ui/icons';
 import Card from '../../shared/Card';
-
-const DashBoardTabs = withStyles({
-  indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > div': {
-      maxWidth: 40,
-      width: '100%',
-      backgroundColor: '#417505',
-    },
-  },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
-
-const DashboardTab = withStyles((theme) => ({
-  root: {
-    margin: '1%',
-    color: '#417505',
-    textAlign: 'center',
-    width: '50%',
-    textTransform: 'none',
-    fontSize: 21,
-    outline: 0,
-    fontWeight: theme.typography.fontWeightBold,
-  },
-  selected: {
-    '&$selected': {
-      outline: 'none',
-      border: 'none',
-    },
-  },
-}))((props) => <Tab disableRipple {...props} />);
+import TabItem from '../../shared/TabItem';
+import Tabs from '../../shared/Tabs';
+import { CURRENCY } from '../../constants';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -153,7 +117,7 @@ TablePaginationActions.propTypes = {
 
 const BranchHistoryCard = () => {
   const classes = useStyles();
-  const [fullRow, setRow] = useState([]);
+  const [rows, setRow] = useState([]);
   const [allRow, setAllRow] = useState([]);
   const [transferRow, setTransferRow] = useState([]);
   const [receiveRow, setReceiveRow] = useState([]);
@@ -162,7 +126,7 @@ const BranchHistoryCard = () => {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
   const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, fullRow.length - page * rowsPerPage);
+    rowsPerPage - Math.min(rowsPerPage, rows.length - page * rowsPerPage);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -172,6 +136,24 @@ const BranchHistoryCard = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
+
+  function historyRows() {
+    return rows.length > 0 ? (
+      rows.map((history, index) => (
+        <tr key={history._id}>
+          <td>{history.bill_no}</td>
+          <td>{history.name}</td>
+          <td className="tac">
+            {CURRENCY} {history.amount.toFixed(2)}
+          </td>
+        </tr>
+      ))
+    ) : (
+      <TableRow style={{ height: 40 * emptyRows }}>
+        <TableCell colSpan={6} />
+      </TableRow>
+    );
+  }
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -207,22 +189,22 @@ const BranchHistoryCard = () => {
       </div>
       <div className="cardBody">
         <Grid container>
-          <DashBoardTabs
+          <Tabs
             style={{ width: '100%' }}
             variant="scrollable"
             scrollButtons="auto"
             onChange={handleChange}
             value={value}
           >
-            <DashboardTab
+            <TabItem
               disableFocusRipple
               disableRipple
               label="All"
               className={classes.allTab}
             />
-            <DashboardTab label="Payment Sent" className={classes.tab} />
-            <DashboardTab label="Payment Recieved" className={classes.tab} />
-          </DashBoardTabs>
+            <TabItem label="Payment Sent" className={classes.tab} />
+            <TabItem label="Payment Recieved" className={classes.tab} />
+          </Tabs>
         </Grid>
         <Grid container className={classes.paper}>
           <TableContainer style={{ color: '#417505', border: 'none' }}>
@@ -231,44 +213,7 @@ const BranchHistoryCard = () => {
               style={{ color: '#417505', border: 'none' }}
             >
               <TableBody style={{ color: '#417505', border: 'none' }}>
-                {/* {rowsPerPage.map((row,index) => ( */}
-                <TableRow
-                  style={{ color: '#417505', borderColor: 'transparent' }}
-                >
-                  <TableCell>
-                    <Typography variant="subtitle1"></Typography>
-                    <Typography variant="subtitle1"></Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography
-                      variant="subtitle1"
-                      style={{ maxWidth: '100px' }}
-                      noWrap
-                    ></Typography>
-                  </TableCell>
-                  <TableCell component="th" scope="row">
-                    <Typography
-                      style={{ color: '#4a90e2' }}
-                      variant="h6"
-                    ></Typography>
-                    <Typography
-                      color="primary"
-                      variant="subtitle1"
-                    ></Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="subtitle1"></Typography>
-                  </TableCell>
-                  <TableCell>
-                    <Typography variant="h6"></Typography>
-                  </TableCell>
-                </TableRow>
-                {/* ))} */}
-                {/* {emptyRows > 0 && (
-                    <TableRow style={{ height: 53 * emptyRows }}>
-                      <TableCell colSpan={6} />
-                    </TableRow>
-                  )} */}
+                {historyRows()}
               </TableBody>
               <TableFooter>
                 <TableRow>
@@ -280,7 +225,7 @@ const BranchHistoryCard = () => {
                       25,
                       { label: 'All', value: -1 },
                     ]}
-                    count={fullRow.length}
+                    count={rows.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     SelectProps={{
