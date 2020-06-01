@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import EWalletBalanceSendMoneyCard from '../EWalletBalanceSendMoneyCard';
-import EWalletBalanceSendAndClaimMoneyCard from '../EWalletBalanceSendAndClaimMoneyCard';
 import Sidebar from './Sidebar';
+import MerchantOperationalWallet from '../../merchant/dashboard/MerchantOperationalWallet';
 
 class MerchantSideBar extends Component {
   render() {
     return (
       <Sidebar marginRight>
-        <EWalletBalanceSendMoneyCard />
-        <EWalletBalanceSendAndClaimMoneyCard />
+        <MerchantOperationalWallet activateNeeded />
       </Sidebar>
     );
   }

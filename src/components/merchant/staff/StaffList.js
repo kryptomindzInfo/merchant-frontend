@@ -13,37 +13,14 @@ import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
 import { CONTRACT_URL, STATIC_URL } from '../../constants';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-
-const  mappedCards = (staff) =>{
-  return staff.map((b) => {
-    if (!b.isAdmin) {
-      const pic = b.logo && b.logo !== '' && b.logo !== undefined
-        ? STATIC_URL + b.logo
-        : `${CONTRACT_URL}main/default-profile.png`;
-      return (<Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
-        <div className="profile">
-          <img src={pic} />
-        </div>
-        <Row>
-          <Col cW="80%">
-            <h4 className="hh">{b.name}</h4>
-          </Col>
-          <Col cW="20%">
-            <Button flex noMin style={{ padding: '5px' }}>
-              Edit
-            </Button>
-          </Col>
-        </Row>
-      </Card>);
-    }
-    return <div key={b._id}></div>;
-  });
-}
+import { fetchBranchList, fetchStaffList } from '../api/MerchantAPI';
+import Loader from '../../shared/Loader';
 
 const StaffList = () => {
-  const [staff, setStaff] = useState('');
+  const [staff, setStaff] = useState([]);
   const [showStaffPopup, setStaffPopup] = useState(false);
   const [popupType, setPopupType] = React.useState('new');
+  const [isLoading, setLoading] = React.useState(false);
   const [editingStaff, setEditingStaff] = React.useState({});
 
   const handleStaffPopupClick = (type, staffObj) => {
@@ -53,9 +30,9 @@ const StaffList = () => {
   };
 
   const refreshStaffList = async () => {
-    // const data = await fetchBranchList();
-    // setBranchList(data.list);
-    // setLoading(data.loading);
+    const data = await fetchStaffList();
+    setStaff(data.list);
+    setLoading(data.loading);
   };
 
   const onPopupClose = () => {
@@ -63,26 +40,49 @@ const StaffList = () => {
   };
 
   useEffect(() => {
-    const getStaffList = () => {
-      const list = [
-        {
-          name: 'Yusuf Jk',
-          isAdmin: false,
-          logo: '2323232.png',
-        },
-        {
-          name: 'Demo',
-          isAdmin: true,
-          logo: '2323232.png',
-        },
-      ];
-      setStaff(list);
+    const getStaffList = async () => {
+      setLoading(true);
+      const data = await fetchBranchList();
+      setStaff(data.list);
+      setLoading(data.loading);
     };
     getStaffList();
   }, []);
-
+  
+  
+  const  mappedCards = () =>{
+    return staff.map((b) => {
+      if (!b.isAdmin) {
+        const pic = b.logo && b.logo !== '' && b.logo !== undefined
+          ? STATIC_URL + b.logo
+          : `${CONTRACT_URL}main/default-profile.png`;
+        return (<Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
+          <div className="profile">
+            <img src={pic} />
+          </div>
+          <Row>
+            <Col cW="80%">
+              <h4 className="hh">{b.name}</h4>
+            </Col>
+            <Col cW="20%">
+              <Button onClick={() => handleStaffPopupClick('update', {b})} flex noMin style={{ padding: '5px' }}>
+                Edit
+              </Button>
+            </Col>
+          </Row>
+        </Card>);
+      }
+      return <div key={b._id}></div>;
+    });
+  };
+  
+  
+  if (isLoading) {
+    return <Loader fullPage />;
+  }
+  
   return (
-    <Wrapper from='bank'>
+    <Wrapper from='merchant'>
       <Helmet>
         <meta charSet='utf-8'/>
         <title>Merchant | Staff</title>
@@ -110,7 +110,7 @@ const StaffList = () => {
           </ActionBar>
           <Row className="clr">
             {staff && staff.length > 0
-              ? mappedCards(staff)
+              ? mappedCards()
               : null}
           </Row>
         </Main>

@@ -1,39 +1,40 @@
 import React from 'react';
 import { Form, Formik } from 'formik';
-import axios from 'axios';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
 import TextField from '@material-ui/core/TextField';
-import notify from '../../utils/Notify';
-import { createBranch, editBranch } from './api/branchAPI';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
-import { API_URL } from '../../constants';
 import Button from '../../shared/Button';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
 import CountrySelectBox from '../../shared/CountrySelectBox';
+import { branchAPI } from '../api/MerchantAPI';
 
 function CreateBranchPopup(props) {
-  const token = localStorage.getItem('bankLogged');
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
           name: props.merchant.name || '',
-          logo_hash: props.merchant.logo_hash || '',
-          description: props.merchant.description || '',
-          document_hash: props.merchant.document_hash || '',
-          email: props.merchant.email || '',
+          bcode: props.merchant.bcode || '',
+          username: props.merchant.username || '',
+          address1: props.merchant.address1 || '',
+          state: props.merchant.shared || '',
+          zip: props.merchant.zip || '',
+          country: props.merchant.country || 'Senegal',
+          ccode: props.merchant.ccode || '+221',
           mobile: props.merchant.mobile || '',
-          merchant_id: props.merchant.username || '',
+          email: props.merchant.email || '',
+          working_from: props.merchant.working_from || '',
+          working_to: props.merchant.working_to || '',
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
-            await editBranch(props, values, token);
+            await branchAPI(props, values, 'update');
           } else {
-            await createBranch(props, values, token);
+            await branchAPI(props, values, 'create');
           }
         }}
         validationSchema={Yup.object().shape({
@@ -45,14 +46,12 @@ function CreateBranchPopup(props) {
               'Mobile no must be valid',
             )
             .required('Mobile no is required'),
-          merchant_id: Yup.string()
-            .min(3, 'Merchant Id should be atleast 3 characters')
-            .required('Merchant Id is required'),
+          bcode: Yup.string()
+            .min(3, 'Branch code should be atleast 3 characters')
+            .required('Branch code is required'),
           name: Yup.string()
             .min(3, 'Merchant name should be atleast 3 characters')
             .required('Merchant name is required'),
-          logo_hash: Yup.string().required('Merchant logo is required'),
-          document_hash: Yup.string().required('Merchant contract is required'),
           email: Yup.string()
             .email('Please provide a valid email')
             .required('Email is required'),
@@ -70,51 +69,6 @@ function CreateBranchPopup(props) {
             handleFocus,
             setFieldValue,
           } = formikProps;
-
-          const triggerBrowse = (inp) => {
-            const input = document.getElementById(inp);
-            input.click();
-          };
-
-          const fileUpload = (file, key) => {
-            const formData = new FormData();
-            formData.append('file', file);
-            const config = {
-              headers: {
-                'content-type': 'multipart/form-data',
-              },
-            };
-            let method = 'fileUpload';
-            let url = `${API_URL}/${method}?token=${token}&from=bank`;
-            if (key === 'document_hash') {
-              method = 'ipfsUpload';
-              url = `${API_URL}/${method}?token=${token}`;
-            }
-            axios
-              .post(url, formData, config)
-              .then((res) => {
-                if (res.status === 200) {
-                  if (res.data.error) {
-                    throw res.data.error;
-                  } else if (key === 'logo_hash') {
-                    setFieldValue(key, res.data.name);
-                  } else {
-                    setFieldValue(key, res.data.hash);
-                  }
-                } else {
-                  throw res.data.error;
-                }
-              })
-              .catch((err) => {
-                notify('something went wrong!', 'error');
-              });
-          };
-
-          const onChange = (e) => {
-            if (e.target.files && e.target.files[0] != null) {
-              fileUpload(e.target.files[0], e.target.getAttribute('data-key'));
-            }
-          };
 
           return (
             <div>
@@ -315,9 +269,7 @@ function CreateBranchPopup(props) {
                   ) : (
                     <span>
                       {' '}
-                      {props.type === 'update'
-                        ? 'Update Merchant'
-                        : 'Add Merchant'}
+                      {props.type === 'update' ? 'Update Branch' : 'Add Branch'}
                     </span>
                   )}
                 </Button>

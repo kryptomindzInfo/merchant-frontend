@@ -83,6 +83,10 @@ const SignInPage = (props) => {
                     } else if (res.data.details.status === 1) {
                       history.push(verifyUrl);
                     } else {
+                      localStorage.setItem(
+                        'merchantLogged',
+                        res.data.details.token,
+                      );
                       history.push(dashboardUrl);
                     }
                   }

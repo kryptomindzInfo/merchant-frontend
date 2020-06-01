@@ -10,11 +10,11 @@ import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
 import Table from '../../shared/Table';
 import Main from '../../shared/Main';
-import { fetchBranchList } from './api/branchAPI';
 import CreateBranchPopup from './CreateBranchPopup';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
+import { fetchBranchList } from '../api/MerchantAPI';
 
 function BranchList() {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
@@ -52,6 +52,49 @@ function BranchList() {
   if (isLoading) {
     return <Loader fullPage />;
   }
+  
+  const getBranchList = () => {
+    return branchList.map((branch) => {
+      return (
+        <tr key={branch._id}>
+          <td className="tac">{branch.name}</td>
+          <td className="tac">{branch.bills_paid}</td>
+          <td className="tac">{branch.bills_raised}</td>
+          <td className="tac">{branch.amount_collected}</td>
+          <td className="tac">{branch.amount_due}</td>
+      
+          <td className="tac bold">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <td className="tac">{branch.fee_generated}</td>
+              <span className="absoluteMiddleRight primary popMenuTrigger">
+                <i className="material-icons ">more_vert</i>
+                <div className="popMenu">
+                  <span
+                    onClick={() =>
+                      handleBranchPopupClick('update', branch)
+                    }
+                  >
+                                      Edit
+                  </span>
+                  {branch.status === -1 ? (
+                    <span>Unblock</span>
+                  ) : (
+                    <span>Block</span>
+                  )}
+                </div>
+              </span>
+            </div>
+          </td>
+        </tr>
+      );
+    })
+  };
+  
   return (
     <Wrapper from="merchant">
       <Helmet>
@@ -107,45 +150,7 @@ function BranchList() {
                 </thead>
                 <tbody>
                   {branchList && branchList.length > 0
-                    ? branchList.map((branch) => {
-                      return (
-                        <tr key={branch._id}>
-                          <td className="tac">{branch.name}</td>
-                          <td className="tac">{branch.bills_paid}</td>
-                          <td className="tac">{branch.bills_raised}</td>
-                          <td className="tac">{branch.amount_collected}</td>
-                          <td className="tac">{branch.amount_due}</td>
-
-                          <td className="tac bold">
-                            <div
-                              style={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                              }}
-                            >
-                              <td className="tac">{branch.fee_generated}</td>
-                              <span className="absoluteMiddleRight primary popMenuTrigger">
-                                <i className="material-icons ">more_vert</i>
-                                <div className="popMenu">
-                                  <span
-                                    onClick={() =>
-                                      handleBranchPopupClick('update', branch)
-                                    }
-                                  >
-                                      Edit
-                                  </span>
-                                  {branch.status === -1 ? (
-                                    <span>Unblock</span>
-                                  ) : (
-                                    <span>Block</span>
-                                  )}
-                                </div>
-                              </span>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })
+                    ? getBranchList()
                     : null}
                 </tbody>
               </Table>

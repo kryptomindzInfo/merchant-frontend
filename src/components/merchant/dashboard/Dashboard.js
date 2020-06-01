@@ -11,12 +11,13 @@ import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
+import Col from '../../shared/Col';
 
 const Dashboard = () => {
   return (
     <Fragment>
       <Helmet>
-        <title>Mercahant | Dashboard</title>
+        <title>Merchant | Dashboard</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
       <MerchantHeader />

@@ -1,6 +1,9 @@
 import styled from 'styled-components';
 
-const Sidebar = styled.div`
-  min-width: 260px;
+const Sidebar = styled.aside`
+  width: 260px;
+  float: left;
   margin-right: ${(props) => (props.marginRight ? '33px' : '0')};
 `;
+
+export default Sidebar;

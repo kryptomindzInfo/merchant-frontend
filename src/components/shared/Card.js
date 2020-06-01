@@ -169,7 +169,7 @@ const Card = styled.div`
     line-height: 46px;
   }
   > h4 {
-    font-size: ${(props) => (props.h4FontSize ? props.h4FontSize : '18px')};
+    font-size: ${(props) => (props.h4FontSize ? props.h4FontSize : '16px')};
     font-weight: normal;
     color: #323c47;
     margin-top: 0;

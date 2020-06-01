@@ -21,6 +21,7 @@ import BranchDashboard from './branch/dashboard/BranchDashboard';
 import CashierDashboard from './cashier/dashboard/CashierDashboard';
 import URL from './Url';
 import InvoiceList from './cashier/invoice/InvoiceList';
+import ProtectedRoute from './ProtectedRoute';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -139,6 +140,7 @@ function App() {
             />
             <Route
               exact
+              userType="merchant"
               path={URL.merchantDashboardUrl}
               component={(props) => <Dashboard {...props} />}
             />

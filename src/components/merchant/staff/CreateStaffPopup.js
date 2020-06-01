@@ -1,11 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
-import axios from 'axios';
-import { toast } from 'react-toastify';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
-import { API_URL, STATIC_URL } from '../../constants';
+import { STATIC_URL } from '../../constants';
 import Button from '../../shared/Button';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
@@ -15,22 +13,55 @@ import UploadArea from '../../shared/UploadArea';
 import SelectInput from '../../shared/SelectInput';
 import Icon from '../../shared/Icon';
 import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
+import { fetchBranchList, staffAPI } from '../api/MerchantAPI';
+import { onFileChange, triggerBrowse } from '../../shared/utils/FileUpload';
 
 function CreateStaffPopup(props) {
-  const token = localStorage.getItem('staffLogged');
+  const [branchList, setBranchList] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+
+  useEffect(() => {
+    const getBranchList = async () => {
+      const data = await fetchBranchList();
+      setBranchList(data.list);
+    };
+    getBranchList();
+  }, []);
+
+  const getBranches = () => {
+    return branchList.map((b) => {
+      return (
+        <option value={b._id} key={b._id}>
+          {b.name}
+        </option>
+      );
+    });
+  };
+
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
           name: props.staff.name || '',
-          logo_hash: props.staff.logo_hash || '',
-          description: props.staff.description || '',
-          document_hash: props.staff.document_hash || '',
+          logo: props.staff.logo_hash || '',
           email: props.staff.email || '',
           mobile: props.staff.mobile || '',
-          staff_id: props.staff.username || '',
+          ccode: props.staff.ccode || '+221',
+          username: props.staff.username || '',
+          password: props.staff.password || '',
+          branch_id: props.staff.branch_id || '',
         }}
-        onSubmit={{}}
+        onSubmit={async (values) => {
+          if (props.type === 'update') {
+            setLoading(true);
+            await staffAPI(props, values, 'update');
+            setLoading(false);
+          } else {
+            setLoading(true);
+            await staffAPI(props, values, 'create');
+            setLoading(false);
+          }
+        }}
       >
         {(formikProps) => {
           const {
@@ -44,51 +75,6 @@ function CreateStaffPopup(props) {
             handleFocus,
             setFieldValue,
           } = formikProps;
-
-          const triggerBrowse = (inp) => {
-            const input = document.getElementById(inp);
-            input.click();
-          };
-
-          const fileUpload = (file, key) => {
-            const formData = new FormData();
-            formData.append('file', file);
-            const config = {
-              headers: {
-                'content-type': 'multipart/form-data',
-              },
-            };
-            let method = 'fileUpload';
-            let url = `${API_URL}/${method}?token=${token}&from=bank`;
-            if (key === 'document_hash') {
-              method = 'ipfsUpload';
-              url = `${API_URL}/${method}?token=${token}`;
-            }
-            axios
-              .post(url, formData, config)
-              .then((res) => {
-                if (res.status === 200) {
-                  if (res.data.error) {
-                    throw res.data.error;
-                  } else if (key === 'logo_hash') {
-                    setFieldValue(key, res.data.name);
-                  } else {
-                    setFieldValue(key, res.data.hash);
-                  }
-                } else {
-                  throw res.data.error;
-                }
-              })
-              .catch((err) => {
-                toast.error('something went wrong!');
-              });
-          };
-
-          const onChange = (e) => {
-            if (e.target.files && e.target.files[0] != null) {
-              fileUpload(e.target.files[0], e.target.getAttribute('data-key'));
-            }
-          };
 
           return (
             <div>
@@ -234,15 +220,7 @@ function CreateStaffPopup(props) {
                   required
                 >
                   <option value="">Select Branch*</option>
-                  {/*  {values.branches && values.branches.length > 0
-                    ? values.branches.map(function (b) {
-                      return (
-                        <option value={b._id} key={b._id}>
-                          {b.name}
-                        </option>
-                      );
-                    })
-                    : null} */}
+                  {branchList && branchList.length > 0 ? getBranches() : null}
                 </SelectInput>
               </FormGroup>
 
@@ -257,8 +235,16 @@ function CreateStaffPopup(props) {
                   ) : (
                     ' '
                   )}
-                  <div className="uploadTrigger">
-                    <input type="file" id="logo" data-key="logo" />
+                  <div
+                    className="uploadTrigger"
+                    onClick={() => triggerBrowse('logo')}
+                  >
+                    <input
+                      type="file"
+                      id="logo"
+                      data-key="logo"
+                      onChange={(e) => onFileChange(e)}
+                    />
                     {!values.logo ? (
                       <i className="material-icons">cloud_upload</i>
                     ) : (
@@ -278,7 +264,7 @@ function CreateStaffPopup(props) {
               <Icon className="material-icons">
                 <FingerprintIcon style={{ fontSize: '45px' }} />
               </Icon>
-              {values.addUserLoading ? (
+              {isLoading ? (
                 <Button filledBtn marginTop="20px" disabled>
                   <Loader />
                 </Button>
