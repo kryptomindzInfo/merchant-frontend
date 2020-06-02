@@ -1,10 +1,31 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
-const ProtectedRoute = ({ userType, component: Component, ...rest }) => {
-  const token = localStorage.getItem(`${userType}Logged`);
+const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
+  const [pathName, setPathName] = React.useState('/');
+  const { branchName } = match.params;
+  const token = localStorage.getItem(`${type}Logged`);
   axios.defaults.headers.common.Authorization = token;
+
+  const pathNameBasedOnType = () => {
+    switch (type) {
+      case 'merchant':
+        setPathName('/merchant/login');
+        break;
+      case 'branch':
+        setPathName(`/branch/${branchName}/login`);
+        break;
+      case 'cashier':
+        setPathName(`/cashier/${branchName}/login`);
+        break;
+      default:
+        setPathName('/');
+        break;
+    }
+  };
+  useEffect(() => pathNameBasedOnType());
   return (
     <Route
       {...rest}
@@ -15,7 +36,7 @@ const ProtectedRoute = ({ userType, component: Component, ...rest }) => {
         return (
           <Redirect
             to={{
-              pathname: '/',
+              pathname: { pathName },
               state: {
                 from: props.location.pathname,
               },
@@ -26,5 +47,7 @@ const ProtectedRoute = ({ userType, component: Component, ...rest }) => {
     />
   );
 };
-
+ProtectedRoute.propTypes = {
+  type: PropTypes.string.isRequired,
+};
 export default ProtectedRoute;

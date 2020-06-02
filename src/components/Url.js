@@ -24,7 +24,7 @@ const invoiceUrl = '/cashier/invoice/:groupId';
 const cashierForgotPasswordUrl = '/cashier/:branchName/forgot-password';
 const cashierOtpUrl = '/cashier/:branchName/otp-forgot-password';
 
-export default {
+export {
   merchantDashboardUrl,
   verifyUrl,
   loginUrl,

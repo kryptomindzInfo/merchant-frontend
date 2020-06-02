@@ -19,9 +19,31 @@ import CashierInfo from './branch/cashier/CashierInfo';
 import BranchSettings from './branch/settings/BranchSettings';
 import BranchDashboard from './branch/dashboard/BranchDashboard';
 import CashierDashboard from './cashier/dashboard/CashierDashboard';
-import URL from './Url';
+
 import InvoiceList from './cashier/invoice/InvoiceList';
 import ProtectedRoute from './ProtectedRoute';
+import {
+  merchantDashboardUrl,
+  verifyUrl,
+  loginUrl,
+  forgotPasswordUrl,
+  otpUrl,
+  branchUrl,
+  staffUrl,
+  branchLoginUrl,
+  branchProfileUrl,
+  branchCashiersUrl,
+  branchDashboardUrl,
+  branchSettingsUrl,
+  cashierInfoUrl,
+  cashierDashboardUrl,
+  invoiceUrl,
+  cashierLoginUrl,
+  cashierForgotPasswordUrl,
+  cashierOtpUrl,
+  branchForgotPasswordUrl,
+  branchOtpUrl,
+} from './Url';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -90,27 +112,27 @@ function App() {
             {/* Merchant Routes */}
             {/* =============== */}
             <Route
-              userType="merchant"
+              type="merchant"
               exact
-              path={URL.merchantDashboardUrl}
+              path={merchantDashboardUrl}
               component={(props) => <Dashboard {...props} />}
             />
             <Route
-              userType="merchant"
+              type="merchant"
               exact
-              path={URL.branchUrl}
+              path={branchUrl}
               component={(props) => <BranchList {...props} />}
             />
             <Route
-              userType="merchant"
+              type="merchant"
               exact
-              path={URL.branchProfileUrl}
+              path={branchProfileUrl}
               component={(props) => <BranchInfo {...props} />}
             />
             <Route
-              userType="merchant"
+              type="merchant"
               exact
-              path={URL.staffUrl}
+              path={staffUrl}
               component={(props) => <StaffList {...props} />}
             />
             {/* ====================== */}
@@ -118,26 +140,26 @@ function App() {
             {/* ====================== */}
             <Route
               exact
-              path={URL.loginUrl}
+              path={loginUrl}
               component={(props) => <SignInPage type="merchant" {...props} />}
             />
             <Route
               exact
-              path={URL.verifyUrl}
+              path={verifyUrl}
               component={(props) => (
                 <SignInVerificationPage type="merchant" {...props} />
               )}
             />
             <Route
               exact
-              path={URL.forgotPasswordUrl}
+              path={forgotPasswordUrl}
               component={(props) => (
                 <ForgotPasswordPage type="merchant" {...props} />
               )}
             />
             <Route
               exact
-              path={URL.otpUrl}
+              path={otpUrl}
               component={(props) => (
                 <OTPForgotPasswordPage type="merchant" {...props} />
               )}
@@ -146,27 +168,27 @@ function App() {
             {/* Branch Routes */}
             {/* ============= */}
             <Route
-              userType="branch"
+              type="branch"
               exact
-              path={URL.branchDashboardUrl}
+              path={branchDashboardUrl}
               component={(props) => <BranchDashboard {...props} />}
             />
             <Route
-              userType="branch"
+              type="branch"
               exact
-              path={URL.branchCashiersUrl}
+              path={branchCashiersUrl}
               component={(props) => <CashierList {...props} />}
             />
             <Route
-              userType="branch"
+              type="branch"
               exact
-              path={URL.cashierInfoUrl}
+              path={cashierInfoUrl}
               component={(props) => <CashierInfo {...props} />}
             />
             <Route
-              userType="branch"
+              type="branch"
               exact
-              path={URL.branchSettingsUrl}
+              path={branchSettingsUrl}
               component={(props) => <BranchSettings {...props} />}
             />
             {/* ==================== */}
@@ -174,19 +196,19 @@ function App() {
             {/* ==================== */}
             <Route
               exact
-              path={URL.branchLoginUrl}
+              path={branchLoginUrl}
               component={(props) => <SignInPage type="branch" {...props} />}
             />
             <Route
               exact
-              path={URL.branchForgotPasswordUrl}
+              path={branchForgotPasswordUrl}
               component={(props) => (
                 <ForgotPasswordPage type="branch" {...props} />
               )}
             />
             <Route
               exact
-              path={URL.branchOtpUrl}
+              path={branchOtpUrl}
               component={(props) => (
                 <OTPForgotPasswordPage type="branch" {...props} />
               )}
@@ -195,15 +217,15 @@ function App() {
             {/* Cashier Routes */}
             {/* ============== */}
             <Route
-              userType="cashier"
+              type="cashier"
               exact
-              path={URL.cashierDashboardUrl}
+              path={cashierDashboardUrl}
               component={(props) => <CashierDashboard {...props} />}
             />
             <Route
-              userType="cashier"
+              type="cashier"
               exact
-              path={URL.invoiceUrl}
+              path={invoiceUrl}
               component={(props) => <InvoiceList {...props} />}
             />
             {/* ===================== */}
@@ -211,19 +233,19 @@ function App() {
             {/* ===================== */}
             <Route
               exact
-              path={URL.cashierLoginUrl}
+              path={cashierLoginUrl}
               component={(props) => <SignInPage type="cashier" {...props} />}
             />
             <Route
               exact
-              path={URL.cashierForgotPasswordUrl}
+              path={cashierForgotPasswordUrl}
               component={(props) => (
                 <ForgotPasswordPage type="cashier" {...props} />
               )}
             />
             <Route
               exact
-              path={URL.cashierOtpUrl}
+              path={cashierOtpUrl}
               component={(props) => (
                 <OTPForgotPasswordPage type="cashier" {...props} />
               )}
