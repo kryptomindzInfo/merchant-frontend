@@ -47,7 +47,7 @@ class CashierHeader extends Component {
     const { page, branchName } = this.props;
     return (
       <TopBar>
-        <Welcome from="branch" bankName={branchName} />
+        <Welcome from="cashier" bankName={branchName} />
         <Container>
           {page === 'info' ? (
             <A href={this.props.goto} float="left">

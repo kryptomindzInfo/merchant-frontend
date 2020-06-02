@@ -30,7 +30,7 @@ class CashierNav extends Component {
           <A href={`/cashier/${branchName}/dashboard`}>
             <Link active={dashboard}>Dashboard</Link>
           </A>
-          <A href={`/cashiers/${branchName}/invoices`}>
+          <A href={`/cashier/${branchName}/invoices`}>
             <Link active={branches}>Invoices</Link>
           </A>
         </NavTag>
