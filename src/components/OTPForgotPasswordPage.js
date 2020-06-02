@@ -17,6 +17,7 @@ import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
+import { verifyOTP } from './utils/ForgotPasswordAPI';
 
 const initialValues = {
   otp: '',
@@ -24,9 +25,9 @@ const initialValues = {
 
 const OTPForgotPasswordPage = (props) => {
   const classes = styles();
-  // eslint-disable-next-line react/prop-types
   const { type, match } = props;
   const { branchName } = match.params;
+  const [isLoading, setLoading] = React.useState(false);
 
   return (
     <Fragment>
@@ -71,27 +72,13 @@ const OTPForgotPasswordPage = (props) => {
           <Formik
             initialValues={initialValues}
             onSubmit={(values) => {
-              // values.mobile = props.location.state.mobile;
-              // values.user_type = 'merchant';
-              // axios
-              //   .post(`${MERCHANT_API}/common/verifyForgotPasswordOTP`, values)
-              //   .then((res) => {
-              //     if (res.data.status === 1) {
-              //       if (res.data.error) {
-              //         notify(res.data.error, 'error');
-              //       } else {
-              //         history.push(loginUrl);
-              //       }
-              //     }
-              //   })
-              //   .catch((error) => {
-              //     notify('Something Went Wrong', 'error');
-              //   });
-              // history.push('/merchant/login');
+              const body = { ...values, user_type: type };
+              setLoading(true);
+              verifyOTP(type, branchName, body);
+              setLoading(false);
             }}
           >
             {(formikProps) => {
-              const { isSubmitting } = formikProps;
               return (
                 <Form>
                   <FormField mB="14px">
@@ -112,7 +99,7 @@ const OTPForgotPasswordPage = (props) => {
                     type="submit"
                     style={{ padding: '2%', marginTop: '5%' }}
                   >
-                    {isSubmitting ? <Loader /> : 'SUBMIT'}
+                    {isLoading ? <Loader /> : 'SUBMIT'}
                   </Button>
                   <Grid container>
                     <Grid item md={6} sm={12} xs={12}>

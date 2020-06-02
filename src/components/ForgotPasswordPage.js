@@ -1,22 +1,19 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import { Field, Form, Formik, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
-import axios from 'axios';
-import history from './utils/history';
 import LandingLeftSection from './shared/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
-import { MERCHANT_API } from './constants';
-import notify from './utils/Notify';
 import Button from './shared/Button';
 import TextInput from './shared/TextInput';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
+import { forgotPassword } from './utils/ForgotPasswordAPI';
 
 const initialValues = {
   mobile: '',
@@ -30,14 +27,14 @@ const validationSchema = Yup.object().shape({
 
 const ForgotPasswordPage = (props) => {
   const classes = styles();
-  // eslint-disable-next-line react/prop-types
   const { type, match } = props;
   const { branchName } = match.params;
+  const [isLoading, setLoading] = React.useState(false);
 
   return (
     <Fragment>
       <Helmet>
-        <title>Merchant | Forgot Password</title>
+        <title>{type.toUpperCase()} | Forgot Password</title>
         <meta
           name="description"
           content="Description of Forgot Password page"
@@ -78,25 +75,14 @@ const ForgotPasswordPage = (props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              // values.user_type = type;
-              // axios
-              //   .post(`${MERCHANT_API}/common/forgotPassword`, values)
-              //   .then((res) => {
-              //     if (res.data.status === 1) {
-              //       if (res.data.error) {
-              //         notify(res.data.error, 'error');
-              //       } else {
-              //         // history.push(otpUrl, { mobile: values.mobile });
-              //       }
-              //     }
-              //   })
-              //   .catch((error) => {
-              //     notify('Something Went Wrong', 'error');
-              //   });
+              const body = { ...values, user_type: type };
+              setLoading(true);
+              forgotPassword(type, branchName, body);
+              setLoading(false);
             }}
           >
             {(formikProps) => {
-              const { isSubmitting, handleChange, handleBlur } = formikProps;
+              const { handleChange, handleBlur } = formikProps;
               return (
                 <Form>
                   <FormField mB="14px">
@@ -124,7 +110,7 @@ const ForgotPasswordPage = (props) => {
                     type="submit"
                     style={{ padding: '2%', marginTop: '5%' }}
                   >
-                    {isSubmitting ? <Loader /> : 'Get OTP'}
+                    {isLoading ? <Loader /> : 'Get OTP'}
                   </Button>
                 </Form>
               );
