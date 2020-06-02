@@ -36,7 +36,7 @@ const validationSchema = Yup.object().shape({
 const SignInVerificationPage = (props) => {
   const classes = styles();
   // eslint-disable-next-line react/prop-types
-  const { dashboardUrl, loginUrl, isBranch, match } = props;
+  const { type, match } = props;
   const { branchName } = match.params;
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
@@ -54,7 +54,7 @@ const SignInVerificationPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
+          <LandingLeftSection branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -94,8 +94,7 @@ const SignInVerificationPage = (props) => {
               //   .catch(error => {
               //     notify('Something Went Wrong', 'error');
               //   });
-
-              history.push(loginUrl);
+              // history.push(loginUrl);
             }}
           >
             {(formikProps) => {
@@ -166,9 +165,7 @@ const SignInVerificationPage = (props) => {
 };
 
 SignInVerificationPage.propTypes = {
-  dashboardUrl: PropTypes.string.isRequired,
-  loginUrl: PropTypes.string.isRequired,
-  isBranch: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default SignInVerificationPage;

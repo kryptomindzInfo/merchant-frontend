@@ -25,7 +25,7 @@ const initialValues = {
 const OTPForgotPasswordPage = (props) => {
   const classes = styles();
   // eslint-disable-next-line react/prop-types
-  const { loginUrl, isBranch, branchLoginUrl, match } = props;
+  const { type, match } = props;
   const { branchName } = match.params;
 
   return (
@@ -45,7 +45,7 @@ const OTPForgotPasswordPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
+          <LandingLeftSection branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -71,23 +71,23 @@ const OTPForgotPasswordPage = (props) => {
           <Formik
             initialValues={initialValues}
             onSubmit={(values) => {
-              values.mobile = props.location.state.mobile;
-              values.user_type = 'merchant';
-              axios
-                .post(`${MERCHANT_API}/common/verifyForgotPasswordOTP`, values)
-                .then((res) => {
-                  if (res.data.status === 1) {
-                    if (res.data.error) {
-                      notify(res.data.error, 'error');
-                    } else {
-                      history.push(loginUrl);
-                    }
-                  }
-                })
-                .catch((error) => {
-                  notify('Something Went Wrong', 'error');
-                });
-              history.push('/merchant/login');
+              // values.mobile = props.location.state.mobile;
+              // values.user_type = 'merchant';
+              // axios
+              //   .post(`${MERCHANT_API}/common/verifyForgotPasswordOTP`, values)
+              //   .then((res) => {
+              //     if (res.data.status === 1) {
+              //       if (res.data.error) {
+              //         notify(res.data.error, 'error');
+              //       } else {
+              //         history.push(loginUrl);
+              //       }
+              //     }
+              //   })
+              //   .catch((error) => {
+              //     notify('Something Went Wrong', 'error');
+              //   });
+              // history.push('/merchant/login');
             }}
           >
             {(formikProps) => {
@@ -139,9 +139,7 @@ const OTPForgotPasswordPage = (props) => {
 };
 
 OTPForgotPasswordPage.propTypes = {
-  loginUrl: PropTypes.string.isRequired,
-  branchLoginUrl: PropTypes.string.isRequired,
-  isBranch: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 export default OTPForgotPasswordPage;

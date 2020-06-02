@@ -6,7 +6,7 @@ const FormField = styled.div`
   margin-right: ${(props) => (props.mR ? props.mR : '0')};
   margin-left: ${(props) => (props.mL ? props.mL : '0')};
   margin-bottom: ${(props) => (props.mB ? props.mB : '0')};
-  text-align: ${(props) => (props.textAlign ? props.textAlign : 'center')};
+  text-align: ${(props) => (props.textAlign ? props.textAlign : 'left')};
   > label {
     position: absolute;
     top: 11px;

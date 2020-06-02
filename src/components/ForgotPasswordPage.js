@@ -31,7 +31,7 @@ const validationSchema = Yup.object().shape({
 const ForgotPasswordPage = (props) => {
   const classes = styles();
   // eslint-disable-next-line react/prop-types
-  const { otpUrl, isBranch, branchOtpUrl, match } = props;
+  const { type, match } = props;
   const { branchName } = match.params;
 
   return (
@@ -51,7 +51,7 @@ const ForgotPasswordPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
+          <LandingLeftSection branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -78,21 +78,21 @@ const ForgotPasswordPage = (props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              values.user_type = 'merchant';
-              axios
-                .post(`${MERCHANT_API}/common/forgotPassword`, values)
-                .then((res) => {
-                  if (res.data.status === 1) {
-                    if (res.data.error) {
-                      notify(res.data.error, 'error');
-                    } else {
-                      history.push(otpUrl, { mobile: values.mobile });
-                    }
-                  }
-                })
-                .catch((error) => {
-                  notify('Something Went Wrong', 'error');
-                });
+              // values.user_type = type;
+              // axios
+              //   .post(`${MERCHANT_API}/common/forgotPassword`, values)
+              //   .then((res) => {
+              //     if (res.data.status === 1) {
+              //       if (res.data.error) {
+              //         notify(res.data.error, 'error');
+              //       } else {
+              //         // history.push(otpUrl, { mobile: values.mobile });
+              //       }
+              //     }
+              //   })
+              //   .catch((error) => {
+              //     notify('Something Went Wrong', 'error');
+              //   });
             }}
           >
             {(formikProps) => {
@@ -136,8 +136,6 @@ const ForgotPasswordPage = (props) => {
   );
 };
 ForgotPasswordPage.propTypes = {
-  otpUrl: PropTypes.string.isRequired,
-  branchOtpUrl: PropTypes.string.isRequired,
-  isBranch: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };
 export default ForgotPasswordPage;

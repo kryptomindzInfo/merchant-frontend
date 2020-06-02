@@ -80,144 +80,153 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router history={history} forceRefresh="true" basename="/">
           <Switch>
+            {/* Default Route */}
             <Route
               exact
               path="/"
-              component={(props) => (
-                <SignInPage
-                  isBranch={false}
-                  verifyUrl={URL.verifyUrl}
-                  dashboardUrl={URL.merchantDashboardUrl}
-                  {...props}
-                />
-              )}
+              component={(props) => <SignInPage type="merchant" {...props} />}
             />
+            {/* =============== */}
+            {/* Merchant Routes */}
+            {/* =============== */}
+            <Route
+              userType="merchant"
+              exact
+              path={URL.merchantDashboardUrl}
+              component={(props) => <Dashboard {...props} />}
+            />
+            <Route
+              userType="merchant"
+              exact
+              path={URL.branchUrl}
+              component={(props) => <BranchList {...props} />}
+            />
+            <Route
+              userType="merchant"
+              exact
+              path={URL.branchProfileUrl}
+              component={(props) => <BranchInfo {...props} />}
+            />
+            <Route
+              userType="merchant"
+              exact
+              path={URL.staffUrl}
+              component={(props) => <StaffList {...props} />}
+            />
+            {/* ====================== */}
+            {/* Merchant Public Routes */}
+            {/* ====================== */}
             <Route
               exact
               path={URL.loginUrl}
-              component={(props) => (
-                <SignInPage
-                  isBranch={false}
-                  verifyUrl={URL.verifyUrl}
-                  dashboardUrl={URL.merchantDashboardUrl}
-                  {...props}
-                />
-              )}
+              component={(props) => <SignInPage type="merchant" {...props} />}
             />
             <Route
               exact
               path={URL.verifyUrl}
               component={(props) => (
-                <SignInVerificationPage
-                  dashboardUrl={URL.merchantDashboardUrl}
-                  loginUrl={URL.loginUrl}
-                  {...props}
-                />
+                <SignInVerificationPage type="merchant" {...props} />
               )}
             />
             <Route
               exact
-              path="/merchant/forgot-password"
+              path={URL.forgotPasswordUrl}
               component={(props) => (
-                <ForgotPasswordPage
-                  isBranch={false}
-                  otpUrl={URL.otpUrl}
-                  {...props}
-                />
+                <ForgotPasswordPage type="merchant" {...props} />
               )}
             />
             <Route
               exact
               path={URL.otpUrl}
               component={(props) => (
-                <OTPForgotPasswordPage
-                  isBranch={false}
-                  loginUrl={URL.loginUrl}
-                  branchLoginUrl={URL.branchLoginUrl}
-                  {...props}
-                />
+                <OTPForgotPasswordPage type="merchant" {...props} />
               )}
             />
-            <Route
-              exact
-              userType="merchant"
-              path={URL.merchantDashboardUrl}
-              component={(props) => <Dashboard {...props} />}
-            />
-            <Route
-              exact
-              path={URL.branchUrl}
-              component={(props) => <BranchList {...props} />}
-            />
-            <Route
-              exact
-              path={URL.branchProfileUrl}
-              component={(props) => <BranchInfo {...props} />}
-            />
-            <Route
-              exact
-              path={URL.staffUrl}
-              component={(props) => <StaffList {...props} />}
-            />
-
+            {/* ============= */}
             {/* Branch Routes */}
+            {/* ============= */}
             <Route
-              exact
-              path={URL.branchLoginUrl}
-              component={(props) => (
-                <SignInPage
-                  isBranch
-                  verifyUrl=""
-                  dashboardUrl={URL.branchDashboardUrl}
-                  {...props}
-                />
-              )}
-            />
-
-            <Route
+              userType="branch"
               exact
               path={URL.branchDashboardUrl}
               component={(props) => <BranchDashboard {...props} />}
             />
-
             <Route
+              userType="branch"
               exact
-              path={URL.cashierUrl}
+              path={URL.branchCashiersUrl}
               component={(props) => <CashierList {...props} />}
             />
             <Route
+              userType="branch"
               exact
               path={URL.cashierInfoUrl}
               component={(props) => <CashierInfo {...props} />}
             />
             <Route
+              userType="branch"
               exact
               path={URL.branchSettingsUrl}
               component={(props) => <BranchSettings {...props} />}
             />
-            {/* <Route */}
-            {/*  exact */}
-            {/*  path={branchVerifyUrl} */}
-            {/*  component={(props) => ( */}
-            {/*    <SignInVerificationPage */}
-            {/*      loginUrl={branchLoginUrl} */}
-            {/*      dashboardUrl={branchDashboardUrl} */}
-            {/*      {...props} */}
-            {/*    /> */}
-            {/*  )} */}
-            {/* /> */}
-
-            {/* Cashier Routes */}
+            {/* ==================== */}
+            {/* Branch public Routes */}
+            {/* ==================== */}
             <Route
+              exact
+              path={URL.branchLoginUrl}
+              component={(props) => <SignInPage type="branch" {...props} />}
+            />
+            <Route
+              exact
+              path={URL.branchForgotPasswordUrl}
+              component={(props) => (
+                <ForgotPasswordPage type="branch" {...props} />
+              )}
+            />
+            <Route
+              exact
+              path={URL.branchOtpUrl}
+              component={(props) => (
+                <OTPForgotPasswordPage type="branch" {...props} />
+              )}
+            />
+            {/* ============== */}
+            {/* Cashier Routes */}
+            {/* ============== */}
+            <Route
+              userType="cashier"
               exact
               path={URL.cashierDashboardUrl}
               component={(props) => <CashierDashboard {...props} />}
             />
-
             <Route
+              userType="cashier"
               exact
               path={URL.invoiceUrl}
               component={(props) => <InvoiceList {...props} />}
+            />
+            {/* ===================== */}
+            {/* Cashier Public Routes */}
+            {/* ===================== */}
+            <Route
+              exact
+              path={URL.cashierLoginUrl}
+              component={(props) => <SignInPage type="cashier" {...props} />}
+            />
+            <Route
+              exact
+              path={URL.cashierForgotPasswordUrl}
+              component={(props) => (
+                <ForgotPasswordPage type="cashier" {...props} />
+              )}
+            />
+            <Route
+              exact
+              path={URL.cashierOtpUrl}
+              component={(props) => (
+                <OTPForgotPasswordPage type="cashier" {...props} />
+              )}
             />
           </Switch>
           <GlobalStyle />

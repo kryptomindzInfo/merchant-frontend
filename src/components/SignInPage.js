@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Field, Form, Formik, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
@@ -30,8 +30,28 @@ const validationSchema = Yup.object().shape({
 
 const SignInPage = (props) => {
   const classes = styles();
-  const { dashboardUrl, isBranch, verifyUrl, match } = props;
+  const [href, setHref] = React.useState('/merchant/forgot-password');
+  const { type, match } = props;
   const { branchName } = match.params;
+
+  const hrefBasedOnType = () => {
+    switch (type) {
+      case 'merchant':
+        setHref('/merchant/forgot-password');
+        break;
+      case 'branch':
+        setHref(`/branch/${branchName}/forgot-password`);
+        break;
+      case 'cashier':
+        setHref(`/cashier/${branchName}/forgot-password`);
+        break;
+      default:
+        setHref('/merchant/forgot-password');
+        break;
+    }
+  };
+
+  useEffect(() => hrefBasedOnType());
 
   return (
     <Fragment>
@@ -47,7 +67,7 @@ const SignInPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection isBranch={isBranch} branchName={branchName} />
+          <LandingLeftSection branchName={branchName} />
         </Grid>
         <Grid
           item
@@ -74,27 +94,27 @@ const SignInPage = (props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              axios
-                .post(`${MERCHANT_API}/login`, values)
-                .then((res) => {
-                  if (res.status === 200) {
-                    if (res.data.status === 0) {
-                      notify(res.data.error, 'error');
-                    } else if (res.data.details.status === 1) {
-                      history.push(verifyUrl);
-                    } else {
-                      localStorage.setItem(
-                        'merchantLogged',
-                        res.data.details.token,
-                      );
-                      history.push(dashboardUrl);
-                    }
-                  }
-                })
-                .catch((error) => {
-                  notify('Something Went Wrong', 'error');
-                });
-              history.push(verifyUrl);
+              // axios
+              //   .post(`${MERCHANT_API}/login`, values)
+              //   .then((res) => {
+              //     if (res.status === 200) {
+              //       if (res.data.status === 0) {
+              //         notify(res.data.error, 'error');
+              //       } else if (res.data.details.status === 1) {
+              //         history.push(verifyUrl);
+              //       } else {
+              //         localStorage.setItem(
+              //           'merchantLogged',
+              //           res.data.details.token,
+              //         );
+              //         history.push(dashboardUrl);
+              //       }
+              //     }
+              //   })
+              //   .catch((error) => {
+              //     notify('Something Went Wrong', 'error');
+              //   });
+              // history.push(verifyUrl);
             }}
           >
             {(formikProps) => {
@@ -157,7 +177,7 @@ const SignInPage = (props) => {
                           // paddingLeft: '5%',
                         }}
                       >
-                        <A href="/merchant/forgot-password">Forgot password?</A>
+                        <A href={href}>Forgot password?</A>
                       </Typography>
                     </Grid>
                   </Grid>
@@ -172,8 +192,6 @@ const SignInPage = (props) => {
 };
 
 SignInPage.propTypes = {
-  dashboardUrl: PropTypes.string.isRequired,
-  verifyUrl: PropTypes.string.isRequired,
-  isBranch: PropTypes.bool.isRequired,
+  type: PropTypes.string.isRequired,
 };
 export default SignInPage;
