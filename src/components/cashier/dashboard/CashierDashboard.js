@@ -11,14 +11,16 @@ import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
 import CreateGroupCard from './CreateGroupCard';
 
-const CashierDashboard = () => {
+const CashierDashboard = (props) => {
+  const { match } = props;
+  const { branchName } = match.params;
   return (
     <Fragment>
       <Helmet>
         <title>Cashier | Dashboard</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <CashierHeader />
+      <CashierHeader branchName={branchName} />
       <Container verticalMargin>
         <Main fullWidth>
           <Row>
