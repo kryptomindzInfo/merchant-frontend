@@ -15,6 +15,7 @@ import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import { fetchBranchList } from '../api/MerchantAPI';
+import history from '../../utils/history';
 
 function BranchList() {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
@@ -27,6 +28,11 @@ function BranchList() {
     setEditingBranch(merchant);
     setPopupType(type);
     setAddBranchPopup(true);
+  };
+  
+  const handleBranchInfoClick = (branchInfo) => {
+    localStorage.setItem(`${branchInfo.name}_branchInfo`,JSON.stringify(branchInfo));
+    history.push(`/merchant/branch/info/${branchInfo.name}`)
   };
 
   const onPopupClose = () => {
@@ -74,13 +80,8 @@ function BranchList() {
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
-                  <span
-                    onClick={() =>
-                      handleBranchPopupClick('update', branch)
-                    }
-                  >
-                                      Edit
-                  </span>
+                  <span onClick={() => handleBranchInfoClick(branch)}>Info</span>
+                  <span onClick={() => handleBranchPopupClick('update', branch)}>Edit</span>
                   {branch.status === -1 ? (
                     <span>Unblock</span>
                   ) : (
