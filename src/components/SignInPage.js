@@ -1,6 +1,6 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { Field, Form, Formik, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
@@ -14,6 +14,7 @@ import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
+import { login } from './utils/LoginAPI';
 
 const initialValues = {
   username: '',
@@ -27,6 +28,7 @@ const validationSchema = Yup.object().shape({
 const SignInPage = (props) => {
   const classes = styles();
   const [href, setHref] = React.useState('/merchant/forgot-password');
+  const [isLoading, setLoading] = React.useState(false);
   const { type, match } = props;
   const { branchName } = match.params;
 
@@ -90,27 +92,13 @@ const SignInPage = (props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              // axios
-              //   .post(`${MERCHANT_API}/login`, values)
-              //   .then((res) => {
-              //     if (res.status === 200) {
-              //       if (res.data.status === 0) {
-              //         notify(res.data.error, 'error');
-              //       } else if (res.data.details.status === 1) {
-              //         history.push(verifyUrl);
-              //       } else {
-              //         localStorage.setItem(
-              //           'merchantLogged',
-              //           res.data.details.token,
-              //         );
-              //         history.push(dashboardUrl);
-              //       }
-              //     }
-              //   })
-              //   .catch((error) => {
-              //     notify('Something Went Wrong', 'error');
-              //   });
-              // history.push(verifyUrl);
+              const loginCreds = {
+                values,
+                type,
+              };
+              setLoading(true);
+              login(loginCreds);
+              setLoading(false);
             }}
           >
             {(formikProps) => {
@@ -161,7 +149,7 @@ const SignInPage = (props) => {
                     type="submit"
                     style={{ padding: '2%', marginTop: '5%' }}
                   >
-                    {isSubmitting ? <Loader /> : 'SIGN IN'}
+                    {isLoading ? <Loader /> : 'SIGN IN'}
                   </Button>
                   <Grid container>
                     <Grid item md={6} sm={12} xs={12}>

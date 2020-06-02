@@ -2,7 +2,6 @@ import React from 'react';
 import { Form, Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
-import TextField from '@material-ui/core/TextField';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
 import Button from '../../shared/Button';
@@ -11,6 +10,7 @@ import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
 import CountrySelectBox from '../../shared/CountrySelectBox';
 import { branchAPI } from '../api/MerchantAPI';
+import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
 
 function CreateBranchPopup(props) {
   return (
@@ -18,7 +18,7 @@ function CreateBranchPopup(props) {
       <Formik
         initialValues={{
           name: props.merchant.name || '',
-          bcode: props.merchant.bcode || '',
+          branch_id: props.merchant.branch_id || '',
           username: props.merchant.username || '',
           address1: props.merchant.address1 || '',
           state: props.merchant.shared || '',
@@ -46,7 +46,7 @@ function CreateBranchPopup(props) {
               'Mobile no must be valid',
             )
             .required('Mobile no is required'),
-          bcode: Yup.string()
+          branch_id: Yup.string()
             .min(3, 'Branch code should be atleast 3 characters')
             .required('Branch code is required'),
           name: Yup.string()
@@ -70,6 +70,13 @@ function CreateBranchPopup(props) {
             setFieldValue,
           } = formikProps;
 
+          const countryChange = (event) => {
+            const { value } = event.target;
+            const { title } = event.target.options[event.target.selectedIndex];
+            setFieldValue('ccode', title, true);
+            setFieldValue('country', value, true);
+          };
+
           return (
             <div>
               <h1>
@@ -81,8 +88,15 @@ function CreateBranchPopup(props) {
                   <TextInput
                     type="text"
                     name="name"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
                     value={values.name}
                     onChange={handleChange}
                     required
@@ -92,10 +106,17 @@ function CreateBranchPopup(props) {
                   <label>Branch ID*</label>
                   <TextInput
                     type="text"
-                    name="bcode"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
-                    value={values.bcode}
+                    name="branch_id"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    value={values.branch_id}
                     onChange={handleChange}
                     required
                   />
@@ -105,8 +126,15 @@ function CreateBranchPopup(props) {
                   <TextInput
                     type="text"
                     name="username"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
                     value={values.username}
                     onChange={handleChange}
                     required
@@ -117,8 +145,15 @@ function CreateBranchPopup(props) {
                   <TextInput
                     type="text"
                     name="address1"
-                    onFocus={handleFocus}
-                    onBlur={handleBlur}
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
                     value={values.address1}
                     onChange={handleChange}
                     required
@@ -132,8 +167,15 @@ function CreateBranchPopup(props) {
                       <TextInput
                         type="text"
                         name="state"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         value={values.state}
                         onChange={handleChange}
                         required
@@ -146,8 +188,15 @@ function CreateBranchPopup(props) {
                       <TextInput
                         type="text"
                         name="zip"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         value={values.zip}
                         onChange={handleChange}
                         required
@@ -158,7 +207,14 @@ function CreateBranchPopup(props) {
                 <Row>
                   <Col>
                     <FormGroup>
-                      <CountrySelectBox />
+                      <CountrySelectBox
+                        type="text"
+                        name="country"
+                        value={values.country}
+                        onChange={countryChange}
+                        data-change="ccode"
+                        required
+                      />
                     </FormGroup>
                   </Col>
 
@@ -168,8 +224,15 @@ function CreateBranchPopup(props) {
                       <TextInput
                         type="email"
                         name="email"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         value={values.email}
                         onChange={handleChange}
                         required
@@ -198,8 +261,15 @@ function CreateBranchPopup(props) {
                         pattern="[0-9]{10}"
                         title="10 Digit numeric value"
                         name="mobile"
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         value={values.mobile}
                         onChange={handleChange}
                         required
@@ -212,50 +282,41 @@ function CreateBranchPopup(props) {
                 <Row>
                   <Col cW="49%" mR="2%">
                     <FormGroup>
-                      <TextField
-                        label="From"
+                      <label>From*</label>
+                      <TextInput
                         type="time"
+                        name="working_from"
+                        onFocus={inputFocus}
+                        onBlur={inputBlur}
+                        min="00:00"
+                        max="23:00"
+                        autoFocus
                         value={values.working_from}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         onChange={handleChange}
                         required
-                        fullWidth
-                        min="00:00"
-                        variant="outlined"
-                        max="23:00"
-                        margin="dense"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
                       />
                     </FormGroup>
                   </Col>
                   <Col cW="49%">
                     <FormGroup>
-                      <TextField
-                        label="To"
+                      <label>To*</label>
+                      <TextInput
                         type="time"
+                        autoFocus
+                        min="00:00"
+                        max="23:00"
+                        name="working_to"
+                        onFocus={inputFocus}
+                        onBlur={inputBlur}
                         value={values.working_to}
-                        onFocus={handleFocus}
-                        onBlur={handleBlur}
                         onChange={handleChange}
                         required
-                        fullWidth
-                        min="00:00"
-                        variant="outlined"
-                        max="23:00"
-                        margin="dense"
-                        InputLabelProps={{
-                          shrink: true,
-                        }}
                       />
                     </FormGroup>
                   </Col>
                 </Row>
                 <Button
                   type="submit"
-                  disabled={isSubmitting}
                   filledBtn
                   marginTop="10px"
                   style={{

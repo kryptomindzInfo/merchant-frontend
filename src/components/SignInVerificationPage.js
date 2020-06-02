@@ -1,20 +1,19 @@
 import React, { Fragment, useState } from 'react';
 import { Helmet } from 'react-helmet';
-import { Field, Form, Formik, ErrorMessage } from 'formik';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
 import LandingLeftSection from './shared/LandingLeftSection';
-import history from './utils/history';
 import styles from '../styles/LandingPageCss';
 import Button from './shared/Button';
 import TextInput from './shared/TextInput';
-import A from './shared/A';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
+import { signInVerify } from './utils/LoginAPI';
 
 const initialValues = {
   newPassword: '',
@@ -35,7 +34,6 @@ const validationSchema = Yup.object().shape({
 
 const SignInVerificationPage = (props) => {
   const classes = styles();
-  // eslint-disable-next-line react/prop-types
   const { type, match } = props;
   const { branchName } = match.params;
   const [showNewPassword, setShowNewPassword] = useState(false);
@@ -81,20 +79,8 @@ const SignInVerificationPage = (props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              // axios.post('', values)
-              //   .then(res => {
-              //     if (res.data.status === 1) {
-              //       if (res.data.error) {
-              //         notify(res.data.error, 'error');
-              //       } else {
-              //         // todo:
-              //       }
-              //     }
-              //   })
-              //   .catch(error => {
-              //     notify('Something Went Wrong', 'error');
-              //   });
-              // history.push(loginUrl);
+              const payload = { password: values.newPassword };
+              signInVerify(payload);
             }}
           >
             {(formikProps) => {
@@ -114,7 +100,7 @@ const SignInVerificationPage = (props) => {
                     <ErrorMessage name="newPassword" component={ErrorText} />
                   </FormField>
                   <FormField mB="14px">
-                    <label htmlFor="repeatPassword">Password</label>
+                    <label htmlFor="repeatPassword">Repeat Password</label>
                     <Field
                       noMargin
                       name="repeatPassword"
@@ -140,20 +126,6 @@ const SignInVerificationPage = (props) => {
                   >
                     {isSubmitting ? <Loader /> : 'SIGN IN'}
                   </Button>
-                  <Grid container>
-                    <Grid item md={6} sm={12} xs={12}>
-                      <Typography
-                        style={{
-                          fontSize: '14px',
-                          paddingTop: '5%',
-                          // textAlign: 'end'
-                          // paddingLeft: '5%',
-                        }}
-                      >
-                        <A href="/merchant/forgot-password">Forgot password?</A>
-                      </Typography>
-                    </Grid>
-                  </Grid>
                 </Form>
               );
             }}

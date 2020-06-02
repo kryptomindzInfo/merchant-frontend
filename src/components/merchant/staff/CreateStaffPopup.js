@@ -25,7 +25,17 @@ function CreateStaffPopup(props) {
       const data = await fetchBranchList();
       setBranchList(data.list);
     };
+    const correctFocus = () => {
+      if (props.type === 'update') {
+        document.querySelectorAll('label').forEach((label) => {
+          label.classList.add('focused');
+        });
+      } else {
+        document.querySelectorAll('label')[2].classList.add('focused');
+      }
+    };
     getBranchList();
+    correctFocus();
   }, []);
 
   const getBranches = () => {

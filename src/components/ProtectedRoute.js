@@ -4,28 +4,21 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
-  const [pathName, setPathName] = React.useState('/');
-  const { branchName } = match.params;
   const token = localStorage.getItem(`${type}Logged`);
   axios.defaults.headers.common.Authorization = token;
 
   const pathNameBasedOnType = () => {
     switch (type) {
       case 'merchant':
-        setPathName('/merchant/login');
-        break;
+        return '/merchant/login';
       case 'branch':
-        setPathName(`/branch/${branchName}/login`);
-        break;
+        return `/branch/${match.params.branchName}/login`;
       case 'cashier':
-        setPathName(`/cashier/${branchName}/login`);
-        break;
+        return `/cashier/${match.params.branchName}/login`;
       default:
-        setPathName('/');
-        break;
+        return '/';
     }
   };
-  useEffect(() => pathNameBasedOnType());
   return (
     <Route
       {...rest}
@@ -36,7 +29,7 @@ const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
         return (
           <Redirect
             to={{
-              pathname: { pathName },
+              pathname: { pathNameBasedOnType },
               state: {
                 from: props.location.pathname,
               },

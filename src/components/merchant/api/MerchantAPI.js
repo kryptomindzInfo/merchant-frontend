@@ -1,17 +1,17 @@
 import axios from 'axios';
-import { API_URL } from '../../constants';
+import { MERCHANT_API } from '../../constants';
 import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
 const getWalletBalance = async () => {
   try {
-    const res = await axios.get(`${API_URL}/merchant/getWalletBalance`);
+    const res = await axios.get(`${MERCHANT_API}/getWalletBalance`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return 0;
       }
-      return res.data.amount;
+      return res.data.balance;
     }
   } catch (e) {
     notify('Could not fetch balance!', 'error');
@@ -22,7 +22,7 @@ const getWalletBalance = async () => {
 const fetchDashboardHistory = async () => {
   try {
     const token = localStorage.getItem('merchantLogged');
-    const res = await axios.post(`${API_URL}/merchant/history`, {
+    const res = await axios.post(`${MERCHANT_API}/history`, {
       token,
     });
     if (res.status === 200) {
@@ -44,13 +44,13 @@ const fetchDashboardHistory = async () => {
 const branchAPI = async (props, values, apiType) => {
   let API = '';
   if (apiType === 'update') {
-    API = '/merchant/editBranch';
+    API = '/editBranch';
     values.username = values.merchant_id;
   } else {
-    API = '/merchant/createBranch';
+    API = '/createBranch';
   }
   try {
-    const res = await axios.post(`${API_URL}${API}`, {
+    const res = await axios.post(`${MERCHANT_API}${API}`, {
       ...values,
     });
     if (res.status === 200) {
@@ -71,7 +71,7 @@ const branchAPI = async (props, values, apiType) => {
 
 const fetchBranchList = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchant/listBranches`);
+    const res = await axios.get(`${MERCHANT_API}/listBranches`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -92,12 +92,12 @@ const fetchBranchList = async () => {
 const staffAPI = async (props, values, apiType) => {
   let API = '';
   if (apiType === 'update') {
-    API = '/merchant/editStaff';
+    API = '/editStaff';
   } else {
-    API = '/merchant/addStaff';
+    API = '/addStaff';
   }
   try {
-    const res = await axios.post(`${API_URL}${API}`, {
+    const res = await axios.post(`${MERCHANT_API}${API}`, {
       ...values,
     });
     if (res.status === 200) {
@@ -118,7 +118,7 @@ const staffAPI = async (props, values, apiType) => {
 
 const fetchStaffList = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchant/listStaff`);
+    const res = await axios.post(`${MERCHANT_API}/listStaff`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

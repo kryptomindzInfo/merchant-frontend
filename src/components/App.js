@@ -111,7 +111,7 @@ function App() {
             {/* =============== */}
             {/* Merchant Routes */}
             {/* =============== */}
-            <Route
+            <ProtectedRoute
               type="merchant"
               exact
               path={merchantDashboardUrl}
@@ -143,8 +143,9 @@ function App() {
               path={loginUrl}
               component={(props) => <SignInPage type="merchant" {...props} />}
             />
-            <Route
+            <ProtectedRoute
               exact
+              type="merchant"
               path={verifyUrl}
               component={(props) => (
                 <SignInVerificationPage type="merchant" {...props} />

@@ -4,19 +4,18 @@ import Card from '../../shared/Card';
 import { CURRENCY } from '../../constants';
 import Button from '../../shared/Button';
 import A from '../../shared/A';
-// eslint-disable-next-line import/named
 import { getWalletBalance } from '../api/MerchantAPI';
 
 const MerchantOperationalWallet = () => {
   const [balance, setBalance] = useState(0);
 
-  /* useEffect(() => {
+  useEffect(() => {
     const fetchBalance = async () => {
-      const data = await getBalance();
+      const data = await getWalletBalance();
       setBalance(data);
     };
     fetchBalance();
-  }, []); */
+  }, []);
 
   return (
     <Card marginBottom="54px" buttonMarginTop="32px" bigPadding>
@@ -25,17 +24,6 @@ const MerchantOperationalWallet = () => {
       <div className="cardValue">
         {CURRENCY} {balance.toFixed(2)}
       </div>
-      {
-        <Button style={{ display: 'flex' }} className="sendMoneyButton">
-          <i className="material-icons">
-            <SendIcon />
-          </i>
-          Send Money
-        </Button>
-      }
-      <A>
-        <span className="history">History</span>
-      </A>
     </Card>
   );
 };
