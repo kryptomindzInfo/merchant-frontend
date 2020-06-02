@@ -41,7 +41,7 @@ const SignInVerificationPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>Merchant | Login Verification</title>
+        <title>{type.toUpperCase()} | Login Verification</title>
         <meta name="description" content="Description of SignUp page" />
       </Helmet>
       <Grid

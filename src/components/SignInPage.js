@@ -54,7 +54,7 @@ const SignInPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>Merchant | Login In</title>
+        <title>{type.toUpperCase()} | Login In</title>
         <meta name="description" content="Description of SignIn Page" />
       </Helmet>
       <Grid
