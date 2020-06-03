@@ -7,7 +7,7 @@ import { verifyUrl, merchantDashboardUrl, loginUrl } from '../Url';
 const redirectUser = (type, response) => {
   switch (type) {
     case 'merchant':
-      localStorage.setItem('merchantLogged', response.data.token);
+      localStorage.setItem('merchantLogged', JSON.stringify(response.data));
       if (response.data.details.status === 0) {
         history.push(verifyUrl);
       } else {

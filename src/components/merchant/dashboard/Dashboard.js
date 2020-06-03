@@ -13,20 +13,26 @@ import Main from '../../shared/Main';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 
 const Dashboard = () => {
+  const merchantDetails = JSON.parse(localStorage.getItem('merchantLogged'))
+    .details;
+  const noOfInvoicesPaid = parseFloat(merchantDetails.bills_paid);
+  const noOfPendingInvoices = parseFloat(
+    merchantDetails.bills_raised - merchantDetails.bills_paid,
+  );
   return (
     <Fragment>
       <Helmet>
         <title>Merchant | Dashboard</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <MerchantHeader />
+      <MerchantHeader active="dashboard" />
       <Container verticalMargin>
         <MerchantSideBar />
         <Main>
           <Row>
             <PaymentRecivedCard />
-            <InvoiceNumberCard />
-            <PendingInvoiceCard />
+            <InvoiceNumberCard amount={noOfInvoicesPaid} />
+            <PendingInvoiceCard amount={noOfPendingInvoices} />
             <OverDueInvoiceCard />
           </Row>
           <HistoryCard />

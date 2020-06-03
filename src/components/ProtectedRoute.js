@@ -4,7 +4,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
-  const token = localStorage.getItem(`${type}Logged`);
+  const userLogged = JSON.parse(localStorage.getItem(`${type}Logged`));
+  const { token } = userLogged;
   axios.defaults.headers.common.Authorization = token;
 
   const pathNameBasedOnType = () => {

@@ -25,6 +25,7 @@ const forgotPassword = (type, branchName, reqBody) => {
         } else if (res.data.status === 1) {
           const successMessage = 'Redirecting you to OTP page!';
           notify(successMessage, 'success');
+          localStorage.setItem(`otpNo_${type}`, reqBody.mobile);
           const otpUrl = getUrlBasedOnType(
             type,
             branchName,
@@ -42,14 +43,18 @@ const forgotPassword = (type, branchName, reqBody) => {
 };
 
 const verifyOTP = (type, branchName, reqBody) => {
+  const mobile = localStorage.getItem(`otpNo_${type}`);
+  reqBody.mobile = mobile;
   axios
     .post(`${API_URL}/common/verifyForgotPasswordOTP`, reqBody)
     .then((res) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
           notify(res.data.message, 'error');
+          localStorage.removeItem(`otpNo_${type}`);
         } else if (res.data.status === 1) {
           notify(res.data.message, 'success');
+          localStorage.removeItem(`otpNo_${type}`);
           notify('Redirecting you to Login page!', 'success');
           const loginUrl = getUrlBasedOnType(type, branchName, 'login');
           setTimeout(() => {

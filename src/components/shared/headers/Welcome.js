@@ -27,13 +27,12 @@ const Icon = styled.i`
 `;
 
 class Welcome extends Component {
-  logoutInfra = () => {
-    localStorage.removeItem('logged');
-    localStorage.removeItem('name');
-    history.push('/');
+  logoutMerchant = () => {
+    localStorage.removeItem('merchantLogged');
+    history.push('/merchant/login');
   };
 
-  logoutBank = () => {
+  /* logoutBank = () => {
     localStorage.removeItem('merchantLogged');
     localStorage.removeItem('merchantName');
     history.push('/merchant/login');
@@ -49,29 +48,28 @@ class Welcome extends Component {
     localStorage.removeItem('cashierLogged');
     history.push(`/cashier/${this.props.bankName}`);
     // this.props.history.push('/bank');
-  };
+  }; */
 
   render() {
     let name = '';
     let isAdmin = false;
     if (this.props.from === 'merchant') {
-      name = localStorage.getItem('merchantName');
+      // eslint-disable-next-line prefer-destructuring
+      name = JSON.parse(localStorage.getItem('merchantLogged')).details.name;
     } else if (this.props.from === 'branch') {
-      name = localStorage.getItem('branchName');
+      // eslint-disable-next-line prefer-destructuring
+      name = JSON.parse(localStorage.getItem('branchLogged')).details.name;
     } else if (this.props.from === 'cashier') {
-      name = localStorage.getItem('cashierName');
+      // eslint-disable-next-line prefer-destructuring
+      name = JSON.parse(localStorage.getItem('cashierLogged')).details.name;
     } else {
       isAdmin = localStorage.getItem('isAdmin');
-      name = localStorage.getItem('name');
     }
-    name = 'Airtel';
     const tempDate = new Date();
     const date = `${tempDate.getDate()}-${
       tempDate.getMonth() + 1
     }-${tempDate.getFullYear()} `;
     const currDate = `${date}`;
-
-    const { bankName } = this.props;
     return (
       <>
         <WelcomeWrap className="clr">
@@ -79,53 +77,12 @@ class Welcome extends Component {
             <NotificationIcon />
           </Icon>
           <div className="dropdown fl">
-            {this.props.infraNav ? (
-              <>
-                <Name>
-                  <span>INFRA:</span> {name}
-                </Name>
-                <SubNav className="infraSubNav">
-                  {/* { isAdmin ?  */}
-                  <A href="/profile">Settings</A>
-                  {/* //  : null } */}
-                  <span onClick={this.logoutInfra}>Logout</span>
-                </SubNav>
-              </>
-            ) : this.props.from === 'branch' ? (
-              <>
-                <Name>
-                  <span>BRANCH:</span> {name}
-                </Name>
-                <SubNav className="infraSubNav">
-                  {/* { isAdmin ?  */}
-                  <A href={`/merchant/branch/info/${bankName}`}>Settings</A>
-                  {/* //  : null } */}
-                  <span onClick={this.logoutBranch}>Logout</span>
-                </SubNav>
-              </>
-            ) : this.props.from === 'cashier' ? (
-              <>
-                <Name>
-                  <span>CASHIER:</span> {name}
-                </Name>
-                <SubNav className="infraSubNav">
-                  {/* { isAdmin ?  */}
-                  <A href={`/cashier/${bankName}/info`}>Profile</A>
-                  {/* //  : null } */}
-                  <span onClick={this.logoutCashier}>Logout</span>
-                </SubNav>
-              </>
-            ) : (
-              <>
-                <Name>
-                  <span>MERCHANT:</span> {name}
-                </Name>
-                <SubNav className="bankSubNav">
-                  <A href="/merchant/info">Settings</A>
-                  <span onClick={this.logoutBank}>Logout</span>
-                </SubNav>
-              </>
-            )}
+            <Name>
+              <span>MERCHANT:</span> {name}
+            </Name>
+            <SubNav className="bankSubNav">
+              <span onClick={() => this.logoutMerchant()}>Logout</span>
+            </SubNav>
           </div>
           <span style={{ paddingRight: '7px' }}>{currDate}</span>
         </WelcomeWrap>

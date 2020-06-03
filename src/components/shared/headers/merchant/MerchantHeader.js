@@ -22,21 +22,15 @@ const MiddleTitle = styled.div`
   display: flex;
   justify-content: center;
 `;
-const token = localStorage.getItem('merchantLogged');
-const merchantName = localStorage.getItem('merchantName');
-const logo = localStorage.getItem('merchantLogo');
-
-let permissions = localStorage.getItem('permissions');
-if (permissions !== 'all' && permissions !== '') {
-  permissions = JSON.parse(permissions);
-}
+const merchantLogged = JSON.parse(localStorage.getItem('merchantLogged')) || {};
+const merchantName = merchantLogged.details.name;
+const logo = merchantLogged.details.logo_hash;
 
 class MerchantHeader extends Component {
   constructor() {
     super();
     this.state = {
       logo,
-      name: 'Demo',
     };
   }
 
@@ -58,7 +52,7 @@ class MerchantHeader extends Component {
             <div className="bankLogo">
               <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
             </div>
-            <h2>{this.state.name.toUpperCase()}</h2>
+            <h2>{merchantName.toUpperCase()}</h2>
           </A>
           {this.props.middleTitle ? (
             <MiddleTitle className="middleTitle">

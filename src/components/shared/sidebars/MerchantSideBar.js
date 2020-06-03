@@ -3,11 +3,9 @@ import EWalletBalanceSendAndClaimMoneyCard from '../EWalletBalanceSendAndClaimMo
 import Sidebar from './Sidebar';
 
 const MerchantSideBar = (props) => {
-  const { showClaimButton } = props;
-
   return (
     <Sidebar marginRight>
-      <EWalletBalanceSendAndClaimMoneyCard showClaimButton={showClaimButton} />
+      <EWalletBalanceSendAndClaimMoneyCard />
     </Sidebar>
   );
 };

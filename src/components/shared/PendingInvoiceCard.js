@@ -2,12 +2,12 @@ import React from 'react';
 import Card from './Card';
 import Col from './Col';
 
-const PendingInvoiceCard = () => {
+const PendingInvoiceCard = (props) => {
   return (
     <Col cW="100%">
       <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
         <h4>Pending No of Invoices</h4>
-        <div className="cardValue">9092</div>
+        <div className="cardValue">{props.amount}</div>
       </Card>
     </Col>
   );
