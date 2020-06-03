@@ -9,3 +9,13 @@ export function inputBlur(e) {
     target.parentElement.querySelector('label').classList.remove('focused');
   }
 }
+
+export const correctFocus = (type) => {
+  if (type === 'update') {
+    document.querySelectorAll('label').forEach((label) => {
+      label.classList.add('focused');
+    });
+  } else {
+    document.querySelectorAll('label')[2].classList.add('focused');
+  }
+};

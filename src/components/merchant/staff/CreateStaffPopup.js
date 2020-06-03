@@ -12,30 +12,27 @@ import Loader from '../../shared/Loader';
 import UploadArea from '../../shared/UploadArea';
 import SelectInput from '../../shared/SelectInput';
 import Icon from '../../shared/Icon';
-import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
+import {
+  correctFocus,
+  inputBlur,
+  inputFocus,
+} from '../../utils/handleInputFocus';
 import { fetchBranchList, staffAPI } from '../api/MerchantAPI';
 import { onFileChange, triggerBrowse } from '../../shared/utils/FileUpload';
 
 function CreateStaffPopup(props) {
   const [branchList, setBranchList] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const merchantLogged = JSON.parse(localStorage.getItem('merchantLogged'));
+  const { token } = merchantLogged;
 
   useEffect(() => {
     const getBranchList = async () => {
       const data = await fetchBranchList();
       setBranchList(data.list);
     };
-    const correctFocus = () => {
-      if (props.type === 'update') {
-        document.querySelectorAll('label').forEach((label) => {
-          label.classList.add('focused');
-        });
-      } else {
-        document.querySelectorAll('label')[2].classList.add('focused');
-      }
-    };
     getBranchList();
-    correctFocus();
+    correctFocus(props.type);
   }, []);
 
   const getBranches = () => {
@@ -253,7 +250,7 @@ function CreateStaffPopup(props) {
                       type="file"
                       id="logo"
                       data-key="logo"
-                      onChange={(e) => onFileChange(e)}
+                      onChange={(e) => onFileChange(e, token, 'merchant')}
                     />
                     {!values.logo ? (
                       <i className="material-icons">cloud_upload</i>

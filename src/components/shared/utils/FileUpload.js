@@ -2,7 +2,7 @@ import axios from 'axios';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
-const fileUpload = (file, key, token) => {
+const fileUpload = (file, token, key, type) => {
   const formData = new FormData();
   formData.append('file', file);
   const config = {
@@ -11,7 +11,7 @@ const fileUpload = (file, key, token) => {
     },
   };
   let method = 'fileUpload';
-  let url = `${API_URL}/${method}?token=${token}&from=bank`;
+  let url = `${API_URL}/${method}?token=${token}&from=${type}`;
   if (key === 'document_hash') {
     method = 'ipfsUpload';
     url = `${API_URL}/${method}?token=${token}`;
@@ -41,9 +41,13 @@ const triggerBrowse = (inp) => {
   input.click();
 };
 
-const onFileChange = (e) => {
+const onFileChange = (e, token, type) => {
   if (e.target.files && e.target.files[0] != null) {
-    fileUpload(e.target.files[0], e.target.getAttribute('data-key'));
+    fileUpload(
+      e.target.files[0],
+      token,
+      e.target.getAttribute('data-key', type),
+    );
   }
 };
 

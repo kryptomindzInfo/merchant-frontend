@@ -64,11 +64,9 @@ function BranchList() {
       return (
         <tr key={branch._id}>
           <td className="tac">{branch.name}</td>
-          <td className="tac">{branch.bills_paid}</td>
-          <td className="tac">{branch.bills_raised}</td>
-          <td className="tac">{branch.amount_collected}</td>
-          <td className="tac">{branch.amount_due}</td>
-
+          <td className="tac">{branch.code}</td>
+          <td className="tac">{branch.total_cashiers}</td>
+          <td className="tac">{branch.username}</td>
           <td className="tac bold">
             <div
               style={{
@@ -76,7 +74,7 @@ function BranchList() {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{branch.fee_generated}</td>
+              <td className="tac">{branch.zone_id}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
@@ -143,10 +141,9 @@ function BranchList() {
                   <tr>
                     <th>Name</th>
                     <th>Branch Code</th>
-                    <th>Bills Raised</th>
-                    <th>Amount Collected</th>
-                    <th>Amount Due</th>
-                    <th>Fee Generated</th>
+                    <th>Total Cashiers</th>
+                    <th>Branch Admin</th>
+                    <th>Zone ID</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -162,8 +159,8 @@ function BranchList() {
       {addBranchPopup ? (
         <CreateBranchPopup
           type={popupType}
-          merchant={editingBranch}
-          refreshBranchList={() => refreshBranchList()}
+          branch={editingBranch}
+          refreshBranchList={(data) => refreshBranchList()}
           onClose={() => onPopupClose()}
         />
       ) : null}

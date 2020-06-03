@@ -43,9 +43,10 @@ const fetchDashboardHistory = async () => {
 // API's for Merchant Branches
 const branchAPI = async (props, values, apiType) => {
   let API = '';
+  // temperorily add zone_id
+  values.zone_id = 'demo';
   if (apiType === 'update') {
     API = '/editBranch';
-    values.username = values.merchant_id;
   } else {
     API = '/createBranch';
   }
@@ -58,7 +59,7 @@ const branchAPI = async (props, values, apiType) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        props.refreshBranchList();
+        props.refreshBranchList(res.data.data);
         props.onClose();
       }
     } else {
@@ -77,7 +78,7 @@ const fetchBranchList = async () => {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.list, loading: false };
+      return { list: res.data.branches, loading: false };
     }
     notify(res.data.message, 'error');
     return { list: [], loading: false };
@@ -118,13 +119,13 @@ const staffAPI = async (props, values, apiType) => {
 
 const fetchStaffList = async () => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listStaff`);
+    const res = await axios.get(`${MERCHANT_API}/listStaff`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.list, loading: false };
+      return { list: res.data.data, loading: false };
     }
     notify(res.data.message, 'error');
     return { list: [], loading: false };

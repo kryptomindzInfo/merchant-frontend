@@ -13,7 +13,7 @@ import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
 import { CONTRACT_URL, STATIC_URL } from '../../constants';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-import { fetchBranchList, fetchStaffList } from '../api/MerchantAPI';
+import { fetchStaffList } from '../api/MerchantAPI';
 import Loader from '../../shared/Loader';
 
 const StaffList = () => {
@@ -42,7 +42,7 @@ const StaffList = () => {
   useEffect(() => {
     const getStaffList = async () => {
       setLoading(true);
-      const data = await fetchBranchList();
+      const data = await fetchStaffList();
       setStaff(data.list);
       setLoading(data.loading);
     };

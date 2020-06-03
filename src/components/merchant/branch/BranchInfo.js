@@ -8,15 +8,29 @@ import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import InfoSidebar from '../../shared/sidebars/InfoSidebar';
+import CreateBranchPopup from './CreateBranchPopup';
 
 function BranchInfo(props) {
   const [branchInfo, setBranchInfo] = useState({});
+  const [editBranchPopup, setEditBranchPopup] = useState(false);
   const { match } = props;
+  const { id } = match.params;
   useEffect(() => {
-    const { id } = match.params;
     const branch = JSON.parse(localStorage.getItem(`${id}_branchInfo`));
     setBranchInfo(branch);
   }, []);
+
+  const handleBranchEdit = () => {
+    setEditBranchPopup(true);
+  };
+  const onPopupClose = () => {
+    setEditBranchPopup(false);
+  };
+  const refreshBranchInfo = (data) => {
+    setBranchInfo(data);
+    localStorage.setItem(`${id}_branchInfo`, JSON.stringify(data));
+  };
+
   return (
     <Wrapper from="merchant">
       <Helmet>
@@ -29,7 +43,7 @@ function BranchInfo(props) {
         goto="/merchant/branches"
       />
       <Container verticalMargin>
-        <InfoSidebar active="info" />
+        <InfoSidebar edit={() => handleBranchEdit()} active="info" />
         <Main>
           <Card bigPadding bordered>
             <div className="cardBody">
@@ -40,7 +54,7 @@ function BranchInfo(props) {
 
               <Row>
                 <Col className="infoLeft">Branch Code</Col>
-                <Col className="infoRight">{branchInfo.branch_id}</Col>
+                <Col className="infoRight">{branchInfo.code}</Col>
               </Row>
 
               <Row>
@@ -86,6 +100,14 @@ function BranchInfo(props) {
           </Card>
         </Main>
       </Container>
+      {editBranchPopup ? (
+        <CreateBranchPopup
+          type="update"
+          branch={branchInfo}
+          refreshBranchList={(data) => refreshBranchInfo(data)}
+          onClose={() => onPopupClose()}
+        />
+      ) : null}
     </Wrapper>
   );
 }

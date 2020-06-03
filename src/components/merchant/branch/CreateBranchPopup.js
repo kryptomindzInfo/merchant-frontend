@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
@@ -10,25 +10,32 @@ import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
 import CountrySelectBox from '../../shared/CountrySelectBox';
 import { branchAPI } from '../api/MerchantAPI';
-import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
+import {
+  correctFocus,
+  inputBlur,
+  inputFocus,
+} from '../../utils/handleInputFocus';
 
 function CreateBranchPopup(props) {
+  useEffect(() => {
+    correctFocus(props.type);
+  });
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
-          name: props.merchant.name || '',
-          branch_id: props.merchant.branch_id || '',
-          username: props.merchant.username || '',
-          address1: props.merchant.address1 || '',
-          state: props.merchant.shared || '',
-          zip: props.merchant.zip || '',
-          country: props.merchant.country || 'Senegal',
-          ccode: props.merchant.ccode || '+221',
-          mobile: props.merchant.mobile || '',
-          email: props.merchant.email || '',
-          working_from: props.merchant.working_from || '',
-          working_to: props.merchant.working_to || '',
+          name: props.branch.name || '',
+          code: props.branch.code || '',
+          username: props.branch.username || '',
+          address1: props.branch.address1 || '',
+          state: props.branch.state || '',
+          zip: props.branch.zip || '',
+          country: props.branch.country || 'Senegal',
+          ccode: props.branch.ccode || '+221',
+          mobile: props.branch.mobile || '',
+          email: props.branch.email || '',
+          working_from: props.branch.working_from || '',
+          working_to: props.branch.working_to || '',
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
@@ -46,7 +53,7 @@ function CreateBranchPopup(props) {
               'Mobile no must be valid',
             )
             .required('Mobile no is required'),
-          branch_id: Yup.string()
+          code: Yup.string()
             .min(3, 'Branch code should be atleast 3 characters')
             .required('Branch code is required'),
           name: Yup.string()
@@ -80,7 +87,7 @@ function CreateBranchPopup(props) {
           return (
             <div>
               <h1>
-                {props.type === 'update' ? 'Update Merchant' : 'Add Merchant'}
+                {props.type === 'update' ? 'Update Branch' : 'Add Branch'}
               </h1>
               <Form>
                 <FormGroup>
@@ -106,7 +113,7 @@ function CreateBranchPopup(props) {
                   <label>Branch ID*</label>
                   <TextInput
                     type="text"
-                    name="branch_id"
+                    name="code"
                     onFocus={(e) => {
                       handleChange(e);
                       inputFocus(e);
@@ -116,7 +123,7 @@ function CreateBranchPopup(props) {
                       handleChange(e);
                       inputBlur(e);
                     }}
-                    value={values.branch_id}
+                    value={values.code}
                     onChange={handleChange}
                     required
                   />
