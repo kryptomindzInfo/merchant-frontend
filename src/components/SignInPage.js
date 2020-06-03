@@ -15,6 +15,7 @@ import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
 import { login } from './utils/LoginAPI';
+import { getUrlBasedOnType } from './utils/ForgotPasswordAPI';
 
 const initialValues = {
   username: '',
@@ -32,22 +33,8 @@ const SignInPage = (props) => {
   const { type, match } = props;
   const { branchName } = match.params;
 
-  const hrefBasedOnType = () => {
-    switch (type) {
-      case 'merchant':
-        setHref('/merchant/forgot-password');
-        break;
-      case 'branch':
-        setHref(`/branch/${branchName}/forgot-password`);
-        break;
-      case 'cashier':
-        setHref(`/cashier/${branchName}/forgot-password`);
-        break;
-      default:
-        setHref('/merchant/forgot-password');
-        break;
-    }
-  };
+  const hrefBasedOnType = () =>
+    setHref(getUrlBasedOnType(type, branchName, 'forgot-password'));
 
   useEffect(() => hrefBasedOnType());
 

@@ -55,7 +55,7 @@ class CashierHeader extends Component {
             </A>
           ) : null}
 
-          <A href={`/cashier/${branchName}/dashboard`} float="left">
+          <A href={`/merchant/cashier/${branchName}/dashboard`} float="left">
             <div className="bankLogo">
               <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
             </div>

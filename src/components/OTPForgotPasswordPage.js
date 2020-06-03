@@ -4,11 +4,11 @@ import { Field, Form, Formik, ErrorMessage } from 'formik';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import PropTypes from 'prop-types';
+import * as Yup from 'yup';
 import LandingLeftSection from './shared/LandingLeftSection';
 import styles from '../styles/LandingPageCss';
 import Button from './shared/Button';
 import TextInput from './shared/TextInput';
-import A from './shared/A';
 import Loader from './shared/Loader';
 import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
@@ -18,6 +18,10 @@ import { verifyOTP } from './utils/ForgotPasswordAPI';
 const initialValues = {
   otp: '',
 };
+
+const validationSchema = Yup.object().shape({
+  otp: Yup.number().required('Required'),
+});
 
 const OTPForgotPasswordPage = (props) => {
   const classes = styles();
@@ -67,6 +71,7 @@ const OTPForgotPasswordPage = (props) => {
           </Typography>
           <Formik
             initialValues={initialValues}
+            validationSchema={validationSchema}
             onSubmit={(values) => {
               const body = { ...values, user_type: type };
               setLoading(true);
@@ -82,12 +87,12 @@ const OTPForgotPasswordPage = (props) => {
                     <Field
                       noMargin
                       name="otp"
-                      type="text"
+                      type="number"
                       onFocus={inputFocus}
                       onBlur={inputBlur}
                       as={TextInput}
                     />
-                    <ErrorMessage name="username" component={ErrorText} />
+                    <ErrorMessage name="otp" component={ErrorText} />
                   </FormField>
                   <Button
                     filledBtn
@@ -97,20 +102,6 @@ const OTPForgotPasswordPage = (props) => {
                   >
                     {isLoading ? <Loader /> : 'SUBMIT'}
                   </Button>
-                  <Grid container>
-                    <Grid item md={6} sm={12} xs={12}>
-                      <Typography
-                        style={{
-                          fontSize: '14px',
-                          paddingTop: '5%',
-                          // textAlign: 'end'
-                          // paddingLeft: '5%',
-                        }}
-                      >
-                        <A href="/merchant/forgot-password">Forgot password?</A>
-                      </Typography>
-                    </Grid>
-                  </Grid>
                 </Form>
               );
             }}

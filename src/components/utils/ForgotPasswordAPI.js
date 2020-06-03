@@ -9,9 +9,9 @@ const getUrlBasedOnType = (type, branchName, url) => {
     case 'merchant':
       return `/merchant/${url}`;
     case 'branch':
-      return `/branch/${branchName}/${url}`;
+      return `/merchant/branch/${branchName}/${url}`;
     case 'cashier':
-      return `/cashier/${branchName}/${url}`;
+      return `/merchant/cashier/${branchName}/${url}`;
     default:
       return `/`;
   }
@@ -26,7 +26,7 @@ const forgotPassword = (type, branchName, reqBody) => {
         } else if (res.data.status === 1) {
           const successMessage = 'Redirecting you to OTP page!';
           notify(successMessage, 'success');
-          localStorage.setItem(`otpNo_${type}`, reqBody.mobile);
+          localStorage.setItem(`otpNo_${type}`, res.data.mobile);
           const otpUrl = getUrlBasedOnType(
             type,
             branchName,
@@ -52,18 +52,14 @@ const verifyOTP = (type, branchName, reqBody) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
           notify(res.data.message, 'error');
-          localStorage.removeItem(`otpNo_${type}`);
         } else if (res.data.status === 1) {
           notify(res.data.message, 'success');
           localStorage.removeItem(`otpNo_${type}`);
-          localStorage.removeItem(`${type}Logged`);
-          localStorage.setItem(
-            `${type}Logged`,
-            JSON.stringify({ token: res.data.token }),
-          );
-          notify('Redirecting you to change password page!', 'success');
+          notify('Generated password sent via SMS!', 'success');
+          notify('Redirecting you to Login page!', 'success');
+          const loginUrl = getUrlBasedOnType(type, branchName, 'login');
           setTimeout(() => {
-            history.push(verifyUrl);
+            history.push(loginUrl);
           }, 4000);
         }
       }
@@ -72,4 +68,4 @@ const verifyOTP = (type, branchName, reqBody) => {
       notify('Something Went Wrong', 'error');
     });
 };
-export { forgotPassword, verifyOTP };
+export { forgotPassword, verifyOTP, getUrlBasedOnType };

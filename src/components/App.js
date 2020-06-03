@@ -43,7 +43,10 @@ import {
   cashierOtpUrl,
   branchForgotPasswordUrl,
   branchOtpUrl,
+  defaultBranchLoginUrl,
+  defaultCashierLoginUrl,
 } from './Url';
+import PrivateRoute from './PrivateRoute';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -117,19 +120,19 @@ function App() {
               path={merchantDashboardUrl}
               component={(props) => <Dashboard {...props} />}
             />
-            <Route
+            <ProtectedRoute
               type="merchant"
               exact
               path={branchUrl}
               component={(props) => <BranchList {...props} />}
             />
-            <Route
+            <ProtectedRoute
               type="merchant"
               exact
               path={branchProfileUrl}
               component={(props) => <BranchInfo {...props} />}
             />
-            <Route
+            <ProtectedRoute
               type="merchant"
               exact
               path={staffUrl}
@@ -158,12 +161,11 @@ function App() {
                 <ForgotPasswordPage type="merchant" {...props} />
               )}
             />
-            <Route
+            <PrivateRoute
               exact
+              type="merchant"
               path={otpUrl}
-              component={(props) => (
-                <OTPForgotPasswordPage type="merchant" {...props} />
-              )}
+              component={(props) => <OTPForgotPasswordPage {...props} />}
             />
             {/* ============= */}
             {/* Branch Routes */}
@@ -197,6 +199,11 @@ function App() {
             {/* ==================== */}
             <Route
               exact
+              path={defaultBranchLoginUrl}
+              component={(props) => <SignInPage type="branch" {...props} />}
+            />
+            <Route
+              exact
               path={branchLoginUrl}
               component={(props) => <SignInPage type="branch" {...props} />}
             />
@@ -207,12 +214,11 @@ function App() {
                 <ForgotPasswordPage type="branch" {...props} />
               )}
             />
-            <Route
+            <PrivateRoute
+              type="branch"
               exact
               path={branchOtpUrl}
-              component={(props) => (
-                <OTPForgotPasswordPage type="branch" {...props} />
-              )}
+              component={(props) => <OTPForgotPasswordPage {...props} />}
             />
             {/* ============== */}
             {/* Cashier Routes */}
@@ -234,6 +240,11 @@ function App() {
             {/* ===================== */}
             <Route
               exact
+              path={defaultCashierLoginUrl}
+              component={(props) => <SignInPage type="cashier" {...props} />}
+            />
+            <Route
+              exact
               path={cashierLoginUrl}
               component={(props) => <SignInPage type="cashier" {...props} />}
             />
@@ -244,12 +255,11 @@ function App() {
                 <ForgotPasswordPage type="cashier" {...props} />
               )}
             />
-            <Route
+            <PrivateRoute
               exact
+              type="cashier"
               path={cashierOtpUrl}
-              component={(props) => (
-                <OTPForgotPasswordPage type="cashier" {...props} />
-              )}
+              component={(props) => <OTPForgotPasswordPage {...props} />}
             />
           </Switch>
           <GlobalStyle />

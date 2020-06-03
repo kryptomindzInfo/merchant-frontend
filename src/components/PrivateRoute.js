@@ -1,16 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import axios from 'axios';
 import PropTypes from 'prop-types';
 import { getUrlBasedOnType } from './utils/ForgotPasswordAPI';
 
-const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
-  const userLogged = JSON.parse(localStorage.getItem(`${type}Logged`));
+const PrivateRoute = ({ type, match, component: Component, ...rest }) => {
+  const mobile = JSON.parse(localStorage.getItem(`otpNo_${type}`));
   const pathNameBasedOnType = () =>
-    getUrlBasedOnType(type, match.params.branchName, 'login');
-  if (userLogged) {
-    const { token } = userLogged;
-    axios.defaults.headers.common.Authorization = token;
+    getUrlBasedOnType(type, match.params.branchName, 'forgot-password');
+  if (mobile) {
     return (
       <Route
         {...rest}
@@ -31,7 +28,7 @@ const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
     />
   );
 };
-ProtectedRoute.propTypes = {
+PrivateRoute.propTypes = {
   type: PropTypes.string.isRequired,
 };
-export default ProtectedRoute;
+export default PrivateRoute;

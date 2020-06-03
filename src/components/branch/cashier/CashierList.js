@@ -37,12 +37,63 @@ function CashierList(props) {
 
   const handleEditCashierPopupClick = (cashier) => {
     setEditingCashier(cashier);
-    setEditCashierPopup(true)
+    setEditCashierPopup(true);
   };
 
   const onEditingPopupClose = () => {
     setEditCashierPopup(false);
   };
+
+  function mappedCards() {
+    return cashierList.map((cashier) => {
+      return (
+        <tr key={cashier._id}>
+          <td>{cashier.name}</td>
+          <td className="tac">
+            {CURRENCY}{' '}
+            {(
+              cashier.opening_balance +
+              (cashier.cash_received - cashier.cash_paid)
+            ).toFixed(2)}
+          </td>
+          <td>
+            {userList.filter((u) => u._id === cashier.bank_user_id)[0]
+              ? userList.filter((u) => u._id === cashier.bank_user_id)[0].name
+              : ''}
+          </td>
+          <td
+            style={{
+              color: cashier.is_closed ? 'red' : 'green',
+            }}
+          >
+            {cashier.is_closed ? 'Closed' : 'Opened'}
+          </td>
+          <td className="tac bold green">
+            {cashier.total_trans}
+            <span className="absoluteMiddleRight primary popMenuTrigger">
+              <i className="material-icons ">more_vert</i>
+              <div className="popMenu">
+                <A href="/branch/cashier/info/dsd">Cashier Info</A>
+                <span onClick={() => handleEditCashierPopupClick({})}>
+                  Edit
+                </span>
+                <span onClick={() => handleAssignUserPopupClick({})}>
+                  Assign User
+                </span>
+                {cashier.is_closed ? <span>Re-open Access</span> : null}
+
+                {cashier.status === -1 ? (
+                  <span>Unblock</span>
+                ) : (
+                  <span>Block</span>
+                )}
+              </div>
+            </span>
+          </td>
+        </tr>
+      );
+    });
+  }
 
   useEffect(() => {
     const getCashierList = () => {
@@ -85,16 +136,12 @@ function CashierList(props) {
     <Wrapper from="merchant">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{ `${branchName} | Cashiers` }</title>
+        <title>{`${branchName} | Cashiers`}</title>
       </Helmet>
       <BranchHeader active="cashier" branchName={branchName} />
       <Container verticalMargin>
         <Main fullWidth>
-          <ActionBar
-            marginBottom="33px"
-            inputWidth="100%"
-            className="clr"
-          >
+          <ActionBar marginBottom="33px" inputWidth="100%" className="clr">
             <div className="iconedInput fl">
               <i className="material-icons">
                 <SearchIcon />
@@ -125,56 +172,7 @@ function CashierList(props) {
                 </thead>
                 <tbody>
                   {cashierList && cashierList.length > 0 && userList
-                    ? cashierList.map((cashier) => {
-                      return (
-                        <tr key={cashier._id}>
-                          <td>{cashier.name}</td>
-                          <td className="tac">
-                            {CURRENCY}{' '}
-                            {(
-                              cashier.opening_balance +
-                                (cashier.cash_received - cashier.cash_paid)
-                            ).toFixed(2)}
-                          </td>
-                          <td>
-                            {userList.filter(
-                              (u) => u._id === cashier.bank_user_id,
-                            )[0]
-                              ? userList.filter(
-                                (u) => u._id === cashier.bank_user_id,
-                              )[0].name
-                              : ''}
-                          </td>
-                          <td
-                            style={{
-                              color: cashier.is_closed ? 'red' : 'green',
-                            }}
-                          >
-                            {cashier.is_closed ? 'Closed' : 'Opened'}
-                          </td>
-                          <td className="tac bold green">
-                            {cashier.total_trans}
-                            <span className="absoluteMiddleRight primary popMenuTrigger">
-                              <i className="material-icons ">more_vert</i>
-                              <div className="popMenu">
-                                <A href="/branch/cashier/info/dsd">Cashier Info</A>
-                                <span onClick={() => handleEditCashierPopupClick({})}>Edit</span>
-                                <span onClick={() => handleAssignUserPopupClick({})} >Assign User</span>
-                                {cashier.is_closed ? (
-                                  <span>Re-open Access</span>
-                                ) : null}
-
-                                {cashier.status === -1 ? (
-                                  <span>Unblock</span>
-                                ) : (
-                                  <span>Block</span>
-                                )}
-                              </div>
-                            </span>
-                          </td>
-                        </tr>
-                      );
-                    })
+                    ? mappedCards()
                     : null}
                 </tbody>
               </Table>
@@ -182,9 +180,19 @@ function CashierList(props) {
           </Card>
         </Main>
       </Container>
-      {assignUserPopup ? <AssignUserPopup onClose={() => onAssignUserPopupClose()} user={userList} /> : null}
+      {assignUserPopup ? (
+        <AssignUserPopup
+          onClose={() => onAssignUserPopupClose()}
+          user={userList}
+        />
+      ) : null}
 
-      {editCashierPopup ? <EditCashierPopup onClose={() => onEditingPopupClose()} cashier={cashierList} /> : null}
+      {editCashierPopup ? (
+        <EditCashierPopup
+          onClose={() => onEditingPopupClose()}
+          cashier={cashierList}
+        />
+      ) : null}
     </Wrapper>
   );
 }

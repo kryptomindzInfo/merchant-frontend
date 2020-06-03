@@ -29,10 +29,13 @@ function BranchList() {
     setPopupType(type);
     setAddBranchPopup(true);
   };
-  
+
   const handleBranchInfoClick = (branchInfo) => {
-    localStorage.setItem(`${branchInfo.name}_branchInfo`,JSON.stringify(branchInfo));
-    history.push(`/merchant/branch/info/${branchInfo.name}`)
+    localStorage.setItem(
+      `${branchInfo.name}_branchInfo`,
+      JSON.stringify(branchInfo),
+    );
+    history.push(`/merchant/branch/info/${branchInfo.name}`);
   };
 
   const onPopupClose = () => {
@@ -78,8 +81,14 @@ function BranchList() {
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
-                  <span onClick={() => handleBranchInfoClick(branch)}>Info</span>
-                  <span onClick={() => handleBranchPopupClick('update', branch)}>Edit</span>
+                  <span onClick={() => handleBranchInfoClick(branch)}>
+                    Info
+                  </span>
+                  <span
+                    onClick={() => handleBranchPopupClick('update', branch)}
+                  >
+                    Edit
+                  </span>
                   {branch.status === -1 ? (
                     <span>Unblock</span>
                   ) : (
@@ -91,7 +100,7 @@ function BranchList() {
           </td>
         </tr>
       );
-    })
+    });
   };
 
   return (
@@ -147,9 +156,7 @@ function BranchList() {
                   </tr>
                 </thead>
                 <tbody>
-                  {branchList && branchList.length > 0
-                    ? getBranchList()
-                    : null}
+                  {branchList && branchList.length > 0 ? getBranchList() : null}
                 </tbody>
               </Table>
             </div>

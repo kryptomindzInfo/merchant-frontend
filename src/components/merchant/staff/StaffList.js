@@ -49,78 +49,88 @@ const StaffList = () => {
     getStaffList();
   }, []);
 
-
-  const  mappedCards = () =>{
+  const mappedCards = () => {
     return staff.map((b) => {
       if (!b.isAdmin) {
-        const pic = b.logo && b.logo !== '' && b.logo !== undefined
-          ? STATIC_URL + b.logo
-          : `${CONTRACT_URL}main/default-profile.png`;
-        return (<Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
-          <div className="profile">
-            <img src={pic} />
-          </div>
-          <Row>
-            <Col cW="80%">
-              <h4 className="hh">{b.name}</h4>
-            </Col>
-            <Col cW="20%">
-              <Button onClick={() => handleStaffPopupClick('update', {b})} flex noMin style={{ padding: '5px' }}>
-                Edit
-              </Button>
-            </Col>
-          </Row>
-        </Card>);
+        const pic =
+          b.logo && b.logo !== '' && b.logo !== undefined
+            ? STATIC_URL + b.logo
+            : `${CONTRACT_URL}main/default-profile.png`;
+        return (
+          <Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
+            <div className="profile">
+              <img src={pic} />
+            </div>
+            <Row>
+              <Col cW="80%">
+                <h4 className="hh">{b.name}</h4>
+              </Col>
+              <Col cW="20%">
+                <Button
+                  onClick={() => handleStaffPopupClick('update', { b })}
+                  flex
+                  noMin
+                  style={{ padding: '5px' }}
+                >
+                  Edit
+                </Button>
+              </Col>
+            </Row>
+          </Card>
+        );
       }
       return <div key={b._id}></div>;
     });
   };
-
 
   if (isLoading) {
     return <Loader fullPage />;
   }
 
   return (
-    <Wrapper from='merchant'>
+    <Wrapper from="merchant">
       <Helmet>
-        <meta charSet='utf-8'/>
+        <meta charSet="utf-8" />
         <title>Merchant | Staff</title>
       </Helmet>
-      <MerchantHeader active='staff'/>
+      <MerchantHeader active="staff" />
       <Container verticalMargin>
         <MerchantSideBar showClaimButton />
         <Main>
           <ActionBar
-            marginBottom='33px'
-            inputWidth='calc(100% - 241px)'
-            className='clr'
+            marginBottom="33px"
+            inputWidth="calc(100% - 241px)"
+            className="clr"
           >
-            <div className='iconedInput fl'>
-              <i className='material-icons'>
-                <SearchIcon/>
+            <div className="iconedInput fl">
+              <i className="material-icons">
+                <SearchIcon />
               </i>
-              <input type='text' placeholder='Search Staff'/>
+              <input type="text" placeholder="Search Staff" />
             </div>
 
-            <Button className='addBankButton' flex onClick={() => handleStaffPopupClick('new', {})}>
-              <i className='material-icons'>add</i>
+            <Button
+              className="addBankButton"
+              flex
+              onClick={() => handleStaffPopupClick('new', {})}
+            >
+              <i className="material-icons">add</i>
               <span>Add Staff</span>
             </Button>
           </ActionBar>
           <Row className="clr">
-            {staff && staff.length > 0
-              ? mappedCards()
-              : null}
+            {staff && staff.length > 0 ? mappedCards() : null}
           </Row>
         </Main>
       </Container>
-      {showStaffPopup ? <CreateStaffPopup
-        type={popupType}
-        staff={editingStaff}
-        refreshBranchList={() => refreshStaffList()}
-        onClose={() => onPopupClose()}
-      /> : null}
+      {showStaffPopup ? (
+        <CreateStaffPopup
+          type={popupType}
+          staff={editingStaff}
+          refreshBranchList={() => refreshStaffList()}
+          onClose={() => onPopupClose()}
+        />
+      ) : null}
     </Wrapper>
   );
 };

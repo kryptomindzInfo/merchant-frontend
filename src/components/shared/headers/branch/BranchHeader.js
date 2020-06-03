@@ -55,7 +55,7 @@ class BranchHeader extends Component {
             </A>
           ) : null}
 
-          <A href={`/branch/${branchName}/dashboard`} float="left">
+          <A href={`/merchant/branch/${branchName}/dashboard`} float="left">
             <div className="bankLogo">
               <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
             </div>

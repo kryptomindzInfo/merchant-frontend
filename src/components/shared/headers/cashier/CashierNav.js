@@ -27,10 +27,10 @@ class CashierNav extends Component {
     return (
       <React.Fragment>
         <NavTag>
-          <A href={`/cashier/${branchName}/dashboard`}>
+          <A href={`/merchant/cashier/${branchName}/dashboard`}>
             <Link active={dashboard}>Dashboard</Link>
           </A>
-          <A href={`/cashier/${branchName}/invoices`}>
+          <A href={`/merchant/cashier/${branchName}/invoices`}>
             <Link active={branches}>Invoices</Link>
           </A>
         </NavTag>

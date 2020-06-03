@@ -9,20 +9,23 @@ const staffUrl = '/merchant/staff';
 const branchProfileUrl = '/merchant/branch/info/:id';
 
 // branch URL's
-const branchLoginUrl = '/branch/:branchName/login';
-const branchCashiersUrl = '/branch/cashiers/:branchName';
-const branchDashboardUrl = '/branch/:branchName/dashboard';
-const branchSettingsUrl = '/branch/settings';
-const cashierInfoUrl = '/branch/cashier/info/:id';
-const branchForgotPasswordUrl = '/branch/:branchName/forgot-password';
-const branchOtpUrl = '/branch/:branchName/otp-forgot-password';
+const defaultBranchLoginUrl = '/merchant/branch/:branchName';
+const branchLoginUrl = '/merchant/branch/:branchName/login';
+const branchCashiersUrl = '/merchant/branch/:branchName/cashiers';
+const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
+const branchSettingsUrl = '/merchant/branch/:branchName/settings';
+const cashierInfoUrl = '/merchant/branch/cashier/info/:id';
+const branchForgotPasswordUrl = '/merchant/branch/:branchName/forgot-password';
+const branchOtpUrl = '/merchant/branch/:branchName/otp-forgot-password';
 
 // cashier URL's
-const cashierLoginUrl = '/cashier/:branchName/login';
-const cashierDashboardUrl = '/cashier/:branchName/dashboard';
-const invoiceUrl = '/cashier/invoice/:groupId';
-const cashierForgotPasswordUrl = '/cashier/:branchName/forgot-password';
-const cashierOtpUrl = '/cashier/:branchName/otp-forgot-password';
+const defaultCashierLoginUrl = '/merchant/cashier/:branchName';
+const cashierLoginUrl = '/merchant/cashier/:branchName/login';
+const cashierDashboardUrl = '/merchant/cashier/:branchName/dashboard';
+const invoiceUrl = '/merchant/cashier/invoice/:groupId';
+const cashierForgotPasswordUrl =
+  '/merchant/cashier/:branchName/forgot-password';
+const cashierOtpUrl = '/merchant/cashier/:branchName/otp-forgot-password';
 
 export {
   merchantDashboardUrl,
@@ -45,4 +48,6 @@ export {
   cashierOtpUrl,
   branchForgotPasswordUrl,
   branchOtpUrl,
+  defaultBranchLoginUrl,
+  defaultCashierLoginUrl,
 };
