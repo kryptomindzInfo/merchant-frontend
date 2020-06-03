@@ -138,17 +138,17 @@ const HistoryCard = () => {
     setPage(0);
   };
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      const data = await fetchDashboardHistory();
-      const list = data.list.reverse();
-      setRow(data);
-      setAllRow(data);
-      setTransferRow(data);
-      setReceiveRow(data);
-    }, 15000);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   const interval = setInterval(async () => {
+  //     const data = await fetchDashboardHistory();
+  //     const list = data.list.reverse();
+  //     setRow(data);
+  //     setAllRow(data);
+  //     setTransferRow(data);
+  //     setReceiveRow(data);
+  //   }, 15000);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   function historyRows() {
     return rows.length > 0 ? (
