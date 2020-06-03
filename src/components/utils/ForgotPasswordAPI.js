@@ -2,6 +2,7 @@ import axios from 'axios';
 import { API_URL } from '../constants';
 import notify from './Notify';
 import history from './history';
+import { verifyUrl } from '../Url';
 
 const getUrlBasedOnType = (type, branchName, url) => {
   switch (type) {
@@ -55,10 +56,14 @@ const verifyOTP = (type, branchName, reqBody) => {
         } else if (res.data.status === 1) {
           notify(res.data.message, 'success');
           localStorage.removeItem(`otpNo_${type}`);
-          notify('Redirecting you to Login page!', 'success');
-          const loginUrl = getUrlBasedOnType(type, branchName, 'login');
+          localStorage.removeItem(`${type}Logged`);
+          localStorage.setItem(
+            `${type}Logged`,
+            JSON.stringify({ token: res.data.token }),
+          );
+          notify('Redirecting you to change password page!', 'success');
           setTimeout(() => {
-            history.push(loginUrl);
+            history.push(verifyUrl);
           }, 4000);
         }
       }

@@ -22,48 +22,37 @@ const MiddleTitle = styled.div`
   display: flex;
   justify-content: center;
 `;
-const merchantLogged = JSON.parse(localStorage.getItem('merchantLogged')) || {};
-const merchantName = merchantLogged.details.name;
-const logo = merchantLogged.details.logo_hash;
 
-class MerchantHeader extends Component {
-  constructor() {
-    super();
-    this.state = {
-      logo,
-    };
-  }
+const MerchantHeader = (props) => {
+  const merchantLogged =
+    JSON.parse(localStorage.getItem('merchantLogged')) || {};
+  const merchantName = merchantLogged.details.name || '';
+  const logo = merchantLogged.details.logo_hash || '';
+  const { page } = props;
 
-  componentDidMount() {}
-
-  render() {
-    const { page } = this.props;
-    return (
-      <TopBar>
-        <Welcome from="merchant" />
-        <Container>
-          {page === 'info' ? (
-            <A href={this.props.goto} float="left">
-              <Link>Back</Link>
-            </A>
-          ) : null}
-
-          <A href="/dashboard" float="left">
-            <div className="bankLogo">
-              <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
-            </div>
-            <h2>{merchantName.toUpperCase()}</h2>
+  return (
+    <TopBar>
+      <Welcome from="merchant" />
+      <Container>
+        {page === 'info' ? (
+          <A href={props.goto} float="left">
+            <Link>Back</Link>
           </A>
-          {this.props.middleTitle ? (
-            <MiddleTitle className="middleTitle">
-              {this.props.middleTitle}
-            </MiddleTitle>
-          ) : null}
-          {page === 'info' ? null : <MerchantNav active={this.props.active} />}
-        </Container>
-      </TopBar>
-    );
-  }
-}
+        ) : null}
+
+        <A href="/merchant/dashboard" float="left">
+          <div className="bankLogo">
+            <img src={STATIC_URL + logo} alt="Merchant Logo" />
+          </div>
+          <h2>{merchantName.toUpperCase()}</h2>
+        </A>
+        {props.middleTitle ? (
+          <MiddleTitle className="middleTitle">{props.middleTitle}</MiddleTitle>
+        ) : null}
+        {page === 'info' ? null : <MerchantNav active={props.active} />}
+      </Container>
+    </TopBar>
+  );
+};
 
 export default MerchantHeader;
