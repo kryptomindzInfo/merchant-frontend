@@ -11,6 +11,7 @@ import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
+import ZoneCard from './ZoneCard';
 
 const Dashboard = () => {
   const merchantDetails = JSON.parse(localStorage.getItem('merchantLogged'))
@@ -35,6 +36,7 @@ const Dashboard = () => {
             <PendingInvoiceCard amount={noOfPendingInvoices} />
             <OverDueInvoiceCard />
           </Row>
+          <ZoneCard />
           <HistoryCard />
         </Main>
       </Container>

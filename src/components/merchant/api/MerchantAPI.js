@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MERCHANT_API } from '../../constants';
+import { API_URL, MERCHANT_API } from '../../constants';
 import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
@@ -36,6 +36,49 @@ const fetchDashboardHistory = async () => {
     return { list: [], loading: false };
   } catch (err) {
     notify('Could not fetch history!', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const zoneAPI = async (props, values, apiType) => {
+  let API = '';
+  if (apiType === 'update') {
+    API = '/editZone';
+  } else {
+    API = '/createZone';
+  }
+  try {
+    const res = await axios.post(`${MERCHANT_API}${API}`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshZoneList(res.data.data);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const fetchZoneList = async () => {
+  try {
+    const res = await axios.get(`${MERCHANT_API}/listZones`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.zones, loading: false };
+    }
+  } catch (e) {
+    notify('Could not fetch zones!', 'error');
     return { list: [], loading: false };
   }
 };
@@ -135,11 +178,39 @@ const fetchStaffList = async () => {
   }
 };
 
+// API's for Merchant Settings
+const editMerchant = async (props, values, token) => {
+  try {
+    values.username = values.merchant_id;
+    const res = await axios.post(`${API_URL}/bank/editMerchant`, {
+      token,
+      status: 1,
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshMerchantList(res.data.data);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
 export {
   branchAPI,
   fetchBranchList,
   staffAPI,
   getWalletBalance,
+  zoneAPI,
+  fetchZoneList,
   fetchStaffList,
   fetchDashboardHistory,
+  editMerchant,
 };

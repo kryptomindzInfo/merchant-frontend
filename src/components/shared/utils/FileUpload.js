@@ -4,17 +4,20 @@ import notify from '../../utils/Notify';
 
 const fileUpload = (file, token, key, type) => {
   const formData = new FormData();
+  let method = '';
+  let url = '';
   formData.append('file', file);
   const config = {
     headers: {
       'content-type': 'multipart/form-data',
     },
   };
-  let method = 'fileUpload';
-  let url = `${API_URL}/${method}?token=${token}&from=${type}`;
   if (key === 'document_hash') {
     method = 'ipfsUpload';
     url = `${API_URL}/${method}?token=${token}`;
+  } else {
+    method = 'imageUpload';
+    url = `${API_URL}/${type}/${method}`;
   }
   axios
     .post(url, formData, config)

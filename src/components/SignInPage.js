@@ -41,7 +41,11 @@ const SignInPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>{type.toUpperCase()} | Login In</title>
+        <title>
+          {type === 'merchant'
+            ? `Merchant | Login`
+            : `${type} | MERCHANT | Login`}
+        </title>
         <meta name="description" content="Description of SignIn Page" />
       </Helmet>
       <Grid

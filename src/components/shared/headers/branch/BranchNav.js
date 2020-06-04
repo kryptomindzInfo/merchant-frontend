@@ -22,7 +22,7 @@ class BranchNav extends Component {
   render() {
     const { branchName } = this.props;
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
-    const branches = this.props.active === 'branch' ? 'true' : '';
+    const cashiers = this.props.active === 'cashier' ? 'true' : '';
 
     return (
       <React.Fragment>
@@ -31,7 +31,7 @@ class BranchNav extends Component {
             <Link active={dashboard}>Dashboard</Link>
           </A>
           <A href={`/merchant/branch/${branchName}/cashiers`}>
-            <Link active={branches}>Cashier</Link>
+            <Link active={cashiers}>Cashier</Link>
           </A>
         </NavTag>
       </React.Fragment>

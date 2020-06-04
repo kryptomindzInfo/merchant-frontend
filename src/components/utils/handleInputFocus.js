@@ -10,12 +10,12 @@ export function inputBlur(e) {
   }
 }
 
-export const correctFocus = (type) => {
+export const correctFocus = (type, focusLabelNo) => {
   if (type === 'update') {
     document.querySelectorAll('label').forEach((label) => {
       label.classList.add('focused');
     });
-  } else {
-    document.querySelectorAll('label')[2].classList.add('focused');
+  } else if (focusLabelNo) {
+    document.querySelectorAll('label')[focusLabelNo].classList.add('focused');
   }
 };

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
-import BranchNav from './BranchNav';
 import TopBar from '../TopBar';
 import Welcome from '../Welcome';
 import Container from '../../Container';
 import A from '../../A';
 import { STATIC_URL } from '../../../constants';
+import BranchNav from './BranchNav';
 
 const Link = styled.span`
   color: #fff;
@@ -23,60 +22,38 @@ const MiddleTitle = styled.div`
   display: flex;
   justify-content: center;
 `;
-const token = localStorage.getItem('merchantLogged');
-const merchantName = localStorage.getItem('merchantName');
-const logo = localStorage.getItem('merchantLogo');
 
-let permissions = localStorage.getItem('permissions');
-if (permissions !== 'all' && permissions !== '') {
-  permissions = JSON.parse(permissions);
-}
+const BranchHeader = (props) => {
+  const branchLogged = JSON.parse(localStorage.getItem('branchLogged')) || {};
+  const branchName = branchLogged.details.name || '';
+  const logo = branchLogged.details.logo_hash || '';
+  const { page } = props;
 
-class BranchHeader extends Component {
-  constructor() {
-    super();
-    this.state = {
-      logo,
-      name: 'Demo',
-    };
-  }
-
-  componentDidMount() {}
-
-  render() {
-    const { page, branchName } = this.props;
-    return (
-      <TopBar>
-        <Welcome from="branch" bankName={branchName} />
-        <Container>
-          {page === 'info' ? (
-            <A href={this.props.goto} float="left">
-              <Link>Back</Link>
-            </A>
-          ) : null}
-
-          <A href={`/merchant/branch/${branchName}/dashboard`} float="left">
-            <div className="bankLogo">
-              <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
-            </div>
-            <h2>{this.state.name.toUpperCase()}</h2>
+  return (
+    <TopBar>
+      <Welcome from="branch" branchName={branchName} />
+      <Container>
+        {page === 'info' ? (
+          <A href={props.goto} float="left">
+            <Link>Back</Link>
           </A>
-          {this.props.middleTitle ? (
-            <MiddleTitle className="middleTitle">
-              {this.props.middleTitle}
-            </MiddleTitle>
-          ) : null}
-          {page === 'info' ? null : (
-            <BranchNav active={this.props.active} branchName={branchName} />
-          )}
-        </Container>
-      </TopBar>
-    );
-  }
-}
+        ) : null}
 
-BranchHeader.propTypes = {
-  branchName: PropTypes.string.isRequired,
+        <A href={`/merchant/branch/${branchName}/dashboard`} float="left">
+          <div className="bankLogo">
+            <img src={STATIC_URL + logo} alt="Branch Logo" />
+          </div>
+          <h2>{branchName.toUpperCase()}</h2>
+        </A>
+        {props.middleTitle ? (
+          <MiddleTitle className="middleTitle">{props.middleTitle}</MiddleTitle>
+        ) : null}
+        {page === 'info' ? null : (
+          <BranchNav branchName={branchName} active={props.active} />
+        )}
+      </Container>
+    </TopBar>
+  );
 };
 
 export default BranchHeader;

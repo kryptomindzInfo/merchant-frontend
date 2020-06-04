@@ -18,7 +18,7 @@ const BranchDashboard = (props) => {
         <title>{`${branchName} | Dashboard`}</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <BranchHeader branchName={branchName} />
+      <BranchHeader active="dashboard" branchName={branchName} />
       <Container verticalMargin>
         <Main fullWidth>
           <Row textAlign="start" justify="start">

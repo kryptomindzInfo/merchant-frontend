@@ -51,7 +51,6 @@ body{
     font-family: 'Roboto', sans-serif;
     font-size: ${(props) => props.theme.fontSize};
     margin:0;
-    background-color: #fcfffc;
   }
   button{
     cursor:pointer;

@@ -32,7 +32,7 @@ function CreateStaffPopup(props) {
       setBranchList(data.list);
     };
     getBranchList();
-    correctFocus(props.type);
+    correctFocus(props.type, 2);
   }, []);
 
   const getBranches = () => {

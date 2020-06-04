@@ -7,6 +7,7 @@ const otpUrl = '/merchant/otp-forgot-password';
 const branchUrl = '/merchant/branches';
 const staffUrl = '/merchant/staff';
 const branchProfileUrl = '/merchant/branch/info/:id';
+const merchantSettingsUrl = '/merchant/info';
 
 // branch URL's
 const defaultBranchLoginUrl = '/merchant/branch/:branchName';
@@ -35,6 +36,7 @@ export {
   otpUrl,
   branchUrl,
   staffUrl,
+  merchantSettingsUrl,
   branchLoginUrl,
   branchProfileUrl,
   branchCashiersUrl,

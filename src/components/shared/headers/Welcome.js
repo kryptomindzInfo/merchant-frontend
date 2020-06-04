@@ -27,9 +27,28 @@ const Icon = styled.i`
 `;
 
 class Welcome extends Component {
+  logoutUser = (type) => {
+    switch (type) {
+      case 'merchant':
+        this.logoutMerchant();
+        break;
+      case 'branch':
+        this.logoutBranch();
+        break;
+      default:
+        this.logoutMerchant();
+        break;
+    }
+  };
+
   logoutMerchant = () => {
     localStorage.removeItem('merchantLogged');
     history.push('/merchant/login');
+  };
+
+  logoutBranch = () => {
+    localStorage.removeItem('branchLogged');
+    history.push(`/merchant/branch/${this.props.branchName}/login`);
   };
 
   /* logoutBank = () => {
@@ -37,13 +56,6 @@ class Welcome extends Component {
     localStorage.removeItem('merchantName');
     history.push('/merchant/login');
   };
-
-  logoutBranch = () => {
-    localStorage.removeItem('branchLogged');
-    localStorage.removeItem('branchName');
-    history.push(`/merchant/branch/${this.props.bankName}`);
-  };
-
   logoutCashier = () => {
     localStorage.removeItem('cashierLogged');
     history.push(`/cashier/${this.props.bankName}`);
@@ -53,15 +65,19 @@ class Welcome extends Component {
   render() {
     let name = '';
     let isAdmin = false;
+    let settingsUrl = '';
     if (this.props.from === 'merchant') {
       // eslint-disable-next-line prefer-destructuring
       name = JSON.parse(localStorage.getItem('merchantLogged')).details.name;
+      settingsUrl = '/merchant/info';
     } else if (this.props.from === 'branch') {
       // eslint-disable-next-line prefer-destructuring
       name = JSON.parse(localStorage.getItem('branchLogged')).details.name;
+      settingsUrl = `/merchant/branch/${this.props.branchName}/info`;
     } else if (this.props.from === 'cashier') {
       // eslint-disable-next-line prefer-destructuring
       name = JSON.parse(localStorage.getItem('cashierLogged')).details.name;
+      settingsUrl = '/merchant/cashier/:cashierName/info';
     } else {
       isAdmin = localStorage.getItem('isAdmin');
     }
@@ -78,10 +94,13 @@ class Welcome extends Component {
           </Icon>
           <div className="dropdown fl">
             <Name>
-              <span>MERCHANT:</span> {name}
+              <span>{this.props.from.toUpperCase()}:</span> {name}
             </Name>
             <SubNav className="bankSubNav">
-              <span onClick={() => this.logoutMerchant()}>Logout</span>
+              <A href={settingsUrl}>Settings</A>
+              <span onClick={() => this.logoutUser(this.props.from)}>
+                Logout
+              </span>
             </SubNav>
           </div>
           <span style={{ paddingRight: '7px' }}>{currDate}</span>

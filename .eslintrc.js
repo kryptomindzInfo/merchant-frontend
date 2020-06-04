@@ -51,6 +51,7 @@ module.exports = {
     "no-nested-ternary": 0,
     "jsx-a11y/anchor-is-valid": 0,
     "jsx-a11y/alt-text": 0,
+    "import/named":0,
     indent: [
       2,
       2,
