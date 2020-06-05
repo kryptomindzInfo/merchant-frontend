@@ -4,19 +4,19 @@ import notify from './Notify';
 import history from './history';
 import { verifyUrl } from '../Url';
 
-const getUrlBasedOnType = (type, branchName, url) => {
+const getUrlBasedOnType = (type, name, url) => {
   switch (type) {
     case 'merchant':
       return `/merchant/${url}`;
     case 'branch':
-      return `/merchant/branch/${branchName}/${url}`;
+      return `/merchant/branch/${name}/${url}`;
     case 'cashier':
-      return `/merchant/cashier/${branchName}/${url}`;
+      return `/merchant/cashier/${name}/${url}`;
     default:
       return `/`;
   }
 };
-const forgotPassword = (type, branchName, reqBody) => {
+const forgotPassword = (type, name, reqBody) => {
   axios
     .post(`${API_URL}/common/forgotPassword`, reqBody)
     .then((res) => {
@@ -27,11 +27,7 @@ const forgotPassword = (type, branchName, reqBody) => {
           const successMessage = 'Redirecting you to OTP page!';
           notify(successMessage, 'success');
           localStorage.setItem(`otpNo_${type}`, res.data.mobile);
-          const otpUrl = getUrlBasedOnType(
-            type,
-            branchName,
-            'otp-forgot-password',
-          );
+          const otpUrl = getUrlBasedOnType(type, name, 'otp-forgot-password');
           setTimeout(() => {
             history.push(otpUrl);
           }, 2000);
@@ -43,7 +39,7 @@ const forgotPassword = (type, branchName, reqBody) => {
     });
 };
 
-const verifyOTP = (type, branchName, reqBody) => {
+const verifyOTP = (type, name, reqBody) => {
   const mobile = localStorage.getItem(`otpNo_${type}`);
   reqBody.mobile = mobile;
   axios
@@ -57,7 +53,7 @@ const verifyOTP = (type, branchName, reqBody) => {
           localStorage.removeItem(`otpNo_${type}`);
           notify('Generated password sent via SMS!', 'success');
           notify('Redirecting you to Login page!', 'success');
-          const loginUrl = getUrlBasedOnType(type, branchName, 'login');
+          const loginUrl = getUrlBasedOnType(type, name, 'login');
           setTimeout(() => {
             history.push(loginUrl);
           }, 4000);

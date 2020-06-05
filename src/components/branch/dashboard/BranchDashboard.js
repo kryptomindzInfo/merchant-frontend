@@ -10,15 +10,15 @@ import BranchHeader from '../../shared/headers/branch/BranchHeader';
 
 const BranchDashboard = (props) => {
   const { match } = props;
-  const { branchName } = match.params;
+  const { name } = match.params;
 
   return (
     <Fragment>
       <Helmet>
-        <title>{`${branchName} | Dashboard`}</title>
+        <title>Dashboard | Branch </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <BranchHeader active="dashboard" branchName={branchName} />
+      <BranchHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
           <Row textAlign="start" justify="start">

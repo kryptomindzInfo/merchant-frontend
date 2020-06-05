@@ -28,7 +28,7 @@ const validationSchema = Yup.object().shape({
 const ForgotPasswordPage = (props) => {
   const classes = styles();
   const { type, match } = props;
-  const { branchName } = match.params;
+  const { name } = match.params;
   const [isLoading, setLoading] = React.useState(false);
 
   return (
@@ -48,7 +48,7 @@ const ForgotPasswordPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection branchName={branchName} />
+          <LandingLeftSection name={name} />
         </Grid>
         <Grid
           item
@@ -77,7 +77,7 @@ const ForgotPasswordPage = (props) => {
             onSubmit={(values) => {
               const body = { ...values, user_type: type };
               setLoading(true);
-              forgotPassword(type, branchName, body);
+              forgotPassword(type, name, body);
               setLoading(false);
             }}
           >

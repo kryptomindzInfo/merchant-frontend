@@ -1,7 +1,6 @@
 import { Helmet } from 'react-helmet';
 import React from 'react';
 import Wrapper from '../../shared/Wrapper';
-import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
 import Main from '../../shared/Main';
 import Card from '../../shared/Card';
@@ -9,8 +8,11 @@ import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CashierWallet from './CashierWallets';
 import InfoSidebar from '../../shared/sidebars/InfoSidebar';
+import BranchHeader from '../../shared/headers/branch/BranchHeader';
 
 function CashierInfo(props) {
+  const { type, match } = props;
+  const { name, id } = match.params;
   /* if (isLoading) {
     return <Loader fullPage />;
   } */
@@ -20,10 +22,10 @@ function CashierInfo(props) {
         <meta charSet="utf-8" />
         <title>Branch | Merchant | E-WALLET</title>
       </Helmet>
-      <MerchantHeader
+      <BranchHeader
         page="info"
-        middleTitle="Yusuf Jk"
-        goto="/bank/branches/"
+        middleTitle={id}
+        goto="/merchant/branch/cashiers"
       />
       <Container verticalMargin>
         <InfoSidebar active="info" bankName="Kotak" type="Cashier" />

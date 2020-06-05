@@ -13,14 +13,14 @@ import CreateGroupCard from './CreateGroupCard';
 
 const CashierDashboard = (props) => {
   const { match } = props;
-  const { branchName } = match.params;
+  const { name } = match.params;
   return (
     <Fragment>
       <Helmet>
         <title>Cashier | Dashboard</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <CashierHeader branchName={branchName} />
+      <CashierHeader name={name} />
       <Container verticalMargin>
         <Main fullWidth>
           <Row>

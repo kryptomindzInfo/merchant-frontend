@@ -26,7 +26,6 @@ const MiddleTitle = styled.div`
 const BranchHeader = (props) => {
   const branchLogged = JSON.parse(localStorage.getItem('branchLogged')) || {};
   const branchName = branchLogged.details.name || '';
-  const logo = branchLogged.details.logo_hash || '';
   const { page } = props;
 
   return (
@@ -39,17 +38,14 @@ const BranchHeader = (props) => {
           </A>
         ) : null}
 
-        <A href={`/merchant/branch/${branchName}/dashboard`} float="left">
-          <div className="bankLogo">
-            <img src={STATIC_URL + logo} alt="Branch Logo" />
-          </div>
+        <A href="/merchant/branch/dashboard" float="left">
           <h2>{branchName.toUpperCase()}</h2>
         </A>
         {props.middleTitle ? (
           <MiddleTitle className="middleTitle">{props.middleTitle}</MiddleTitle>
         ) : null}
         {page === 'info' ? null : (
-          <BranchNav branchName={branchName} active={props.active} />
+          <BranchNav name={branchName} active={props.active} />
         )}
       </Container>
     </TopBar>

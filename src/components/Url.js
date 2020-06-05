@@ -10,24 +10,23 @@ const branchProfileUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/info';
 
 // branch URL's
-const defaultBranchLoginUrl = '/merchant/branch/:branchName';
-const branchLoginUrl = '/merchant/branch/:branchName/login';
-const branchCashiersUrl = '/merchant/branch/:branchName/cashiers';
-const branchDashboardUrl = '/merchant/branch/:branchName/dashboard';
-const branchSettingsUrl = '/merchant/branch/:branchName/settings';
+const defaultBranchLoginUrl = '/merchant/branch/:name';
+const branchLoginUrl = '/merchant/branch/:name/login';
+const branchCashiersUrl = '/merchant/branch/cashiers';
+const branchDashboardUrl = '/merchant/branch/dashboard';
+const branchSettingsUrl = '/merchant/branch/settings';
 const cashierInfoUrl = '/merchant/branch/cashier/info/:id';
-const branchForgotPasswordUrl = '/merchant/branch/:branchName/forgot-password';
-const branchOtpUrl = '/merchant/branch/:branchName/otp-forgot-password';
-const branchVerifyUrl = '/merchant/branch/:branchName/login-verify';
+const branchForgotPasswordUrl = '/merchant/branch/:name/forgot-password';
+const branchOtpUrl = '/merchant/branch/:name/otp-forgot-password';
+const branchVerifyUrl = '/merchant/branch/:name/login-verify';
 
 // cashier URL's
-const defaultCashierLoginUrl = '/merchant/cashier/:branchName';
-const cashierLoginUrl = '/merchant/cashier/:branchName/login';
-const cashierDashboardUrl = '/merchant/cashier/:branchName/dashboard';
+const defaultCashierLoginUrl = '/merchant/cashier/:name';
+const cashierLoginUrl = `/merchant/cashier/:name/login`;
+const cashierDashboardUrl = '/merchant/cashier/:name/dashboard';
 const invoiceUrl = '/merchant/cashier/invoice/:groupId';
-const cashierForgotPasswordUrl =
-  '/merchant/cashier/:branchName/forgot-password';
-const cashierOtpUrl = '/merchant/cashier/:branchName/otp-forgot-password';
+const cashierForgotPasswordUrl = '/merchant/cashier/:name/forgot-password';
+const cashierOtpUrl = '/merchant/cashier/:name/otp-forgot-password';
 
 export {
   merchantDashboardUrl,

@@ -44,10 +44,10 @@ class CashierHeader extends Component {
   componentDidMount() {}
 
   render() {
-    const { page, branchName } = this.props;
+    const { page, name } = this.props;
     return (
       <TopBar>
-        <Welcome from="cashier" bankName={branchName} />
+        <Welcome from="cashier" bankName={name} />
         <Container>
           {page === 'info' ? (
             <A href={this.props.goto} float="left">
@@ -55,7 +55,7 @@ class CashierHeader extends Component {
             </A>
           ) : null}
 
-          <A href={`/merchant/cashier/${branchName}/dashboard`} float="left">
+          <A href={`/merchant/cashier/${name}/dashboard`} float="left">
             <div className="bankLogo">
               <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
             </div>
@@ -67,7 +67,7 @@ class CashierHeader extends Component {
             </MiddleTitle>
           ) : null}
           {page === 'info' ? null : (
-            <CashierNav active={this.props.active} branchName={branchName} />
+            <CashierNav active={this.props.active} name={name} />
           )}
         </Container>
       </TopBar>
@@ -76,7 +76,7 @@ class CashierHeader extends Component {
 }
 
 CashierHeader.propTypes = {
-  branchName: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default CashierHeader;

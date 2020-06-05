@@ -17,7 +17,7 @@ import EditCashierPopup from './EditCashierPopup';
 
 function CashierList(props) {
   const { match } = props;
-  const { branchName } = match.params;
+  const { name } = match.params;
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
   const [cashierList, setCashierList] = React.useState([]);
@@ -73,7 +73,9 @@ function CashierList(props) {
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <A href="/branch/cashier/info/dsd">Cashier Info</A>
+                <A href={`/merchant/branch/cashier/info/${cashier.name}`}>
+                  Cashier Info
+                </A>
                 <span onClick={() => handleEditCashierPopupClick({})}>
                   Edit
                 </span>
@@ -136,9 +138,9 @@ function CashierList(props) {
     <Wrapper from="merchant">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{`${branchName} | Cashiers`}</title>
+        <title>{`${name} | Cashiers`}</title>
       </Helmet>
-      <BranchHeader active="cashier" branchName={branchName} />
+      <BranchHeader active="cashier" branchName={name} />
       <Container verticalMargin>
         <Main fullWidth>
           <ActionBar marginBottom="33px" inputWidth="100%" className="clr">

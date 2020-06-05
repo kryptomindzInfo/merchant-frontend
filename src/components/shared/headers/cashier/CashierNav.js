@@ -20,17 +20,17 @@ const Link = styled.span`
 
 class CashierNav extends Component {
   render() {
-    const { branchName } = this.props;
+    const { name } = this.props;
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
     const branches = this.props.active === 'branch' ? 'true' : '';
 
     return (
       <React.Fragment>
         <NavTag>
-          <A href={`/merchant/cashier/${branchName}/dashboard`}>
+          <A href={`/merchant/cashier/${name}/dashboard`}>
             <Link active={dashboard}>Dashboard</Link>
           </A>
-          <A href={`/merchant/cashier/${branchName}/invoices`}>
+          <A href={`/merchant/cashier/${name}/invoices`}>
             <Link active={branches}>Invoices</Link>
           </A>
         </NavTag>
@@ -40,7 +40,7 @@ class CashierNav extends Component {
 }
 
 CashierNav.propTypes = {
-  branchName: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
 };
 
 export default CashierNav;

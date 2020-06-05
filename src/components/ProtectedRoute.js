@@ -7,7 +7,7 @@ import { getUrlBasedOnType } from './utils/ForgotPasswordAPI';
 const ProtectedRoute = ({ type, match, component: Component, ...rest }) => {
   const userLogged = JSON.parse(localStorage.getItem(`${type}Logged`));
   const pathNameBasedOnType = () =>
-    getUrlBasedOnType(type, match.params.branchName, 'login');
+    getUrlBasedOnType(type, match.params.name, 'login');
   if (userLogged) {
     const { token } = userLogged;
     axios.defaults.headers.common.Authorization = token;

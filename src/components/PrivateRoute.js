@@ -6,7 +6,7 @@ import { getUrlBasedOnType } from './utils/ForgotPasswordAPI';
 const PrivateRoute = ({ type, match, component: Component, ...rest }) => {
   const mobile = JSON.parse(localStorage.getItem(`otpNo_${type}`));
   const pathNameBasedOnType = () =>
-    getUrlBasedOnType(type, match.params.branchName, 'forgot-password');
+    getUrlBasedOnType(type, match.params.name, 'forgot-password');
   if (mobile) {
     return (
       <Route

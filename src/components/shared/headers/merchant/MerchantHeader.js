@@ -27,7 +27,7 @@ const MerchantHeader = (props) => {
   const merchantLogged =
     JSON.parse(localStorage.getItem('merchantLogged')) || {};
   const merchantName = merchantLogged.details.name || '';
-  const logo = merchantLogged.details.logo_hash || '';
+  const logo = merchantLogged.details.logo || '';
   const { page } = props;
 
   return (

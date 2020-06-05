@@ -22,7 +22,7 @@ import TabItem from '../../shared/TabItem';
 
 function InvoiceList(props) {
   const { match } = props;
-  const { branchName: groupName } = match.params;
+  const { name } = match.params;
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [invoiceList, setInvoiceList] = React.useState([]);
@@ -117,9 +117,9 @@ function InvoiceList(props) {
     <Wrapper from="merchant">
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{`${groupName} | Invoice`}</title>
+        <title>{`${name} | Invoice`}</title>
       </Helmet>
-      <CashierHeader active="invoice" branchName={groupName} />
+      <CashierHeader active="invoice" name={name} />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
         <Main fullWidth>
           <InvoiceCards />

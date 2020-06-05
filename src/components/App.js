@@ -19,7 +19,6 @@ import CashierInfo from './branch/cashier/CashierInfo';
 import BranchSettings from './branch/settings/BranchSettings';
 import BranchDashboard from './branch/dashboard/BranchDashboard';
 import CashierDashboard from './cashier/dashboard/CashierDashboard';
-
 import InvoiceList from './cashier/invoice/InvoiceList';
 import ProtectedRoute from './ProtectedRoute';
 import {

@@ -31,10 +31,10 @@ const SignInPage = (props) => {
   const [href, setHref] = React.useState('/merchant/forgot-password');
   const [isLoading, setLoading] = React.useState(false);
   const { type, match } = props;
-  const { branchName } = match.params;
+  const { name } = match.params;
 
   const hrefBasedOnType = () =>
-    setHref(getUrlBasedOnType(type, branchName, 'forgot-password'));
+    setHref(getUrlBasedOnType(type, name, 'forgot-password'));
 
   useEffect(() => hrefBasedOnType());
 
@@ -56,7 +56,7 @@ const SignInPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection branchName={branchName} />
+          <LandingLeftSection name={name} />
         </Grid>
         <Grid
           item

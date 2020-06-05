@@ -22,10 +22,12 @@ const redirectUser = (type, response) => {
           `/merchant/branch/${response.data.details.name}/login-verify`,
         );
       } else {
-        history.push(
-          `/merchant/branch/${response.data.details.name}/dashboard`,
-        );
+        history.push(`/merchant/branch/dashboard`);
       }
+      break;
+    case 'cashier':
+      localStorage.setItem('cashierLogged', JSON.stringify(response.data));
+      history.push(`/merchant/cashier/${response.data.details.name}/dashboard`);
       break;
     default:
       break;
@@ -39,6 +41,9 @@ const loginRedirect = (type, name) => {
       break;
     case 'branch':
       history.push(`/merchant/branch/${name}/dashboard`);
+      break;
+    case 'cashier':
+      history.push(`/merchant/cashier/${name}/dashboard`);
       break;
     default:
       break;

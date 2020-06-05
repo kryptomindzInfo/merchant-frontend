@@ -35,7 +35,7 @@ const validationSchema = Yup.object().shape({
 const SignInVerificationPage = (props) => {
   const classes = styles();
   const { type, match } = props;
-  const { branchName } = match.params;
+  const { name } = match.params;
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
   return (
@@ -52,7 +52,7 @@ const SignInVerificationPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection branchName={branchName} />
+          <LandingLeftSection name={name} />
         </Grid>
         <Grid
           item
@@ -82,7 +82,7 @@ const SignInVerificationPage = (props) => {
               const payload = {
                 type: props.type,
                 password: values.newPassword,
-                name: branchName,
+                name,
               };
               signInVerify(payload);
             }}
