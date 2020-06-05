@@ -7,7 +7,7 @@ import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CashierWallet from './CashierWallets';
-import InfoSidebar from '../../shared/sidebars/InfoSidebar';
+import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
 
 function CashierInfo(props) {
@@ -28,7 +28,7 @@ function CashierInfo(props) {
         goto="/merchant/branch/cashiers"
       />
       <Container verticalMargin>
-        <InfoSidebar active="info" bankName="Kotak" type="Cashier" />
+        <BranchInfoSidebar active="info" bankName="Kotak" type="Cashier" />
         <Main>
           <CashierWallet />
           <Card bigPadding bordered>

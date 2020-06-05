@@ -7,7 +7,7 @@ import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
-import InfoSidebar from '../../shared/sidebars/InfoSidebar';
+import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
 import CreateBranchPopup from './CreateBranchPopup';
 
 function BranchInfo(props) {
@@ -37,13 +37,13 @@ function BranchInfo(props) {
         <meta charSet="utf-8" />
         <title>Branch | Merchant | E-WALLET</title>
       </Helmet>
-      <MerchantHeader
-        page="info"
-        middleTitle="Branch Profile"
-        goto="/merchant/branches"
-      />
+      <MerchantHeader page="info" middleTitle={id} goto="/merchant/branches" />
       <Container verticalMargin>
-        <InfoSidebar edit={() => handleBranchEdit()} active="info" />
+        <BranchInfoSidebar
+          edit={() => handleBranchEdit()}
+          name={branchInfo.name}
+          active="info"
+        />
         <Main>
           <Card bigPadding bordered>
             <div className="cardBody">

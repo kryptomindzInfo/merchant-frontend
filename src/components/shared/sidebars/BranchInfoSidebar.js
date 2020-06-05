@@ -55,7 +55,7 @@ const H1 = styled.h1`
   text-align: center;
 `;
 
-class InfoSidebar extends Component {
+class BranchInfoSidebar extends Component {
   editSignal = (event) => {
     this.props.edit();
   };
@@ -72,9 +72,10 @@ class InfoSidebar extends Component {
     const block = this.props.active === 'block';
     const bt = this.props.blockTxt === 1 ? 'Block' : 'Unblock';
     const infoType = this.props.type;
+    const { name } = this.props;
     return (
       <SidebarStyle marginRight>
-        <A href={`/bank/branch/${this.props.branchId}`}>
+        <A href={`/merchant/branch/info/${name}`}>
           <Card rounded selected={info} className="sideNav">
             <i className="material-icons">
               <PersonIcon />
@@ -82,17 +83,15 @@ class InfoSidebar extends Component {
             <h3>{infoType} Info</h3>
           </Card>
         </A>
-        {infoType === 'Branch' ? (
-          <A href={`/bank/cashiers/${this.props.branchId}`}>
-            <Card rounded selected={cashier} className="sideNav">
-              <i className="material-icons">
-                <FolderIcon />
-              </i>
+        <A href={`/merchant/cashiers/${name}`}>
+          <Card rounded selected={cashier} className="sideNav">
+            <i className="material-icons">
+              <FolderIcon />
+            </i>
 
-              <h3>Cashier</h3>
-            </Card>
-          </A>
-        ) : null}
+            <h3>Cashier</h3>
+          </Card>
+        </A>
         <A href="/reports/">
           <Card rounded selected={reports} className="sideNav">
             <i className="material-icons">
@@ -102,17 +101,19 @@ class InfoSidebar extends Component {
           </Card>
         </A>
 
-        <Card
-          rounded
-          selected={edit}
-          className="sideNav"
-          onClick={this.editSignal}
-        >
-          <i className="material-icons">
-            <EditIcon />
-          </i>
-          <h3>Edit</h3>
-        </Card>
+        {info ? (
+          <Card
+            rounded
+            selected={edit}
+            className="sideNav"
+            onClick={this.editSignal}
+          >
+            <i className="material-icons">
+              <EditIcon />
+            </i>
+            <h3>Edit</h3>
+          </Card>
+        ) : null}
 
         <Card
           rounded
@@ -131,4 +132,4 @@ class InfoSidebar extends Component {
   }
 }
 
-export default InfoSidebar;
+export default BranchInfoSidebar;

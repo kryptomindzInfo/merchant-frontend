@@ -61,6 +61,7 @@ function CreateStaffPopup(props) {
         onSubmit={async (values) => {
           if (props.type === 'update') {
             setLoading(true);
+            values.user_id = props.staff._id;
             await staffAPI(props, values, 'update');
             setLoading(false);
           } else {

@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import AddIcon from '@material-ui/icons/Add';
 import Wrapper from '../../shared/Wrapper';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
 import Loader from '../../shared/Loader';
@@ -14,12 +15,16 @@ import { CURRENCY } from '../../constants';
 import A from '../../shared/A';
 import AssignUserPopup from './AssignUserPopup';
 import EditCashierPopup from './EditCashierPopup';
+import Button from '../../shared/Button';
+import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
+import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
 
 function CashierList(props) {
   const { match } = props;
   const { name } = match.params;
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
+  const [cashierPopupType, setCashierPopupType] = React.useState('new');
   const [cashierList, setCashierList] = React.useState([]);
   const [userList, setUserList] = React.useState([]);
   const [editingUser, setEditingUser] = React.useState({});
@@ -35,7 +40,8 @@ function CashierList(props) {
     setAssignUserPopup(false);
   };
 
-  const handleEditCashierPopupClick = (cashier) => {
+  const handleEditCashierPopupClick = (type, cashier) => {
+    setCashierPopupType(type);
     setEditingCashier(cashier);
     setEditCashierPopup(true);
   };
@@ -44,6 +50,30 @@ function CashierList(props) {
     setEditCashierPopup(false);
   };
 
+  const refreshCashierList = async () => {
+    const data = {};
+    setCashierList(data.list);
+    setLoading(data.loading);
+  };
+  useEffect(() => {
+    setLoading(true);
+    const getCashierList = async () => {
+      const data = {};
+      setCashierList(data.list);
+      setLoading(data.loading);
+    };
+    getCashierList();
+  }, []); // Or [] if effect doesn't need props or state
+
+  if (isLoading) {
+    return <Loader fullPage />;
+  }
+  const getCashierInfoURL = (cashierName) => {
+    if (props.type === 'merchant') {
+      return `/merchant/cashier/info/${cashierName}`;
+    }
+    return `/merchant/branch/cashier/info/${cashierName}`;
+  };
   function mappedCards() {
     return cashierList.map((cashier) => {
       return (
@@ -73,10 +103,10 @@ function CashierList(props) {
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <A href={`/merchant/branch/cashier/info/${cashier.name}`}>
-                  Cashier Info
-                </A>
-                <span onClick={() => handleEditCashierPopupClick({})}>
+                <A href={getCashierInfoURL(cashier.name)}>Cashier Info</A>
+                <span
+                  onClick={() => handleEditCashierPopupClick('update', cashier)}
+                >
                   Edit
                 </span>
                 <span onClick={() => handleAssignUserPopupClick({})}>
@@ -140,16 +170,41 @@ function CashierList(props) {
         <meta charSet="utf-8" />
         <title>{`${name} | Cashiers`}</title>
       </Helmet>
-      <BranchHeader active="cashier" branchName={name} />
+      {props.type === 'merchant' ? (
+        <MerchantHeader
+          page="info"
+          middleTitle={name}
+          goto="/merchant/branches/"
+        />
+      ) : (
+        <BranchHeader active="cashier" branchName={name} />
+      )}
       <Container verticalMargin>
-        <Main fullWidth>
-          <ActionBar marginBottom="33px" inputWidth="100%" className="clr">
+        {props.type === 'merchant' ? (
+          <BranchInfoSidebar name={name} active="cashier" />
+        ) : null}
+        <Main>
+          <ActionBar
+            marginBottom="33px"
+            inputWidth="calc(100% - 241px)"
+            className="clr"
+          >
             <div className="iconedInput fl">
               <i className="material-icons">
                 <SearchIcon />
               </i>
               <input type="text" placeholder="Search Cashiers" />
             </div>
+            {props.type === 'merchant' ? (
+              <Button
+                className="addBankButton"
+                flex
+                onClick={() => handleEditCashierPopupClick('new', {})}
+              >
+                <AddIcon className="material-icons" />
+                <span>Add Cashier</span>
+              </Button>
+            ) : null}
           </ActionBar>
           <Card bigPadding>
             <div className="cardHeader">
@@ -191,8 +246,10 @@ function CashierList(props) {
 
       {editCashierPopup ? (
         <EditCashierPopup
+          type={cashierPopupType}
           onClose={() => onEditingPopupClose()}
-          cashier={cashierList}
+          refreshCashierList={(data) => refreshCashierList()}
+          cashier={editingCashier}
         />
       ) : null}
     </Wrapper>

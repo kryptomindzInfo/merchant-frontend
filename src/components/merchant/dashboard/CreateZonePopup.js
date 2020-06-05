@@ -30,6 +30,7 @@ function CreateZonePopup(props) {
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
+            values.zone_id = props.zone._id;
             await zoneAPI(props, values, 'update');
           } else {
             await zoneAPI(props, values, 'create');

@@ -6,6 +6,8 @@ const forgotPasswordUrl = '/merchant/forgot-password';
 const otpUrl = '/merchant/otp-forgot-password';
 const branchUrl = '/merchant/branches';
 const staffUrl = '/merchant/staff';
+const cashierUrl = '/merchant/cashiers/:name';
+const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
 const branchProfileUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/info';
 
@@ -15,9 +17,9 @@ const branchLoginUrl = '/merchant/branch/:name/login';
 const branchCashiersUrl = '/merchant/branch/cashiers';
 const branchDashboardUrl = '/merchant/branch/dashboard';
 const branchSettingsUrl = '/merchant/branch/settings';
-const cashierInfoUrl = '/merchant/branch/cashier/info/:id';
 const branchForgotPasswordUrl = '/merchant/branch/:name/forgot-password';
 const branchOtpUrl = '/merchant/branch/:name/otp-forgot-password';
+const branchCashierInfoUrl = '/merchant/branch/cashier/info/:id';
 const branchVerifyUrl = '/merchant/branch/:name/login-verify';
 
 // cashier URL's
@@ -36,6 +38,7 @@ export {
   otpUrl,
   branchUrl,
   staffUrl,
+  cashierUrl,
   merchantSettingsUrl,
   branchLoginUrl,
   branchProfileUrl,
@@ -43,7 +46,8 @@ export {
   branchDashboardUrl,
   branchSettingsUrl,
   branchVerifyUrl,
-  cashierInfoUrl,
+  branchCashierInfoUrl,
+  merchantCashierInfoUrl,
   cashierDashboardUrl,
   invoiceUrl,
   cashierLoginUrl,

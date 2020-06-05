@@ -33,9 +33,10 @@ import {
   branchVerifyUrl,
   cashierDashboardUrl,
   cashierForgotPasswordUrl,
-  cashierInfoUrl,
+  merchantCashierInfoUrl,
   cashierLoginUrl,
   cashierOtpUrl,
+  cashierUrl,
   defaultBranchLoginUrl,
   defaultCashierLoginUrl,
   forgotPasswordUrl,
@@ -46,6 +47,7 @@ import {
   otpUrl,
   staffUrl,
   verifyUrl,
+  branchCashierInfoUrl,
 } from './Url';
 import PrivateRoute from './PrivateRoute';
 import MerchantSettings from './merchant/settings/MerchantSettings';
@@ -140,6 +142,24 @@ function App() {
               path={staffUrl}
               component={(props) => <StaffList {...props} />}
             />
+            <ProtectedRoute
+              exact
+              type="merchant"
+              path={merchantSettingsUrl}
+              component={(props) => <MerchantSettings {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={cashierUrl}
+              component={(props) => <CashierList type="merchant" {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantCashierInfoUrl}
+              component={(props) => <CashierInfo type="merchant" {...props} />}
+            />
             {/* ====================== */}
             {/* Merchant Public Routes */}
             {/* ====================== */}
@@ -169,12 +189,6 @@ function App() {
               path={otpUrl}
               component={(props) => <OTPForgotPasswordPage {...props} />}
             />
-            <ProtectedRoute
-              exact
-              type="merchant"
-              path={merchantSettingsUrl}
-              component={(props) => <MerchantSettings {...props} />}
-            />
             {/* ============= */}
             {/* Branch Routes */}
             {/* ============= */}
@@ -193,8 +207,8 @@ function App() {
             <ProtectedRoute
               type="branch"
               exact
-              path={cashierInfoUrl}
-              component={(props) => <CashierInfo {...props} />}
+              path={branchCashierInfoUrl}
+              component={(props) => <CashierInfo type="branch" {...props} />}
             />
             <ProtectedRoute
               type="branch"

@@ -21,6 +21,7 @@ const styles = makeStyles((theme) => ({
     margin: '0 auto',
     marginBottom: '2%',
     height: '130px',
+    textAlign: 'center',
     width: '130px',
     background: 'transparent',
   },

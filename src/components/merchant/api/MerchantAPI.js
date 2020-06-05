@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL, MERCHANT_API } from '../../constants';
+import { MERCHANT_API } from '../../constants';
 import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
@@ -182,7 +182,7 @@ const fetchStaffList = async () => {
 const editMerchant = async (props, values, token) => {
   try {
     values.username = values.merchant_id;
-    const res = await axios.post(`${API_URL}/bank/editMerchant`, {
+    const res = await axios.post(`${MERCHANT_API}/editDetails`, {
       token,
       status: 1,
       ...values,
@@ -192,7 +192,7 @@ const editMerchant = async (props, values, token) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        props.refreshMerchantList(res.data.data);
+        props.refreshMerchantList(values);
         props.onClose();
       }
     } else {
