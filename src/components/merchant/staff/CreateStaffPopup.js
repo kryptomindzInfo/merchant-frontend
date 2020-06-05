@@ -50,7 +50,7 @@ function CreateStaffPopup(props) {
       <Formik
         initialValues={{
           name: props.staff.name || '',
-          logo: props.staff.logo_hash || '',
+          logo: props.staff.logo || '',
           email: props.staff.email || '',
           mobile: props.staff.mobile || '',
           ccode: props.staff.ccode || '+221',
@@ -85,7 +85,7 @@ function CreateStaffPopup(props) {
 
           return (
             <div>
-              <h1>Create Staff</h1>
+              <h1> {props.type === 'update' ? 'Update Staff' : 'Add Staff'}</h1>
               <FormGroup mR="10%" mL="10%">
                 <label>Name*</label>
                 <TextInput
@@ -250,7 +250,11 @@ function CreateStaffPopup(props) {
                       type="file"
                       id="logo"
                       data-key="logo"
-                      onChange={(e) => onFileChange(e, token, 'merchant')}
+                      onChange={(e) => {
+                        onFileChange(e, token, 'merchant').then((name) => {
+                          setFieldValue('logo', name);
+                        });
+                      }}
                     />
                     {!values.logo ? (
                       <i className="material-icons">cloud_upload</i>
@@ -277,6 +281,8 @@ function CreateStaffPopup(props) {
                 </Button>
               ) : (
                 <Button
+                  type="submit"
+                  onClick={handleSubmit}
                   filledBtn
                   marginTop="20px"
                   style={{
@@ -285,7 +291,9 @@ function CreateStaffPopup(props) {
                     fontWeight: 500,
                   }}
                 >
-                  <span>Add User</span>
+                  <span>
+                    {props.type === 'update' ? 'Update Staff' : 'Add Staff'}
+                  </span>
                 </Button>
               )}
             </div>

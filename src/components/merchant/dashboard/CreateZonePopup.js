@@ -26,6 +26,7 @@ function CreateZonePopup(props) {
         initialValues={{
           code: props.zone.code || '',
           name: props.zone.name || '',
+          description: props.zone.description || '',
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
@@ -80,6 +81,20 @@ function CreateZonePopup(props) {
                     as={TextInput}
                   />
                   <ErrorMessage name="name" component={ErrorText} />
+                </FormField>
+                <FormField mB="14px" background="#fff">
+                  <label htmlFor="name">Description</label>
+                  <Field
+                    type="text"
+                    name="description"
+                    onFocus={(e) => {
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      inputBlur(e);
+                    }}
+                    as={TextInput}
+                  />
                 </FormField>
                 <Button
                   type="submit"

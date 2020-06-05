@@ -2,12 +2,7 @@ import axios from 'axios';
 import { API_URL, MERCHANT_API } from '../constants';
 import notify from './Notify';
 import history from './history';
-import {
-  verifyUrl,
-  merchantDashboardUrl,
-  loginUrl,
-  branchDashboardUrl,
-} from '../Url';
+import { loginUrl, merchantDashboardUrl, verifyUrl } from '../Url';
 
 const redirectUser = (type, response) => {
   switch (type) {
@@ -22,7 +17,28 @@ const redirectUser = (type, response) => {
 
     case 'branch':
       localStorage.setItem('branchLogged', JSON.stringify(response.data));
-      history.push(`/merchant/branch/${response.data.details.name}/dashboard`);
+      if (response.data.details.status === 0) {
+        history.push(
+          `/merchant/branch/${response.data.details.name}/login-verify`,
+        );
+      } else {
+        history.push(
+          `/merchant/branch/${response.data.details.name}/dashboard`,
+        );
+      }
+      break;
+    default:
+      break;
+  }
+};
+
+const loginRedirect = (type, name) => {
+  switch (type) {
+    case 'merchant':
+      history.push(loginUrl);
+      break;
+    case 'branch':
+      history.push(`/merchant/branch/${name}/dashboard`);
       break;
     default:
       break;
@@ -63,7 +79,7 @@ const login = (loginCreds) => {
 
 const signInVerify = (values) => {
   axios
-    .post(`${MERCHANT_API}/changePassword`, values)
+    .post(`${API_URL}/${values.type}/changePassword`, values.password)
     .then((res) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
@@ -74,7 +90,7 @@ const signInVerify = (values) => {
           );
           notify(successMessage, 'success');
           setTimeout(() => {
-            history.push(loginUrl);
+            loginRedirect(values.type, values.name);
           }, 1000);
         }
       }

@@ -67,7 +67,7 @@ const StaffList = () => {
               </Col>
               <Col cW="20%">
                 <Button
-                  onClick={() => handleStaffPopupClick('update', { b })}
+                  onClick={() => handleStaffPopupClick('update', b)}
                   flex
                   noMin
                   style={{ padding: '5px' }}
@@ -127,7 +127,7 @@ const StaffList = () => {
         <CreateStaffPopup
           type={popupType}
           staff={editingStaff}
-          refreshBranchList={() => refreshStaffList()}
+          refreshStaffList={() => refreshStaffList()}
           onClose={() => onPopupClose()}
         />
       ) : null}

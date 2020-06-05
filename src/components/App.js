@@ -31,6 +31,7 @@ import {
   branchProfileUrl,
   branchSettingsUrl,
   branchUrl,
+  branchVerifyUrl,
   cashierDashboardUrl,
   cashierForgotPasswordUrl,
   cashierInfoUrl,
@@ -201,6 +202,14 @@ function App() {
               exact
               path={branchSettingsUrl}
               component={(props) => <BranchSettings {...props} />}
+            />
+            <ProtectedRoute
+              exact
+              type="branch"
+              path={branchVerifyUrl}
+              component={(props) => (
+                <SignInVerificationPage type="branch" {...props} />
+              )}
             />
             {/* ==================== */}
             {/* Branch public Routes */}

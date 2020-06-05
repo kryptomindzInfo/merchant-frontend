@@ -79,7 +79,11 @@ const SignInVerificationPage = (props) => {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={(values) => {
-              const payload = { password: values.newPassword };
+              const payload = {
+                type: props.type,
+                password: values.newPassword,
+                name: branchName,
+              };
               signInVerify(payload);
             }}
           >

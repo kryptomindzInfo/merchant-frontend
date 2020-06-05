@@ -19,13 +19,13 @@ const fileUpload = (file, token, key, type) => {
     method = 'imageUpload';
     url = `${API_URL}/${type}/${method}`;
   }
-  axios
+  return axios
     .post(url, formData, config)
     .then((res) => {
       if (res.status === 200) {
         if (res.data.error) {
           throw res.data.error;
-        } else if (key === 'logo_hash') {
+        } else if (key === 'logo') {
           return res.data.name;
         } else {
           return res.data.hash;
@@ -46,11 +46,14 @@ const triggerBrowse = (inp) => {
 
 const onFileChange = (e, token, type) => {
   if (e.target.files && e.target.files[0] != null) {
-    fileUpload(
+    return fileUpload(
       e.target.files[0],
       token,
       e.target.getAttribute('data-key', type),
-    );
+      type,
+    ).then((response) => {
+      return response;
+    });
   }
 };
 
