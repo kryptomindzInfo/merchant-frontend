@@ -49,7 +49,11 @@ const SignInPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>{`${type.toUpperCase()} | Login`}</title>
+        <title>
+          {name === 'merchant'
+            ? 'type.toUpperCase()} | Login Verification'
+            : `${type.toUpperCase()} | ${name.toUpperCase()} | Login`}
+        </title>
         <meta name="description" content="Description of SignIn Page" />
       </Helmet>
       <Grid
