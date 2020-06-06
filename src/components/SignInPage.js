@@ -15,7 +15,7 @@ import FormField from './shared/FormField';
 import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
 import { login } from './utils/LoginAPI';
-import { getUrlBasedOnType } from './utils/ForgotPasswordAPI';
+import { getUrlBasedOnType } from './utils/urlUtils';
 
 const initialValues = {
   username: '',
@@ -33,19 +33,23 @@ const SignInPage = (props) => {
   const { type, match } = props;
   const { name } = match.params;
 
+  if (type === 'merchant') {
+    localStorage.setItem(`${type}_name`, 'merchant');
+  } else {
+    localStorage.setItem(`${type}_name`, name);
+  }
+
   const hrefBasedOnType = () =>
     setHref(getUrlBasedOnType(type, name, 'forgot-password'));
 
-  useEffect(() => hrefBasedOnType());
+  useEffect(() => {
+    hrefBasedOnType();
+  });
 
   return (
     <Fragment>
       <Helmet>
-        <title>
-          {type === 'merchant'
-            ? `Merchant | Login`
-            : `${type} | MERCHANT | Login`}
-        </title>
+        <title>{`${type.toUpperCase()} | Login`}</title>
         <meta name="description" content="Description of SignIn Page" />
       </Helmet>
       <Grid
@@ -56,7 +60,7 @@ const SignInPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection name={name} />
+          <LandingLeftSection type={type} />
         </Grid>
         <Grid
           item

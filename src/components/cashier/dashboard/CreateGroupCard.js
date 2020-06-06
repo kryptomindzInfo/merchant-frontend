@@ -4,6 +4,7 @@ import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import Wrapper from '../../shared/Wrapper';
 import CreateGroupPopup from './CreateGroupPopup';
+import Col from '../../shared/Col';
 
 const CreateGroupCard = (props) => {
   const [addGroupPopup, setAddGroupPopup] = React.useState(false);
@@ -17,20 +18,9 @@ const CreateGroupCard = (props) => {
   };
 
   return (
-    <Wrapper>
-      <Card
-        style={{ backgroundColor: '#0000', boxShadow: 'none' }}
-        textAlign="center"
-        marginBottom="85px"
-        bigPadding
-      >
-        <Button
-          width="100%"
-          flex
-          className="addBankButton"
-          style={{ padding: '10px' }}
-          onClick={handlePopupClick}
-        >
+    <Col cW="100%">
+      <Card marginBottom="54px" bigPadding smallValue>
+        <Button width="100%" flex onClick={handlePopupClick}>
           <AddIcon className="material-icons" />
           <span>Create Group</span>
         </Button>
@@ -38,7 +28,7 @@ const CreateGroupCard = (props) => {
       {addGroupPopup ? (
         <CreateGroupPopup onClose={() => onPopupClose()} />
       ) : null}
-    </Wrapper>
+    </Col>
   );
 };
 

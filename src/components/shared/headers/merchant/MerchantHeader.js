@@ -32,7 +32,7 @@ const MerchantHeader = (props) => {
 
   return (
     <TopBar>
-      <Welcome from="merchant" />
+      <Welcome type="merchant" />
       <Container>
         {page === 'info' ? (
           <A href={props.goto} float="left">

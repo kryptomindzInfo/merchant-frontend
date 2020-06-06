@@ -10,7 +10,7 @@ import Col from '../../shared/Col';
 import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
 import CreateBranchPopup from './CreateBranchPopup';
 
-function BranchInfo(props) {
+function MerchantBranchInfoPage(props) {
   const [branchInfo, setBranchInfo] = useState({});
   const [editBranchPopup, setEditBranchPopup] = useState(false);
   const { match } = props;
@@ -32,10 +32,10 @@ function BranchInfo(props) {
   };
 
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Branch | Merchant | E-WALLET</title>
+        <title>Branch | {branchInfo.name.toUpperCase()} | Info</title>
       </Helmet>
       <MerchantHeader page="info" middleTitle={id} goto="/merchant/branches" />
       <Container verticalMargin>
@@ -112,4 +112,4 @@ function BranchInfo(props) {
   );
 }
 
-export default BranchInfo;
+export default MerchantBranchInfoPage;

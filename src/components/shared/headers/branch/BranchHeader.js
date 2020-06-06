@@ -24,29 +24,26 @@ const MiddleTitle = styled.div`
 `;
 
 const BranchHeader = (props) => {
-  const branchLogged = JSON.parse(localStorage.getItem('branchLogged')) || {};
-  const branchName = branchLogged.details.name || '';
-  const { page } = props;
+  const { page, goto, middleTitle, active } = props;
+  const name = localStorage.getItem(`branch_name`);
 
   return (
     <TopBar>
-      <Welcome from="branch" branchName={branchName} />
+      <Welcome type="branch" />
       <Container>
         {page === 'info' ? (
-          <A href={props.goto} float="left">
+          <A href={goto} float="left">
             <Link>Back</Link>
           </A>
         ) : null}
 
         <A href="/merchant/branch/dashboard" float="left">
-          <h2>{branchName.toUpperCase()}</h2>
+          <h2>{name.toUpperCase()}</h2>
         </A>
-        {props.middleTitle ? (
-          <MiddleTitle className="middleTitle">{props.middleTitle}</MiddleTitle>
+        {middleTitle ? (
+          <MiddleTitle className="middleTitle">{middleTitle}</MiddleTitle>
         ) : null}
-        {page === 'info' ? null : (
-          <BranchNav name={branchName} active={props.active} />
-        )}
+        {page === 'info' ? null : <BranchNav active={active} />}
       </Container>
     </TopBar>
   );

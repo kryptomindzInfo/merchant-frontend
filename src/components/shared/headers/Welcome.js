@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import styled from 'styled-components';
 import NotificationIcon from '@material-ui/icons/Notifications';
 import history from '../../utils/history';
@@ -26,88 +26,79 @@ const Icon = styled.i`
   margin-left: 10px;
 `;
 
-class Welcome extends Component {
-  logoutUser = (type) => {
+const Welcome = (props) => {
+  const { type } = props;
+  const name = localStorage.getItem(`${type}_name`);
+
+  const logoutMerchant = () => {
+    localStorage.removeItem('merchantLogged');
+    history.push('/merchant/login');
+  };
+
+  const logoutBranch = () => {
+    localStorage.removeItem('branchLogged');
+    localStorage.removeItem(`branch_name`);
+    history.push(`/merchant/branch/${name}/login`);
+  };
+
+  const logoutCashier = () => {
+    localStorage.removeItem('cashierLogged');
+    localStorage.removeItem(`cashier_name`);
+    history.push(`/merchant/cashier/${name}/login`);
+  };
+
+  const logoutUser = () => {
     switch (type) {
       case 'merchant':
-        this.logoutMerchant();
+        logoutMerchant();
         break;
       case 'branch':
-        this.logoutBranch();
+        logoutBranch();
+        break;
+      case 'cashier':
+        logoutCashier();
         break;
       default:
-        this.logoutMerchant();
+        logoutMerchant();
         break;
     }
   };
 
-  logoutMerchant = () => {
-    localStorage.removeItem('merchantLogged');
-    history.push('/merchant/login');
-  };
-
-  logoutBranch = () => {
-    localStorage.removeItem('branchLogged');
-    history.push(`/merchant/branch/${this.props.branchName}/login`);
-  };
-
-  /* logoutBank = () => {
-    localStorage.removeItem('merchantLogged');
-    localStorage.removeItem('merchantName');
-    history.push('/merchant/login');
-  };
-  logoutCashier = () => {
-    localStorage.removeItem('cashierLogged');
-    history.push(`/cashier/${this.props.bankName}`);
-    // this.props.history.push('/bank');
-  }; */
-
-  render() {
-    let name = '';
-    let isAdmin = false;
-    let settingsUrl = '';
-    if (this.props.from === 'merchant') {
-      // eslint-disable-next-line prefer-destructuring
-      name = JSON.parse(localStorage.getItem('merchantLogged')).details.name;
-      settingsUrl = '/merchant/info';
-    } else if (this.props.from === 'branch') {
-      // eslint-disable-next-line prefer-destructuring
-      name = JSON.parse(localStorage.getItem('branchLogged')).details.name;
-      settingsUrl = `/merchant/branch/${this.props.branchName}/info`;
-    } else if (this.props.from === 'cashier') {
-      // eslint-disable-next-line prefer-destructuring
-      name = JSON.parse(localStorage.getItem('cashierLogged')).details.name;
-      settingsUrl = '/merchant/cashier/:cashierName/info';
-    } else {
-      isAdmin = localStorage.getItem('isAdmin');
-    }
-    const tempDate = new Date();
-    const date = `${tempDate.getDate()}-${
-      tempDate.getMonth() + 1
-    }-${tempDate.getFullYear()} `;
-    const currDate = `${date}`;
-    return (
-      <>
-        <WelcomeWrap className="clr">
-          <Icon className="material-icons fl">
-            <NotificationIcon />
-          </Icon>
-          <div className="dropdown fl">
-            <Name>
-              <span>{this.props.from.toUpperCase()}:</span> {name}
-            </Name>
-            <SubNav className="bankSubNav">
-              <A href={settingsUrl}>Settings</A>
-              <span onClick={() => this.logoutUser(this.props.from)}>
-                Logout
-              </span>
-            </SubNav>
-          </div>
-          <span style={{ paddingRight: '7px' }}>{currDate}</span>
-        </WelcomeWrap>
-      </>
-    );
+  let isAdmin = false;
+  let settingsUrl = '';
+  if (type === 'merchant') {
+    settingsUrl = '/merchant/settings';
+  } else if (type === 'branch') {
+    settingsUrl = `/merchant/branch/settings`;
+  } else if (type === 'cashier') {
+    settingsUrl = `/merchant/cashier/settings`;
+  } else {
+    isAdmin = localStorage.getItem('isAdmin');
   }
-}
+  const tempDate = new Date();
+  const date = `${tempDate.getDate()}-${
+    tempDate.getMonth() + 1
+  }-${tempDate.getFullYear()} `;
+  const currDate = `${date}`;
+  return (
+    <Fragment>
+      <WelcomeWrap className="clr">
+        <Icon className="material-icons fl">
+          <NotificationIcon />
+        </Icon>
+        <div className="dropdown fl">
+          <Name>
+            <span>{type.toUpperCase()}:</span> {name}
+          </Name>
+          <SubNav className="bankSubNav">
+            <A href={settingsUrl}>Settings</A>
+            <span onClick={() => logoutUser()}>Logout</span>
+          </SubNav>
+        </div>
+        <span style={{ paddingRight: '7px' }}>{currDate}</span>
+      </WelcomeWrap>
+    </Fragment>
+  );
+};
 
 export default Welcome;

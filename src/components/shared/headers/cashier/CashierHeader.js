@@ -1,12 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import PropTypes from 'prop-types';
 import CashierNav from './CashierNav';
 import TopBar from '../TopBar';
 import Welcome from '../Welcome';
 import Container from '../../Container';
 import A from '../../A';
-import { STATIC_URL } from '../../../constants';
 
 const Link = styled.span`
   color: #fff;
@@ -23,60 +21,36 @@ const MiddleTitle = styled.div`
   display: flex;
   justify-content: center;
 `;
-const token = localStorage.getItem('merchantLogged');
-const merchantName = localStorage.getItem('merchantName');
-const logo = localStorage.getItem('merchantLogo');
 
-let permissions = localStorage.getItem('permissions');
-if (permissions !== 'all' && permissions !== '') {
-  permissions = JSON.parse(permissions);
-}
+const CashierHeader = (props) => {
+  const { page, goto, middleTitle, active } = props;
+  const name = localStorage.getItem(`cashier_name`);
 
-class CashierHeader extends Component {
-  constructor() {
-    super();
-    this.state = {
-      logo,
-      name: 'Demo',
-    };
+  let permissions = localStorage.getItem('permissions');
+  if (permissions !== 'all' && permissions !== '') {
+    permissions = JSON.parse(permissions);
   }
 
-  componentDidMount() {}
-
-  render() {
-    const { page, name } = this.props;
-    return (
-      <TopBar>
-        <Welcome from="cashier" bankName={name} />
-        <Container>
-          {page === 'info' ? (
-            <A href={this.props.goto} float="left">
-              <Link>Back</Link>
-            </A>
-          ) : null}
-
-          <A href={`/merchant/cashier/${name}/dashboard`} float="left">
-            <div className="bankLogo">
-              <img src={STATIC_URL + this.state.logo} alt="Merchant Logo" />
-            </div>
-            <h2>{this.state.name.toUpperCase()}</h2>
+  return (
+    <TopBar>
+      <Welcome type="cashier" />
+      <Container>
+        {page === 'info' ? (
+          <A href={goto} float="left">
+            <Link>Back</Link>
           </A>
-          {this.props.middleTitle ? (
-            <MiddleTitle className="middleTitle">
-              {this.props.middleTitle}
-            </MiddleTitle>
-          ) : null}
-          {page === 'info' ? null : (
-            <CashierNav active={this.props.active} name={name} />
-          )}
-        </Container>
-      </TopBar>
-    );
-  }
-}
+        ) : null}
 
-CashierHeader.propTypes = {
-  name: PropTypes.string.isRequired,
+        <A href="/merchant/cashier/dashboard" float="left">
+          <h2>{name.toUpperCase()}</h2>
+        </A>
+        {props.middleTitle ? (
+          <MiddleTitle className="middleTitle">{middleTitle}</MiddleTitle>
+        ) : null}
+        {page === 'info' ? null : <CashierNav active={active} />}
+      </Container>
+    </TopBar>
+  );
 };
 
 export default CashierHeader;

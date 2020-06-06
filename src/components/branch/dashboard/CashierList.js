@@ -4,7 +4,6 @@ import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import AddIcon from '@material-ui/icons/Add';
 import Wrapper from '../../shared/Wrapper';
-import BranchHeader from '../../shared/headers/branch/BranchHeader';
 import Loader from '../../shared/Loader';
 import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
@@ -20,8 +19,7 @@ import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
 
 function CashierList(props) {
-  const { match } = props;
-  const { name } = match.params;
+  const name = localStorage.getItem(`branch_name`);
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
   const [cashierPopupType, setCashierPopupType] = React.useState('new');
@@ -165,30 +163,27 @@ function CashierList(props) {
     return <Loader fullPage />;
   }
   return (
-    <Wrapper from="merchant">
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>{`${name} | Cashiers`}</title>
-      </Helmet>
+    <Wrapper>
+      {props.type === 'merchant' ? (
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{`${name} | Cashiers`}</title>
+        </Helmet>
+      ) : null}
+
       {props.type === 'merchant' ? (
         <MerchantHeader
           page="info"
           middleTitle={name}
           goto="/merchant/branches/"
         />
-      ) : (
-        <BranchHeader active="cashier" branchName={name} />
-      )}
+      ) : null}
       <Container verticalMargin>
         {props.type === 'merchant' ? (
-          <BranchInfoSidebar name={name} active="cashier" />
+          <BranchInfoSidebar active="cashier" />
         ) : null}
-        <Main>
-          <ActionBar
-            marginBottom="33px"
-            inputWidth="calc(100% - 241px)"
-            className="clr"
-          >
+        <Main fullWidth>
+          <ActionBar marginBottom="33px" inputWidth="100%" className="clr">
             <div className="iconedInput fl">
               <i className="material-icons">
                 <SearchIcon />

@@ -17,7 +17,7 @@ import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import { fetchBranchList } from '../api/MerchantAPI';
 import history from '../../utils/history';
 
-function BranchList() {
+function MerchantBranchListPage() {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
   const [branchList, setBranchList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
@@ -104,7 +104,7 @@ function BranchList() {
   };
 
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Merchant | Branches</title>
@@ -175,4 +175,4 @@ function BranchList() {
   );
 }
 
-export default BranchList;
+export default MerchantBranchListPage;

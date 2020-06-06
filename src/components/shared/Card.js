@@ -197,24 +197,5 @@ const Card = styled.div`
     font-weight: bold;
     color: ${(props) => props.theme.primary};
   }
-
-  > button,
-  .sendMoneyButton {
-    padding: 6px;
-    border-radius: 2px;
-    min-width: 0 !important;
-    border: solid 1px ${(props) => props.theme.primary};
-    color: ${(props) => props.theme.primary};
-    font-size: 11px;
-    font-weight: bold;
-    background: #fff;
-    margin-top: ${(props) =>
-    props.buttonMarginTop ? props.buttonMarginTop : '0'};
-
-    > i {
-      margin-right: 5px;
-      font-size: 11px;
-    }
-  }
 `;
 export default Card;

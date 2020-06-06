@@ -2,23 +2,12 @@ import axios from 'axios';
 import { API_URL } from '../constants';
 import notify from './Notify';
 import history from './history';
-import { verifyUrl } from '../Url';
+import { getNameBasedOnType, getUrlBasedOnType } from './urlUtils';
 
-const getUrlBasedOnType = (type, name, url) => {
-  switch (type) {
-    case 'merchant':
-      return `/merchant/${url}`;
-    case 'branch':
-      return `/merchant/branch/${name}/${url}`;
-    case 'cashier':
-      return `/merchant/cashier/${name}/${url}`;
-    default:
-      return `/`;
-  }
-};
-const forgotPassword = (type, name, reqBody) => {
+const forgotPassword = (type, reqBody) => {
+  const name = localStorage.getItem(`${type}_name`);
   axios
-    .post(`${API_URL}/common/forgotPassword`, reqBody)
+    .post(`${API_URL}/${getNameBasedOnType(type)}/forgotPassword`, reqBody)
     .then((res) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
@@ -34,16 +23,20 @@ const forgotPassword = (type, name, reqBody) => {
         }
       }
     })
-    .catch((error) => {
+    .catch((_) => {
       notify('Something Went Wrong', 'error');
     });
 };
 
-const verifyOTP = (type, name, reqBody) => {
+const verifyOTP = (type, reqBody) => {
   const mobile = localStorage.getItem(`otpNo_${type}`);
   reqBody.mobile = mobile;
+  const name = localStorage.getItem(`${type}_name`);
   axios
-    .post(`${API_URL}/common/verifyForgotPasswordOTP`, reqBody)
+    .post(
+      `${API_URL}/${getNameBasedOnType(type)}/verifyForgotPasswordOTP`,
+      reqBody,
+    )
     .then((res) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
@@ -60,8 +53,8 @@ const verifyOTP = (type, name, reqBody) => {
         }
       }
     })
-    .catch((error) => {
+    .catch((_) => {
       notify('Something Went Wrong', 'error');
     });
 };
-export { forgotPassword, verifyOTP, getUrlBasedOnType };
+export { forgotPassword, verifyOTP };

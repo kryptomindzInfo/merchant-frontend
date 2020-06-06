@@ -2,9 +2,11 @@ import axios from 'axios';
 import { API_URL, MERCHANT_API } from '../constants';
 import notify from './Notify';
 import history from './history';
-import { loginUrl, merchantDashboardUrl, verifyUrl } from '../Url';
+import { verifyUrl, merchantDashboardUrl, loginUrl } from '../Url';
+import { getNameBasedOnType, getUrlBasedOnType } from './urlUtils';
 
 const redirectUser = (type, response) => {
+  const name = localStorage.getItem(`${type}_name`);
   switch (type) {
     case 'merchant':
       localStorage.setItem('merchantLogged', JSON.stringify(response.data));
@@ -18,32 +20,18 @@ const redirectUser = (type, response) => {
     case 'branch':
       localStorage.setItem('branchLogged', JSON.stringify(response.data));
       if (response.data.details.status === 0) {
-        history.push(
-          `/merchant/branch/${response.data.details.name}/login-verify`,
-        );
+        history.push(`/merchant/branch/${name}/login-verify`);
       } else {
         history.push(`/merchant/branch/dashboard`);
       }
       break;
     case 'cashier':
       localStorage.setItem('cashierLogged', JSON.stringify(response.data));
-      history.push(`/merchant/cashier/${response.data.details.name}/dashboard`);
-      break;
-    default:
-      break;
-  }
-};
-
-const loginRedirect = (type, name) => {
-  switch (type) {
-    case 'merchant':
-      history.push(loginUrl);
-      break;
-    case 'branch':
-      history.push(`/merchant/branch/${name}/dashboard`);
-      break;
-    case 'cashier':
-      history.push(`/merchant/cashier/${name}/dashboard`);
+      if (response.data.details.status === 0) {
+        history.push(`/merchant/cashier/${name}/login-verify`);
+      } else {
+        history.push(`/merchant/cashier/dashboard`);
+      }
       break;
     default:
       break;
@@ -57,10 +45,10 @@ const login = (loginCreds) => {
       API = `${MERCHANT_API}/login`;
       break;
     case 'branch':
-      API = `${API_URL}/merchantBranch/login`;
+      API = `${API_URL}/${getNameBasedOnType(loginCreds.type)}/login`;
       break;
     case 'cashier':
-      API = `${API_URL}/merchantCashier/login`;
+      API = `${API_URL}/${getNameBasedOnType(loginCreds.type)}/login`;
       break;
     default:
       API = `${MERCHANT_API}/login`;
@@ -77,14 +65,15 @@ const login = (loginCreds) => {
         }
       }
     })
-    .catch((error) => {
+    .catch((_) => {
       notify('Something Went Wrong', 'error');
     });
 };
 
-const signInVerify = (values) => {
+const signInVerify = (values, type) => {
+  const name = localStorage.getItem(`${type}_name`);
   axios
-    .post(`${API_URL}/${values.type}/changePassword`, values.password)
+    .post(`${API_URL}/${getNameBasedOnType(type)}/changePassword`, values)
     .then((res) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
@@ -94,13 +83,14 @@ const signInVerify = (values) => {
             '. Redirecting you to login page!',
           );
           notify(successMessage, 'success');
+          const loginURL = getUrlBasedOnType(type, name, 'login');
           setTimeout(() => {
-            loginRedirect(values.type, values.name);
-          }, 1000);
+            history.push(loginURL);
+          }, 2000);
         }
       }
     })
-    .catch((error) => {
+    .catch((_) => {
       notify('Something Went Wrong', 'error');
     });
 };

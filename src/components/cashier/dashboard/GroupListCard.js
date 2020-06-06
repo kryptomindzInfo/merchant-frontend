@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { Grid, makeStyles, Tab, Tabs, withStyles } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
 import FirstPageIcon from '@material-ui/icons/FirstPage';
@@ -10,38 +10,6 @@ import { useTheme } from '@material-ui/core/styles';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import Card from '../../shared/Card';
 import Table from '../../shared/Table';
-
-const DashBoardTabs = withStyles({
-  indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    backgroundColor: 'transparent',
-    '& > div': {
-      maxWidth: 40,
-      width: '100%',
-      backgroundColor: '#417505',
-    },
-  },
-})((props) => <Tabs {...props} TabIndicatorProps={{ children: <div /> }} />);
-
-const DashboardTab = withStyles((theme) => ({
-  root: {
-    margin: '1%',
-    color: '#417505',
-    textAlign: 'center',
-    width: '50%',
-    textTransform: 'none',
-    fontSize: 21,
-    outline: 0,
-    fontWeight: theme.typography.fontWeightBold,
-  },
-  selected: {
-    '&$selected': {
-      outline: 'none',
-      border: 'none',
-    },
-  },
-}))((props) => <Tab disableRipple {...props} />);
 
 const useStyles = makeStyles(() => ({
   paper: {

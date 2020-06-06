@@ -50,7 +50,8 @@ const FrontLeftWrap = styled.section`
 
 const LandingLeftSection = (props) => {
   const classes = styles();
-  const { name } = props;
+  const { type } = props;
+  const name = localStorage.getItem(`${type}_name`);
   return (
     <FrontLeftWrap>
       <Grid
@@ -62,7 +63,7 @@ const LandingLeftSection = (props) => {
       >
         <Avatar alt="bank logo" src="" className={classes.setupPageLogo}>
           <Typography style={{ fontWeight: 'bold', fontSize: '23px' }}>
-            {name.toLocaleUpperCase(locale.default)}
+            {name.toUpperCase()}
           </Typography>
         </Avatar>
         <Typography className={classes.setupPageTitle} variant="h1">
@@ -78,9 +79,6 @@ const LandingLeftSection = (props) => {
   );
 };
 LandingLeftSection.propTypes = {
-  name: PropTypes.string,
-};
-LandingLeftSection.defaultProps = {
-  name: 'Merchant',
+  type: PropTypes.string.isRequired,
 };
 export default LandingLeftSection;

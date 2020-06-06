@@ -9,20 +9,21 @@ import SignInVerificationPage from './SignInVerificationPage';
 import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
-import Dashboard from './merchant/dashboard/Dashboard';
-import StaffList from './merchant/staff/StaffList';
-import BranchList from './merchant/branch/BranchList';
-import BranchInfo from './merchant/branch/BranchInfo';
+import MerchantDashboardPage from './merchant/dashboard/MerchantDashboardPage';
+import MerchantStaffListPage from './merchant/staff/MerchantStaffListPage';
+import MerchantBranchListPage from './merchant/branch/MerchantBranchListPage';
+import MerchantBranchInfoPage from './merchant/branch/MerchantBranchInfoPage';
 import GlobalStyle from '../styles/global-styles';
-import CashierList from './branch/cashier/CashierList';
-import CashierInfo from './branch/cashier/CashierInfo';
-import BranchSettings from './branch/settings/BranchSettings';
-import BranchDashboard from './branch/dashboard/BranchDashboard';
-import CashierDashboard from './cashier/dashboard/CashierDashboard';
-import InvoiceList from './cashier/invoice/InvoiceList';
+import MerchantCashierListPage from './branch/dashboard/CashierList';
+import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
+import BranchSettingsPage from './branch/settings/BranchSettingsPage';
+import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
+import CashierDashboardPage from './cashier/dashboard/CashierDashboardPage';
+import InvoiceListPage from './cashier/invoice/InvoiceListPage';
+import MerchantSettingsPage from './merchant/settings/MerchantSettingsPage';
+import PrivateRoute from './PrivateRoute';
 import ProtectedRoute from './ProtectedRoute';
 import {
-  branchCashiersUrl,
   branchDashboardUrl,
   branchForgotPasswordUrl,
   branchLoginUrl,
@@ -48,9 +49,8 @@ import {
   staffUrl,
   verifyUrl,
   branchCashierInfoUrl,
+  cashierVerifyUrl,
 } from './Url';
-import PrivateRoute from './PrivateRoute';
-import MerchantSettings from './merchant/settings/MerchantSettings';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -122,43 +122,43 @@ function App() {
               type="merchant"
               exact
               path={merchantDashboardUrl}
-              component={(props) => <Dashboard {...props} />}
+              component={(props) => <MerchantDashboardPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
               exact
               path={branchUrl}
-              component={(props) => <BranchList {...props} />}
+              component={(props) => <MerchantBranchListPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
               exact
               path={branchProfileUrl}
-              component={(props) => <BranchInfo {...props} />}
+              component={(props) => <MerchantBranchInfoPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
               exact
               path={staffUrl}
-              component={(props) => <StaffList {...props} />}
+              component={(props) => <MerchantStaffListPage {...props} />}
             />
             <ProtectedRoute
               exact
               type="merchant"
               path={merchantSettingsUrl}
-              component={(props) => <MerchantSettings {...props} />}
+              component={(props) => <MerchantSettingsPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
               exact
               path={cashierUrl}
-              component={(props) => <CashierList type="merchant" {...props} />}
+              component={(props) => <MerchantCashierListPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
               exact
               path={merchantCashierInfoUrl}
-              component={(props) => <CashierInfo type="merchant" {...props} />}
+              component={(props) => <BranchCashierInfoPage {...props} />}
             />
             {/* ====================== */}
             {/* Merchant Public Routes */}
@@ -172,9 +172,7 @@ function App() {
               exact
               type="merchant"
               path={verifyUrl}
-              component={(props) => (
-                <SignInVerificationPage type="merchant" {...props} />
-              )}
+              component={(props) => <SignInVerificationPage {...props} />}
             />
             <Route
               exact
@@ -196,33 +194,21 @@ function App() {
               type="branch"
               exact
               path={branchDashboardUrl}
-              component={(props) => <BranchDashboard {...props} />}
-            />
-            <ProtectedRoute
-              type="branch"
-              exact
-              path={branchCashiersUrl}
-              component={(props) => <CashierList {...props} />}
+              component={(props) => <BranchDashboardPage {...props} />}
             />
             <ProtectedRoute
               type="branch"
               exact
               path={branchCashierInfoUrl}
-              component={(props) => <CashierInfo type="branch" {...props} />}
+              component={(props) => (
+                <BranchCashierInfoPage type="branch" {...props} />
+              )}
             />
             <ProtectedRoute
               type="branch"
               exact
               path={branchSettingsUrl}
-              component={(props) => <BranchSettings {...props} />}
-            />
-            <ProtectedRoute
-              exact
-              type="branch"
-              path={branchVerifyUrl}
-              component={(props) => (
-                <SignInVerificationPage type="branch" {...props} />
-              )}
+              component={(props) => <BranchSettingsPage {...props} />}
             />
             {/* ==================== */}
             {/* Branch public Routes */}
@@ -236,6 +222,12 @@ function App() {
               exact
               path={branchLoginUrl}
               component={(props) => <SignInPage type="branch" {...props} />}
+            />
+            <ProtectedRoute
+              exact
+              type="branch"
+              path={branchVerifyUrl}
+              component={(props) => <SignInVerificationPage {...props} />}
             />
             <Route
               exact
@@ -253,17 +245,17 @@ function App() {
             {/* ============== */}
             {/* Cashier Routes */}
             {/* ============== */}
-            <Route
+            <ProtectedRoute
               type="cashier"
               exact
               path={cashierDashboardUrl}
-              component={(props) => <CashierDashboard {...props} />}
+              component={(props) => <CashierDashboardPage {...props} />}
             />
-            <Route
+            <ProtectedRoute
               type="cashier"
               exact
               path={invoiceUrl}
-              component={(props) => <InvoiceList {...props} />}
+              component={(props) => <InvoiceListPage {...props} />}
             />
             {/* ===================== */}
             {/* Cashier Public Routes */}
@@ -277,6 +269,12 @@ function App() {
               exact
               path={cashierLoginUrl}
               component={(props) => <SignInPage type="cashier" {...props} />}
+            />
+            <ProtectedRoute
+              exact
+              type="cashier"
+              path={cashierVerifyUrl}
+              component={(props) => <SignInVerificationPage {...props} />}
             />
             <Route
               exact

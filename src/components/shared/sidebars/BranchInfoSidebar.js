@@ -72,7 +72,7 @@ class BranchInfoSidebar extends Component {
     const block = this.props.active === 'block';
     const bt = this.props.blockTxt === 1 ? 'Block' : 'Unblock';
     const infoType = this.props.type;
-    const { name } = this.props;
+    const name = localStorage.getItem(`branch_name`);
     return (
       <SidebarStyle marginRight>
         <A href={`/merchant/branch/info/${name}`}>

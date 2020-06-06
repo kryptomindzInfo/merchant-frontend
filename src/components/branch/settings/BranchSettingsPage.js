@@ -9,15 +9,17 @@ import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 
-function BranchSettings(props) {
+function BranchSettingsPage(props) {
   /* if (isLoading) {
     return <Loader fullPage />;
   } */
+  const name = localStorage.getItem(`branch_name`);
+
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Branch | Merchant | E-WALLET</title>
+        <title>Branch | {name.toUpperCase()} | Settings</title>
       </Helmet>
       <MerchantHeader page="info" goto="/branch/dashboard" />
       <Container verticalMargin>
@@ -86,4 +88,4 @@ function BranchSettings(props) {
   );
 }
 
-export default BranchSettings;
+export default BranchSettingsPage;

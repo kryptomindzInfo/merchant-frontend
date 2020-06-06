@@ -31,10 +31,18 @@ const ForgotPasswordPage = (props) => {
   const { name } = match.params;
   const [isLoading, setLoading] = React.useState(false);
 
+  if (type === 'merchant') {
+    localStorage.setItem(`${type}_name`, 'merchant');
+  } else {
+    localStorage.setItem(`${type}_name`, name);
+  }
+
   return (
     <Fragment>
       <Helmet>
-        <title>{type.toUpperCase()} | Forgot Password</title>
+        <title>
+          {type.toUpperCase()} | {name.toUpperCase()} | Forgot Password
+        </title>
         <meta
           name="description"
           content="Description of Forgot Password page"
@@ -48,7 +56,7 @@ const ForgotPasswordPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection name={name} />
+          <LandingLeftSection type={type} />
         </Grid>
         <Grid
           item
@@ -77,7 +85,7 @@ const ForgotPasswordPage = (props) => {
             onSubmit={(values) => {
               const body = { ...values, user_type: type };
               setLoading(true);
-              forgotPassword(type, name, body);
+              forgotPassword(type, body);
               setLoading(false);
             }}
           >

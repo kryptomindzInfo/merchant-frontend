@@ -20,17 +20,7 @@ function CreateInvoicePopup(props) {
         onSubmit={{}}
       >
         {(formikProps) => {
-          const {
-            values,
-            touched,
-            errors,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleFocus,
-            setFieldValue,
-          } = formikProps;
+          const { values, isSubmitting } = formikProps;
 
           return (
             <div>

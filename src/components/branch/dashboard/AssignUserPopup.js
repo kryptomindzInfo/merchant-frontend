@@ -6,9 +6,9 @@ import Button from '../../shared/Button';
 import TextInput from '../../shared/TextInput';
 import Loader from '../../shared/Loader';
 import SelectInput from '../../shared/SelectInput';
+import { inputFocus, inputBlur } from '../../utils/handleInputFocus';
 
 function AssignUserPopup(props) {
-  const token = localStorage.getItem('bankLogged');
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
@@ -30,17 +30,7 @@ function AssignUserPopup(props) {
         onSubmit={{}}
       >
         {(formikProps) => {
-          const {
-            values,
-            touched,
-            errors,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleFocus,
-            setFieldValue,
-          } = formikProps;
+          const { values, handleChange, handleBlur } = formikProps;
 
           return (
             <div>
@@ -50,13 +40,19 @@ function AssignUserPopup(props) {
                 <TextInput
                   type="text"
                   name="name"
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.name}
                   readOnly
                   autoFocus
                   onChange={handleChange}
-                  required
                 />
               </FormGroup>
               <FormGroup mR="10%" mL="10%">
@@ -64,20 +60,23 @@ function AssignUserPopup(props) {
                 <TextInput
                   type="text"
                   name="bcode"
-                  autoFocus
-                  onFocus={handleFocus}
-                  onBlur={handleBlur}
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
                   value={values.bcode}
                   onChange={handleChange}
                   readOnly
-                  required
                 />
               </FormGroup>
               <FormGroup mR="10%" mL="10%">
                 <label>Assign User*</label>
                 <SelectInput
-                  onFocus={handleFocus}
-                  autoFocus
                   onChange={handleChange}
                   onBlur={handleBlur}
                   value={values.bank_user_id}
@@ -86,7 +85,7 @@ function AssignUserPopup(props) {
                   required
                 >
                   <option value="">Select User</option>
-                  {values.users.map(function (b) {
+                  {values.users.map((b) => {
                     return (
                       <option key={b._id} value={b._id}>
                         {b.name}

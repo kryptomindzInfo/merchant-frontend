@@ -1,12 +1,13 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { getUrlBasedOnType } from './utils/ForgotPasswordAPI';
+import { getUrlBasedOnType } from './utils/urlUtils';
 
-const PrivateRoute = ({ type, match, component: Component, ...rest }) => {
+const PrivateRoute = ({ type, component: Component, ...rest }) => {
   const mobile = JSON.parse(localStorage.getItem(`otpNo_${type}`));
+  const name = localStorage.getItem(`${type}_name`);
   const pathNameBasedOnType = () =>
-    getUrlBasedOnType(type, match.params.name, 'forgot-password');
+    getUrlBasedOnType(type, name, 'forgot-password');
   if (mobile) {
     return (
       <Route

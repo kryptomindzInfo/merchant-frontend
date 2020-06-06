@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Form, Formik } from 'formik';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
@@ -7,11 +7,18 @@ import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
 import Loader from '../../shared/Loader';
-import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
+import {
+  inputBlur,
+  inputFocus,
+  correctFocus,
+} from '../../utils/handleInputFocus';
 import { zoneAPI } from '../../merchant/api/MerchantAPI';
 import { cashierAPI } from '../api/CashierAPI';
 
 function EditCashierPopup(props) {
+  useEffect(() => {
+    correctFocus(props.type);
+  });
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
@@ -35,14 +42,9 @@ function EditCashierPopup(props) {
         {(formikProps) => {
           const {
             values,
-            touched,
-            errors,
             isSubmitting,
             handleChange,
             handleBlur,
-            handleSubmit,
-            handleFocus,
-            setFieldValue,
           } = formikProps;
 
           return (
@@ -97,8 +99,15 @@ function EditCashierPopup(props) {
                       <TextInput
                         type="time"
                         name="working_from"
-                        onFocus={inputFocus}
-                        onBlur={inputBlur}
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         min="00:00"
                         max="23:00"
                         value={values.working_from}
@@ -115,8 +124,15 @@ function EditCashierPopup(props) {
                         min="00:00"
                         max="23:00"
                         name="working_to"
-                        onFocus={inputFocus}
-                        onBlur={inputBlur}
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         value={values.working_to}
                         onChange={handleChange}
                         required

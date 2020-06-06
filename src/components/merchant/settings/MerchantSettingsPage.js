@@ -13,7 +13,7 @@ import EditMerchantPopup from './EditMerchantPopup';
 import Loader from '../../shared/Loader';
 import SettingSideBar from './SettingSidebar';
 
-const MerchantSettings = (props) => {
+const MerchantSettingsPage = (props) => {
   const [editMerchantPopup, setEditMerchantPopup] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [merchantInfo, setMerchantInfo] = useState({});
@@ -41,10 +41,10 @@ const MerchantSettings = (props) => {
     return <Loader fullPage />;
   }
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | E-WALLET</title>
+        <title>Merchant | Settings</title>
       </Helmet>
       <MerchantHeader />
       <Container verticalMargin>
@@ -109,4 +109,4 @@ const MerchantSettings = (props) => {
     </Wrapper>
   );
 };
-export default MerchantSettings;
+export default MerchantSettingsPage;

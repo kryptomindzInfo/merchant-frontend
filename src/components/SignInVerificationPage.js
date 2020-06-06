@@ -34,14 +34,18 @@ const validationSchema = Yup.object().shape({
 
 const SignInVerificationPage = (props) => {
   const classes = styles();
-  const { type, match } = props;
-  const { name } = match.params;
+  const { type } = props;
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState(false);
+
+  const name = localStorage.getItem(`${type}_name`);
+
   return (
     <Fragment>
       <Helmet>
-        <title>{type.toUpperCase()} | Login Verification</title>
+        <title>
+          {type.toUpperCase()} | {name.toUpperCase()} | Login Verification
+        </title>
         <meta name="description" content="Description of SignUp page" />
       </Helmet>
       <Grid
@@ -52,7 +56,7 @@ const SignInVerificationPage = (props) => {
         alignItems="center"
       >
         <Grid item md={6} className={classes.setupPageLeftSide}>
-          <LandingLeftSection name={name} />
+          <LandingLeftSection type={type} />
         </Grid>
         <Grid
           item
@@ -84,7 +88,7 @@ const SignInVerificationPage = (props) => {
                 password: values.newPassword,
                 name,
               };
-              signInVerify(payload);
+              signInVerify(payload, type);
             }}
           >
             {(formikProps) => {

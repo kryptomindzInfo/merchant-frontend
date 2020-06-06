@@ -10,22 +10,24 @@ import CashierWallet from './CashierWallets';
 import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
 
-function CashierInfo(props) {
-  const { type, match } = props;
-  const { name, id } = match.params;
+function BranchCashierInfoPage(props) {
+  const { match } = props;
+  const { id } = match.params;
   /* if (isLoading) {
     return <Loader fullPage />;
   } */
+
+  const name = localStorage.getItem(`branch_name`);
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Branch | Merchant | E-WALLET</title>
+        <title>Branch | {name.toUpperCase()} | Info</title>
       </Helmet>
       <BranchHeader
         page="info"
         middleTitle={id}
-        goto="/merchant/branch/cashiers"
+        goto="/merchant/branch/dashboard"
       />
       <Container verticalMargin>
         <BranchInfoSidebar active="info" bankName="Kotak" type="Cashier" />
@@ -80,4 +82,4 @@ function CashierInfo(props) {
   );
 }
 
-export default CashierInfo;
+export default BranchCashierInfoPage;

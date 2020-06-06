@@ -16,7 +16,7 @@ import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import { fetchStaffList } from '../api/MerchantAPI';
 import Loader from '../../shared/Loader';
 
-const StaffList = () => {
+const MerchantStaffListPage = () => {
   const [staff, setStaff] = useState([]);
   const [showStaffPopup, setStaffPopup] = useState(false);
   const [popupType, setPopupType] = React.useState('new');
@@ -88,7 +88,7 @@ const StaffList = () => {
   }
 
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Merchant | Staff</title>
@@ -135,4 +135,4 @@ const StaffList = () => {
   );
 };
 
-export default StaffList;
+export default MerchantStaffListPage;

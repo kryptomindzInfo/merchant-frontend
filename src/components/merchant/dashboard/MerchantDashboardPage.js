@@ -13,7 +13,7 @@ import Main from '../../shared/Main';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import ZoneCard from './ZoneCard';
 
-const Dashboard = () => {
+const MerchantDashboardPage = () => {
   const merchantDetails = JSON.parse(localStorage.getItem('merchantLogged'))
     .details;
   const noOfInvoicesPaid = parseFloat(merchantDetails.bills_paid);
@@ -44,4 +44,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default MerchantDashboardPage;

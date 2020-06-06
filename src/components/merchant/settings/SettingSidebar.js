@@ -61,7 +61,7 @@ class SettingSidebar extends Component {
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>
-        <A href="/merchant/info">
+        <A href="/merchant/settings">
           <Card rounded selected={info} className="sideNav">
             <i className="material-icons">
               <PersonIcon />

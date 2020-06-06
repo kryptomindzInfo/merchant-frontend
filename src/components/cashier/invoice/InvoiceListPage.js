@@ -19,10 +19,10 @@ import InvoiceCards from './InvoiceCards';
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
+import Row from '../../shared/Row';
+import Col from '../../shared/Col';
 
-function InvoiceList(props) {
-  const { match } = props;
-  const { name } = match.params;
+function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [invoiceList, setInvoiceList] = React.useState([]);
@@ -113,13 +113,15 @@ function InvoiceList(props) {
     return <Loader fullPage />;
   }
 
+  const name = localStorage.getItem(`cashier_name`);
+
   return (
-    <Wrapper from="merchant">
+    <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>{`${name} | Invoice`}</title>
+        <title>Cashier | ${name.toUpperCase()} | Invoice</title>
       </Helmet>
-      <CashierHeader active="invoice" name={name} />
+      <CashierHeader active="invoice" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
         <Main fullWidth>
           <InvoiceCards />
@@ -135,31 +137,28 @@ function InvoiceList(props) {
               </i>
               <input type="text" placeholder="Search Invoices" />
             </div>
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                marginLeft: '30px',
-              }}
-            >
-              <Button
-                className="addBankButton"
-                flex
-                style={{ marginBottom: '30px' }}
-                onClick={() => handleCreateInvoicePopupClick('new', {})}
-              >
-                <AddIcon className="material-icons" />
-                <span>Create Invoice</span>
-              </Button>
-              <Button
-                className="addBankButton"
-                flex
-                onClick={() => handleUploadInvoicePopupClick()}
-              >
-                <AddIcon className="material-icons" />
-                <span>Upload Invoice</span>
-              </Button>
-            </div>
+            <Row justify="space-between" mL="30px">
+              <Col cW="100%">
+                <Button
+                  className="addBankButton"
+                  flex
+                  onClick={() => handleCreateInvoicePopupClick('new', {})}
+                >
+                  <AddIcon className="material-icons" />
+                  <span>Create Invoice</span>
+                </Button>
+              </Col>
+              <Col cW="100%">
+                <Button
+                  className="addBankButton"
+                  flex
+                  onClick={() => handleUploadInvoicePopupClick()}
+                >
+                  <AddIcon className="material-icons" />
+                  <span>Upload Invoice</span>
+                </Button>
+              </Col>
+            </Row>
           </ActionBar>
           <Card bigPadding>
             <div className="cardHeader">
@@ -219,4 +218,4 @@ function InvoiceList(props) {
   );
 }
 
-export default InvoiceList;
+export default InvoiceListPage;

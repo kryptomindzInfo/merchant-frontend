@@ -11,16 +11,15 @@ import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
 import CreateGroupCard from './CreateGroupCard';
 
-const CashierDashboard = (props) => {
-  const { match } = props;
-  const { name } = match.params;
+const CashierDashboardPage = (props) => {
+  const name = localStorage.getItem(`cashier_name`);
   return (
     <Fragment>
       <Helmet>
-        <title>Cashier | Dashboard</title>
+        <title>Cashier| {name.toUpperCase()} | Dashboard</title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <CashierHeader name={name} />
+      <CashierHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
           <Row>
@@ -36,4 +35,4 @@ const CashierDashboard = (props) => {
   );
 };
 
-export default CashierDashboard;
+export default CashierDashboardPage;
