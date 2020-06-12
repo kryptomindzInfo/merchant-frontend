@@ -41,8 +41,8 @@ const ForgotPasswordPage = (props) => {
     <Fragment>
       <Helmet>
         <title>
-          {name === 'merchant'
-            ? `${type.toUpperCase()} | Login Verification`
+          {type === 'merchant'
+            ? `${type.toUpperCase()} | Forgot Password`
             : `${type.toUpperCase()} | ${name.toUpperCase()} | Forgot Password`}
         </title>
         <meta

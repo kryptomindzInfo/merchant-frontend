@@ -34,8 +34,8 @@ const OTPForgotPasswordPage = (props) => {
     <Fragment>
       <Helmet>
         <title>
-          {name === 'merchant'
-            ? `${type.toUpperCase()} | Login Verification`
+          {type === 'merchant'
+            ? `${type.toUpperCase()} | OTP Forgot Password`
             : `${type.toUpperCase()} | ${name.toUpperCase()} | OTP Forgot Password`}
         </title>
         <meta

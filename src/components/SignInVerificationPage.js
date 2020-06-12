@@ -44,7 +44,7 @@ const SignInVerificationPage = (props) => {
     <Fragment>
       <Helmet>
         <title>
-          {name === 'merchant'
+          {type === 'merchant'
             ? `${type.toUpperCase()} | Login Verification`
             : `${type.toUpperCase()} | ${name.toUpperCase()} | Login Verification`}
         </title>
