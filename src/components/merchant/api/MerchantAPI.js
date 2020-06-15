@@ -203,6 +203,55 @@ const editMerchant = async (props, values, token) => {
   }
 };
 
+const getRules = async (ruleType) => {
+  try {
+    let URL = '';
+    if (ruleType === 'Revenue') {
+      URL = `${MERCHANT_API}/merchantFee/getRule`;
+    } else {
+      URL = `${MERCHANT_API}/commission/getRule`;
+    }
+    const res = await axios.get(URL);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.rules, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const ruleAPI = async (props, ruleType, ruleStatus, payload) => {
+  let URL = '';
+  if (ruleType === 'Revenue') {
+    URL = `${MERCHANT_API}/merchantFee/${ruleStatus}`;
+  } else {
+    URL = `${MERCHANT_API}/commission/${ruleStatus}`;
+  }
+  try {
+    const res = await axios.post(URL, payload);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshRuleList();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
 export {
   branchAPI,
   fetchBranchList,
@@ -213,4 +262,6 @@ export {
   fetchStaffList,
   fetchDashboardHistory,
   editMerchant,
+  getRules,
+  ruleAPI,
 };

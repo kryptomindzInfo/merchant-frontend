@@ -3,6 +3,8 @@ import styled from 'styled-components';
 const Card = styled.div`
   display: block;
   width: ${(props) => (props.cardWidth ? props.cardWidth : '100%')};
+  margin-top: ${(props) =>
+    props.topMargin ? props.topMargin : '0'};
   margin-left: ${(props) =>
     props.horizontalMargin ? props.horizontalMargin : '0'};
   margin-right: ${(props) =>

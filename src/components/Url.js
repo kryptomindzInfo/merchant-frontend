@@ -10,6 +10,8 @@ const cashierUrl = '/merchant/cashiers/:name';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
 const branchProfileUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/settings';
+const revenueSharingRules = '/merchant/settings/revenue-sharing-rules';
+const commissionSharingRules = '/merchant/settings/commission-sharing-rules';
 
 // branch URL's
 const defaultBranchLoginUrl = '/merchant/branch/:name';
@@ -41,6 +43,8 @@ export {
   staffUrl,
   cashierUrl,
   merchantSettingsUrl,
+  revenueSharingRules,
+  commissionSharingRules,
   branchLoginUrl,
   branchProfileUrl,
   branchDashboardUrl,

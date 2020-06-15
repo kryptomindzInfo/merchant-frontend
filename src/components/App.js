@@ -23,7 +23,9 @@ import InvoiceListPage from './cashier/invoice/InvoiceListPage';
 import MerchantSettingsPage from './merchant/settings/MerchantSettingsPage';
 import PrivateRoute from './PrivateRoute';
 import ProtectedRoute from './ProtectedRoute';
+import SharingRulesPage from './merchant/settings/SharingRulesPage';
 import {
+  branchCashierInfoUrl,
   branchDashboardUrl,
   branchForgotPasswordUrl,
   branchLoginUrl,
@@ -34,22 +36,23 @@ import {
   branchVerifyUrl,
   cashierDashboardUrl,
   cashierForgotPasswordUrl,
-  merchantCashierInfoUrl,
   cashierLoginUrl,
   cashierOtpUrl,
   cashierUrl,
+  cashierVerifyUrl,
+  commissionSharingRules,
   defaultBranchLoginUrl,
   defaultCashierLoginUrl,
   forgotPasswordUrl,
   invoiceUrl,
   loginUrl,
+  merchantCashierInfoUrl,
   merchantDashboardUrl,
   merchantSettingsUrl,
   otpUrl,
+  revenueSharingRules,
   staffUrl,
   verifyUrl,
-  branchCashierInfoUrl,
-  cashierVerifyUrl,
 } from './Url';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
@@ -159,6 +162,22 @@ function App() {
               exact
               path={merchantCashierInfoUrl}
               component={(props) => <BranchCashierInfoPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={revenueSharingRules}
+              component={(props) => (
+                <SharingRulesPage ruleType="Revenue" {...props} />
+              )}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={commissionSharingRules}
+              component={(props) => (
+                <SharingRulesPage ruleType="Commission" {...props} />
+              )}
             />
             {/* ====================== */}
             {/* Merchant Public Routes */}

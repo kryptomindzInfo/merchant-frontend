@@ -57,7 +57,8 @@ class SettingSidebar extends Component {
   render() {
     const info = this.props.active === 'info';
     const documents = this.props.active === 'documents';
-    const security = this.props.active === 'security';
+    const revenue = this.props.active === 'Revenue';
+    const commission = this.props.active === 'Commission';
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>
@@ -77,12 +78,20 @@ class SettingSidebar extends Component {
             <h3>Documents</h3>
           </Card>
         </A>
-        <A>
-          <Card rounded selected={security} className="sideNav">
+        <A href="/merchant/settings/revenue-sharing-rules">
+          <Card rounded selected={revenue} className="sideNav">
             <i className="material-icons">
               <MobileScreenShareIcon />
             </i>
-            <h3>Security</h3>
+            <h3>Revenue Sharing Rules</h3>
+          </Card>
+        </A>
+        <A href="/merchant/settings/commission-sharing-rules">
+          <Card rounded selected={commission} className="sideNav">
+            <i className="material-icons">
+              <MobileScreenShareIcon />
+            </i>
+            <h3>Commission Sharing Rules</h3>
           </Card>
         </A>
       </SidebarStyle>
