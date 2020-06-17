@@ -53,6 +53,7 @@ import {
   revenueSharingRules,
   staffUrl,
   verifyUrl,
+  zoneBranchUrl,
 } from './Url';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
@@ -130,7 +131,7 @@ function App() {
             <ProtectedRoute
               type="merchant"
               exact
-              path={branchUrl}
+              path={zoneBranchUrl}
               component={(props) => <MerchantBranchListPage {...props} />}
             />
             <ProtectedRoute
@@ -191,7 +192,9 @@ function App() {
               exact
               type="merchant"
               path={verifyUrl}
-              component={(props) => <SignInVerificationPage {...props} />}
+              component={(props) => (
+                <SignInVerificationPage type="merchant" {...props} />
+              )}
             />
             <Route
               exact

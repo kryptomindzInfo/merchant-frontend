@@ -25,9 +25,12 @@ const SharingRulesPage = (props) => {
 
   const refreshRuleList = () => {
     setLoading(true);
-    const rules = getRules(props.ruleType);
-    setRules(rules.list);
-    setLoading(rules.loading);
+    setRuleForApproval({});
+    setApprovalPopup(false);
+    getRules(props.ruleType).then((rules) => {
+      setRules(rules.list);
+      setLoading(rules.loading);
+    });
   };
 
   useEffect(() => {
@@ -46,7 +49,11 @@ const SharingRulesPage = (props) => {
 
   const rules = () => {
     return ruleList.map((rule) => {
-      const r = rule.revenue_sharing_rule.infra_share;
+      const r = rule.ranges;
+      if (rule.edited && rule.edited.ranges.length > 0) {
+        rule.ranges = rule.edited.ranges;
+        rule.merchant_approve_status = rule.edited.merchant_approve_status;
+      }
       return (
         <tr key={rule._id}>
           <td>
@@ -57,28 +64,36 @@ const SharingRulesPage = (props) => {
             )}
           </td>
           <td className="tac">
-            {rule.status === 0 ? (
-              <span>{rule.trans_type}</span>
-            ) : (
-              <span>{rule.trans_type}</span>
-            )}
+            <span>
+              {' '}
+              {r.type === 0 ? 'Wallet to Merchant' : 'Non-wallet to Merchant'}
+            </span>
           </td>
           <td>
             <div>
-              Fixed: <span className="green">{`${CURRENCY} ${r.fixed}`}</span>,
-              Percentage: <span className="green">{r.percentage}</span>
+              {r.map((range) => {
+                return (
+                  <span key={r._id}>
+                    Range:{' '}
+                    {`${CURRENCY} ${range.trans_from} - ${CURRENCY} ${range.trans_to}`}{' '}
+                    <br />
+                    Fixed: {`${CURRENCY} ${range.fixed}`} <br />
+                    Percentage: {`${range.percentage}`} <br />
+                  </span>
+                );
+              })}
             </div>
           </td>
 
           <td className="tac bold">
-            {rule.status === 2 ? (
+            {rule.merchant_approve_status === 0 ? (
               <Button
                 onClick={() => onApprovalPopupClick(rule)}
                 className="addBankButton"
               >
                 <span>Approve</span>
               </Button>
-            ) : rule.status === 1 ? (
+            ) : rule.merchant_approve_status === 1 ? (
               <span>Approved</span>
             ) : (
               <span>Declined</span>
@@ -100,7 +115,7 @@ const SharingRulesPage = (props) => {
       </Helmet>
       <MerchantHeader
         page="info"
-        middleTitle={`${props.ruleType} Revenue Sharing Rules`}
+        middleTitle={`${props.ruleType} Sharing Rules`}
         goto="/dashboard"
       />
       <Container verticalMargin>
@@ -126,7 +141,10 @@ const SharingRulesPage = (props) => {
                     <th />
                   </tr>
                 </thead>
-                <tbody>{rules && rules.length > 0 ? rules() : null}</tbody>
+                <tbody>
+                  {' '}
+                  {ruleList && ruleList.length > 0 ? rules() : null}
+                </tbody>
               </Table>
             </div>
           </Card>
@@ -137,16 +155,19 @@ const SharingRulesPage = (props) => {
           <div>
             <form>
               <p>
-                <span id="popname">demo</span>
+                <span id="popname">Approve Rule?</span>
               </p>
               <p>
                 {' '}
-                Sending from <span id="poptype">demo</span>
+                Rule Name : <span id="poptype">{ruleForApproval.name}</span>
+                Transaction Type :{' '}
+                <span id="poptype">
+                  {' '}
+                  {ruleForApproval.type === 0
+                    ? 'Wallet to Merchant'
+                    : 'Non-wallet to Merchant'}
+                </span>
               </p>
-              <div>
-                Fixed: <span className="green">{`${CURRENCY} 100`}</span>,
-                Percentage: <span className="green">2</span>
-              </div>
 
               <Row>
                 <Col>
@@ -168,12 +189,11 @@ const SharingRulesPage = (props) => {
                         accentedBtn
                         type="button"
                         onClick={() =>
-                          ruleAPI(
-                            props,
-                            props.ruleType,
-                            'decline',
-                            ruleForApproval,
-                          )
+                          ruleAPI(props, props.ruleType, 'decline', {
+                            fee_id: ruleForApproval._id,
+                          }).then(() => {
+                            refreshRuleList();
+                          })
                         }
                       >
                         <span>Decline</span>
@@ -190,12 +210,11 @@ const SharingRulesPage = (props) => {
                     ) : (
                       <Button
                         onClick={() =>
-                          ruleAPI(
-                            props,
-                            props.ruleType,
-                            'approve',
-                            ruleForApproval,
-                          )
+                          ruleAPI(props, props.ruleType, 'approve', {
+                            fee_id: ruleForApproval._id,
+                          }).then(() => {
+                            refreshRuleList();
+                          })
                         }
                         filledBtn
                         marginTop="50px"

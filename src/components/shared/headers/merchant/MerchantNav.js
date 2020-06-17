@@ -20,7 +20,6 @@ const Link = styled.span`
 class MerchantNav extends Component {
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
-    const branches = this.props.active === 'branch' ? 'true' : '';
     const cashier = this.props.active === 'cashier' ? 'true' : '';
     const staff = this.props.active === 'staff' ? 'true' : '';
     const reports = this.props.active === 'reports' ? 'true' : '';
@@ -30,9 +29,6 @@ class MerchantNav extends Component {
         <NavTag>
           <A href="/merchant/dashboard">
             <Link active={dashboard}>Dashboard</Link>
-          </A>
-          <A href="/merchant/branches">
-            <Link active={branches}>Branches</Link>
           </A>
           <A href="/merchant/staff">
             <Link active={staff}>Staff</Link>

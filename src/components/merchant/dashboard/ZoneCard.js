@@ -8,6 +8,7 @@ import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import CreateZonePopup from './CreateZonePopup';
 import { fetchZoneList } from '../api/MerchantAPI';
+import A from '../../shared/A';
 
 function ZoneCard() {
   const [openZonePopup, setZonePopup] = React.useState(false);
@@ -58,6 +59,9 @@ function ZoneCard() {
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
+                  <A href={`/merchant/${zone._id}/branches`}>
+                    <span>Branches</span>
+                  </A>
                   <span onClick={() => handleZonePopupClick('update', zone)}>
                     Edit
                   </span>

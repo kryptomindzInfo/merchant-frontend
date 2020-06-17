@@ -4,7 +4,7 @@ const verifyUrl = '/merchant/login-verify';
 const loginUrl = '/merchant/login';
 const forgotPasswordUrl = '/merchant/forgot-password';
 const otpUrl = '/merchant/otp-forgot-password';
-const branchUrl = '/merchant/branches';
+const zoneBranchUrl = '/merchant/:id/branches';
 const staffUrl = '/merchant/staff';
 const cashierUrl = '/merchant/cashiers/:name';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
@@ -39,7 +39,7 @@ export {
   loginUrl,
   forgotPasswordUrl,
   otpUrl,
-  branchUrl,
+  zoneBranchUrl,
   staffUrl,
   cashierUrl,
   merchantSettingsUrl,

@@ -17,12 +17,14 @@ import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import { fetchBranchList } from '../api/MerchantAPI';
 import history from '../../utils/history';
 
-function MerchantBranchListPage() {
+function MerchantBranchListPage(props) {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
   const [branchList, setBranchList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
   const [editingBranch, setEditingBranch] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
+  const { match } = props;
+  const { id } = match.params;
 
   const handleBranchPopupClick = (type, merchant) => {
     setEditingBranch(merchant);
@@ -166,6 +168,7 @@ function MerchantBranchListPage() {
       {addBranchPopup ? (
         <CreateBranchPopup
           type={popupType}
+          zoneId={id}
           branch={editingBranch}
           refreshBranchList={(data) => refreshBranchList()}
           onClose={() => onPopupClose()}

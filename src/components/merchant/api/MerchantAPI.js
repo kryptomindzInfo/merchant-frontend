@@ -86,8 +86,6 @@ const fetchZoneList = async () => {
 // API's for Merchant Branches
 const branchAPI = async (props, values, apiType) => {
   let API = '';
-  // temperorily add zone_id
-  values.zone_id = 'demo';
   if (apiType === 'update') {
     API = '/editBranch';
   } else {
@@ -207,9 +205,9 @@ const getRules = async (ruleType) => {
   try {
     let URL = '';
     if (ruleType === 'Revenue') {
-      URL = `${MERCHANT_API}/merchantFee/getRule`;
+      URL = `${MERCHANT_API}/merchantFee/getRules`;
     } else {
-      URL = `${MERCHANT_API}/commission/getRule`;
+      URL = `${MERCHANT_API}/commission/getRules`;
     }
     const res = await axios.get(URL);
     if (res.status === 200) {
@@ -241,8 +239,6 @@ const ruleAPI = async (props, ruleType, ruleStatus, payload) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        props.refreshRuleList();
-        props.onClose();
       }
     } else {
       notify(res.data.message, 'error');
