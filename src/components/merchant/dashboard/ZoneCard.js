@@ -59,7 +59,7 @@ function ZoneCard() {
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
-                  <A href={`/merchant/${zone._id}/branches`}>
+                  <A href={`/merchant/${zone.code}/branches`}>
                     <span>Branches</span>
                   </A>
                   <span onClick={() => handleZonePopupClick('update', zone)}>

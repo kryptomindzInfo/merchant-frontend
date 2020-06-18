@@ -7,8 +7,9 @@ import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
-import BranchInfoSidebar from '../../shared/sidebars/BranchInfoSidebar';
+import MerchantBranchInfoSidebar from './MerchantBranchInfoSidebar';
 import CreateBranchPopup from './CreateBranchPopup';
+import { blockMerchantBranch, unblockMerchantBranch } from '../api/MerchantAPI';
 
 function MerchantBranchInfoPage(props) {
   const [branchInfo, setBranchInfo] = useState({});
@@ -35,14 +36,25 @@ function MerchantBranchInfoPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Branch | {branchInfo.name.toUpperCase()} | Info</title>
+        <title>Branch | MERCHANT | E-WALLET</title>
       </Helmet>
       <MerchantHeader page="info" middleTitle={id} goto="/merchant/branches" />
       <Container verticalMargin>
-        <BranchInfoSidebar
+        <MerchantBranchInfoSidebar
           edit={() => handleBranchEdit()}
           name={branchInfo.name}
           active="info"
+          blockStatus={branchInfo.status}
+          block={() =>
+            blockMerchantBranch(branchInfo._id).then(() => {
+              setBranchInfo({ ...branchInfo, status: 2 });
+            })
+          }
+          unblock={() =>
+            unblockMerchantBranch(branchInfo._id).then(() => {
+              setBranchInfo({ ...branchInfo, status: 0 });
+            })
+          }
         />
         <Main>
           <Card bigPadding bordered>

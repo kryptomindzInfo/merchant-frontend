@@ -14,7 +14,6 @@ import MerchantStaffListPage from './merchant/staff/MerchantStaffListPage';
 import MerchantBranchListPage from './merchant/branch/MerchantBranchListPage';
 import MerchantBranchInfoPage from './merchant/branch/MerchantBranchInfoPage';
 import GlobalStyle from '../styles/global-styles';
-import MerchantCashierListPage from './branch/dashboard/CashierList';
 import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
@@ -38,7 +37,7 @@ import {
   cashierForgotPasswordUrl,
   cashierLoginUrl,
   cashierOtpUrl,
-  cashierUrl,
+  merchantCashierUrl,
   cashierVerifyUrl,
   commissionSharingRules,
   defaultBranchLoginUrl,
@@ -55,6 +54,7 @@ import {
   verifyUrl,
   zoneBranchUrl,
 } from './Url';
+import MerchantCashierListPage from './merchant/branch/MerchantCashierListPage';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -155,8 +155,10 @@ function App() {
             <ProtectedRoute
               type="merchant"
               exact
-              path={cashierUrl}
-              component={(props) => <MerchantCashierListPage {...props} />}
+              path={merchantCashierUrl}
+              component={(props) => (
+                <MerchantCashierListPage type="merchant" {...props} />
+              )}
             />
             <ProtectedRoute
               type="merchant"

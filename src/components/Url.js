@@ -6,7 +6,7 @@ const forgotPasswordUrl = '/merchant/forgot-password';
 const otpUrl = '/merchant/otp-forgot-password';
 const zoneBranchUrl = '/merchant/:id/branches';
 const staffUrl = '/merchant/staff';
-const cashierUrl = '/merchant/cashiers/:name';
+const merchantCashierUrl = '/merchant/:id/cashiers';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
 const branchProfileUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/settings';
@@ -41,7 +41,7 @@ export {
   otpUrl,
   zoneBranchUrl,
   staffUrl,
-  cashierUrl,
+  merchantCashierUrl,
   merchantSettingsUrl,
   revenueSharingRules,
   commissionSharingRules,

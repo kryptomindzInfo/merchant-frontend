@@ -129,6 +129,44 @@ const fetchBranchList = async () => {
   }
 };
 
+const blockMerchantBranch = async (branchId) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/blockBranch`, {
+      branch_id: branchId,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.data, 'success');
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const unblockMerchantBranch = async (branchId) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/unblockBranch`, {
+      branch_id: branchId,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.data, 'success');
+      }
+    } else {
+      notify(res.data.data, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 // API's for Merchant Staff
 
 const staffAPI = async (props, values, apiType) => {
@@ -248,6 +286,53 @@ const ruleAPI = async (props, ruleType, ruleStatus, payload) => {
   }
 };
 
+// Merchant Cashier APIs
+
+const merchantCashierAPI = async (props, values, apiType) => {
+  let URL = '';
+  if (apiType === 'update') {
+    URL = `${MERCHANT_API}/editCashier`;
+  } else {
+    URL = `${MERCHANT_API}/addCashier`;
+  }
+  try {
+    const res = await axios.post(URL, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshCashierList();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const getMerchantCashier = async () => {
+  try {
+    const res = await axios.get(`${MERCHANT_API}/listCashier`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.cashiers, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
 export {
   branchAPI,
   fetchBranchList,
@@ -260,4 +345,8 @@ export {
   editMerchant,
   getRules,
   ruleAPI,
+  blockMerchantBranch,
+  unblockMerchantBranch,
+  merchantCashierAPI,
+  getMerchantCashier,
 };

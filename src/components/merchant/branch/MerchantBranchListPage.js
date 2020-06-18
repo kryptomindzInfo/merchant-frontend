@@ -14,7 +14,11 @@ import CreateBranchPopup from './CreateBranchPopup';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-import { fetchBranchList } from '../api/MerchantAPI';
+import {
+  blockMerchantBranch,
+  fetchBranchList,
+  unblockMerchantBranch,
+} from '../api/MerchantAPI';
 import history from '../../utils/history';
 
 function MerchantBranchListPage(props) {
@@ -45,19 +49,15 @@ function MerchantBranchListPage(props) {
   };
 
   const refreshBranchList = async () => {
-    const data = await fetchBranchList();
-    setBranchList(data.list);
-    setLoading(data.loading);
+    setLoading(true);
+    fetchBranchList().then((data) => {
+      setBranchList(data.list);
+      setLoading(data.loading);
+    });
   };
 
   useEffect(() => {
-    setLoading(true);
-    const getBranchList = async () => {
-      const data = await fetchBranchList();
-      setBranchList(data.list);
-      setLoading(data.loading);
-    };
-    getBranchList();
+    refreshBranchList();
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
@@ -91,10 +91,26 @@ function MerchantBranchListPage(props) {
                   >
                     Edit
                   </span>
-                  {branch.status === -1 ? (
-                    <span>Unblock</span>
+                  {branch.status === 2 ? (
+                    <span
+                      onClick={() =>
+                        unblockMerchantBranch(branch._id).then(() =>
+                          refreshBranchList(),
+                        )
+                      }
+                    >
+                      Unblock
+                    </span>
                   ) : (
-                    <span>Block</span>
+                    <span
+                      onClick={async () =>
+                        blockMerchantBranch(branch._id).then(() => {
+                          refreshBranchList();
+                        })
+                      }
+                    >
+                      Block
+                    </span>
                   )}
                 </div>
               </span>

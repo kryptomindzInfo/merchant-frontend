@@ -5,8 +5,8 @@ import BlockIcon from '@material-ui/icons/Block';
 import FolderIcon from '@material-ui/icons/Folder';
 import EditIcon from '@material-ui/icons/Edit';
 import ChartIcon from '@material-ui/icons/InsertChartOutlined';
-import A from '../A';
-import Card from '../Card';
+import A from '../../shared/A';
+import Card from '../../shared/Card';
 
 const SidebarStyle = styled.aside`
   width: 260px;
@@ -55,24 +55,31 @@ const H1 = styled.h1`
   text-align: center;
 `;
 
-class BranchInfoSidebar extends Component {
+class MerchantBranchInfoSidebar extends Component {
   editSignal = (event) => {
     this.props.edit();
   };
 
-  blockSignal = (event) => {
-    this.props.block();
+  blockSignal = (status) => {
+    if (status === 'Unblock') {
+      this.props.unblock();
+    } else {
+      this.props.block();
+    }
   };
 
   render() {
-    const cashier = this.props.active === 'cashier';
     const info = this.props.active === 'info';
     const reports = this.props.active === 'reports';
     const edit = this.props.active === 'edit';
     const block = this.props.active === 'block';
-    const bt = this.props.blockTxt === 1 ? 'Block' : 'Unblock';
+    const bt = this.props.blockStatus === 2 ? 'Unblock' : 'Block';
     const infoType = this.props.type;
     const name = localStorage.getItem(`branch_name`);
+    const cashier = this.props.active === 'cashier';
+    const editingBranch = JSON.parse(
+      localStorage.getItem(`${name}_branchInfo`),
+    );
     return (
       <SidebarStyle marginRight>
         <A href={`/merchant/branch/info/${name}`}>
@@ -80,16 +87,7 @@ class BranchInfoSidebar extends Component {
             <i className="material-icons">
               <PersonIcon />
             </i>
-            <h3>{infoType} Info</h3>
-          </Card>
-        </A>
-        <A href={`/merchant/cashiers/${name}`}>
-          <Card rounded selected={cashier} className="sideNav">
-            <i className="material-icons">
-              <FolderIcon />
-            </i>
-
-            <h3>Cashier</h3>
+            <h3>Branch Info</h3>
           </Card>
         </A>
         <A href="/reports/">
@@ -98,6 +96,15 @@ class BranchInfoSidebar extends Component {
               <ChartIcon />
             </i>
             <h3>Reports</h3>
+          </Card>
+        </A>
+
+        <A href={`/merchant/${editingBranch._id}/cashiers`}>
+          <Card rounded selected={cashier} className="sideNav">
+            <i className="material-icons">
+              <EditIcon />
+            </i>
+            <h3>Cashiers</h3>
           </Card>
         </A>
 
@@ -119,7 +126,7 @@ class BranchInfoSidebar extends Component {
           rounded
           selected={block}
           className="sideNav"
-          onClick={this.blockSignal}
+          onClick={() => this.blockSignal(bt)}
         >
           <i className="material-icons">
             <BlockIcon />
@@ -132,4 +139,4 @@ class BranchInfoSidebar extends Component {
   }
 }
 
-export default BranchInfoSidebar;
+export default MerchantBranchInfoSidebar;
