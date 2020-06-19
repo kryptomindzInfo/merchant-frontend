@@ -16,6 +16,7 @@ function MerchantBranchInfoPage(props) {
   const [editBranchPopup, setEditBranchPopup] = useState(false);
   const { match } = props;
   const { id } = match.params;
+  localStorage.setItem('currentBranchId', id);
   useEffect(() => {
     const branch = JSON.parse(localStorage.getItem(`${id}_branchInfo`));
     setBranchInfo(branch);

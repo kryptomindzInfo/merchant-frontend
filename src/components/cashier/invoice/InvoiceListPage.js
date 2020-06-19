@@ -34,6 +34,9 @@ function InvoiceListPage(props) {
   const [allRow, setAllRow] = React.useState([]);
   const [transferRow, setTransferRow] = React.useState([]);
   const [receiveRow, setReceiveRow] = React.useState([]);
+  const { match } = props;
+  const { groupId } = match.params;
+  localStorage.setItem('currentGroupId', groupId);
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);

@@ -13,6 +13,8 @@ import BranchHeader from '../../shared/headers/branch/BranchHeader';
 function BranchCashierInfoPage(props) {
   const { match } = props;
   const { id } = match.params;
+  localStorage.setItem('currentBranchId', id);
+  const branch = JSON.parse(localStorage.getItem(`${id}_branchInfo`));
   /* if (isLoading) {
     return <Loader fullPage />;
   } */
@@ -32,7 +34,7 @@ function BranchCashierInfoPage(props) {
       <Container verticalMargin>
         <MerchantBranchInfoSidebar
           active="info"
-          bankName="Kotak"
+          name={branch.name}
           type="Cashier"
         />
         <Main>
