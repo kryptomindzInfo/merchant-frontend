@@ -8,7 +8,7 @@ const zoneBranchUrl = '/merchant/:id/branches';
 const staffUrl = '/merchant/staff';
 const merchantCashierUrl = '/merchant/:id/cashiers';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
-const branchProfileUrl = '/merchant/branch/info/:id';
+const merchantBranchInfoUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/settings';
 const revenueSharingRules = '/merchant/settings/revenue-sharing-rules';
 const commissionSharingRules = '/merchant/settings/commission-sharing-rules';
@@ -46,7 +46,7 @@ export {
   revenueSharingRules,
   commissionSharingRules,
   branchLoginUrl,
-  branchProfileUrl,
+  merchantBranchInfoUrl,
   branchDashboardUrl,
   branchSettingsUrl,
   branchVerifyUrl,

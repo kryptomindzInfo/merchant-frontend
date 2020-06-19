@@ -37,11 +37,8 @@ function MerchantBranchListPage(props) {
   };
 
   const handleBranchInfoClick = (branchInfo) => {
-    localStorage.setItem(
-      `${branchInfo.name}_branchInfo`,
-      JSON.stringify(branchInfo),
-    );
-    history.push(`/merchant/branch/info/${branchInfo.name}`);
+    localStorage.setItem(`selectedBranch`, JSON.stringify(branchInfo));
+    history.push(`/merchant/branch/info/${branchInfo._id}`);
   };
 
   const onPopupClose = () => {

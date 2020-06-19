@@ -28,7 +28,7 @@ function EditMerchantPopup(props) {
       <Formik
         initialValues={{
           name: props.merchant.name || '',
-          logo_hash: props.merchant.logo_hash || '',
+          logo: props.merchant.logo || '',
           description: props.merchant.description || '',
           document_hash: props.merchant.document_hash || '',
           email: props.merchant.email || '',
@@ -36,7 +36,7 @@ function EditMerchantPopup(props) {
           merchant_id: props.merchant.username || '',
         }}
         onSubmit={async (values) => {
-          await editMerchant(props, values, token);
+          await editMerchant(props, values);
         }}
         validationSchema={Yup.object().shape({
           mobile: Yup.string()
@@ -53,7 +53,7 @@ function EditMerchantPopup(props) {
           name: Yup.string()
             .min(3, 'Merchant name should be atleast 3 characters')
             .required('Merchant name is required'),
-          logo_hash: Yup.string().required('Merchant logo is required'),
+          logo: Yup.string().required('Merchant logo is required'),
           document_hash: Yup.string().required('Merchant contract is required'),
           email: Yup.string()
             .email('Please provide a valid email')
@@ -201,11 +201,11 @@ function EditMerchantPopup(props) {
                   </Typography>
                 </FormGroup>
                 <FormGroup>
-                  <UploadArea bgImg={STATIC_URL + values.logo_hash}>
-                    {values.logo_hash ? (
+                  <UploadArea bgImg={STATIC_URL + values.logo}>
+                    {values.logo ? (
                       <a
                         className="uploadedImg"
-                        href={STATIC_URL + values.logo_hash}
+                        href={STATIC_URL + values.logo}
                         target="_BLANK"
                       />
                     ) : (
@@ -213,22 +213,22 @@ function EditMerchantPopup(props) {
                     )}
                     <div
                       className="uploadTrigger"
-                      onClick={() => triggerBrowse('logo_hash')}
+                      onClick={() => triggerBrowse('logo')}
                     >
                       <input
                         type="file"
-                        id="logo_hash"
+                        id="logo"
                         onChange={(e) => onFileChange(e, token, 'merchant')}
-                        data-key="logo_hash"
+                        data-key="logo"
                         accept="image/jpeg, image/png, image/jpg"
                       />
-                      {!values.logo_hash ? (
+                      {!values.logo ? (
                         <i className="material-icons">cloud_upload</i>
                       ) : (
                         ' '
                       )}
                       <label>
-                        {values.logo_hash === '' ? (
+                        {values.logo === '' ? (
                           <span>Upload Logo</span>
                         ) : (
                           <span>Change Logo</span>
@@ -238,9 +238,7 @@ function EditMerchantPopup(props) {
                     </div>
                   </UploadArea>
                   <Typography variant="body2" color="error">
-                    {errors.logo_hash && touched.logo_hash
-                      ? errors.logo_hash
-                      : ''}
+                    {errors.logo && touched.logo ? errors.logo : ''}
                   </Typography>
                 </FormGroup>
                 <FormGroup>

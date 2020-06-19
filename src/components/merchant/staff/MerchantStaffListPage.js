@@ -13,7 +13,7 @@ import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
 import { CONTRACT_URL, STATIC_URL } from '../../constants';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-import { fetchStaffList } from '../api/MerchantAPI';
+import { blockStaffAPI, fetchStaffList } from '../api/MerchantAPI';
 import Loader from '../../shared/Loader';
 
 const MerchantStaffListPage = () => {
@@ -30,6 +30,7 @@ const MerchantStaffListPage = () => {
   };
 
   const refreshStaffList = async () => {
+    setLoading(true);
     const data = await fetchStaffList();
     setStaff(data.list);
     setLoading(data.loading);
@@ -40,13 +41,7 @@ const MerchantStaffListPage = () => {
   };
 
   useEffect(() => {
-    const getStaffList = async () => {
-      setLoading(true);
-      const data = await fetchStaffList();
-      setStaff(data.list);
-      setLoading(data.loading);
-    };
-    getStaffList();
+    refreshStaffList();
   }, []);
 
   const mappedCards = () => {
@@ -66,14 +61,35 @@ const MerchantStaffListPage = () => {
                 <h4 className="hh">{b.name}</h4>
               </Col>
               <Col cW="20%">
-                <Button
-                  onClick={() => handleStaffPopupClick('update', b)}
-                  flex
-                  noMin
-                  style={{ padding: '5px' }}
-                >
-                  Edit
-                </Button>
+                <span className="absoluteMiddleRight primary popMenuTrigger">
+                  <i className="material-icons ">more_vert</i>
+                  <div className="popMenu">
+                    <span onClick={() => handleStaffPopupClick('update', b)}>
+                      Edit
+                    </span>
+                    {b.status === 2 ? (
+                      <span
+                        onClick={() =>
+                          blockStaffAPI('unblock', b._id).then(() =>
+                            refreshStaffList(),
+                          )
+                        }
+                      >
+                        Unblock
+                      </span>
+                    ) : (
+                      <span
+                        onClick={() =>
+                          blockStaffAPI('block', b._id).then(() =>
+                            refreshStaffList(),
+                          )
+                        }
+                      >
+                        Block
+                      </span>
+                    )}
+                  </div>
+                </span>
               </Col>
             </Row>
           </Card>

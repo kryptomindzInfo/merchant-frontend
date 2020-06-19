@@ -194,6 +194,37 @@ body{
   .red{
     color: ${(props) => props.theme.danger};
   }
+  .popMenuTrigger {
+    i {
+      font-size: 18px;
+    }
+    cursor: pointer;
+    .popMenu {
+      display: none;
+      position: absolute;
+      z-index: 10;
+      font-size: 13px;
+      font-weight: normal;
+      width: 130px;
+      right: 18px;
+      margin-top: -15px;
+      box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.5);
+      background-color: #ffffff;
+      padding: 5px 10px;
+      > span {
+        margin: 8px 0 12px;
+        text-align: left;
+        display: block;
+        color: #000;
+        font-size: 13px;
+        font-weight: normal;
+      }
+    }
+    &:hover .popMenu,
+    .popMenu:hover {
+      display: block;
+    }
+  }
 `;
 
 export default GlobalStyle;

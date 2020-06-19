@@ -1,18 +1,18 @@
 import React, { useEffect } from 'react';
 import { Form, Formik } from 'formik';
-import Popup from '../../shared/Popup';
-import FormGroup from '../../shared/FormGroup';
-import Button from '../../shared/Button';
-import Row from '../../shared/Row';
-import Col from '../../shared/Col';
-import TextInput from '../../shared/TextInput';
-import Loader from '../../shared/Loader';
+import Popup from '../../../shared/Popup';
+import FormGroup from '../../../shared/FormGroup';
+import Button from '../../../shared/Button';
+import Row from '../../../shared/Row';
+import Col from '../../../shared/Col';
+import TextInput from '../../../shared/TextInput';
+import Loader from '../../../shared/Loader';
 import {
   inputBlur,
   inputFocus,
   correctFocus,
-} from '../../utils/handleInputFocus';
-import { merchantCashierAPI } from '../api/MerchantAPI';
+} from '../../../utils/handleInputFocus';
+import { merchantCashierAPI } from '../../api/MerchantAPI';
 
 function MerchantCreateCashierPopup(props) {
   useEffect(() => {
@@ -30,11 +30,12 @@ function MerchantCreateCashierPopup(props) {
           max_trans_count: props.cashier.max_trans_count || '',
         }}
         onSubmit={async (values) => {
-          values.branch_id = props.branchId;
           if (props.type === 'update') {
             values.cashier_id = props.cashier._id;
+            values.branch_id = props.cashier.branch_id;
             await merchantCashierAPI(props, values, 'update');
           } else {
+            values.branch_id = props.branchId;
             await merchantCashierAPI(props, values, 'create');
           }
         }}

@@ -29,7 +29,7 @@ import {
   branchForgotPasswordUrl,
   branchLoginUrl,
   branchOtpUrl,
-  branchProfileUrl,
+  merchantBranchInfoUrl,
   branchSettingsUrl,
   branchUrl,
   branchVerifyUrl,
@@ -54,7 +54,8 @@ import {
   verifyUrl,
   zoneBranchUrl,
 } from './Url';
-import MerchantCashierListPage from './merchant/branch/MerchantCashierListPage';
+import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
+import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -137,7 +138,7 @@ function App() {
             <ProtectedRoute
               type="merchant"
               exact
-              path={branchProfileUrl}
+              path={merchantBranchInfoUrl}
               component={(props) => <MerchantBranchInfoPage {...props} />}
             />
             <ProtectedRoute
@@ -164,7 +165,7 @@ function App() {
               type="merchant"
               exact
               path={merchantCashierInfoUrl}
-              component={(props) => <BranchCashierInfoPage {...props} />}
+              component={(props) => <MerchantCashierInfoPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
@@ -251,7 +252,9 @@ function App() {
               exact
               type="branch"
               path={branchVerifyUrl}
-              component={(props) => <SignInVerificationPage {...props} />}
+              component={(props) => (
+                <SignInVerificationPage type="branch" {...props} />
+              )}
             />
             <Route
               exact
@@ -298,7 +301,9 @@ function App() {
               exact
               type="cashier"
               path={cashierVerifyUrl}
-              component={(props) => <SignInVerificationPage {...props} />}
+              component={(props) => (
+                <SignInVerificationPage type="cashier" {...props} />
+              )}
             />
             <Route
               exact

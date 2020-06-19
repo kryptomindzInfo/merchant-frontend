@@ -15,10 +15,10 @@ function MerchantBranchInfoPage(props) {
   const [branchInfo, setBranchInfo] = useState({});
   const [editBranchPopup, setEditBranchPopup] = useState(false);
   const { match } = props;
-  const { id } = match.params;
-  localStorage.setItem('currentBranchId', id);
+  const selectedZone = localStorage.getItem('selectedZone');
+
   useEffect(() => {
-    const branch = JSON.parse(localStorage.getItem(`${id}_branchInfo`));
+    const branch = JSON.parse(localStorage.getItem(`selectedBranch`));
     setBranchInfo(branch);
   }, []);
 
@@ -30,7 +30,7 @@ function MerchantBranchInfoPage(props) {
   };
   const refreshBranchInfo = (data) => {
     setBranchInfo(data);
-    localStorage.setItem(`${id}_branchInfo`, JSON.stringify(data));
+    localStorage.setItem(`selectedBranch`, JSON.stringify(data));
   };
 
   return (
@@ -39,7 +39,11 @@ function MerchantBranchInfoPage(props) {
         <meta charSet="utf-8" />
         <title>Branch | MERCHANT | E-WALLET</title>
       </Helmet>
-      <MerchantHeader page="info" middleTitle={id} goto="/merchant/branches" />
+      <MerchantHeader
+        page="info"
+        middleTitle={branchInfo.name}
+        goto={`/merchant/${selectedZone}/branches`}
+      />
       <Container verticalMargin>
         <MerchantBranchInfoSidebar
           edit={() => handleBranchEdit()}

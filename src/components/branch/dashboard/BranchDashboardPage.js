@@ -8,7 +8,7 @@ import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PaymentRecivedCard from '../../shared/PaymentRecivedCard';
-import CashierList from './CashierList';
+import BranchCashierList from './BranchCashierList';
 
 const BranchDashboardPage = (props) => {
   const { type } = props;
@@ -29,7 +29,7 @@ const BranchDashboardPage = (props) => {
             <PendingInvoiceCard amount={530} />
             <OverDueInvoiceCard />
           </Row>
-          <CashierList type={type} />
+          <BranchCashierList type={type} />
         </Main>
       </Container>
     </Fragment>

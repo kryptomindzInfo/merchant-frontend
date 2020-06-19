@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
-import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-import AddIcon from '@material-ui/icons/Add';
 import Wrapper from '../../shared/Wrapper';
 import Loader from '../../shared/Loader';
 import Container from '../../shared/Container';
@@ -12,14 +10,12 @@ import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import { CURRENCY } from '../../constants';
 import A from '../../shared/A';
-import Button from '../../shared/Button';
-import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
-import MerchantBranchInfoSidebar from './MerchantBranchInfoSidebar';
-import AssignUserPopup from '../../branch/dashboard/AssignUserPopup';
-import MerchantCreateCashierPopup from './MerchantCreateCashierPopup';
-import { getMerchantCashier } from '../api/MerchantAPI';
+import AssignUserPopup from './AssignUserPopup';
+import EditCashierPopup from './EditCashierPopup';
+import { fetchBranchStaffList, getBranchCashier } from '../api/BranchAPI';
 
-function MerchantCashierListPage(props) {
+function BranchCashierList(props) {
+  const name = localStorage.getItem(`branch_name`);
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
   const [cashierPopupType, setCashierPopupType] = React.useState('new');
@@ -28,8 +24,6 @@ function MerchantCashierListPage(props) {
   const [editingUser, setEditingUser] = React.useState({});
   const [editingCashier, setEditingCashier] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
-  const { id } = props.match.params;
-  const name = localStorage.getItem(`branch_name`);
 
   const handleAssignUserPopupClick = (user) => {
     setEditingUser(user);
@@ -52,26 +46,35 @@ function MerchantCashierListPage(props) {
 
   const refreshCashierList = async () => {
     setLoading(true);
-    const data = await getMerchantCashier();
-    setCashierList(data.list);
-    setLoading(data.loading);
+    getBranchCashier().then((data) => {
+      setCashierList(data.list);
+    });
+    fetchBranchStaffList().then((data) => {
+      setUserList(data.list);
+    });
+    setLoading(false);
   };
-
   useEffect(() => {
     refreshCashierList();
   }, []); // Or [] if effect doesn't need props or state
 
-  const getCashierInfoURL = (cashierName) => {
-    return `/merchant/cashier/info/${cashierName}`;
+  if (isLoading) {
+    return <Loader fullPage />;
+  }
+  const getCashierInfoURL = (cashierId) => {
+    return `/merchant/branch/cashier/info/${cashierId}`;
   };
-
   function mappedCards() {
     return cashierList.map((cashier) => {
       return (
         <tr key={cashier._id}>
           <td>{cashier.name}</td>
           <td className="tac">
-            {CURRENCY} {cashier.max_trans_amt}
+            {CURRENCY}{' '}
+            {(
+              cashier.opening_balance +
+              (cashier.cash_received - cashier.cash_paid)
+            ).toFixed(2)}
           </td>
           <td>
             {userList.filter((u) => u._id === cashier.bank_user_id)[0]
@@ -83,14 +86,14 @@ function MerchantCashierListPage(props) {
               color: cashier.is_closed ? 'red' : 'green',
             }}
           >
-            {cashier.status === 1 ? 'Opened' : 'Closed'}
+            {cashier.is_closed ? 'Closed' : 'Opened'}
           </td>
           <td className="tac bold green">
-            {cashier.max_trans_count}
+            {cashier.total_trans}
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <A href={getCashierInfoURL(cashier.name)}>Cashier Info</A>
+                <A href={getCashierInfoURL(cashier._id)}>Cashier Info</A>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
                 >
@@ -99,8 +102,9 @@ function MerchantCashierListPage(props) {
                 <span onClick={() => handleAssignUserPopupClick({})}>
                   Assign User
                 </span>
+                {cashier.is_closed ? <span>Re-open Access</span> : null}
 
-                {cashier.status === 0 ? (
+                {cashier.status === -1 ? (
                   <span>Unblock</span>
                 ) : (
                   <span>Block</span>
@@ -118,37 +122,15 @@ function MerchantCashierListPage(props) {
   }
   return (
     <Wrapper>
-      <Helmet>
-        <meta charSet="utf-8" />
-        <title>Cashier | MERCHANT | E-WALLET </title>
-      </Helmet>
-      <MerchantHeader
-        page="info"
-        middleTitle={name}
-        goto="/merchant/branches/"
-      />
       <Container verticalMargin>
-        <MerchantBranchInfoSidebar active="cashier" />
-        <Main big>
-          <ActionBar
-            marginBottom="33px"
-            inputWidth="calc(100% - 241px)"
-            className="clr"
-          >
+        <Main fullWidth>
+          <ActionBar marginBottom="33px" inputWidth="100%" className="clr">
             <div className="iconedInput fl">
               <i className="material-icons">
                 <SearchIcon />
               </i>
               <input type="text" placeholder="Search Cashiers" />
             </div>
-            <Button
-              className="addBankButton"
-              flex
-              onClick={() => handleEditCashierPopupClick('new', {})}
-            >
-              <AddIcon className="material-icons" />
-              <span>Add Cashier</span>
-            </Button>
           </ActionBar>
           <Card bigPadding>
             <div className="cardHeader">
@@ -189,16 +171,15 @@ function MerchantCashierListPage(props) {
       ) : null}
 
       {editCashierPopup ? (
-        <MerchantCreateCashierPopup
+        <EditCashierPopup
           type={cashierPopupType}
           onClose={() => onEditingPopupClose()}
           refreshCashierList={(data) => refreshCashierList()}
           cashier={editingCashier}
-          branchId={id}
         />
       ) : null}
     </Wrapper>
   );
 }
 
-export default MerchantCashierListPage;
+export default BranchCashierList;

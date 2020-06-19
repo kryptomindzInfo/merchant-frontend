@@ -13,7 +13,7 @@ import {
   correctFocus,
 } from '../../utils/handleInputFocus';
 import { zoneAPI } from '../../merchant/api/MerchantAPI';
-import { cashierAPI } from '../api/CashierAPI';
+import { addBranchCashier } from '../api/BranchAPI';
 
 function EditCashierPopup(props) {
   useEffect(() => {
@@ -33,9 +33,9 @@ function EditCashierPopup(props) {
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
-            await cashierAPI(props, values, 'update');
+            await addBranchCashier(props, values, 'update');
           } else {
-            await cashierAPI(props, values, 'create');
+            await addBranchCashier(props, values, 'create');
           }
         }}
       >

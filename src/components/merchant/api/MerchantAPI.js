@@ -196,6 +196,31 @@ const staffAPI = async (props, values, apiType) => {
   }
 };
 
+const blockStaffAPI = async (apiType, id) => {
+  let API = '';
+  if (apiType === 'block') {
+    API = '/blockStaff';
+  } else {
+    API = '/unblockStaff';
+  }
+  try {
+    const res = await axios.post(`${MERCHANT_API}${API}`, {
+      staff_id: id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.data, 'success');
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const fetchStaffList = async () => {
   try {
     const res = await axios.get(`${MERCHANT_API}/listStaff`);
@@ -204,7 +229,7 @@ const fetchStaffList = async () => {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.data, loading: false };
+      return { list: res.data.staffs, loading: false };
     }
     notify(res.data.message, 'error');
     return { list: [], loading: false };
@@ -215,12 +240,10 @@ const fetchStaffList = async () => {
 };
 
 // API's for Merchant Settings
-const editMerchant = async (props, values, token) => {
+const editMerchant = async (props, values) => {
   try {
     values.username = values.merchant_id;
     const res = await axios.post(`${MERCHANT_API}/editDetails`, {
-      token,
-      status: 1,
       ...values,
     });
     if (res.status === 200) {
@@ -304,7 +327,7 @@ const merchantCashierAPI = async (props, values, apiType) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        props.refreshCashierList();
+        props.refreshCashierList(values);
         props.onClose();
       }
     } else {
@@ -337,6 +360,7 @@ export {
   branchAPI,
   fetchBranchList,
   staffAPI,
+  blockStaffAPI,
   getWalletBalance,
   zoneAPI,
   fetchZoneList,
