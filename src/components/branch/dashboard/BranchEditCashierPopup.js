@@ -13,9 +13,9 @@ import {
   correctFocus,
 } from '../../utils/handleInputFocus';
 import { zoneAPI } from '../../merchant/api/MerchantAPI';
-import { addBranchCashier } from '../api/BranchAPI';
+import { editBranchCashier } from '../api/BranchAPI';
 
-function EditCashierPopup(props) {
+function BranchEditCashierPopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   });
@@ -24,19 +24,15 @@ function EditCashierPopup(props) {
       <Formik
         initialValues={{
           name: props.cashier.name || '',
-          logo: props.cashier.logo || '',
-          description: props.cashier.description || '',
-          document_hash: props.cashier.document_hash || '',
-          email: props.cashier.email || '',
-          mobile: props.cashier.mobile || '',
-          cashier_id: props.cashier.username || '',
+          working_from: props.cashier.working_from || '',
+          working_to: props.cashier.working_to || '',
+          per_trans_amt: props.cashier.per_trans_amt || '',
+          max_trans_amt: props.cashier.max_trans_amt || '',
+          max_trans_count: props.cashier.max_trans_count || '',
         }}
         onSubmit={async (values) => {
-          if (props.type === 'update') {
-            await addBranchCashier(props, values, 'update');
-          } else {
-            await addBranchCashier(props, values, 'create');
-          }
+          values.cashier_id = props.cashier._id;
+          await editBranchCashier(props, values);
         }}
       >
         {(formikProps) => {
@@ -49,9 +45,7 @@ function EditCashierPopup(props) {
 
           return (
             <div>
-              <h1>
-                {props.type === 'update' ? `Update Cashier` : `Add Cashier`}
-              </h1>
+              <h1>Update Cashier</h1>
               <Form>
                 <FormGroup>
                   <label>Cashier Name*</label>
@@ -68,25 +62,6 @@ function EditCashierPopup(props) {
                       inputBlur(e);
                     }}
                     value={values.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Cashier Code*</label>
-                  <TextInput
-                    type="text"
-                    name="bcode"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.bcode}
                     onChange={handleChange}
                     required
                   />
@@ -197,7 +172,7 @@ function EditCashierPopup(props) {
                     required
                   />
                 </FormGroup>
-                {values.editBranchLoading ? (
+                {isSubmitting ? (
                   <Button
                     disabled={isSubmitting}
                     filledBtn
@@ -222,12 +197,7 @@ function EditCashierPopup(props) {
                       fontWeight: 500,
                     }}
                   >
-                    <span>
-                      {' '}
-                      {props.type === 'update'
-                        ? `Update Cashier`
-                        : `Add Cashier`}
-                    </span>
+                    <span>Update Cashier</span>
                   </Button>
                 )}
               </Form>
@@ -239,4 +209,4 @@ function EditCashierPopup(props) {
   );
 }
 
-export default EditCashierPopup;
+export default BranchEditCashierPopup;

@@ -1,25 +1,42 @@
-import React from 'react';
-import { Form, Formik, Field, ErrorMessage } from 'formik';
+import React, { useEffect } from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
 import Popup from '../../shared/Popup';
 import FormField from '../../shared/FormField';
 import Button from '../../shared/Button';
 import TextInput from '../../shared/TextInput';
-import { inputBlur, inputFocus } from '../../utils/handleInputFocus';
+import {
+  correctFocus,
+  inputBlur,
+  inputFocus,
+} from '../../utils/handleInputFocus';
 import ErrorText from '../../shared/ErrorText';
+import { merchantCashierAPI } from '../../merchant/api/MerchantAPI';
+import { groupAPI } from '../api/CashierAPI';
 
 function CreateBranchPopup(props) {
-  const token = localStorage.getItem('bankLogged');
+  useEffect(() => {
+    correctFocus(props.type);
+  });
+
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1>Create Group</h1>
+      <h1>{props.type === 'update' ? `Update Group` : `Create Group`}</h1>
       <Formik
         initialValues={{
-          name: '',
-          description: '',
+          name: props.group.name || '',
+          description: props.group.description || '',
+          code: props.group.code || '',
         }}
-        onSubmit={{}}
+        onSubmit={async (values) => {
+          if (props.type === 'update') {
+            values.group_id = props.group._id;
+            await merchantCashierAPI(props, values, 'update');
+          } else {
+            await groupAPI(props, values, 'create');
+          }
+        }}
         validationSchema={Yup.object().shape({
           name: Yup.string()
             .min(3, 'Group name should be atleast 3 characters')
@@ -31,6 +48,20 @@ function CreateBranchPopup(props) {
           return (
             <div>
               <Form>
+                <FormField mB="14px" background="#fff">
+                  <label htmlFor="description">Group Code</label>
+                  <Field
+                    type="text"
+                    name="code"
+                    onFocus={(e) => {
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      inputBlur(e);
+                    }}
+                    as={TextInput}
+                  />
+                </FormField>
                 <FormField textAlign="start" mB="14px" background="#fff">
                   <label htmlFor="name">Group Name*</label>
                   <Field
@@ -77,7 +108,11 @@ function CreateBranchPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Create Group</span>
+                    <span>
+                      {props.type === 'update'
+                        ? `Update Group`
+                        : `Create Group`}
+                    </span>
                   )}
                 </Button>
               </Form>

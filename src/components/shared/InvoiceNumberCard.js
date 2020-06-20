@@ -7,7 +7,7 @@ const InvoiceNumberCard = (props) => {
     <Col cW="100%">
       <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
         <h4>No of Invoice paid</h4>
-        <div className="cardValue">{props.amount}</div>
+        <div className="cardValue">{props.no}</div>
       </Card>
     </Col>
   );

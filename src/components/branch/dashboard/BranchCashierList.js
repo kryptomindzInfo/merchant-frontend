@@ -9,10 +9,14 @@ import Table from '../../shared/Table';
 import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import { CURRENCY } from '../../constants';
-import A from '../../shared/A';
 import AssignUserPopup from './AssignUserPopup';
-import EditCashierPopup from './EditCashierPopup';
-import { fetchBranchStaffList, getBranchCashier } from '../api/BranchAPI';
+import BranchEditCashierPopup from './BranchEditCashierPopup';
+import {
+  blockCashierApi,
+  fetchBranchStaffList,
+  getBranchCashier,
+} from '../api/BranchAPI';
+import history from '../../utils/history';
 
 function BranchCashierList(props) {
   const name = localStorage.getItem(`branch_name`);
@@ -25,8 +29,8 @@ function BranchCashierList(props) {
   const [editingCashier, setEditingCashier] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
 
-  const handleAssignUserPopupClick = (user) => {
-    setEditingUser(user);
+  const handleAssignUserPopupClick = (cashier) => {
+    setEditingCashier(cashier);
     setAssignUserPopup(true);
   };
 
@@ -62,7 +66,7 @@ function BranchCashierList(props) {
     return <Loader fullPage />;
   }
   const getCashierInfoURL = (cashierId) => {
-    return `/merchant/branch/cashier/info/${cashierId}`;
+    return `/branch/cashier/info/${cashierId}`;
   };
   function mappedCards() {
     return cashierList.map((cashier) => {
@@ -70,44 +74,65 @@ function BranchCashierList(props) {
         <tr key={cashier._id}>
           <td>{cashier.name}</td>
           <td className="tac">
-            {CURRENCY}{' '}
-            {(
-              cashier.opening_balance +
-              (cashier.cash_received - cashier.cash_paid)
-            ).toFixed(2)}
+            {CURRENCY} {cashier.max_trans_amt}
           </td>
           <td>
-            {userList.filter((u) => u._id === cashier.bank_user_id)[0]
-              ? userList.filter((u) => u._id === cashier.bank_user_id)[0].name
+            {userList.filter((u) => u._id === cashier.staff_id)[0]
+              ? userList.filter((u) => u._id === cashier.staff_id)[0].name
               : ''}
           </td>
           <td
             style={{
-              color: cashier.is_closed ? 'red' : 'green',
+              color: cashier.status === 2 ? 'red' : 'green',
             }}
           >
-            {cashier.is_closed ? 'Closed' : 'Opened'}
+            {cashier.status === 2 ? 'Closed' : 'Opened'}
           </td>
           <td className="tac bold green">
-            {cashier.total_trans}
+            {cashier.max_trans_count}
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <A href={getCashierInfoURL(cashier._id)}>Cashier Info</A>
+                <span
+                  onClick={() => {
+                    localStorage.setItem(
+                      'selectedCashier',
+                      JSON.stringify(cashier),
+                    );
+                    history.push(getCashierInfoURL(cashier._id));
+                  }}
+                >
+                  Cashier Info
+                </span>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
                 >
                   Edit
                 </span>
-                <span onClick={() => handleAssignUserPopupClick({})}>
+                <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
                 </span>
-                {cashier.is_closed ? <span>Re-open Access</span> : null}
 
-                {cashier.status === -1 ? (
-                  <span>Unblock</span>
+                {cashier.status === 0 ? (
+                  <span
+                    onClick={() =>
+                      blockCashierApi('unblock', cashier._id).then(() =>
+                        refreshCashierList(),
+                      )
+                    }
+                  >
+                    Unblock
+                  </span>
                 ) : (
-                  <span>Block</span>
+                  <span
+                    onClick={() =>
+                      blockCashierApi('block', cashier._id).then(() =>
+                        refreshCashierList(),
+                      )
+                    }
+                  >
+                    Block
+                  </span>
                 )}
               </div>
             </span>
@@ -167,11 +192,13 @@ function BranchCashierList(props) {
         <AssignUserPopup
           onClose={() => onAssignUserPopupClose()}
           user={userList}
+          cashier={editingCashier}
+          refreshCashierList={() => refreshCashierList()}
         />
       ) : null}
 
       {editCashierPopup ? (
-        <EditCashierPopup
+        <BranchEditCashierPopup
           type={cashierPopupType}
           onClose={() => onEditingPopupClose()}
           refreshCashierList={(data) => refreshCashierList()}

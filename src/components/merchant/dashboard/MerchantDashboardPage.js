@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { Helmet } from 'react-helmet';
-import PaymentRecivedCard from '../../shared/PaymentRecivedCard';
+import PaymentReceivedCard from '../../shared/PaymentReceivedCard';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
@@ -31,7 +31,7 @@ const MerchantDashboardPage = () => {
         <MerchantSideBar />
         <Main>
           <Row>
-            <PaymentRecivedCard />
+            <PaymentReceivedCard />
             <InvoiceNumberCard amount={noOfInvoicesPaid} />
             <PendingInvoiceCard amount={noOfPendingInvoices} />
             <OverDueInvoiceCard />

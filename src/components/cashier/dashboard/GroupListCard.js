@@ -8,8 +8,17 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { useTheme } from '@material-ui/core/styles';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import SearchIcon from '@material-ui/core/SvgIcon/SvgIcon';
+import AddIcon from '@material-ui/icons/Add';
 import Card from '../../shared/Card';
 import Table from '../../shared/Table';
+import ActionBar from '../../shared/ActionBar';
+import Main from '../../shared/Main';
+import Wrapper from '../../shared/Wrapper';
+import Container from '../../shared/Container';
+import CreateGroupPopup from './CreateGroupPopup';
+import Button from '../../shared/Button';
+import history from '../../utils/history';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -106,53 +115,16 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-const GroupListCard = () => {
-  const classes = useStyles();
-  const [fullRow, setRow] = useState([]);
-  const [allRow, setAllRow] = useState([]);
-  const [transferRow, setTransferRow] = useState([]);
-  const [receiveRow, setReceiveRow] = useState([]);
-  const [value, setValue] = useState(0);
-  const [groupList, setGroupList] = useState([
-    {
-      name: 'Group 1',
-      total_invoice: '100',
-      paid_invoice: '30',
-      due_invoice: '70',
-    },
-  ]);
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+const GroupListCard = (props) => {
+  const [addGroupPopup, setGroupPopup] = useState(false);
+  const [popupType, setPopupType] = useState('create');
+  const [editingGroup, setEditingGroup] = useState({});
+  const [groupList, setGroupList] = useState(props.groupList);
 
-  const emptyRows =
-    rowsPerPage - Math.min(rowsPerPage, fullRow.length - page * rowsPerPage);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-    switch (newValue) {
-      case 0:
-        setRow(allRow);
-        break;
-      case 1:
-        setPage(0);
-        setRow(transferRow);
-        break;
-      case 2:
-        setPage(0);
-        setRow(receiveRow);
-        break;
-      default:
-        setRow(allRow);
-    }
+  const handleGroupPopupClick = (type, group) => {
+    setEditingGroup(group);
+    setPopupType(type);
+    setGroupPopup(true);
   };
 
   const getGroups = () => {
@@ -160,11 +132,20 @@ const GroupListCard = () => {
       return (
         <tr key={group.name}>
           <td>{group.name}</td>
-          <td>{group.total_invoice}</td>
-          <td>{group.paid_invoice}</td>
+          <td>{group.bills_raised}</td>
+          <td>{group.bills_paid}</td>
+          <td>{group.bills_raised - group.bills_paid}</td>
           <td>
-            {group.paid_invoice}
-            <span> View </span>
+            <span
+              className="tac"
+              style={{ cursor: 'pointer', color: '#417505' }}
+              onClick={() => {
+                history.push(`/cashier/${group._id}/invoices`);
+              }}
+            >
+              {' '}
+              View{' '}
+            </span>
           </td>
         </tr>
       );
@@ -172,54 +153,70 @@ const GroupListCard = () => {
   };
 
   return (
-    <Card bigPadding>
-      <div className="cardHeader">
-        <div className="cardHeaderLeft">
-          <SupervisedUserCircleIcon
-            style={{ color: '#417505', fontSize: '50' }}
-            className="material-icons"
-          />
-        </div>
-        <div className="cardHeaderRight" style={{ paddingLeft: '10px' }}>
-          <h3>Group List</h3>
-          <h5>List of your groups</h5>
-        </div>
-      </div>
-      <div className="cardBody">
-        {/*  <Grid container>
-          <DashBoardTabs
-            style={{ width: '100%' }}
-            variant="scrollable"
-            scrollButtons="auto"
-            onChange={handleChange}
-            value={value}
+    <Wrapper>
+      <Container verticalMargin>
+        <Main fullWidth>
+          <ActionBar
+            marginBottom="33px"
+            inputWidth="calc(100% - 241px)"
+            className="clr"
           >
-            <DashboardTab
-              disableFocusRipple
-              disableRipple
-              label="All"
-              className={classes.allTab}
-            />
-            <DashboardTab label="Payment Recieved" className={classes.tab} />
-            <DashboardTab label="Payment Pending" className={classes.tab} />
-          </DashBoardTabs>
-        </Grid> */}
-
-        <Table marginTop="34px" smallTd>
-          <thead>
-            <tr>
-              <th>Group Name</th>
-              <th>No. of Invoices</th>
-              <th>No. of Paid Invoices</th>
-              <th>No. of Due Invoices</th>
-            </tr>
-          </thead>
-          <tbody>
-            {groupList && groupList.length > 0 ? getGroups() : null}
-          </tbody>
-        </Table>
-      </div>
-    </Card>
+            <div className="iconedInput fl">
+              <i className="material-icons">
+                <SearchIcon />
+              </i>
+              <input type="text" placeholder="Search Groups" />
+            </div>
+            <Button
+              className="addBankButton"
+              flex
+              onClick={() => handleGroupPopupClick('create', {})}
+            >
+              <AddIcon className="material-icons" />
+              <span>Add Group</span>
+            </Button>
+          </ActionBar>
+          <Card bigPadding>
+            <div className="cardHeader">
+              <div className="cardHeaderLeft">
+                <SupervisedUserCircleIcon
+                  style={{ color: '#417505', fontSize: '50' }}
+                  className="material-icons"
+                />
+              </div>
+              <div className="cardHeaderRight" style={{ paddingLeft: '10px' }}>
+                <h3>Group List</h3>
+                <h5>List of your groups</h5>
+              </div>
+            </div>
+            <div className="cardBody">
+              <Table marginTop="34px" smallTd>
+                <thead>
+                  <tr>
+                    <th>Group Name</th>
+                    <th>No. of Invoices</th>
+                    <th>No. of Paid Invoices</th>
+                    <th>No. of Due Invoices</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {groupList && groupList.length > 0 ? getGroups() : null}
+                </tbody>
+              </Table>
+            </div>
+          </Card>
+        </Main>
+      </Container>
+      {addGroupPopup ? (
+        <CreateGroupPopup
+          type={popupType}
+          group={editingGroup}
+          refreshGroupList={() => props.refreshGroupList()}
+          onClose={() => setGroupPopup(false)}
+        />
+      ) : null}
+    </Wrapper>
   );
 };
 

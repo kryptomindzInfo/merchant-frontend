@@ -28,7 +28,9 @@ const Icon = styled.i`
 
 const Welcome = (props) => {
   const { type } = props;
-  const { name } = JSON.parse(localStorage.getItem(`${type}Logged`)).details;
+  const { name } =
+    JSON.parse(localStorage.getItem(`${type}Logged`)).details ||
+    JSON.parse(localStorage.getItem(`${type}Logged`)).cashier;
 
   const logoutMerchant = () => {
     localStorage.removeItem('merchantLogged');
@@ -69,9 +71,9 @@ const Welcome = (props) => {
   if (type === 'merchant') {
     settingsUrl = '/merchant/settings';
   } else if (type === 'branch') {
-    settingsUrl = `/merchant/branch/settings`;
+    settingsUrl = `/branch/settings`;
   } else if (type === 'cashier') {
-    settingsUrl = `/merchant/cashier/settings`;
+    settingsUrl = `/cashier/settings`;
   } else {
     isAdmin = localStorage.getItem('isAdmin');
   }

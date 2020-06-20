@@ -16,22 +16,22 @@ const commissionSharingRules = '/merchant/settings/commission-sharing-rules';
 // branch URL's
 const defaultBranchLoginUrl = '/merchant/branch/:name';
 const branchLoginUrl = '/merchant/branch/:name/login';
-const branchDashboardUrl = '/merchant/branch/dashboard';
-const branchSettingsUrl = '/merchant/branch/settings';
-const branchForgotPasswordUrl = '/merchant/branch/:name/forgot-password';
-const branchOtpUrl = '/merchant/branch/:name/otp-forgot-password';
-const branchCashierInfoUrl = '/merchant/branch/cashier/info/:id';
-const branchVerifyUrl = '/merchant/branch/:name/login-verify';
+const branchDashboardUrl = '/branch/dashboard';
+const branchSettingsUrl = '/branch/settings';
+const branchForgotPasswordUrl = '/branch/:name/forgot-password';
+const branchOtpUrl = '/branch/:name/otp-forgot-password';
+const branchCashierInfoUrl = '/branch/cashier/info/:id';
+const branchVerifyUrl = '/branch/:name/login-verify';
 
 // cashier URL's
 const defaultCashierLoginUrl = '/merchant/cashier/:name';
 const cashierLoginUrl = '/merchant/cashier/:name/login';
-const cashierDashboardUrl = '/merchant/cashier/dashboard';
-const invoiceUrl = '/merchant/cashier/invoice/:groupId';
-const cashierForgotPasswordUrl = '/merchant/cashier/:name/forgot-password';
-const cashierOtpUrl = '/merchant/cashier/:name/otp-forgot-password';
-const cashierVerifyUrl = '/merchant/cashier/:name/login-verify';
-const cashierSettingsUrl = '/merchant/cashier/settings';
+const cashierDashboardUrl = '/cashier/dashboard';
+const invoiceUrl = '/cashier/:id/invoices';
+const cashierForgotPasswordUrl = '/cashier/:name/forgot-password';
+const cashierOtpUrl = '/cashier/:name/otp-forgot-password';
+const cashierVerifyUrl = '/cashier/:name/login-verify';
+const cashierSettingsUrl = '/cashier/settings';
 
 export {
   merchantDashboardUrl,

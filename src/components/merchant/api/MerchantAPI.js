@@ -338,9 +338,11 @@ const merchantCashierAPI = async (props, values, apiType) => {
   }
 };
 
-const getMerchantCashier = async () => {
+const getMerchantCashier = async (id) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listCashier`);
+    const res = await axios.post(`${MERCHANT_API}/listCashier`, {
+      branch_id: id,
+    });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

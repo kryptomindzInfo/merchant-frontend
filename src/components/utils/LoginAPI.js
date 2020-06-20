@@ -20,17 +20,17 @@ const redirectUser = (type, response) => {
     case 'branch':
       localStorage.setItem('branchLogged', JSON.stringify(response.data));
       if (response.data.details.status === 0) {
-        history.push(`/merchant/branch/${name}/login-verify`);
+        history.push(`/branch/${name}/login-verify`);
       } else {
-        history.push(`/merchant/branch/dashboard`);
+        history.push(`/branch/dashboard`);
       }
       break;
     case 'cashier':
       localStorage.setItem('cashierLogged', JSON.stringify(response.data));
-      if (response.data.details.status === 0) {
-        history.push(`/merchant/cashier/${name}/login-verify`);
+      if (response.data.status === 0) {
+        history.push(`/cashier/${name}/login-verify`);
       } else {
-        history.push(`/merchant/cashier/dashboard`);
+        history.push(`/cashier/dashboard`);
       }
       break;
     default:

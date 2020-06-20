@@ -24,7 +24,7 @@ const MiddleTitle = styled.div`
 
 const CashierHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
-  const name = localStorage.getItem(`cashier_name`);
+  const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).cashier;
 
   let permissions = localStorage.getItem('permissions');
   if (permissions !== 'all' && permissions !== '') {
@@ -41,7 +41,7 @@ const CashierHeader = (props) => {
           </A>
         ) : null}
 
-        <A href="/merchant/cashier/dashboard" float="left">
+        <A href="/cashier/dashboard" float="left">
           <h2>{name.toUpperCase()}</h2>
         </A>
         {props.middleTitle ? (

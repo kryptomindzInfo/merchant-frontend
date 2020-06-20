@@ -21,6 +21,7 @@ import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
+import { fetchInvoices, invoiceApi } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
@@ -32,11 +33,11 @@ function InvoiceListPage(props) {
   const [value, setValue] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [allRow, setAllRow] = React.useState([]);
-  const [transferRow, setTransferRow] = React.useState([]);
-  const [receiveRow, setReceiveRow] = React.useState([]);
+  const [paidRow, setPaidRow] = React.useState([]);
+  const [unpaidRow, setUnpaidRow] = React.useState([]);
   const { match } = props;
-  const { groupId } = match.params;
-  localStorage.setItem('currentGroupId', groupId);
+  const { id } = match.params;
+  localStorage.setItem('currentGroupId', id);
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);
@@ -55,21 +56,58 @@ function InvoiceListPage(props) {
     setUploadInvoicePopup(false);
   };
 
+  const setInvoices = (list) => {
+    setInvoiceList(list);
+    setAllRow(list);
+    const paidRows = list.filter((invoice) => {
+      return invoice.paid === 1;
+    });
+    const unpaidRows = list.filter((invoice) => {
+      return invoice.paid === 0;
+    });
+    setPaidRow(paidRows);
+    setUnpaidRow(unpaidRows);
+  };
+
+  const refreshInvoiceList = async () => {
+    setLoading(true);
+    fetchInvoices(id)
+      .then((data) => {
+        setInvoices(data.list);
+        setLoading(false);
+      })
+      .catch((err) => setLoading(false));
+  };
+
   const getInvoices = () => {
     return invoiceList.map((invoice) => {
       return (
         <tr key={invoice._id}>
-          <td>{invoice.bill_no}</td>
+          <td>{invoice.number}</td>
           <td>{invoice.name}</td>
           <td className="tac">
-            {CURRENCY} {invoice.amount.toFixed(2)}
+            {CURRENCY} {invoice.amount}
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <span onClick={() => handleCreateInvoicePopupClick({})}>
+                <span
+                  onClick={() =>
+                    handleCreateInvoicePopupClick('update', invoice)
+                  }
+                >
                   Edit
                 </span>
-                <span>Delete</span>
+                <span
+                  onClick={async () =>
+                    invoiceApi(
+                      {},
+                      { invoice_id: invoice._id },
+                      'delete',
+                    ).then((data) => refreshInvoiceList())
+                  }
+                >
+                  Delete
+                </span>
               </div>
             </span>
           </td>
@@ -86,11 +124,11 @@ function InvoiceListPage(props) {
         break;
       case 1:
         setPage(0);
-        setInvoiceList(transferRow);
+        setInvoiceList(paidRow);
         break;
       case 2:
         setPage(0);
-        setInvoiceList(receiveRow);
+        setInvoiceList(unpaidRow);
         break;
       default:
         setInvoiceList(allRow);
@@ -98,31 +136,18 @@ function InvoiceListPage(props) {
   };
 
   useEffect(() => {
-    const getInvoiceList = () => {
-      const invoices = [
-        {
-          _id: 'sdsdsd',
-          name: 'Yusuf',
-          amount: 100,
-          bill_no: 1,
-        },
-      ];
-      setInvoiceList(invoices);
-    };
-    getInvoiceList();
+    refreshInvoiceList();
   }, []);
 
   if (isLoading) {
     return <Loader fullPage />;
   }
 
-  const name = localStorage.getItem(`cashier_name`);
-
   return (
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Cashier | ${name.toUpperCase()} | Invoice</title>
+        <title>Invoice | CASHIER | E-WALLET </title>
       </Helmet>
       <CashierHeader active="invoice" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
@@ -145,7 +170,7 @@ function InvoiceListPage(props) {
                 <Button
                   className="addBankButton"
                   flex
-                  onClick={() => handleCreateInvoicePopupClick('new', {})}
+                  onClick={() => handleCreateInvoicePopupClick('create', {})}
                 >
                   <AddIcon className="material-icons" />
                   <span>Create Invoice</span>
@@ -211,6 +236,11 @@ function InvoiceListPage(props) {
         <CreateInvoicePopup
           onClose={() => onCreateInvoicePopupClose()}
           invoice={editingInvoice}
+          groupId={id}
+          refreshInvoiceList={() => {
+            refreshInvoiceList();
+          }}
+          type={invoiceType}
         />
       ) : null}
 

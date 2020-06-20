@@ -25,7 +25,7 @@ class CashierNav extends Component {
     return (
       <React.Fragment>
         <NavTag>
-          <A href="/merchant/cashier/dashboard">
+          <A href="/cashier/dashboard">
             <Link active={dashboard}>Dashboard</Link>
           </A>
         </NavTag>

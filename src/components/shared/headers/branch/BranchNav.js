@@ -24,7 +24,7 @@ class BranchNav extends Component {
     return (
       <React.Fragment>
         <NavTag>
-          <A href="/merchant/branch/dashboard">
+          <A href="/branch/dashboard">
             <Link active={dashboard}>Dashboard</Link>
           </A>
         </NavTag>

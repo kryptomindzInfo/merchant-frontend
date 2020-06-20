@@ -179,7 +179,7 @@ function MerchantCreateCashierPopup(props) {
                     required
                   />
                 </FormGroup>
-                {values.editBranchLoading ? (
+                {isSubmitting ? (
                   <Button
                     disabled={isSubmitting}
                     filledBtn

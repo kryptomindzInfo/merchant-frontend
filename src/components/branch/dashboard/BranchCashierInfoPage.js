@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import React from 'react';
+import React, { useState } from 'react';
 import Wrapper from '../../shared/Wrapper';
 import Container from '../../shared/Container';
 import Main from '../../shared/Main';
@@ -7,34 +7,39 @@ import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CashierWallet from './CashierWallets';
-import MerchantBranchInfoSidebar from '../../merchant/branch/MerchantBranchInfoSidebar';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
+import BranchCashierInfoSidebar from './BranchCashierInfoSidebar';
+import BranchEditCashierPopup from './BranchEditCashierPopup';
 
 function BranchCashierInfoPage(props) {
+  const [editCashierPopup, setEditCashierPopup] = useState(false);
   const { match } = props;
   const { id } = match.params;
-  localStorage.setItem('currentBranchId', id);
-  const branch = JSON.parse(localStorage.getItem(`${id}_branchInfo`));
+  const [cashierInfo, setCashierInfo] = useState(
+    JSON.parse(localStorage.getItem('selectedCashier')),
+  );
   /* if (isLoading) {
     return <Loader fullPage />;
   } */
 
-  const name = localStorage.getItem(`branch_name`);
   return (
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Branch | {name.toUpperCase()} | Info</title>
+        <title>Cashier | BRANCH | E-WALLET</title>
       </Helmet>
       <BranchHeader
         page="info"
-        middleTitle={id}
-        goto="/merchant/branch/dashboard"
+        middleTitle={cashierInfo.name}
+        goto="/branch/dashboard"
       />
       <Container verticalMargin>
-        <MerchantBranchInfoSidebar
+        <BranchCashierInfoSidebar
+          edit={() => {
+            setEditCashierPopup(true);
+          }}
           active="info"
-          name={branch.name}
+          id={id}
           type="Cashier"
         />
         <Main>
@@ -43,12 +48,7 @@ function BranchCashierInfoPage(props) {
             <div className="cardBody">
               <Row>
                 <Col className="infoLeft">Cashier Name</Col>
-                <Col className="infoRight">Yusuf Jk</Col>
-              </Row>
-
-              <Row>
-                <Col className="infoLeft">Cashier Code</Col>
-                <Col className="infoRight">2322</Col>
+                <Col className="infoRight">{cashierInfo.name}</Col>
               </Row>
 
               <Row>
@@ -58,32 +58,40 @@ function BranchCashierInfoPage(props) {
 
               <Row>
                 <Col className="infoLeft">From</Col>
-                <Col className="infoRight">12:00PM</Col>
+                <Col className="infoRight">{cashierInfo.working_from}</Col>
               </Row>
 
               <Row>
                 <Col className="infoLeft">To</Col>
-                <Col className="infoRight">8:00PM</Col>
+                <Col className="infoRight">{cashierInfo.working_to}</Col>
               </Row>
 
               <Row>
                 <Col className="infoLeft">Maximum per transaction amount</Col>
-                <Col className="infoRight">1000</Col>
+                <Col className="infoRight">{cashierInfo.per_trans_amt}</Col>
               </Row>
 
               <Row>
                 <Col className="infoLeft">Maximum daily transaction amount</Col>
-                <Col className="infoRight">100</Col>
+                <Col className="infoRight">{cashierInfo.max_trans_amt}</Col>
               </Row>
 
               <Row>
                 <Col className="infoLeft">Maximum daily transaction count</Col>
-                <Col className="infoRight">200</Col>
+                <Col className="infoRight">{cashierInfo.max_trans_count}</Col>
               </Row>
             </div>
           </Card>
         </Main>
       </Container>
+      {editCashierPopup ? (
+        <BranchEditCashierPopup
+          type="update"
+          refreshCashierList={(data) => setCashierInfo(data)}
+          onClose={() => setEditCashierPopup(false)}
+          cashier={cashierInfo}
+        />
+      ) : null}
     </Wrapper>
   );
 }

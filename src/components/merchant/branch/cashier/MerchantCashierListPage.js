@@ -40,7 +40,7 @@ function MerchantCashierListPage(props) {
 
   const refreshCashierList = async () => {
     setLoading(true);
-    const data = await getMerchantCashier();
+    const data = await getMerchantCashier(id);
     setCashierList(data.list);
     setLoading(data.loading);
   };

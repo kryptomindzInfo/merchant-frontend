@@ -1,5 +1,5 @@
 import React from 'react';
-import { Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
 import Button from '../../shared/Button';
@@ -7,124 +7,99 @@ import TextInput from '../../shared/TextInput';
 import Loader from '../../shared/Loader';
 import SelectInput from '../../shared/SelectInput';
 import { inputFocus, inputBlur } from '../../utils/handleInputFocus';
+import { editBranchCashier, assignStaff } from '../api/BranchAPI';
 
 function AssignUserPopup(props) {
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
-          name: props.user.name || '',
-          logo_hash: props.user.logo_hash || '',
-          description: props.user.description || '',
-          document_hash: props.user.document_hash || '',
-          email: props.user.email || '',
-          mobile: props.user.mobile || '',
-          user_id: props.user.username || '',
-          users: [
-            {
-              _id: '2sdnjs',
-              name: 'Yusuf',
-            },
-          ],
+          name: props.cashier.name || '',
+          staff_id: props.cashier.staff_id || '',
         }}
-        onSubmit={{}}
+        onSubmit={async (values) => {
+          values.cashier_id = props.cashier._id;
+          await assignStaff(props, values);
+        }}
       >
         {(formikProps) => {
-          const { values, handleChange, handleBlur } = formikProps;
+          const {
+            values,
+            handleChange,
+            handleBlur,
+            isSubmitting,
+          } = formikProps;
 
           return (
             <div>
               <h1>Assign User</h1>
-              <FormGroup mR="10%" mL="10%">
-                <label>Cashier Name*</label>
-                <TextInput
-                  type="text"
-                  name="name"
-                  onFocus={(e) => {
-                    handleChange(e);
-                    inputFocus(e);
-                  }}
-                  onBlur={(e) => {
-                    handleBlur(e);
-                    handleChange(e);
-                    inputBlur(e);
-                  }}
-                  value={values.name}
-                  readOnly
-                  autoFocus
-                  onChange={handleChange}
-                />
-              </FormGroup>
-              <FormGroup mR="10%" mL="10%">
-                <label>Cashier Code*</label>
-                <TextInput
-                  type="text"
-                  name="bcode"
-                  onFocus={(e) => {
-                    handleChange(e);
-                    inputFocus(e);
-                  }}
-                  onBlur={(e) => {
-                    handleBlur(e);
-                    handleChange(e);
-                    inputBlur(e);
-                  }}
-                  value={values.bcode}
-                  onChange={handleChange}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup mR="10%" mL="10%">
-                <label>Assign User*</label>
-                <SelectInput
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                  value={values.bank_user_id}
-                  name="bank_user_id"
-                  placeholder="Assign User*"
-                  required
-                >
-                  <option value="">Select User</option>
-                  {values.users.map((b) => {
-                    return (
-                      <option key={b._id} value={b._id}>
-                        {b.name}
-                      </option>
-                    );
-                  })}
-                </SelectInput>
-              </FormGroup>
+              <Form>
+                <FormGroup>
+                  <label>Cashier Name*</label>
+                  <TextInput
+                    type="text"
+                    name="name"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    value={values.name}
+                    readOnly
+                    autoFocus
+                    onChange={handleChange}
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <SelectInput
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.staff_id}
+                    name="staff_id"
+                    required
+                  >
+                    <option value="">Select User</option>
+                    {props.user.map((b) => {
+                      return (
+                        <option key={b._id} value={b._id}>
+                          {b.name}
+                        </option>
+                      );
+                    })}
+                  </SelectInput>
+                </FormGroup>
 
-              {values.assignLoading ? (
-                <Button
-                  style={{
-                    padding: '5px',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontWeight: 500,
-                    width: '80%',
-                    marginLeft: '10%',
-                  }}
-                  filledBtn
-                  marginTop="50px"
-                  disabled
-                >
-                  <Loader />
-                </Button>
-              ) : (
-                <Button
-                  style={{
-                    padding: '5px',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontWeight: 500,
-                    width: '80%',
-                    marginLeft: '10%',
-                  }}
-                  filledBtn
-                  marginTop="50px"
-                >
-                  <span>Assign User</span>
-                </Button>
-              )}
+                {isSubmitting ? (
+                  <Button
+                    marginTop="10px"
+                    style={{
+                      padding: '5px',
+                      fontFamily: 'Roboto, sans-serif',
+                      fontWeight: 500,
+                    }}
+                    filledBtn
+                    disabled
+                  >
+                    <Loader />
+                  </Button>
+                ) : (
+                  <Button
+                    marginTop="10px"
+                    style={{
+                      padding: '5px',
+                      fontFamily: 'Roboto, sans-serif',
+                      fontWeight: 500,
+                    }}
+                    filledBtn
+                  >
+                    <span>Assign User</span>
+                  </Button>
+                )}
+              </Form>
             </div>
           );
         }}

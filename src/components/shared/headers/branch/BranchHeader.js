@@ -25,7 +25,7 @@ const MiddleTitle = styled.div`
 
 const BranchHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
-  const name = localStorage.getItem(`branch_name`);
+  const { name } = JSON.parse(localStorage.getItem('branchLogged')).details;
 
   return (
     <TopBar>
@@ -37,7 +37,7 @@ const BranchHeader = (props) => {
           </A>
         ) : null}
 
-        <A href="/merchant/branch/dashboard" float="left">
+        <A href="/branch/dashboard" float="left">
           <h2>{name.toUpperCase()}</h2>
         </A>
         {middleTitle ? (

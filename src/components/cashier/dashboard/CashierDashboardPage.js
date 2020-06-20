@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
@@ -9,26 +9,67 @@ import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
-import CreateGroupCard from './CreateGroupCard';
+import { fetchGroups, fetchStats } from '../api/CashierAPI';
+import Loader from '../../shared/Loader';
 
 const CashierDashboardPage = (props) => {
-  const name = localStorage.getItem(`cashier_name`);
+  const [isLoading, setLoading] = useState(false);
+  const [groupList, setGroupList] = useState([]);
+  const [cashierInfo, setCashierInfo] = useState(
+    JSON.parse(localStorage.getItem('cashierLogged')).cashier,
+  );
+  const [stats, setStats] = useState({});
+
+  const refreshGroupList = async () => {
+    setLoading(true);
+    fetchGroups()
+      .then((data) => {
+        setGroupList(data.list);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+
+  const getStats = async () => {
+    setLoading(true);
+    fetchStats()
+      .then((data) => {
+        setStats(data.stats);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+  useEffect(() => {
+    refreshGroupList();
+    getStats();
+  }, []); // Or [] if effect doesn't need props or state
+
+  if (isLoading) {
+    return <Loader fullPage />;
+  }
+
   return (
     <Fragment>
       <Helmet>
-        <title>Cashier| {name.toUpperCase()} | Dashboard</title>
+        <title>Dashboard | CASHIER | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
       <CashierHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
           <Row>
-            <GroupNumberCard />
-            <InvoiceNumberCard />
-            <PendingInvoiceCard />
-            <CreateGroupCard />
+            <GroupNumberCard no={groupList.length} />
+            <InvoiceNumberCard no={stats.bills_paid} />
+            <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
           </Row>
-          <GroupListCard />
+          <GroupListCard
+            groupList={groupList}
+            refreshGroupList={() => refreshGroupList()}
+          />
         </Main>
       </Container>
     </Fragment>
