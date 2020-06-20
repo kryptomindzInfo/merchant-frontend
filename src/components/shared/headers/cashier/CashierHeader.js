@@ -26,11 +26,6 @@ const CashierHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
   const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).cashier;
 
-  let permissions = localStorage.getItem('permissions');
-  if (permissions !== 'all' && permissions !== '') {
-    permissions = JSON.parse(permissions);
-  }
-
   return (
     <TopBar>
       <Welcome type="cashier" />

@@ -53,9 +53,11 @@ import {
   staffUrl,
   verifyUrl,
   zoneBranchUrl,
+  cashierSettingsUrl,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
+import CashierSettingsPage from './cashier/settings/CashierSettingsPage';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -283,6 +285,12 @@ function App() {
               exact
               path={invoiceUrl}
               component={(props) => <InvoiceListPage {...props} />}
+            />
+            <ProtectedRoute
+              type="cashier"
+              exact
+              path={cashierSettingsUrl}
+              component={(props) => <CashierSettingsPage {...props} />}
             />
             {/* ===================== */}
             {/* Cashier Public Routes */}

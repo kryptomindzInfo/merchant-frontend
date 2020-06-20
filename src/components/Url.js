@@ -57,6 +57,7 @@ export {
   cashierLoginUrl,
   cashierForgotPasswordUrl,
   cashierOtpUrl,
+  cashierSettingsUrl,
   branchForgotPasswordUrl,
   branchOtpUrl,
   defaultBranchLoginUrl,
