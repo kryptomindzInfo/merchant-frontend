@@ -265,7 +265,7 @@ const editMerchant = async (props, values) => {
 const getRules = async (ruleType) => {
   try {
     let URL = '';
-    if (ruleType === 'Revenue') {
+    if (ruleType === 'Fee') {
       URL = `${MERCHANT_API}/merchantFee/getRules`;
     } else {
       URL = `${MERCHANT_API}/commission/getRules`;
@@ -288,7 +288,7 @@ const getRules = async (ruleType) => {
 
 const ruleAPI = async (props, ruleType, ruleStatus, payload) => {
   let URL = '';
-  if (ruleType === 'Revenue') {
+  if (ruleType === 'Fee') {
     URL = `${MERCHANT_API}/merchantFee/${ruleStatus}`;
   } else {
     URL = `${MERCHANT_API}/commission/${ruleStatus}`;

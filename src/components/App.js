@@ -39,7 +39,7 @@ import {
   cashierOtpUrl,
   merchantCashierUrl,
   cashierVerifyUrl,
-  commissionSharingRules,
+  merchantCommissionRules,
   defaultBranchLoginUrl,
   defaultCashierLoginUrl,
   forgotPasswordUrl,
@@ -49,7 +49,7 @@ import {
   merchantDashboardUrl,
   merchantSettingsUrl,
   otpUrl,
-  revenueSharingRules,
+  merchantFeeRules,
   staffUrl,
   verifyUrl,
   zoneBranchUrl,
@@ -172,15 +172,15 @@ function App() {
             <ProtectedRoute
               type="merchant"
               exact
-              path={revenueSharingRules}
+              path={merchantFeeRules}
               component={(props) => (
-                <SharingRulesPage ruleType="Revenue" {...props} />
+                <SharingRulesPage ruleType="Fee" {...props} />
               )}
             />
             <ProtectedRoute
               type="merchant"
               exact
-              path={commissionSharingRules}
+              path={merchantCommissionRules}
               component={(props) => (
                 <SharingRulesPage ruleType="Commission" {...props} />
               )}

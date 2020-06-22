@@ -78,20 +78,20 @@ class SettingSidebar extends Component {
             <h3>Documents</h3>
           </Card>
         </A>
-        <A href="/merchant/settings/revenue-sharing-rules">
+        <A href="/merchant/settings/fee-rules">
           <Card rounded selected={revenue} className="sideNav">
             <i className="material-icons">
               <MobileScreenShareIcon />
             </i>
-            <h3>Revenue Sharing Rules</h3>
+            <h3>Fee Rules</h3>
           </Card>
         </A>
-        <A href="/merchant/settings/commission-sharing-rules">
+        <A href="/merchant/settings/commission-rules">
           <Card rounded selected={commission} className="sideNav">
             <i className="material-icons">
               <MobileScreenShareIcon />
             </i>
-            <h3>Commission Sharing Rules</h3>
+            <h3>Commission Rules</h3>
           </Card>
         </A>
       </SidebarStyle>

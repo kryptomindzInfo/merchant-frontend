@@ -21,7 +21,7 @@ import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
-import { fetchInvoices, invoiceApi } from '../api/CashierAPI';
+import { fetchGroups, fetchInvoices, invoiceApi } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
@@ -35,6 +35,7 @@ function InvoiceListPage(props) {
   const [allRow, setAllRow] = React.useState([]);
   const [paidRow, setPaidRow] = React.useState([]);
   const [unpaidRow, setUnpaidRow] = React.useState([]);
+  const [groupList, setGroupList] = React.useState([]);
   const { match } = props;
   const { id } = match.params;
   localStorage.setItem('currentGroupId', id);
@@ -74,6 +75,20 @@ function InvoiceListPage(props) {
     fetchInvoices(id)
       .then((data) => {
         setInvoices(data.list);
+        setLoading(false);
+      })
+      .catch((err) => setLoading(false));
+  };
+
+  const refreshGroupList = () => {
+    setLoading(true);
+    fetchGroups()
+      .then((data) => {
+        setGroupList(
+          data.list.filter((group) => {
+            return group._id === id;
+          }),
+        );
         setLoading(false);
       })
       .catch((err) => setLoading(false));
@@ -137,6 +152,7 @@ function InvoiceListPage(props) {
 
   useEffect(() => {
     refreshInvoiceList();
+    refreshGroupList();
   }, []);
 
   if (isLoading) {
@@ -245,7 +261,12 @@ function InvoiceListPage(props) {
       ) : null}
 
       {uploadInvoicePopup ? (
-        <UploadInvoicePopup onClose={() => onUploadInvoicePopupClose()} />
+        <UploadInvoicePopup
+          groupId={id}
+          groups={groupList}
+          refreshInvoiceList={() => refreshInvoiceList()}
+          onClose={() => onUploadInvoicePopupClose()}
+        />
       ) : null}
     </Wrapper>
   );

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Papa from 'papaparse';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
@@ -139,6 +140,39 @@ const invoiceApi = async (props, values, type) => {
   }
 };
 
+const triggerCsvBrowse = (inp) => {
+  const input = document.getElementById(inp);
+  input.click();
+};
+
+const processCsv = (e, sendResult) => {
+  if (e.target.files && e.target.files[0] != null) {
+    return Papa.parse(e.target.files[0], {
+      worker: true,
+      header: true,
+      skipEmptyLines: true,
+      complete: async function demo(results) {
+        if (results.errors && results.errors.length > 0) {
+          notify(
+            'Error parsing csv file. Please check the format and try again.',
+            'error',
+          );
+          console.log(results);
+        }
+        sendResult(results.data);
+      },
+    });
+  }
+};
+
+const onCsvFileChange = (e) => {
+  let parsedData = [];
+  processCsv(e, function demo(data) {
+    parsedData = data;
+  });
+  return parsedData;
+};
+
 export {
   fetchGroups,
   groupAPI,
@@ -146,4 +180,7 @@ export {
   uploadInvoice,
   invoiceApi,
   fetchStats,
+  triggerCsvBrowse,
+  onCsvFileChange,
+  processCsv,
 };

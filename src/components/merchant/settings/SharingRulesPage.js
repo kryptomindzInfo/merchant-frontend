@@ -111,7 +111,7 @@ const SharingRulesPage = (props) => {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | {props.ruleType} Sharing Rules</title>
+        <title>Merchant | {props.ruleType} Rules</title>
       </Helmet>
       <MerchantHeader
         page="info"
@@ -127,8 +127,8 @@ const SharingRulesPage = (props) => {
                 <i className="material-icons">supervised_user_circle</i>
               </div>
               <div className="cardHeaderRight">
-                <h3>{props.ruleType} Sharing Rules</h3>
-                <h5>Fees created by the infra</h5>
+                <h3>{props.ruleType} Rules</h3>
+                <h5>Fees created by the Bank</h5>
               </div>
             </div>
             <div className="cardBody">
@@ -212,6 +212,7 @@ const SharingRulesPage = (props) => {
                         onClick={() =>
                           ruleAPI(props, props.ruleType, 'approve', {
                             fee_id: ruleForApproval._id,
+                            commission_id: ruleForApproval._id,
                           }).then(() => {
                             refreshRuleList();
                           })

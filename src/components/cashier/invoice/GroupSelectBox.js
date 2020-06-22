@@ -1,5 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, useEffect, useState } from 'react';
 import styled from 'styled-components';
+import CircularProgress from '@material-ui/core/CircularProgress/CircularProgress';
+import { fetchGroups } from '../api/CashierAPI';
+import Loader from '../../shared/Loader';
 
 const SelectInput = styled.select`
   width: 100%;
@@ -22,23 +25,37 @@ const SelectInput = styled.select`
   }
 `;
 
-class GroupSelectBox extends Component {
-  componentDidMount() {}
+const GroupSelectBox = (props) => {
+  const [groupList, setGroupList] = useState(props.groups);
+  const [isLoading, setLoading] = useState(false);
 
-  sendCloseSignal = (event) => {
+  const sendCloseSignal = (event) => {
     if (!document.getElementById('GroupSelectBoxBody').contains(event.target)) {
-      this.props.close();
+      props.close();
     }
   };
 
-  render() {
-    return (
-      <SelectInput {...this.props}>
-        <option title="Group 1">Group 1</option>
-        <option title="Group 2">Group 2</option>
-      </SelectInput>
-    );
-  }
-}
+  const getGroups = () => {
+    if (isLoading) {
+      return;
+    }
+    return groupList.map((group) => {
+      return (
+        <option key={group._id} value={group._id}>
+          {group.name}
+        </option>
+      );
+    });
+  };
+
+  return (
+    <SelectInput {...props}>
+      {isLoading ? (
+        <CircularProgress size={30} thickness={5} color="primary" />
+      ) : null}
+      {groupList && groupList.length > 0 ? getGroups() : null}
+    </SelectInput>
+  );
+};
 
 export default GroupSelectBox;

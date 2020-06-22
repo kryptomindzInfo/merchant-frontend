@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import Popup from '../../shared/Popup';
@@ -6,42 +6,66 @@ import FormGroup from '../../shared/FormGroup';
 import Button from '../../shared/Button';
 import GroupSelectBox from './GroupSelectBox';
 import UploadArea from '../../shared/UploadArea';
-import { CONTRACT_URL, STATIC_URL } from '../../constants';
+import {
+  onCsvFileChange,
+  processCsv,
+  triggerCsvBrowse,
+  uploadInvoice,
+} from '../api/CashierAPI';
 
-function CreateInvoicePopup(props) {
-  const token = localStorage.getItem('bankLogged');
+function UploadInvoicePopup(props) {
+  const [uploadInvoiceList, setUploadInvoices] = useState([]);
+
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
-          groupName: '',
+          group_id: props.groupId,
           document_hash: '',
         }}
-        onSubmit={{}}
+        onSubmit={async (values) => {
+          const payload = {
+            group_id: props.groupId,
+            invoices: uploadInvoiceList,
+          };
+          await uploadInvoice(props, payload);
+        }}
       >
         {(formikProps) => {
-          const { values, isSubmitting } = formikProps;
+          const { values, isSubmitting, setFieldValue } = formikProps;
 
           return (
             <div>
               <h1>Upload Invoice</h1>
               <Form>
                 <FormGroup>
-                  <GroupSelectBox />
+                  <GroupSelectBox groups={props.groups} />
                 </FormGroup>
                 <FormGroup>
-                  <UploadArea bgImg={`${STATIC_URL}main/pdf-icon.png`}>
+                  <UploadArea bgImg="/src/assets/images/csvImage.jpg">
                     {values.document_hash ? (
-                      <a
-                        className="uploadedImg"
-                        href={CONTRACT_URL + values.document_hash}
-                        target="_BLANK"
-                      />
+                      <a className="uploadedImg" target="_BLANK" />
                     ) : (
                       ' '
                     )}
-                    <div className="uploadTrigger">
-                      <input type="file" id="logo" data-key="logo" />
+                    <div
+                      className="uploadTrigger"
+                      onClick={() => triggerCsvBrowse('csv')}
+                    >
+                      <input
+                        type="file"
+                        id="csv"
+                        data-key="csv"
+                        accept=".csv"
+                        onChange={(e) => {
+                          processCsv(e, function (data) {
+                            if (data && data.length > 0) {
+                              setUploadInvoices(data);
+                              setFieldValue('document_hash', 'success', true);
+                            }
+                          });
+                        }}
+                      />
                       {!values.document_hash ? (
                         <i className="material-icons">cloud_upload</i>
                       ) : (
@@ -57,6 +81,15 @@ function CreateInvoicePopup(props) {
                       </label>
                     </div>
                   </UploadArea>
+                </FormGroup>
+                <FormGroup>
+                  <a
+                    target="_BLANK"
+                    href="/src/assets/invoice_format.csv"
+                    id="pdfdown"
+                  >
+                    Click here to download sample invoice file
+                  </a>
                 </FormGroup>
                 <Button
                   type="submit"
@@ -85,4 +118,4 @@ function CreateInvoicePopup(props) {
   );
 }
 
-export default CreateInvoicePopup;
+export default UploadInvoicePopup;
