@@ -104,6 +104,16 @@ const SharingRulesPage = (props) => {
     });
   };
 
+  const ranges = () => {
+    ruleForApproval.ranges.map((range) => (
+      <tr key={range._id}>
+        <td className="tac">{`${CURRENCY} ${range.trans_from} - ${CURRENCY} ${range.trans_to}`}</td>
+        <td className="tac">{`${CURRENCY} ${range.fixed}`}</td>
+        <td className="tac">{`${range.percentage}%`} </td>
+      </tr>
+    ));
+  };
+
   if (isLoading) {
     return <Loader fullPage />;
   }
@@ -168,7 +178,23 @@ const SharingRulesPage = (props) => {
                     : 'Non-wallet to Merchant'}
                 </span>
               </p>
-
+              <Row>
+                <Table marginTop="34px" smallTd>
+                  <thead>
+                    <tr>
+                      <th>Range</th>
+                      <th>Fixed</th>
+                      <th>Percentage</th>
+                      <th />
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {ruleForApproval.ranges && ruleForApproval.ranges.length > 0
+                      ? ranges()
+                      : null}
+                  </tbody>
+                </Table>
+              </Row>
               <Row>
                 <Col>
                   <FormGroup>

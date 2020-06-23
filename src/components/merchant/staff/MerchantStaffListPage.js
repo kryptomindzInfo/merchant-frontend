@@ -54,7 +54,7 @@ const MerchantStaffListPage = () => {
         return (
           <Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
             <div className="profile">
-              <img src={pic} />
+              <img style={{ height: '100px', width: '100px' }} src={pic} />
             </div>
             <Row>
               <Col cW="80%">
