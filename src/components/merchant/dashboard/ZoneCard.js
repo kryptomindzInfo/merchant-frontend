@@ -62,8 +62,8 @@ function ZoneCard() {
                 <div className="popMenu">
                   <span
                     onClick={() => {
-                      localStorage.setItem('selectedZone', zone.code);
-                      history.push(`/merchant/${zone.code}/branches`);
+                      localStorage.setItem('selectedZone', zone._id);
+                      history.push(`/merchant/${zone._id}/branches`);
                     }}
                   >
                     <span>Branches</span>

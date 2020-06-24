@@ -31,7 +31,7 @@ const MerchantDashboardPage = () => {
         <MerchantSideBar />
         <Main>
           <Row>
-            <PaymentReceivedCard />
+            <PaymentReceivedCard amount="0" />
             <InvoiceNumberCard amount={noOfInvoicesPaid} />
             <PendingInvoiceCard amount={noOfPendingInvoices} />
             <OverDueInvoiceCard />

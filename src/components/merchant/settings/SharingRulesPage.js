@@ -126,7 +126,7 @@ const SharingRulesPage = (props) => {
       </Helmet>
       <MerchantHeader
         page="info"
-        middleTitle={`${props.ruleType} Sharing Rules`}
+        middleTitle={`${props.ruleType} Rule`}
         goto="/dashboard"
       />
       <Container verticalMargin>
