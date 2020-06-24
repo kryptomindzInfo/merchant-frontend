@@ -134,6 +134,7 @@ function EditMerchantPopup(props) {
                     size="small"
                     name="description"
                     fullWidth
+                    multiline
                     rows="3"
                     style={{ marginBottom: '14px' }}
                     variant="outlined"

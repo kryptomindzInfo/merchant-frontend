@@ -28,7 +28,8 @@ const Icon = styled.i`
 
 const Welcome = (props) => {
   const { type } = props;
-  const name = localStorage.getItem(`${type}_name`);
+  const { name } =
+    JSON.parse(localStorage.getItem(`${type}Logged`)).details || '';
 
   const logoutMerchant = () => {
     localStorage.removeItem('merchantLogged');

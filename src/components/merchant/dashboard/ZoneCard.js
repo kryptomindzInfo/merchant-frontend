@@ -49,7 +49,7 @@ function ZoneCard() {
       return (
         <tr key={zone._id}>
           <td className="tac">{zone.name}</td>
-          <td className="tac">{zone.branches.length}</td>
+          <td className="tac">{zone.branches_count}</td>
           <td className="tac bold">
             <div
               style={{
@@ -119,7 +119,7 @@ function ZoneCard() {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Zone Branches</th>
+                <th>Total Branches</th>
                 <th>Zone ID</th>
               </tr>
             </thead>

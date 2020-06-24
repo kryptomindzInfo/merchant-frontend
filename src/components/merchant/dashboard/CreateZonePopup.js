@@ -13,6 +13,7 @@ import {
 } from '../../utils/handleInputFocus';
 import ErrorText from '../../shared/ErrorText';
 import { zoneAPI } from '../api/MerchantAPI';
+import TextArea from '../../shared/TextArea';
 
 function CreateZonePopup(props) {
   useEffect(() => {
@@ -95,7 +96,7 @@ function CreateZonePopup(props) {
                     onBlur={(e) => {
                       inputBlur(e);
                     }}
-                    as={TextInput}
+                    as={TextArea}
                   />
                 </FormField>
                 <Button
