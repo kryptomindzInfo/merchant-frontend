@@ -85,7 +85,7 @@ function CreateZonePopup(props) {
                   <ErrorMessage name="name" component={ErrorText} />
                 </FormField>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="name">Description</label>
+                  <label htmlFor="description">Description</label>
                   <Field
                     type="text"
                     name="description"

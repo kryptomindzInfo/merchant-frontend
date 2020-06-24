@@ -14,6 +14,7 @@ import {
 } from '../../utils/handleInputFocus';
 import { invoiceApi, uploadInvoice } from '../api/CashierAPI';
 import { CURRENCY } from '../../constants';
+import TextArea from '../../shared/TextArea';
 
 function CreateInvoicePopup(props) {
   useEffect(() => {
@@ -136,7 +137,7 @@ function CreateInvoicePopup(props) {
                 </Row>
                 <FormGroup>
                   <label>Description</label>
-                  <TextInput
+                  <TextArea
                     type="date"
                     name="description"
                     rows="3"

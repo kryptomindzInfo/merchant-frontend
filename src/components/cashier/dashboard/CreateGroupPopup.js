@@ -14,6 +14,7 @@ import {
 import ErrorText from '../../shared/ErrorText';
 import { merchantCashierAPI } from '../../merchant/api/MerchantAPI';
 import { groupAPI } from '../api/CashierAPI';
+import TextArea from '../../shared/TextArea';
 
 function CreateBranchPopup(props) {
   useEffect(() => {
@@ -49,7 +50,7 @@ function CreateBranchPopup(props) {
             <div>
               <Form>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="description">Category Id</label>
+                  <label htmlFor="code">Category Id</label>
                   <Field
                     type="text"
                     name="code"
@@ -92,7 +93,7 @@ function CreateBranchPopup(props) {
                     onBlur={(e) => {
                       inputBlur(e);
                     }}
-                    as={TextInput}
+                    as={TextArea}
                   />
                 </FormField>
                 <Button
