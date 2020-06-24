@@ -13,6 +13,7 @@ import {
   inputFocus,
 } from '../../utils/handleInputFocus';
 import { invoiceApi, uploadInvoice } from '../api/CashierAPI';
+import { CURRENCY } from '../../constants';
 
 function CreateInvoicePopup(props) {
   useEffect(() => {
@@ -62,7 +63,7 @@ function CreateInvoicePopup(props) {
                 <FormGroup>
                   <label>Bill No*</label>
                   <TextInput
-                    type="number"
+                    type="text"
                     name="number"
                     onFocus={(e) => {
                       handleChange(e);
@@ -136,8 +137,9 @@ function CreateInvoicePopup(props) {
                 <FormGroup>
                   <label>Description</label>
                   <TextInput
-                    type="text"
+                    type="date"
                     name="description"
+                    rows="3"
                     onFocus={(e) => {
                       handleChange(e);
                       inputFocus(e);
@@ -171,25 +173,34 @@ function CreateInvoicePopup(props) {
                     required
                   />
                 </FormGroup>
-                <FormGroup>
-                  <label>Amount</label>
-                  <TextInput
-                    type="text"
-                    name="amount"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.amount}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
+                <Row>
+                  <Col cW="20%" mR="2%">
+                    <FormGroup>
+                      <TextInput readOnly value={CURRENCY} />
+                    </FormGroup>
+                  </Col>
+                  <Col>
+                    <FormGroup>
+                      <label>Amount</label>
+                      <TextInput
+                        type="text"
+                        name="amount"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        value={values.amount}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                </Row>
                 <Button
                   type="submit"
                   disabled={isSubmitting}

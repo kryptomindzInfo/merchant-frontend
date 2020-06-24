@@ -118,13 +118,19 @@ function MerchantBranchListPage(props) {
     });
   };
 
+  const { name } = JSON.parse(localStorage.getItem('currentZone'));
+
   return (
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
         <title>Merchant | Branches</title>
       </Helmet>
-      <MerchantHeader active="branch" />
+      <MerchantHeader
+        page="info"
+        middleTitle={name}
+        goto="/merchant/dashboard"
+      />
       <Container verticalMargin>
         <MerchantSideBar showClaimButton />
         <Main>

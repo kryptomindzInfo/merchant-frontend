@@ -11,9 +11,9 @@ const redirectUser = (type, response) => {
     case 'merchant':
       localStorage.setItem('merchantLogged', JSON.stringify(response.data));
       if (response.data.details.status === 0) {
-        history.push(verifyUrl);
+        history.push(`/merchant/${name}/login-verify`);
       } else {
-        history.push(merchantDashboardUrl);
+        history.push(`/merchant/dashboard`);
       }
       break;
 

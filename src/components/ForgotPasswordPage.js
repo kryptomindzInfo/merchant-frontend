@@ -31,16 +31,12 @@ const ForgotPasswordPage = (props) => {
   const { name } = match.params;
   const [isLoading, setLoading] = React.useState(false);
 
-  if (type === 'merchant') {
-    localStorage.setItem(`${type}_name`, 'merchant');
-  } else {
-    localStorage.setItem(`${type}_name`, name);
-  }
+  localStorage.setItem(`${type}_name`, name);
 
   return (
     <Fragment>
       <Helmet>
-        <title>`${type.toUpperCase()} | Forgot Password | E-WALLET`</title>
+        <title>OTP Forgot Password | ${type.toUpperCase()} | E-WALLET</title>
         <meta
           name="description"
           content="Description of Forgot Password page"

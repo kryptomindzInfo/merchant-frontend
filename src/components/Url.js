@@ -1,9 +1,10 @@
 // merchant URL's
 const merchantDashboardUrl = '/merchant/dashboard';
-const verifyUrl = '/merchant/login-verify';
-const loginUrl = '/merchant/login';
-const forgotPasswordUrl = '/merchant/forgot-password';
-const otpUrl = '/merchant/otp-forgot-password';
+const verifyUrl = '/merchant/:name/login-verify';
+const defaultLoginUrl = '/merchant/:name';
+const loginUrl = '/merchant/:name/login';
+const forgotPasswordUrl = '/merchant/:name/forgot-password';
+const otpUrl = '/merchant/:name/otp-forgot-password';
 const zoneBranchUrl = '/merchant/:id/branches';
 const staffUrl = '/merchant/staff';
 const merchantCashierUrl = '/merchant/:id/cashiers';
@@ -63,4 +64,5 @@ export {
   defaultBranchLoginUrl,
   defaultCashierLoginUrl,
   cashierVerifyUrl,
+  defaultLoginUrl,
 };

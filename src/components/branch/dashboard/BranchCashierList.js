@@ -73,9 +73,6 @@ function BranchCashierList(props) {
       return (
         <tr key={cashier._id}>
           <td>{cashier.name}</td>
-          <td className="tac">
-            {CURRENCY} {cashier.max_trans_amt}
-          </td>
           <td>
             {userList.filter((u) => u._id === cashier.staff_id)[0]
               ? userList.filter((u) => u._id === cashier.staff_id)[0].name
@@ -172,7 +169,6 @@ function BranchCashierList(props) {
                 <thead>
                   <tr>
                     <th>Cashier Name</th>
-                    <th>Cash in Hand</th>
                     <th>Assigned to</th>
                     <th>Status</th>
                     <th>Transaction Count</th>

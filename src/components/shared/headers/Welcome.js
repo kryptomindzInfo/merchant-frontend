@@ -28,13 +28,12 @@ const Icon = styled.i`
 
 const Welcome = (props) => {
   const { type } = props;
-  const { name } =
-    JSON.parse(localStorage.getItem(`${type}Logged`)).details ||
-    JSON.parse(localStorage.getItem(`${type}Logged`)).cashier;
+  const name = localStorage.getItem(`${type}_name`);
 
   const logoutMerchant = () => {
     localStorage.removeItem('merchantLogged');
-    history.push('/merchant/login');
+    localStorage.removeItem(`merchant_name`);
+    history.push(`/merchant/${name}/login`);
   };
 
   const logoutBranch = () => {

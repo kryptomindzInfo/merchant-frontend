@@ -15,7 +15,7 @@ const forgotPassword = (type, reqBody) => {
         } else if (res.data.status === 1) {
           const successMessage = 'Redirecting you to OTP page!';
           notify(successMessage, 'success');
-          localStorage.setItem(`otpNo_${type}`, res.data.mobile);
+          localStorage.setItem(`otpNo_${type}`, reqBody.mobile);
           const otpUrl = getUrlBasedOnType(type, name, 'otp-forgot-password');
           setTimeout(() => {
             history.push(otpUrl);

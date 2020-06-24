@@ -1,7 +1,7 @@
 const getUrlBasedOnType = (type, name, url) => {
   switch (type) {
     case 'merchant':
-      return `/merchant/${url}`;
+      return `/merchant/${name}/${url}`;
     case 'branch':
       return `/merchant/branch/${name}/${url}`;
     case 'cashier':

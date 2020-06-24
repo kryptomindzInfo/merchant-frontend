@@ -44,7 +44,7 @@ const SignInVerificationPage = (props) => {
     <Fragment>
       <Helmet>
         <title>
-          Verification | `${type.toString().toUpperCase()} | E-WALLET`
+          Change Password | ${type.toString().toUpperCase()} | E-WALLET
         </title>
         <meta name="description" content="Description of SignUp page" />
       </Helmet>
@@ -66,7 +66,7 @@ const SignInVerificationPage = (props) => {
           className={classes.setupPageRightSide}
         >
           <Typography variant="h4" style={{ fontWeight: '600' }}>
-            Verify Account
+            Change Password
           </Typography>
           <Typography
             variant="subtitle2"

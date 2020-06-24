@@ -4,7 +4,8 @@ import axios from 'axios';
 import PropTypes from 'prop-types';
 import { getUrlBasedOnType } from './utils/urlUtils';
 
-const ProtectedRoute = ({ type, component: Component, ...rest }) => {
+const ProtectedRoute = ({ component: Component, ...rest }) => {
+  const { type } = rest;
   const name = localStorage.getItem(`${type}_name`);
   const userLogged = JSON.parse(localStorage.getItem(`${type}Logged`));
   const pathNameBasedOnType = () => getUrlBasedOnType(type, name, 'login');

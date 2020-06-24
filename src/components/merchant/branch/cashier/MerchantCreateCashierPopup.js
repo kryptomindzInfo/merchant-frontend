@@ -15,6 +15,7 @@ import {
 import { merchantCashierAPI } from '../../api/MerchantAPI';
 
 function MerchantCreateCashierPopup(props) {
+  const selectedBranch = JSON.parse(localStorage.getItem('selectedBranch'));
   useEffect(() => {
     correctFocus(props.type);
   });
@@ -23,11 +24,9 @@ function MerchantCreateCashierPopup(props) {
       <Formik
         initialValues={{
           name: props.cashier.name || '',
-          working_from: props.cashier.working_from || '',
-          working_to: props.cashier.working_to || '',
-          per_trans_amt: props.cashier.per_trans_amt || '',
-          max_trans_amt: props.cashier.max_trans_amt || '',
-          max_trans_count: props.cashier.max_trans_count || '',
+          working_from:
+            props.cashier.working_from || selectedBranch.working_from,
+          working_to: props.cashier.working_to || selectedBranch.working_to,
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
@@ -122,63 +121,6 @@ function MerchantCreateCashierPopup(props) {
                     </FormGroup>
                   </Col>
                 </Row>
-                <FormGroup>
-                  <label>Maximum per transaction amount*</label>
-                  <TextInput
-                    type="text"
-                    name="per_trans_amt"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.per_trans_amt}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Maximum daily transaction amount*</label>
-                  <TextInput
-                    type="text"
-                    name="max_trans_amt"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.max_trans_amt}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Maximum daily transaction count*</label>
-                  <TextInput
-                    type="text"
-                    name="max_trans_count"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.max_trans_count}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
                 {isSubmitting ? (
                   <Button
                     disabled={isSubmitting}

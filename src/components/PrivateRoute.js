@@ -3,7 +3,8 @@ import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { getUrlBasedOnType } from './utils/urlUtils';
 
-const PrivateRoute = ({ type, component: Component, ...rest }) => {
+const PrivateRoute = ({ component: Component, ...rest }) => {
+  const { type } = rest;
   const mobile = localStorage.getItem(`otpNo_${type}`);
   const name = localStorage.getItem(`${type}_name`);
   const pathNameBasedOnType = () =>

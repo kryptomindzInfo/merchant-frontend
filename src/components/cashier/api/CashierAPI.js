@@ -157,7 +157,6 @@ const processCsv = (e, sendResult) => {
             'Error parsing csv file. Please check the format and try again.',
             'error',
           );
-          console.log(results);
         }
         sendResult(results.data);
       },

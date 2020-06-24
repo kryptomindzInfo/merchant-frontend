@@ -33,11 +33,7 @@ const SignInPage = (props) => {
   const { type, match } = props;
   const { name } = match.params;
 
-  if (type === 'merchant') {
-    localStorage.setItem(`${type}_name`, 'merchant');
-  } else {
-    localStorage.setItem(`${type}_name`, name);
-  }
+  localStorage.setItem(`${type}_name`, name);
 
   const hrefBasedOnType = () =>
     setHref(getUrlBasedOnType(type, name, 'forgot-password'));
@@ -49,11 +45,7 @@ const SignInPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>
-          {type === 'merchant'
-            ? `${type.toUpperCase()} | Login`
-            : `${type.toUpperCase()} | ${name.toUpperCase()} | Login`}
-        </title>
+        <title> Login | ${type.toUpperCase()} | E-Wallet</title>
         <meta name="description" content="Description of SignIn Page" />
       </Helmet>
       <Grid

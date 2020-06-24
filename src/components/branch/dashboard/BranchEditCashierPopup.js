@@ -26,9 +26,6 @@ function BranchEditCashierPopup(props) {
           name: props.cashier.name || '',
           working_from: props.cashier.working_from || '',
           working_to: props.cashier.working_to || '',
-          per_trans_amt: props.cashier.per_trans_amt || '',
-          max_trans_amt: props.cashier.max_trans_amt || '',
-          max_trans_count: props.cashier.max_trans_count || '',
         }}
         onSubmit={async (values) => {
           values.cashier_id = props.cashier._id;
@@ -115,63 +112,6 @@ function BranchEditCashierPopup(props) {
                     </FormGroup>
                   </Col>
                 </Row>
-                <FormGroup>
-                  <label>Maximum per transaction amount*</label>
-                  <TextInput
-                    type="text"
-                    name="per_trans_amt"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.per_trans_amt}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Maximum daily transaction amount*</label>
-                  <TextInput
-                    type="text"
-                    name="max_trans_amt"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.max_trans_amt}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Maximum daily transaction count*</label>
-                  <TextInput
-                    type="text"
-                    name="max_trans_count"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.max_trans_count}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
                 {isSubmitting ? (
                   <Button
                     disabled={isSubmitting}

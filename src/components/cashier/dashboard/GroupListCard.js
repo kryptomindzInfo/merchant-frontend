@@ -173,7 +173,7 @@ const GroupListCard = (props) => {
               onClick={() => handleGroupPopupClick('create', {})}
             >
               <AddIcon className="material-icons" />
-              <span>Add Group</span>
+              <span>Add Category</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
@@ -185,15 +185,15 @@ const GroupListCard = (props) => {
                 />
               </div>
               <div className="cardHeaderRight" style={{ paddingLeft: '10px' }}>
-                <h3>Group List</h3>
-                <h5>List of your groups</h5>
+                <h3>Category List</h3>
+                <h5>List of your Categories</h5>
               </div>
             </div>
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Group Name</th>
+                    <th>Name</th>
                     <th>No. of Invoices</th>
                     <th>No. of Paid Invoices</th>
                     <th>No. of Due Invoices</th>

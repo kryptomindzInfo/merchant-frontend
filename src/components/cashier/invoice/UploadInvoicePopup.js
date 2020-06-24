@@ -58,7 +58,7 @@ function UploadInvoicePopup(props) {
                         data-key="csv"
                         accept=".csv"
                         onChange={(e) => {
-                          processCsv(e, function (data) {
+                          processCsv(e, (data) => {
                             if (data && data.length > 0) {
                               setUploadInvoices(data);
                               setFieldValue('document_hash', 'success', true);

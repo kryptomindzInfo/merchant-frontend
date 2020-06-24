@@ -22,7 +22,7 @@ function CreateBranchPopup(props) {
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1>{props.type === 'update' ? `Update Group` : `Create Group`}</h1>
+      <h1>{props.type === 'update' ? `Update Category` : `Create Category`}</h1>
       <Formik
         initialValues={{
           name: props.group.name || '',
@@ -49,10 +49,11 @@ function CreateBranchPopup(props) {
             <div>
               <Form>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="description">Group Code</label>
+                  <label htmlFor="description">Category Id</label>
                   <Field
                     type="text"
                     name="code"
+                    rows="3"
                     onFocus={(e) => {
                       inputFocus(e);
                     }}
@@ -63,7 +64,7 @@ function CreateBranchPopup(props) {
                   />
                 </FormField>
                 <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="name">Group Name*</label>
+                  <label htmlFor="name">Name*</label>
                   <Field
                     type="text"
                     name="name"
@@ -110,8 +111,8 @@ function CreateBranchPopup(props) {
                   ) : (
                     <span>
                       {props.type === 'update'
-                        ? `Update Group`
-                        : `Create Group`}
+                        ? `Update Category`
+                        : `Create Category`}
                     </span>
                   )}
                 </Button>

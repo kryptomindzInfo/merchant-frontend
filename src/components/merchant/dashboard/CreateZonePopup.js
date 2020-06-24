@@ -88,6 +88,7 @@ function CreateZonePopup(props) {
                   <Field
                     type="text"
                     name="description"
+                    rows="3"
                     onFocus={(e) => {
                       inputFocus(e);
                     }}

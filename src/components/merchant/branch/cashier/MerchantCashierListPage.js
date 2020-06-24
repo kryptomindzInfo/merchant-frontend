@@ -58,9 +58,6 @@ function MerchantCashierListPage(props) {
       return (
         <tr key={cashier._id}>
           <td>{cashier.name}</td>
-          <td className="tac">
-            {CURRENCY} {cashier.max_trans_amt}
-          </td>
           <td
             style={{
               color: cashier.is_closed ? 'red' : 'green',
@@ -149,7 +146,6 @@ function MerchantCashierListPage(props) {
                 <thead>
                   <tr>
                     <th>Cashier Name</th>
-                    <th>Cash in Hand</th>
                     <th>Status</th>
                     <th>Transaction Count</th>
                   </tr>

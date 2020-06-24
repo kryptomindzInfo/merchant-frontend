@@ -21,16 +21,6 @@ const CashierWallet = (props) => {
           </div>
         </Card>
       </Col>
-
-      <Col>
-        <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
-          <h4>Cash in Hand</h4>
-          <h5>Available</h5>
-          <div className="cardValue">
-            {CURRENCY} {inHand.toFixed(2)}
-          </div>
-        </Card>
-      </Col>
       <Col>
         <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
           <h4>Money Paid Today</h4>

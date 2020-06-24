@@ -20,6 +20,8 @@ const MerchantDashboardPage = () => {
   const noOfPendingInvoices = parseFloat(
     merchantDetails.bills_raised - merchantDetails.bills_paid,
   );
+  const amount = parseFloat(0);
+  const overDueInvoices = 0;
   return (
     <Fragment>
       <Helmet>
@@ -31,10 +33,10 @@ const MerchantDashboardPage = () => {
         <MerchantSideBar />
         <Main>
           <Row>
-            <PaymentReceivedCard amount="0" />
-            <InvoiceNumberCard amount={noOfInvoicesPaid} />
-            <PendingInvoiceCard amount={noOfPendingInvoices} />
-            <OverDueInvoiceCard />
+            <PaymentReceivedCard amount={amount} />
+            <InvoiceNumberCard no={noOfInvoicesPaid} />
+            <PendingInvoiceCard no={noOfPendingInvoices} />
+            <OverDueInvoiceCard no={overDueInvoices} />
           </Row>
           <ZoneCard />
           <HistoryCard />

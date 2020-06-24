@@ -54,6 +54,7 @@ import {
   verifyUrl,
   zoneBranchUrl,
   cashierSettingsUrl,
+  defaultLoginUrl,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
@@ -188,6 +189,11 @@ function App() {
             {/* ====================== */}
             {/* Merchant Public Routes */}
             {/* ====================== */}
+            <Route
+              exact
+              path={defaultLoginUrl}
+              component={(props) => <SignInPage type="merchant" {...props} />}
+            />
             <Route
               exact
               path={loginUrl}
