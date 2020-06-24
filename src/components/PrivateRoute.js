@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { getUrlBasedOnType } from './utils/urlUtils';
 
 const PrivateRoute = ({ type, component: Component, ...rest }) => {
-  const mobile = JSON.parse(localStorage.getItem(`otpNo_${type}`));
+  const mobile = localStorage.getItem(`otpNo_${type}`);
   const name = localStorage.getItem(`${type}_name`);
   const pathNameBasedOnType = () =>
     getUrlBasedOnType(type, name, 'forgot-password');

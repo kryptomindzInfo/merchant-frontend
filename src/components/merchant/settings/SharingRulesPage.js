@@ -88,6 +88,7 @@ const SharingRulesPage = (props) => {
           <td className="tac bold">
             {rule.merchant_approve_status === 0 ? (
               <Button
+                style={{ padding: '5px' }}
                 onClick={() => onApprovalPopupClick(rule)}
                 className="addBankButton"
               >
@@ -105,7 +106,7 @@ const SharingRulesPage = (props) => {
   };
 
   const ranges = () => {
-    ruleForApproval.ranges.map((range) => (
+    return ruleForApproval.ranges.map((range) => (
       <tr key={range._id}>
         <td className="tac">{`${CURRENCY} ${range.trans_from} - ${CURRENCY} ${range.trans_to}`}</td>
         <td className="tac">{`${CURRENCY} ${range.fixed}`}</td>
@@ -169,8 +170,11 @@ const SharingRulesPage = (props) => {
               </p>
               <p>
                 {' '}
-                Rule Name : <span id="poptype">{ruleForApproval.name}</span>
-                Transaction Type :{' '}
+                Rule Name : <span id="poptype">
+                  {ruleForApproval.name}
+                </span>{' '}
+                <br />
+                Transaction Type :
                 <span id="poptype">
                   {' '}
                   {ruleForApproval.type === 0
@@ -178,6 +182,7 @@ const SharingRulesPage = (props) => {
                     : 'Non-wallet to Merchant'}
                 </span>
               </p>
+              <br />
               <Row>
                 <Table marginTop="34px" smallTd>
                   <thead>
@@ -185,7 +190,6 @@ const SharingRulesPage = (props) => {
                       <th>Range</th>
                       <th>Fixed</th>
                       <th>Percentage</th>
-                      <th />
                     </tr>
                   </thead>
                   <tbody>
@@ -213,6 +217,7 @@ const SharingRulesPage = (props) => {
                         filledBtn
                         marginTop="50px"
                         accentedBtn
+                        style={{ padding: '8px' }}
                         type="button"
                         onClick={() =>
                           ruleAPI(props, props.ruleType, 'decline', {
@@ -245,6 +250,7 @@ const SharingRulesPage = (props) => {
                         }
                         filledBtn
                         marginTop="50px"
+                        style={{ padding: '8px' }}
                         type="button"
                       >
                         <span>Approve</span>
