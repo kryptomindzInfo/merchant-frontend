@@ -152,9 +152,10 @@ function CreateInvoicePopup(props) {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <label>Due Date</label>
+                  <label className="focused">Due Date</label>
                   <TextInput
-                    type="text"
+                    type="date"
+                    format="dd-mm-yyyy"
                     name="due_date"
                     onFocus={(e) => {
                       handleChange(e);
