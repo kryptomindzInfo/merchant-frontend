@@ -38,7 +38,6 @@ jobs:
          subject: Merchant Frontend Workflow Status - ${{job.status}}
          #https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#job-context
          body: |
-            Workflow - ${{job.container}}
             Status - ${{job.status}}
          to: invinciblemuffi@gmail.com, hatimtechnologies@gmail.com
          from: Hatim Technologies
