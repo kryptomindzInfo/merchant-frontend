@@ -17,6 +17,10 @@ import { CURRENCY } from '../../constants';
 import TextArea from '../../shared/TextArea';
 
 function CreateInvoicePopup(props) {
+  const today = new Date();
+  const date = `${today.getFullYear()}-${
+    today.getMonth() + 1 < 10 ? `0${today.getMonth()}` : today.getMonth()
+  }-${today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()}`;
   useEffect(() => {
     correctFocus(props.type);
   });
@@ -29,6 +33,8 @@ function CreateInvoicePopup(props) {
           name: props.invoice.name || '',
           amount: props.invoice.amount || '',
           due_date: props.invoice.due_date || '',
+          bill_period: props.invoice.bill_period || '',
+          bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
           ccode: props.invoice.ccode || '',
@@ -100,11 +106,21 @@ function CreateInvoicePopup(props) {
                   />
                 </FormGroup>
                 <Row>
-                  <Col cW="20%" mR="2%">
+                  <Col cW="25%" mR="2%">
                     <FormGroup>
+                      <label>Country Code*</label>
                       <TextInput
                         type="text"
                         name="ccode"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
                         value={values.ccode}
                         onChange={handleChange}
                         required
@@ -155,6 +171,46 @@ function CreateInvoicePopup(props) {
                   />
                 </FormGroup>
                 <FormGroup>
+                  <label className="focused">Bill Date</label>
+                  <TextInput
+                    type="date"
+                    format="dd-mm-yyyy"
+                    name="bill_date"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    value={values.bill_date}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <label className="focused">Bill Period</label>
+                  <TextInput
+                    type="date"
+                    format="dd-mm-yyyy"
+                    name="bill_period"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    value={values.bill_period}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
                   <label className="focused">Due Date</label>
                   <TextInput
                     type="date"
@@ -180,7 +236,7 @@ function CreateInvoicePopup(props) {
                       <TextInput readOnly value={CURRENCY} />
                     </FormGroup>
                   </Col>
-                  <Col>
+                  <Col cW="78%">
                     <FormGroup>
                       <label>Amount</label>
                       <TextInput

@@ -100,8 +100,12 @@ function InvoiceListPage(props) {
         <tr key={invoice._id}>
           <td>{invoice.number}</td>
           <td>{invoice.name}</td>
-          <td className="tac">
+          <td>
             {CURRENCY} {invoice.amount}
+          </td>
+          <td>{invoice.mobile}</td>
+          <td className="tac">
+            {invoice.due_date}
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
@@ -238,6 +242,8 @@ function InvoiceListPage(props) {
                     <th>Bill No</th>
                     <th>Name</th>
                     <th>Amount</th>
+                    <th>Mobile No</th>
+                    <th>Due Date</th>
                   </tr>
                 </thead>
                 <tbody>

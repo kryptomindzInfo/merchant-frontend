@@ -28,8 +28,13 @@ const Icon = styled.i`
 
 const Welcome = (props) => {
   const { type } = props;
-  const { name } =
-    JSON.parse(localStorage.getItem(`${type}Logged`)).details || '';
+  let name = '';
+  if (type === 'merchant') {
+    // eslint-disable-next-line prefer-destructuring
+    name = JSON.parse(localStorage.getItem(`${type}Logged`)).details.name;
+  } else {
+    name = localStorage.getItem(`${type}_name`);
+  }
 
   const logoutMerchant = () => {
     localStorage.removeItem('merchantLogged');
