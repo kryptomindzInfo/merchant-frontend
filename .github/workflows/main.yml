@@ -1,0 +1,44 @@
+name: Merchant Frontend React Project CI/CD
+
+on:
+  push:
+    branches: [ development ]
+    #https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-ignoring-paths
+    paths-ignore: 
+    - dist/**
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v1.1.0
+      with:
+        version: ${{ matrix.node-version }}
+    
+    - name: Deploy code to ${{ secrets.HOST }}, executing remote ssh commands using ssh key
+      uses: appleboy/ssh-action@master
+      with:
+        username: ${{ secrets.USERNAME }}
+        host: ${{ secrets.HOST }}
+        script: ~/deploy-merchant-frontend.sh
+        key: ${{ secrets.DEPLOY_KEY }}
+        
+   #https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
+    - name: Workflow Status Email
+      uses: wadeww/send-email-action@master
+      with:
+         server_address: smtp.gmail.com
+         port: 465
+         username: ${{secrets.MAIL_USERNAME}}
+         password: ${{secrets.MAIL_PASSWORD}}
+         subject: Merchant Frontend Workflow Status - ${{job.status}}
+         #https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#job-context
+         body: |
+            Workflow - ${{job.container}}
+            Status - ${{job.status}}
+         to: invinciblemuffi@gmail.com, hatimtechnologies@gmail.com
+         from: Hatim Technologies
