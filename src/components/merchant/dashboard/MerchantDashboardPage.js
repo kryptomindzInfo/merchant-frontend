@@ -39,7 +39,7 @@ const MerchantDashboardPage = () => {
             <OverDueInvoiceCard no={overDueInvoices} />
           </Row>
           <ZoneCard />
-          <HistoryCard />
+          {/* <HistoryCard /> */}
         </Main>
       </Container>
     </Fragment>
