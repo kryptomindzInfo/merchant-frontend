@@ -20,19 +20,7 @@ const CashierDashboardPage = (props) => {
   );
   const [stats, setStats] = useState({});
 
-  const refreshGroupList = async () => {
-    setLoading(true);
-    fetchGroups()
-      .then((data) => {
-        setGroupList(data.list);
-        setLoading(false);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
-  };
-
-  const getStats = async () => {
+  const getStats = () => {
     setLoading(true);
     fetchStats()
       .then((data) => {
@@ -44,7 +32,6 @@ const CashierDashboardPage = (props) => {
       });
   };
   useEffect(() => {
-    refreshGroupList();
     getStats();
   }, []); // Or [] if effect doesn't need props or state
 
@@ -66,10 +53,7 @@ const CashierDashboardPage = (props) => {
             <InvoiceNumberCard no={stats.bills_paid} />
             <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
           </Row>
-          <GroupListCard
-            groupList={groupList}
-            refreshGroupList={() => refreshGroupList()}
-          />
+          <GroupListCard setLoading={(val) => {}} />
         </Main>
       </Container>
     </Fragment>

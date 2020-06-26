@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
@@ -19,6 +19,7 @@ import Container from '../../shared/Container';
 import CreateGroupPopup from './CreateGroupPopup';
 import Button from '../../shared/Button';
 import history from '../../utils/history';
+import { fetchGroups } from '../api/CashierAPI';
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -119,7 +120,22 @@ const GroupListCard = (props) => {
   const [addGroupPopup, setGroupPopup] = useState(false);
   const [popupType, setPopupType] = useState('create');
   const [editingGroup, setEditingGroup] = useState({});
-  const [groupList, setGroupList] = useState(props.groupList);
+  const [groupList, setGroupList] = useState([]);
+
+  const refreshGroupList = () => {
+    fetchGroups()
+      .then((data) => {
+        setGroupList(data.list);
+        props.setLoading(false);
+      })
+      .catch((err) => {
+        props.setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    refreshGroupList();
+  }, []);
 
   const handleGroupPopupClick = (type, group) => {
     setEditingGroup(group);
@@ -212,7 +228,7 @@ const GroupListCard = (props) => {
         <CreateGroupPopup
           type={popupType}
           group={editingGroup}
-          refreshGroupList={() => props.refreshGroupList()}
+          refreshGroupList={() => refreshGroupList()}
           onClose={() => setGroupPopup(false)}
         />
       ) : null}
