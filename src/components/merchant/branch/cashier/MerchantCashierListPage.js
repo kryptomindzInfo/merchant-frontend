@@ -79,7 +79,7 @@ function MerchantCashierListPage(props) {
                     props.history.push(getCashierInfoURL(cashier._id));
                   }}
                 >
-                  Cashier Info
+                  Info
                 </span>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
@@ -101,7 +101,7 @@ function MerchantCashierListPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Cashier | MERCHANT | E-WALLET </title>
+        <title>Staff | MERCHANT | E-WALLET </title>
       </Helmet>
       <MerchantHeader
         page="info"
@@ -128,7 +128,7 @@ function MerchantCashierListPage(props) {
               onClick={() => handleEditCashierPopupClick('new', {})}
             >
               <AddIcon className="material-icons" />
-              <span>Add Cashier</span>
+              <span>Add Staff</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
@@ -137,15 +137,15 @@ function MerchantCashierListPage(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>Cashier List</h3>
-                <h5>List of your cashier</h5>
+                <h3>Staff List</h3>
+                <h5>List of your staff</h5>
               </div>
             </div>
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Cashier Name</th>
+                    <th>Name</th>
                     <th>Status</th>
                     <th>Transaction Count</th>
                   </tr>

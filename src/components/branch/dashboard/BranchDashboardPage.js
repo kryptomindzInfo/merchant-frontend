@@ -9,11 +9,7 @@ import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PaymentReceivedCard from '../../shared/PaymentReceivedCard';
 import BranchCashierList from './BranchCashierList';
-import {
-  fetchBranchStaffList,
-  fetchDailyStats,
-  getBranchCashier,
-} from '../api/BranchAPI';
+import { fetchDailyStats } from '../api/BranchAPI';
 import Loader from '../../shared/Loader';
 
 const BranchDashboardPage = (props) => {

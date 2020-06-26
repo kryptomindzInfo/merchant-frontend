@@ -42,7 +42,7 @@ const CashierDashboardPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>Dashboard | CASHIER | E-WALLET </title>
+        <title>Dashboard | STAFF | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
       <CashierHeader active="dashboard" />

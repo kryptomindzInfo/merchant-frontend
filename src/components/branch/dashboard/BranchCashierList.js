@@ -8,7 +8,6 @@ import ActionBar from '../../shared/ActionBar';
 import Table from '../../shared/Table';
 import Main from '../../shared/Main';
 import Card from '../../shared/Card';
-import { CURRENCY } from '../../constants';
 import AssignUserPopup from './AssignUserPopup';
 import BranchEditCashierPopup from './BranchEditCashierPopup';
 import {
@@ -99,7 +98,7 @@ function BranchCashierList(props) {
                     history.push(getCashierInfoURL(cashier._id));
                   }}
                 >
-                  Cashier Info
+                  Staff Info
                 </span>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
@@ -160,15 +159,15 @@ function BranchCashierList(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>Cashier List</h3>
-                <h5>List of your cashier</h5>
+                <h3>Staff List</h3>
+                <h5>List of your staffs</h5>
               </div>
             </div>
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Cashier Name</th>
+                    <th>Staff Name</th>
                     <th>Assigned to</th>
                     <th>Status</th>
                     <th>Transaction Count</th>
