@@ -1,5 +1,5 @@
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.min.css';
+import '../../styles/Toastify.css';
 
 toast.configure({
   position: toast.POSITION.BOTTOM_RIGHT,
