@@ -11,7 +11,7 @@ import { fetchZoneList } from '../api/MerchantAPI';
 import A from '../../shared/A';
 import history from '../../utils/history';
 
-function ZoneCard() {
+function ZoneCard(props) {
   const [openZonePopup, setZonePopup] = React.useState(false);
   const [zoneList, setZoneList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
@@ -32,6 +32,7 @@ function ZoneCard() {
     const data = await fetchZoneList();
     setZoneList(data.list);
     setLoading(data.loading);
+    props.refreshZone();
   };
 
   useEffect(() => {
