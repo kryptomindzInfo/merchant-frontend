@@ -20,12 +20,12 @@ jobs:
         version: ${{ matrix.node-version }}
     
     - name: Deploy code to ${{ secrets.HOST }}, executing remote ssh commands using ssh key
-      uses: appleboy/ssh-action@master
-      with:
-        username: ${{ secrets.USERNAME }}
-        host: ${{ secrets.HOST }}
-        script: ~/deploy-merchant-frontend.sh
-        key: ${{ secrets.DEPLOY_KEY }}
+     # uses: appleboy/ssh-action@master
+     # with:
+      #  username: ${{ secrets.USERNAME }}
+      #  host: ${{ secrets.HOST }}
+      #  script: ~/deploy-merchant-frontend.sh
+      #  key: ${{ secrets.DEPLOY_KEY }}
         
    #https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idif
     - name: Workflow Status Email
