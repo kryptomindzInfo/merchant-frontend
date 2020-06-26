@@ -65,21 +65,6 @@ function BranchCashierInfoPage(props) {
                 <Col className="infoLeft">To</Col>
                 <Col className="infoRight">{cashierInfo.working_to}</Col>
               </Row>
-
-              <Row>
-                <Col className="infoLeft">Maximum per transaction amount</Col>
-                <Col className="infoRight">{cashierInfo.per_trans_amt}</Col>
-              </Row>
-
-              <Row>
-                <Col className="infoLeft">Maximum daily transaction amount</Col>
-                <Col className="infoRight">{cashierInfo.max_trans_amt}</Col>
-              </Row>
-
-              <Row>
-                <Col className="infoLeft">Maximum daily transaction count</Col>
-                <Col className="infoRight">{cashierInfo.max_trans_count}</Col>
-              </Row>
             </div>
           </Card>
         </Main>
