@@ -111,9 +111,11 @@ const branchAPI = async (props, values, apiType) => {
   }
 };
 
-const fetchBranchList = async () => {
+const fetchBranchList = async (zoneId) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listBranches`);
+    const res = await axios.post(`${MERCHANT_API}/listBranchesByZoneId`, {
+      zone_id: zoneId,
+    });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

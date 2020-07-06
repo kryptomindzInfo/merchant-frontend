@@ -47,7 +47,7 @@ function MerchantBranchListPage(props) {
 
   const refreshBranchList = async () => {
     setLoading(true);
-    fetchBranchList().then((data) => {
+    fetchBranchList(localStorage.getItem('selectedZone')).then((data) => {
       setBranchList(data.list);
       setLoading(data.loading);
     });
