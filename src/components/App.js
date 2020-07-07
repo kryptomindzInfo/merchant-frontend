@@ -14,6 +14,7 @@ import MerchantStaffListPage from './merchant/staff/MerchantStaffListPage';
 import MerchantBranchListPage from './merchant/branch/MerchantBranchListPage';
 import MerchantBranchInfoPage from './merchant/branch/MerchantBranchInfoPage';
 import MerchantOfferingListPage from './merchant/offerings/MerchantOfferingListPage';
+import MerchantTaxListPage from './merchant/taxes/MerchantTaxListPage';
 import GlobalStyle from '../styles/global-styles';
 import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
@@ -57,6 +58,7 @@ import {
   cashierSettingsUrl,
   defaultLoginUrl,
   merchantOfferingsUrl,
+  merchantTaxesUrl,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
@@ -157,6 +159,12 @@ function App() {
               exact
               path={merchantOfferingsUrl}
               component={(props) => <MerchantOfferingListPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantTaxesUrl}
+              component={(props) => <MerchantTaxListPage {...props} />}
             />
             <ProtectedRoute
               exact

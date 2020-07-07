@@ -241,7 +241,7 @@ const fetchStaffList = async () => {
   }
 };
 
-// API's for Merchant Product
+// API's for Merchant Offering
 
 const fetchOfferingList = async () => {
   try {
@@ -297,6 +297,67 @@ const editOffering = async (props, values) => {
       notify(res.data.message, 'error');
     }
   } catch (e) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+// API's for Merchant Taxes
+const fetchTaxList = async () => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/listTaxes`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.taxes, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const createTax = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/createTax`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshTaxList();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const editTax = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/editTax`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshTaxList();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
     notify('Something went wrong', 'error');
   }
 };
@@ -440,4 +501,7 @@ export {
   fetchOfferingList,
   deleteOffering,
   editOffering,
+  fetchTaxList,
+  createTax,
+  editTax,
 };

@@ -44,7 +44,7 @@ const MerchantOfferingListPage = () => {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | Product</title>
+        <title>Merchant | Offering</title>
       </Helmet>
       <MerchantHeader active="offering" />
       <Container verticalMargin>
