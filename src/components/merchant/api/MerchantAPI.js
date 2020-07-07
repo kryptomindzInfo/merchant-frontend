@@ -241,6 +241,66 @@ const fetchStaffList = async () => {
   }
 };
 
+// API's for Merchant Product
+
+const fetchOfferingList = async () => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/listOfferings`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.offerings, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const deleteOffering = async (offeringId) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/deleteOffering`, {
+      offering_id: offeringId,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.data, 'success');
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const editOffering = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/editOffering`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshOfferingList(res.data.data);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 // API's for Merchant Settings
 const editMerchant = async (props, values) => {
   try {
@@ -377,4 +437,7 @@ export {
   unblockMerchantBranch,
   merchantCashierAPI,
   getMerchantCashier,
+  fetchOfferingList,
+  deleteOffering,
+  editOffering,
 };

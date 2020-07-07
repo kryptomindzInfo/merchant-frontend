@@ -13,6 +13,7 @@ const merchantBranchInfoUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/settings';
 const merchantFeeRules = '/merchant/settings/fee-rules';
 const merchantCommissionRules = '/merchant/settings/commission-rules';
+const merchantOfferingsUrl = '/merchant/offerings';
 
 // branch URL's
 const defaultBranchLoginUrl = '/merchant/branch/:name';
@@ -65,4 +66,5 @@ export {
   defaultCashierLoginUrl,
   cashierVerifyUrl,
   defaultLoginUrl,
+  merchantOfferingsUrl,
 };
