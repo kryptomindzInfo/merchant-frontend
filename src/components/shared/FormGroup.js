@@ -2,6 +2,7 @@ import styled from 'styled-components';
 
 const FormGroup = styled.div`
   display: block;
+  width: ${(props) => props.width};
   position: relative;
   margin-right: ${(props) => (props.mR ? props.mR : '0')};
   margin-left: ${(props) => (props.mL ? props.mL : '0')};

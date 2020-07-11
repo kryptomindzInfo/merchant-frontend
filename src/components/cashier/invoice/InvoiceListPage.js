@@ -21,11 +21,19 @@ import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
-import { fetchGroups, fetchInvoices, invoiceApi } from '../api/CashierAPI';
+import {
+  fetchGroups,
+  fetchInvoices,
+  invoiceApi,
+  fetchTaxList,
+  fetchOfferingList,
+} from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
+  const [offeringList, setOfferingList] = React.useState([]);
+  const [taxList, setTaxList] = React.useState([]);
   const [invoiceList, setInvoiceList] = React.useState([]);
   const [invoiceType, setInvoiceType] = React.useState('new');
   const [editingInvoice, setEditingInvoice] = React.useState({});
@@ -42,6 +50,22 @@ function InvoiceListPage(props) {
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);
+  };
+
+  const getOfferingList = async () => {
+    setLoading(true);
+    fetchOfferingList().then((data) => {
+      setOfferingList(data.list);
+      setLoading(data.loading);
+    });
+  };
+
+  const getTaxList = async () => {
+    setLoading(true);
+    fetchTaxList().then((data) => {
+      setTaxList(data.list);
+      setLoading(data.loading);
+    });
   };
 
   const handleCreateInvoicePopupClick = (type, invoice) => {
@@ -157,6 +181,8 @@ function InvoiceListPage(props) {
   useEffect(() => {
     refreshInvoiceList();
     refreshGroupList();
+    getOfferingList();
+    getTaxList();
   }, []);
 
   if (isLoading) {
@@ -243,6 +269,9 @@ function InvoiceListPage(props) {
                     <th>Name</th>
                     <th>Amount</th>
                     <th>Mobile No</th>
+                    <th>
+                      <Button>View</Button>
+                    </th>
                     <th>Due Date</th>
                   </tr>
                 </thead>
@@ -258,6 +287,8 @@ function InvoiceListPage(props) {
         <CreateInvoicePopup
           onClose={() => onCreateInvoicePopupClose()}
           invoice={editingInvoice}
+          taxlist={taxList}
+          offeringlist={offeringList}
           groupId={id}
           refreshInvoiceList={() => {
             refreshInvoiceList();

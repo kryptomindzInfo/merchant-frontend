@@ -30,6 +30,8 @@ const Button = styled.button`
   justify-content: center;
   margin-top: ${(props) => (props.marginTop ? props.marginTop : '0')};
   margin-bottom: ${(props) => (props.marginBottom ? props.marginBottom : '0')};
+  margin-left: ${(props) => (props.marginLeft ? props.marginLeft : '0')};
+  margin-right: ${(props) => (props.marginRight ? props.marginRight : '0')};
   position: ${(props) => (props.bottomRight ? 'absolute' : 'relative')};
   bottom: ${(props) => (props.bottomRight ? '2px;' : '0')};
   right: ${(props) => (props.bottomRight ? '2px;' : '0')};

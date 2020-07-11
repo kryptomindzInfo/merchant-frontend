@@ -17,6 +17,7 @@ import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import {
   blockMerchantBranch,
   fetchBranchList,
+  fetchBranchListByZone,
   unblockMerchantBranch,
 } from '../api/MerchantAPI';
 import history from '../../utils/history';
@@ -47,7 +48,7 @@ function MerchantBranchListPage(props) {
 
   const refreshBranchList = async () => {
     setLoading(true);
-    fetchBranchList(localStorage.getItem('selectedZone')).then((data) => {
+    fetchBranchListByZone(localStorage.getItem('selectedZone')).then((data) => {
       setBranchList(data.list);
       setLoading(data.loading);
     });

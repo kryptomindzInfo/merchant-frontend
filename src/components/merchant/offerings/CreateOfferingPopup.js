@@ -31,7 +31,6 @@ function CreateOfferingPopup(props) {
         }}
         onSubmit={async (values) => {
           values.offering_id = props.offering._id;
-          console.log(values);
           if (props.type === 'update') {
             await editOffering(props, values);
           }

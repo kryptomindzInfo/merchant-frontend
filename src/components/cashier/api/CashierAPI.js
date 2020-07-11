@@ -145,6 +145,25 @@ const triggerCsvBrowse = (inp) => {
   input.click();
 };
 
+const processJson = (e, sendResult) => {
+  if (e.target.files && e.target.files[0] != null) {
+    return Papa.unparse(e.target.files[0], {
+      header: true,
+      skipEmptyLines: true,
+      complete: async function demo(results) {
+        console.log(results.data);
+        if (results.errors && results.errors.length > 0) {
+          notify(
+            'Error parsing csv file. Please check the format and try again.',
+            'error',
+          );
+        }
+        sendResult(results.data);
+      },
+    });
+  }
+};
+
 const processCsv = (e, sendResult) => {
   if (e.target.files && e.target.files[0] != null) {
     return Papa.parse(e.target.files[0], {
@@ -161,6 +180,45 @@ const processCsv = (e, sendResult) => {
         sendResult(results.data);
       },
     });
+  }
+};
+
+const fetchTaxList = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/listTaxes`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.taxes, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const fetchOfferingList = async () => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/merchantCashier/listOfferings`,
+      {},
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.offerings, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
   }
 };
 
@@ -182,4 +240,7 @@ export {
   triggerCsvBrowse,
   onCsvFileChange,
   processCsv,
+  processJson,
+  fetchTaxList,
+  fetchOfferingList,
 };

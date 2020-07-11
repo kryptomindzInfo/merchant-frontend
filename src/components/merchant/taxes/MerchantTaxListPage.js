@@ -13,7 +13,8 @@ import Main from '../../shared/Main';
 import Button from '../../shared/Button';
 import CreateTaxPopup from './CreateTaxPopup';
 import Card from '../../shared/Card';
-import { fetchTaxList } from '../api/MerchantAPI';
+import DeletePopup from '../../shared/DeletePopup';
+import { fetchTaxList, deleteTax } from '../api/MerchantAPI';
 
 const MerchantTaxListPage = () => {
   const [addTaxPopup, setAddTaxPopup] = React.useState(false);
@@ -21,6 +22,8 @@ const MerchantTaxListPage = () => {
   const [popupType, setPopupType] = React.useState('new');
   const [editingTax, setEditingTax] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
+  const [deleteTaxPopup, setDeleteTaxPopup] = React.useState(false);
+  const [deletingTax, setDeletingTax] = React.useState({});
 
   const handleTaxPopupClick = (type, tax) => {
     setEditingTax(tax);
@@ -37,6 +40,22 @@ const MerchantTaxListPage = () => {
     fetchTaxList().then((data) => {
       setTaxList(data.list);
       setLoading(data.loading);
+    });
+  };
+
+  const handleDeleteTaxPopupClick = (offering) => {
+    setDeletingTax(offering);
+    setDeleteTaxPopup(true);
+  };
+
+  const onDeleteTaxPopupClose = () => {
+    setDeleteTaxPopup(false);
+  };
+
+  const handleDeleteTax = (tax) => {
+    deleteTax(tax._id).then(() => {
+      refreshTaxList();
+      setDeleteTaxPopup(false);
     });
   };
 
@@ -67,6 +86,9 @@ const MerchantTaxListPage = () => {
                 <div className="popMenu">
                   <span onClick={() => handleTaxPopupClick('update', tax)}>
                     Edit
+                  </span>
+                  <span onClick={() => handleDeleteTaxPopupClick(tax)}>
+                    Delete
                   </span>
                 </div>
               </span>
@@ -139,6 +161,14 @@ const MerchantTaxListPage = () => {
           tax={editingTax}
           refreshTaxList={(data) => refreshTaxList()}
           onClose={() => onPopupClose()}
+        />
+      ) : null}
+      {deleteTaxPopup ? (
+        <DeletePopup
+          element={deletingTax}
+          onClose={() => onDeleteTaxPopupClose()}
+          delete={handleDeleteTax}
+          header="tax"
         />
       ) : null}
     </Wrapper>

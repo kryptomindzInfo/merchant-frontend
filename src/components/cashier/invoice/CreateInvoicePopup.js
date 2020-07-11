@@ -7,6 +7,7 @@ import Button from '../../shared/Button';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
+import InvoiceDescription from './InvoiceDescription';
 import {
   correctFocus,
   inputBlur,
@@ -17,16 +18,68 @@ import { CURRENCY } from '../../constants';
 import TextArea from '../../shared/TextArea';
 
 function CreateInvoicePopup(props) {
+  const [offeringList, setOfferingList] = React.useState(props.offeringlist);
+  const [taxList, setTaxList] = React.useState(props.taxlist);
+  const [itemList, setItemList] = React.useState([
+    {
+      item_id: '',
+      quantity: 0,
+      tax_id: '',
+      total_amount: 0,
+    },
+  ]);
+  const [totalAmount, setTotalAmount] = React.useState(0);
   const today = new Date();
   const date = `${today.getFullYear()}-${
     today.getMonth() + 1 < 10 ? `0${today.getMonth()}` : today.getMonth()
   }-${today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()}`;
+
+  const addNewItem = () => {
+    setItemList([
+      ...itemList,
+      {
+        item_id: '',
+        quantity: 0,
+        tax_id: '',
+        total_amount: 0,
+      },
+    ]);
+  };
+
+  const deleteItem = (index) => {
+    setItemList(itemList.filter((sindex, ind) => ind !== index));
+  };
+
+  const handleItemIdChange = (id, index) => {
+    const itemL = [...itemList];
+    itemL[index].item_id = id;
+    setItemList(itemL);
+  };
+
+  const handleQuantityChange = (quantity, amount, index) => {
+    const itemL = [...itemList];
+    itemL[index].quantity = quantity;
+    itemL[index].total_amount = amount;
+    setItemList(itemL);
+  };
+
+  const handleTaxIdChange = (id, amount, index) => {
+    const itemL = [...itemList];
+    itemL[index].tax_id = id;
+    itemL[index].total_amount = amount;
+    setItemList(itemL);
+  };
+
+  const handleTotalAmount = (value) => {
+    setTotalAmount(value);
+  };
+
   useEffect(() => {
     correctFocus(props.type);
   });
 
   return (
-    <Popup accentedH1 close={props.onClose.bind(this)}>
+    <Popup accentedH1 bigBody close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
           number: props.invoice.number || '',
@@ -38,8 +91,11 @@ function CreateInvoicePopup(props) {
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
           ccode: props.invoice.ccode || '',
+          items: [],
         }}
         onSubmit={async (values) => {
+          values.items = itemList;
+          values.amount = totalAmount;
           if (props.type === 'create') {
             const payload = {
               group_id: props.groupId,
@@ -67,46 +123,50 @@ function CreateInvoicePopup(props) {
                 {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice'}
               </h1>
               <Form>
-                <FormGroup>
-                  <label>Bill No*</label>
-                  <TextInput
-                    type="text"
-                    name="number"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.number}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label>Name*</label>
-                  <TextInput
-                    type="text"
-                    name="name"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.name}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
                 <Row>
-                  <Col cW="25%" mR="2%">
+                  <Col cW="10%" mR="2%">
+                    <FormGroup>
+                      <label>Bill No*</label>
+                      <TextInput
+                        type="text"
+                        name="number"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        value={values.number}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="40%" mR="2%">
+                    <FormGroup>
+                      <label>Name*</label>
+                      <TextInput
+                        type="text"
+                        name="name"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        value={values.name}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="10%" mR="2%">
                     <FormGroup>
                       <label>Country Code*</label>
                       <TextInput
@@ -127,7 +187,7 @@ function CreateInvoicePopup(props) {
                       />
                     </FormGroup>
                   </Col>
-                  <Col cW="78%">
+                  <Col cW="40%">
                     <FormGroup>
                       <label>Mobile Number*</label>
                       <TextInput
@@ -151,97 +211,24 @@ function CreateInvoicePopup(props) {
                     </FormGroup>
                   </Col>
                 </Row>
-                <FormGroup>
-                  <label>Description</label>
-                  <TextArea
-                    type="date"
-                    name="description"
-                    rows="3"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.description}
-                    onChange={handleChange}
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label className="focused">Bill Date</label>
-                  <TextInput
-                    type="date"
-                    format="dd-mm-yyyy"
-                    name="bill_date"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.bill_date}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label className="focused">Bill Period</label>
-                  <TextInput
-                    type="date"
-                    format="dd-mm-yyyy"
-                    name="bill_period"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.bill_period}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label className="focused">Due Date</label>
-                  <TextInput
-                    type="date"
-                    format="dd-mm-yyyy"
-                    name="due_date"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    value={values.due_date}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
+                <InvoiceDescription
+                  offeringlist={offeringList}
+                  taxlist={taxList}
+                  totalamount={handleTotalAmount}
+                  addnewitem={addNewItem}
+                  deleteitem={deleteItem}
+                  itemidchange={handleItemIdChange}
+                  quantitychange={handleQuantityChange}
+                  taxidchange={handleTaxIdChange}
+                ></InvoiceDescription>
                 <Row>
-                  <Col cW="20%" mR="2%">
+                  <Col cW="33%" mR="2%">
                     <FormGroup>
-                      <TextInput readOnly value={CURRENCY} />
-                    </FormGroup>
-                  </Col>
-                  <Col cW="78%">
-                    <FormGroup>
-                      <label>Amount</label>
+                      <label className="focused">Bill Date</label>
                       <TextInput
-                        type="text"
-                        name="amount"
+                        type="date"
+                        format="dd-mm-yyyy"
+                        name="bill_date"
                         onFocus={(e) => {
                           handleChange(e);
                           inputFocus(e);
@@ -251,7 +238,51 @@ function CreateInvoicePopup(props) {
                           handleChange(e);
                           inputBlur(e);
                         }}
-                        value={values.amount}
+                        value={values.bill_date}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="33%" mR="2%">
+                    <FormGroup>
+                      <label className="focused">Bill Period</label>
+                      <TextInput
+                        type="date"
+                        format="dd-mm-yyyy"
+                        name="bill_period"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        value={values.bill_period}
+                        onChange={handleChange}
+                        required
+                      />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="33%">
+                    <FormGroup>
+                      <label className="focused">Due Date</label>
+                      <TextInput
+                        type="date"
+                        format="dd-mm-yyyy"
+                        name="due_date"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        value={values.due_date}
                         onChange={handleChange}
                         required
                       />
@@ -279,6 +310,7 @@ function CreateInvoicePopup(props) {
                         : 'Create Invoice'}
                     </span>
                   )}
+                  <span> Total XOF {totalAmount}</span>
                 </Button>
               </Form>
             </div>

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { MERCHANT_API } from '../../constants';
+import { MERCHANT_API, API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
@@ -111,11 +111,29 @@ const branchAPI = async (props, values, apiType) => {
   }
 };
 
-const fetchBranchList = async (zoneId) => {
+const fetchBranchListByZone = async (zoneId) => {
   try {
     const res = await axios.post(`${MERCHANT_API}/listBranchesByZoneId`, {
       zone_id: zoneId,
     });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.branches, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const fetchBranchList = async () => {
+  try {
+    const res = await axios.get(`${MERCHANT_API}/listBranches`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -243,6 +261,28 @@ const fetchStaffList = async () => {
 
 // API's for Merchant Offering
 
+const uploadOffering = async (props, offeringList) => {
+  try {
+    const res = await axios.post(
+      `${MERCHANT_API}/uploadOfferings`,
+      offeringList,
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshOfferingList();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const fetchOfferingList = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/listOfferings`, {});
@@ -353,6 +393,25 @@ const editTax = async (props, values) => {
         notify(res.data.message, 'success');
         props.refreshTaxList();
         props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const deleteTax = async (taxId) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/deleteTax`, {
+      tax_id: taxId,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.data, 'success');
       }
     } else {
       notify(res.data.message, 'error');
@@ -498,10 +557,13 @@ export {
   unblockMerchantBranch,
   merchantCashierAPI,
   getMerchantCashier,
+  uploadOffering,
   fetchOfferingList,
   deleteOffering,
   editOffering,
   fetchTaxList,
   createTax,
   editTax,
+  deleteTax,
+  fetchBranchListByZone,
 };

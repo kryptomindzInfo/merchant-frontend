@@ -4,70 +4,29 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
 import Button from '../../shared/Button';
-import GroupSelectBox from './GroupSelectBox';
 import UploadArea from '../../shared/UploadArea';
 import {
   onCsvFileChange,
   processCsv,
   triggerCsvBrowse,
-  uploadInvoice,
-} from '../api/CashierAPI';
+  processJson,
+} from '../../cashier/api/CashierAPI';
+import { uploadOffering } from '../api/MerchantAPI';
 
-function UploadInvoicePopup(props) {
-  const [uploadInvoiceList, setUploadInvoices] = useState([]);
-
-  const restructuringInfoAcccordingToInvoiceApi = (data) => {
-    const temp = [];
-    data.map((value) => {
-      const filterlist = temp.filter(
-        (svalue, sindex) => svalue.number === value.number,
-      );
-      if (filterlist.length > 0) {
-        const itemobj = {
-          item_id: value.item_id,
-          quantity: value.quantity,
-          tax_id: value.tax_id,
-          total_amount: value.total,
-        };
-        const id = temp.findIndex((item) => item.number === value.number);
-        temp[id].items.push(itemobj);
-      } else {
-        const obj = {
-          number: value.number,
-          name: value.namee,
-          amount: value.amount,
-          due_date: value.dueDate,
-          description: value.description,
-          mobile: value.mobile,
-          ccode: value.ccode,
-          items: [
-            {
-              item_id: value.item_id,
-              quantity: value.quantity,
-              tax_id: value.tax_id,
-              total_amount: value.totalAmount,
-            },
-          ],
-        };
-        temp.push(obj);
-      }
-    });
-    return temp;
-  };
+function UploadOfferingPopup(props) {
+  const [uploadOfferingList, setUploadOfferings] = useState([]);
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
-          group_id: props.groupId,
           document_hash: '',
         }}
         onSubmit={async (values) => {
           const payload = {
-            group_id: props.groupId,
-            invoices: uploadInvoiceList,
+            offerings: uploadOfferingList,
           };
-          await uploadInvoice(props, payload);
+          await uploadOffering(props, payload);
         }}
       >
         {(formikProps) => {
@@ -75,11 +34,8 @@ function UploadInvoicePopup(props) {
 
           return (
             <div>
-              <h1>Upload Invoice</h1>
+              <h1>Upload Offering</h1>
               <Form>
-                <FormGroup>
-                  <GroupSelectBox groups={props.groups} />
-                </FormGroup>
                 <FormGroup>
                   <UploadArea bgImg="/src/assets/images/csvImage.jpg">
                     {values.document_hash ? (
@@ -99,10 +55,8 @@ function UploadInvoicePopup(props) {
                         onChange={(e) => {
                           processCsv(e, (data) => {
                             if (data && data.length > 0) {
-                              const finalData = restructuringInfoAcccordingToInvoiceApi(
-                                data,
-                              );
-                              setUploadInvoices(finalData);
+                              console.log(data);
+                              setUploadOfferings(data);
                               setFieldValue('document_hash', 'success', true);
                             }
                           });
@@ -127,10 +81,10 @@ function UploadInvoicePopup(props) {
                 <FormGroup>
                   <a
                     target="_BLANK"
-                    href="/src/assets/invoice_format.csv"
+                    href="/src/assets/offering_format.csv"
                     id="pdfdown"
                   >
-                    Click here to download sample invoice file
+                    Click here to download sample offering file
                   </a>
                 </FormGroup>
                 <Button
@@ -148,7 +102,7 @@ function UploadInvoicePopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Upload Invoice</span>
+                    <span>Upload Offering</span>
                   )}
                 </Button>
               </Form>
@@ -160,4 +114,4 @@ function UploadInvoicePopup(props) {
   );
 }
 
-export default UploadInvoicePopup;
+export default UploadOfferingPopup;
