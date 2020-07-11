@@ -32,6 +32,7 @@ import {
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
+  const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [offeringList, setOfferingList] = React.useState([]);
   const [taxList, setTaxList] = React.useState([]);
   const [invoiceList, setInvoiceList] = React.useState([]);
@@ -79,6 +80,14 @@ function InvoiceListPage(props) {
 
   const onUploadInvoicePopupClose = () => {
     setUploadInvoicePopup(false);
+  };
+
+  const handleViewInvoicePopupClick = () => {
+    setViewInvoicePopup(true);
+  };
+
+  const onViewInvoicePopupClose = () => {
+    setViewInvoicePopup(false);
   };
 
   const setInvoices = (list) => {
