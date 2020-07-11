@@ -1,8 +1,6 @@
 import React from 'react';
 import Popup from './Popup';
 import Button from './Button';
-import FormGroup from './FormGroup';
-import Row from './Row';
 
 function DeletePopup(props) {
   return (

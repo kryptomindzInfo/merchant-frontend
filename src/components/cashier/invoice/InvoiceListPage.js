@@ -15,6 +15,7 @@ import { CURRENCY } from '../../constants';
 import Button from '../../shared/Button';
 import CreateInvoicePopup from './CreateInvoicePopup';
 import UploadInvoicePopup from './UploadInvoicePopup';
+import ViewInvoicePopup from './ViewInvoicePopup';
 import InvoiceCards from './InvoiceCards';
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Tabs from '../../shared/Tabs';
@@ -38,6 +39,7 @@ function InvoiceListPage(props) {
   const [invoiceList, setInvoiceList] = React.useState([]);
   const [invoiceType, setInvoiceType] = React.useState('new');
   const [editingInvoice, setEditingInvoice] = React.useState({});
+  const [viewingInvoice, setViewingInvoice] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
   const [value, setValue] = React.useState(0);
   const [page, setPage] = React.useState(0);
@@ -82,7 +84,8 @@ function InvoiceListPage(props) {
     setUploadInvoicePopup(false);
   };
 
-  const handleViewInvoicePopupClick = () => {
+  const handleViewInvoicePopupClick = (invoice) => {
+    setViewingInvoice(invoice);
     setViewInvoicePopup(true);
   };
 
@@ -137,6 +140,16 @@ function InvoiceListPage(props) {
             {CURRENCY} {invoice.amount}
           </td>
           <td>{invoice.mobile}</td>
+          <td
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
+              View
+            </Button>
+          </td>
           <td className="tac">
             {invoice.due_date}
             <span className="absoluteMiddleRight primary popMenuTrigger">
@@ -278,9 +291,7 @@ function InvoiceListPage(props) {
                     <th>Name</th>
                     <th>Amount</th>
                     <th>Mobile No</th>
-                    <th>
-                      <Button>View</Button>
-                    </th>
+                    <th>View Details</th>
                     <th>Due Date</th>
                   </tr>
                 </thead>
@@ -312,6 +323,12 @@ function InvoiceListPage(props) {
           groups={groupList}
           refreshInvoiceList={() => refreshInvoiceList()}
           onClose={() => onUploadInvoicePopupClose()}
+        />
+      ) : null}
+      {viewInvoicePopup ? (
+        <ViewInvoicePopup
+          invoice={viewingInvoice}
+          onClose={() => onViewInvoicePopupClose()}
         />
       ) : null}
     </Wrapper>
