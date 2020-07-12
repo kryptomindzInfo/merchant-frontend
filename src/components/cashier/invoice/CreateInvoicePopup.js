@@ -70,8 +70,12 @@ function CreateInvoicePopup(props) {
     setItemList(itemL);
   };
 
-  const handleTotalAmount = (value) => {
-    setTotalAmount(value);
+  const handleTotalAmount = (prev, next) => {
+    setTotalAmount((prevsum) => prevsum - prev + next);
+  };
+
+  const resteTotalAmount = () => {
+    setTotalAmount(0);
   };
 
   useEffect(() => {
@@ -220,6 +224,7 @@ function CreateInvoicePopup(props) {
                   itemidchange={handleItemIdChange}
                   quantitychange={handleQuantityChange}
                   taxidchange={handleTaxIdChange}
+                  reset={resteTotalAmount}
                 ></InvoiceDescription>
                 <Row>
                   <Col cW="33%" mR="2%">

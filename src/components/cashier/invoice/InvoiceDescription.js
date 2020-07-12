@@ -34,14 +34,6 @@ const InvoiceDescription = (props) => {
     },
   ]);
 
-  const changeTotalAmount = () => {
-    let sum = 0;
-    descriptionList.forEach((element) => {
-      sum += element.amount;
-    });
-    props.totalamount(sum);
-  };
-
   const toggleProduct = () => {
     if (toggleButton !== 'product') {
       setToggleButton('product');
@@ -58,7 +50,7 @@ const InvoiceDescription = (props) => {
           amount: 0,
         },
       ]);
-      props.totalamount(0);
+      props.reset();
     }
   };
 
@@ -78,7 +70,7 @@ const InvoiceDescription = (props) => {
           amount: 0,
         },
       ]);
-      props.totalamount(0);
+      props.reset();
     }
   };
 
@@ -90,9 +82,11 @@ const InvoiceDescription = (props) => {
     const ta = descriptionL[e.target.id].tax;
     const ind = descriptionL[e.target.id].index;
     const quan = descriptionL[e.target.id].quantity;
+    const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax = parseFloat(olist[0].unit_price) * parseFloat(quan);
     const taxOnAmount = amountWithoutTax * (parseFloat(ta) / 100);
-    const amoun = parseFloat(amountWithoutTax + taxOnAmount);
+    const newamount = parseFloat(amountWithoutTax + taxOnAmount);
+    props.totalamount(prevamount, newamount);
     descriptionL[e.target.id] = {
       index: ind,
       name: olist[0].name,
@@ -102,10 +96,9 @@ const InvoiceDescription = (props) => {
       unitPrice: olist[0].unit_price,
       quantity: quan,
       tax: ta,
-      amount: amoun,
+      amount: newamount,
     };
     setDescriptionList(descriptionL);
-    changeTotalAmount();
     props.itemidchange(olist[0]._id, e.target.id);
   };
 
@@ -115,6 +108,7 @@ const InvoiceDescription = (props) => {
     );
     const descriptionL = [...descriptionList];
     descriptionL[e.target.id].tax = parseFloat(e.target.value);
+    const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax =
       parseFloat(descriptionL[e.target.id].unitPrice) *
       parseFloat(descriptionL[e.target.id].quantity);
@@ -123,12 +117,13 @@ const InvoiceDescription = (props) => {
     descriptionL[e.target.id].amount = amount;
     setDescriptionList(descriptionL);
     props.taxidchange(tlist[0]._id, amount, e.target.id);
-    changeTotalAmount();
+    props.totalamount(prevamount, amount);
   };
 
   const handleQuantityChange = (e) => {
     const descriptionL = [...descriptionList];
     descriptionL[e.target.id].quantity = parseFloat(e.target.value);
+    const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax =
       parseFloat(descriptionL[e.target.id].unitPrice) *
       parseFloat(e.target.value);
@@ -138,7 +133,7 @@ const InvoiceDescription = (props) => {
     descriptionL[e.target.id].amount = amount;
     setDescriptionList(descriptionL);
     props.quantitychange(parseFloat(e.target.value), amount, e.target.id);
-    changeTotalAmount();
+    props.totalamount(prevamount, amount);
   };
 
   const addNewRow = (e) => {
