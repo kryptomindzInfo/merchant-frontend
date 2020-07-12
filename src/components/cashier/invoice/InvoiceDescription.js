@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { strategy } from 'webpack-merge';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Button from '../../shared/Button';
@@ -107,12 +108,20 @@ const InvoiceDescription = (props) => {
       (sindex) => sindex.value === parseFloat(e.target.value),
     );
     const descriptionL = [...descriptionList];
-    descriptionL[e.target.id].tax = parseFloat(e.target.value);
+    if (
+      e.target.value === undefined ||
+      Number.isNaN(parseFloat(e.target.value))
+    ) {
+      descriptionL[e.target.id].tax = 0;
+    } else {
+      descriptionL[e.target.id].tax = parseFloat(e.target.value);
+    }
     const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax =
       parseFloat(descriptionL[e.target.id].unitPrice) *
       parseFloat(descriptionL[e.target.id].quantity);
-    const taxOnAmount = amountWithoutTax * (parseFloat(e.target.value) / 100);
+    const taxOnAmount =
+      amountWithoutTax * (parseFloat(descriptionL[e.target.id].tax) / 100);
     const amount = parseFloat(amountWithoutTax + taxOnAmount);
     descriptionL[e.target.id].amount = amount;
     setDescriptionList(descriptionL);
@@ -122,11 +131,18 @@ const InvoiceDescription = (props) => {
 
   const handleQuantityChange = (e) => {
     const descriptionL = [...descriptionList];
-    descriptionL[e.target.id].quantity = parseFloat(e.target.value);
+    if (
+      e.target.value === undefined ||
+      Number.isNaN(parseFloat(e.target.value))
+    ) {
+      descriptionL[e.target.id].quantity = 0;
+    } else {
+      descriptionL[e.target.id].quantity = parseFloat(e.target.value);
+    }
     const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax =
       parseFloat(descriptionL[e.target.id].unitPrice) *
-      parseFloat(e.target.value);
+      parseFloat(descriptionL[e.target.id].quantity);
     const taxOnAmount =
       amountWithoutTax * (parseFloat(descriptionL[e.target.id].tax) / 100);
     const amount = parseFloat(amountWithoutTax + taxOnAmount);

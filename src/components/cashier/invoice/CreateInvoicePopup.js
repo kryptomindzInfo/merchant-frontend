@@ -71,7 +71,7 @@ function CreateInvoicePopup(props) {
   };
 
   const handleTotalAmount = (prev, next) => {
-    setTotalAmount((prevsum) => prevsum - prev + next);
+    setTotalAmount(totalAmount - prev + next);
   };
 
   const resteTotalAmount = () => {
