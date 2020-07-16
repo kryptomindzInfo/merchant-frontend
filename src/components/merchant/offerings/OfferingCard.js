@@ -13,6 +13,9 @@ import DeletePopup from '../../shared/DeletePopup';
 
 function OfferingCard(props) {
   const [offeringList, setOfferingList] = React.useState([]);
+  const [productList, setProductList] = React.useState([]);
+  const [serviceList, setServiceList] = React.useState([]);
+  const [toggleButton, setToggleButton] = React.useState('product');
   const [isLoading, setLoading] = React.useState(false);
   const [popupType, setPopupType] = React.useState('new');
   const [addOfferingPopup, setAddOfferingPopup] = React.useState(false);
@@ -20,6 +23,18 @@ function OfferingCard(props) {
   const [uploadOfferingPopup, setUploadOfferingPopup] = React.useState(false);
   const [deleteOfferingPopup, setDeleteOfferingPopup] = React.useState(false);
   const [deletingOffering, setDeletingOffering] = React.useState({});
+
+  const toggleService = () => {
+    if (toggleButton !== 'service') {
+      setToggleButton('service');
+    }
+  };
+
+  const toggleProduct = () => {
+    if (toggleButton !== 'product') {
+      setToggleButton('product');
+    }
+  };
 
   const handleOfferingPopupClick = (type, offering) => {
     setEditingOffering(offering);
@@ -48,10 +63,22 @@ function OfferingCard(props) {
     setDeleteOfferingPopup(false);
   };
 
+  const setOffering = (list) => {
+    setOfferingList(list);
+    const products = list.filter((offering) => {
+      return offering.type === '0';
+    });
+    const services = list.filter((offering) => {
+      return offering.type === '1';
+    });
+    setProductList(products);
+    setServiceList(services);
+  };
+
   const refreshOfferingList = async () => {
     setLoading(true);
     fetchOfferingList().then((data) => {
-      setOfferingList(data.list);
+      setOffering(data.list);
       setLoading(data.loading);
     });
     props.refreshoffering();
@@ -69,45 +96,49 @@ function OfferingCard(props) {
   }, []);
 
   const getOfferings = () => {
-    return offeringList.map((offering) => {
-      return (
-        <tr key={offering._id}>
-          <td className="tac">{offering.name}</td>
-          <td className="tac">{offering.description}</td>
-          <td className="tac">{offering.code}</td>
-          <td className="tac">
-            {offering.type === '0' ? 'Product' : 'Service'}
-          </td>
-          <td className="tac">{offering.denomination}</td>
-          <td className="tac">{offering.unit_of_measure}</td>
-          <td className="tac bold">
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <td className="tac">{offering.unit_price}</td>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
-                <i className="material-icons ">more_vert</i>
-                <div className="popMenu">
-                  <span
-                    onClick={() => handleOfferingPopupClick('update', offering)}
-                  >
-                    Edit
-                  </span>
-                  <span
-                    onClick={() => handleDeleteOfferingPopupClick(offering)}
-                  >
-                    Delete
-                  </span>
-                </div>
-              </span>
-            </div>
-          </td>
-        </tr>
-      );
-    });
+    return (toggleButton === 'product' ? productList : serviceList).map(
+      (offering) => {
+        return (
+          <tr key={offering._id}>
+            <td className="tac">{offering.name}</td>
+            <td className="tac">{offering.description}</td>
+            <td className="tac">{offering.code}</td>
+            <td className="tac">
+              {offering.type === '0' ? 'Product' : 'Service'}
+            </td>
+            <td className="tac">{offering.denomination}</td>
+            <td className="tac">{offering.unit_of_measure}</td>
+            <td className="tac bold">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <td className="tac">{offering.unit_price}</td>
+                <span className="absoluteMiddleRight primary popMenuTrigger">
+                  <i className="material-icons ">more_vert</i>
+                  <div className="popMenu">
+                    <span
+                      onClick={() =>
+                        handleOfferingPopupClick('update', offering)
+                      }
+                    >
+                      Edit
+                    </span>
+                    <span
+                      onClick={() => handleDeleteOfferingPopupClick(offering)}
+                    >
+                      Delete
+                    </span>
+                  </div>
+                </span>
+              </div>
+            </td>
+          </tr>
+        );
+      },
+    );
   };
 
   return (
@@ -145,6 +176,29 @@ function OfferingCard(props) {
           <div className="cardHeaderRight">
             <h3>Offering List</h3>
           </div>
+        </div>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'left',
+            marginTop: '10px',
+          }}
+        >
+          <Button
+            className={toggleButton === 'product' ? 'active' : ''}
+            onClick={toggleProduct}
+            marginRight="5px"
+            padding="5px"
+          >
+            Product
+          </Button>
+          <Button
+            className={toggleButton === 'service' ? 'active' : ''}
+            onClick={toggleService}
+            marginLeft="20px"
+          >
+            Service
+          </Button>
         </div>
         <div className="cardBody">
           <Table marginTop="34px" smallTd>

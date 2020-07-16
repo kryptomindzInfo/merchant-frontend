@@ -125,7 +125,7 @@ function ZoneCard(props) {
               <tr>
                 <th>Name</th>
                 <th>Total Branches</th>
-                <th>Zone ID</th>
+                <th>Zone Code</th>
               </tr>
             </thead>
             <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>

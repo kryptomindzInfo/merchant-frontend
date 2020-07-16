@@ -23,7 +23,7 @@ function ViewInvoicePopup(props) {
 
   return (
     <Popup bigBody accentedH1 close={props.onClose.bind(this)}>
-      <h1>Invoice {props.invoice.name}</h1>
+      <h1>{props.invoice.name}</h1>
       <Card bigPadding>
         <div className="cardHeader">
           <div className="cardHeaderLeft">

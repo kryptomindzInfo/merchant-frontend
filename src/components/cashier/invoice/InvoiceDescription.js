@@ -212,13 +212,15 @@ const InvoiceDescription = (props) => {
           <td smallTd>
             <FormGroup onChange={handleOfferingNameChange}>
               <SelectInput
+                noPadding
                 name="name"
                 id={index}
                 style={{
                   marginBottom: '0px',
                 }}
+                required
               >
-                <option value=" ">Select Name</option>
+                <option value="">Select Name</option>
                 {nameSelectInput()}
               </SelectInput>
             </FormGroup>
@@ -230,9 +232,10 @@ const InvoiceDescription = (props) => {
           <td smallTd>
             <FormGroup onChange={handleQuantityChange} required>
               <TextInput
+                noMargin
+                noPadding
                 type="text"
                 name="quantity"
-                marginTop
                 id={index}
                 required
               />
@@ -241,11 +244,13 @@ const InvoiceDescription = (props) => {
           <td smallTd>
             <FormGroup onChange={handleTaxChange} required>
               <SelectInput
+                noPadding
                 name="tax"
                 id={index}
                 style={{
                   marginBottom: '0px',
                 }}
+                required
               >
                 <option value="">Select tax</option>
                 {taxSelectInput()}
@@ -261,15 +266,17 @@ const InvoiceDescription = (props) => {
             >
               <td>{val.amount}</td>
               <span
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  marginRight: '2px',
-                }}
+                className="absoluteMiddleRight primary"
                 onClick={() => deleteRow(val, index)}
               >
-                <RemoveCircleIcon />
+                {index !== 0 ? (
+                  <RemoveCircleIcon
+                    style={{
+                      color: '#f5a623',
+                      fontSize: 30,
+                    }}
+                  />
+                ) : null}
               </span>
             </div>
           </td>
@@ -284,18 +291,21 @@ const InvoiceDescription = (props) => {
         style={{
           display: 'flex',
           justifyContent: 'left',
+          marginTop: '10px',
         }}
       >
         <Button
           className={toggleButton === 'product' ? 'active' : ''}
           onClick={toggleProduct}
-          marginRight="2px"
+          marginRight="5px"
+          padding="5px"
         >
           Product
         </Button>
         <Button
           className={toggleButton === 'service' ? 'active' : ''}
           onClick={toggleService}
+          marginLeft="20px"
         >
           Service
         </Button>
@@ -315,9 +325,20 @@ const InvoiceDescription = (props) => {
         </thead>
         <tbody>{tableRows()}</tbody>
       </Table>
-      <span onClick={(event) => addNewRow()} marginBottom="10px">
-        <AddCircleIcon />
-      </span>
+      <div
+        onClick={(event) => addNewRow()}
+        style={{
+          marginBottom: '10px',
+          marginLeft: '10px',
+        }}
+      >
+        <AddCircleIcon
+          style={{
+            color: '#f5a623',
+            fontSize: 30,
+          }}
+        />
+      </div>
     </div>
   );
 };

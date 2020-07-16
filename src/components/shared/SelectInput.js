@@ -6,8 +6,7 @@ const SelectInput = styled.select`
   z-index: 1;
   background: transparent;
   box-sizing: border-box;
-  padding: 10px;
-  padding-right: 0;
+  padding: ${(props) => (props.noPadding ? '3px 3px' : '10px 0px')};
   border: solid 1px rgba(0, 0, 0, 0.32);
 
   border-radius: 4px;

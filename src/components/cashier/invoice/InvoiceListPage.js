@@ -49,6 +49,7 @@ function InvoiceListPage(props) {
   const [groupList, setGroupList] = React.useState([]);
   const { match } = props;
   const { id } = match.params;
+  const groupName = localStorage.getItem('currentGroupName');
   localStorage.setItem('currentGroupId', id);
 
   const onCreateInvoicePopupClose = () => {
@@ -220,7 +221,7 @@ function InvoiceListPage(props) {
       <CashierHeader active="invoice" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
         <Main fullWidth>
-          <InvoiceCards />
+          <InvoiceCards paid={paidRow.length} unpaid={unpaidRow.length} />
           <ActionBar
             style={{ display: 'flex', alignItems: 'center' }}
             marginBottom="33px"
@@ -265,6 +266,14 @@ function InvoiceListPage(props) {
                 <h3>Invoice List</h3>
                 <h5>List of your invoices</h5>
               </div>
+              <div
+                className="cardHeaderRight"
+                style={{
+                  float: 'right',
+                }}
+              >
+                <h3>{groupName}</h3>
+              </div>
             </div>
             <div className="cardBody">
               <Grid container>
@@ -284,21 +293,30 @@ function InvoiceListPage(props) {
                   <TabItem label="Pending Invoices" />
                 </Tabs>
               </Grid>
-              <Table marginTop="34px" smallTd>
-                <thead>
-                  <tr>
-                    <th>Bill No</th>
-                    <th>Name</th>
-                    <th>Amount</th>
-                    <th>Mobile No</th>
-                    <th>View Details</th>
-                    <th>Due Date</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {invoiceList && invoiceList.length > 0 ? getInvoices() : null}
-                </tbody>
-              </Table>
+              {invoiceList && invoiceList.length > 0 ? (
+                <Table marginTop="34px" smallTd>
+                  <thead>
+                    <tr>
+                      <th>Bill No</th>
+                      <th>Name</th>
+                      <th>Amount</th>
+                      <th>Mobile No</th>
+                      <th>View Details</th>
+                      <th>Due Date</th>
+                    </tr>
+                  </thead>
+                  <tbody>{getInvoices()}</tbody>
+                </Table>
+              ) : (
+                <h3
+                  style={{
+                    textAlign: 'center',
+                    color: 'grey',
+                  }}
+                >
+                  No invoice found
+                </h3>
+              )}
             </div>
           </Card>
         </Main>

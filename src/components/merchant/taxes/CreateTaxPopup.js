@@ -95,7 +95,7 @@ function CreateTaxPopup(props) {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <label>Tax Vlaue*</label>
+                  <label>Tax Percentage*</label>
                   <TextInput
                     type="text"
                     name="value"

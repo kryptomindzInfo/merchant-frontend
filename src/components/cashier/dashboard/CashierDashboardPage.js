@@ -33,6 +33,7 @@ const CashierDashboardPage = (props) => {
   };
   useEffect(() => {
     getStats();
+    console.log(localStorage);
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
@@ -53,7 +54,7 @@ const CashierDashboardPage = (props) => {
             <InvoiceNumberCard no={stats.bills_paid} />
             <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
           </Row>
-          <GroupListCard setLoading={(val) => {}} />
+          <GroupListCard setLoading={(val) => {}} group={setGroupList} />
         </Main>
       </Container>
     </Fragment>

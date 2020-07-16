@@ -7,7 +7,7 @@ const Button = styled.button`
   padding: ${(props) => (props.accentedBtn ? '7px' : '5px')};
   text-align: center;
   border-radius: 4px;
-  padding: 0;
+  padding: ${(props) => (props.padding ? props.padding : '0px')};
   float: ${(props) => (props.float ? props.float : 'none')};
   background-color: ${(props) =>
     props.filledBtn ? props.theme.primary : '#fff'};

@@ -69,7 +69,6 @@ function MerchantBranchListPage(props) {
           <td className="tac">{branch.name}</td>
           <td className="tac">{branch.code}</td>
           <td className="tac">{branch.total_cashiers}</td>
-          <td className="tac">{branch.username}</td>
           <td className="tac bold">
             <div
               style={{
@@ -77,7 +76,7 @@ function MerchantBranchListPage(props) {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{branch.zone_id}</td>
+              <td className="tac">{branch.username}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
@@ -163,7 +162,6 @@ function MerchantBranchListPage(props) {
               </div>
               <div className="cardHeaderRight">
                 <h3>Branch List</h3>
-                <h5>Your friends and family</h5>
               </div>
             </div>
             <div className="cardBody">
@@ -174,7 +172,6 @@ function MerchantBranchListPage(props) {
                     <th>Branch Code</th>
                     <th>Total Cashiers</th>
                     <th>Branch Admin</th>
-                    <th>Zone ID</th>
                   </tr>
                 </thead>
                 <tbody>

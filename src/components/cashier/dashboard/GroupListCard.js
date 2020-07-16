@@ -127,6 +127,7 @@ const GroupListCard = (props) => {
       .then((data) => {
         setGroupList(data.list);
         props.setLoading(false);
+        props.group(data.list);
       })
       .catch((err) => {
         props.setLoading(false);
@@ -157,6 +158,7 @@ const GroupListCard = (props) => {
               style={{ cursor: 'pointer', color: '#417505' }}
               onClick={() => {
                 history.push(`/cashier/${group._id}/invoices`);
+                localStorage.setItem('currentGroupName', group.name);
               }}
             >
               {' '}

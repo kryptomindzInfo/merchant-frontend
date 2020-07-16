@@ -100,7 +100,7 @@ class MerchantBranchInfoSidebar extends Component {
             <i className="material-icons">
               <FolderIcon />
             </i>
-            <h3>Staffs</h3>
+            <h3>Staff Position</h3>
           </Card>
         </A>
         {info ? (
