@@ -128,7 +128,7 @@ function MerchantCashierListPage(props) {
               onClick={() => handleEditCashierPopupClick('new', {})}
             >
               <AddIcon className="material-icons" />
-              <span>Add Staff</span>
+              <span>Add Staff Position</span>
             </Button>
           </ActionBar>
           <Card bigPadding>

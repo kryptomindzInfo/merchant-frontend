@@ -20,6 +20,9 @@ const EWalletBalanceSendAndClaimMoneyCard = (props) => {
       <div className="cardValue">
         {CURRENCY} {balance}
       </div>
+      <a href="/merchant/operationalHistory">
+        <span className="history">History</span>
+      </a>
     </Card>
   );
 };

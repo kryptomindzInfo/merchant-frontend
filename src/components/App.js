@@ -10,6 +10,7 @@ import ForgotPasswordPage from './ForgotPasswordPage';
 import OTPForgotPasswordPage from './OTPForgotPasswordPage';
 import history from './utils/history';
 import MerchantDashboardPage from './merchant/dashboard/MerchantDashboardPage';
+import MerchantEwalletHistory from './merchant/dashboard/MerchantEwalletHistory';
 import MerchantStaffListPage from './merchant/staff/MerchantStaffListPage';
 import MerchantBranchListPage from './merchant/branch/MerchantBranchListPage';
 import MerchantBranchInfoPage from './merchant/branch/MerchantBranchInfoPage';
@@ -59,6 +60,7 @@ import {
   defaultLoginUrl,
   merchantOfferingsUrl,
   merchantTaxesUrl,
+  merchantOperationalHistoryUrl,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
@@ -135,6 +137,12 @@ function App() {
               exact
               path={merchantDashboardUrl}
               component={(props) => <MerchantDashboardPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantOperationalHistoryUrl}
+              component={(props) => <MerchantEwalletHistory {...props} />}
             />
             <ProtectedRoute
               type="merchant"

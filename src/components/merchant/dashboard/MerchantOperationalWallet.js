@@ -24,6 +24,9 @@ const MerchantOperationalWallet = () => {
       <div className="cardValue">
         {CURRENCY} {balance.toFixed(2)}
       </div>
+      <A href={'/merchant/operationalHistory'}>
+          <span className="history">History</span>
+      </A>
     </Card>
   );
 };
