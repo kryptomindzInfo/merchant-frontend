@@ -22,9 +22,9 @@ function CreateInvoicePopup(props) {
   const [taxList, setTaxList] = React.useState(props.taxlist);
   const [itemList, setItemList] = React.useState([
     {
-      item_id: '',
+      item_code: '',
       quantity: 0,
-      tax_id: '',
+      tax_code: '',
       total_amount: 0,
     },
   ]);
@@ -38,9 +38,9 @@ function CreateInvoicePopup(props) {
     setItemList([
       ...itemList,
       {
-        item_id: '',
+        item_code: '',
         quantity: 0,
-        tax_id: '',
+        tax_code: '',
         total_amount: 0,
       },
     ]);
@@ -50,9 +50,9 @@ function CreateInvoicePopup(props) {
     setItemList(itemList.filter((sindex, ind) => ind !== index));
   };
 
-  const handleItemIdChange = (id, index) => {
+  const handleItemCodeChange = (code, index) => {
     const itemL = [...itemList];
-    itemL[index].item_id = id;
+    itemL[index].item_code = code;
     setItemList(itemL);
   };
 
@@ -63,9 +63,9 @@ function CreateInvoicePopup(props) {
     setItemList(itemL);
   };
 
-  const handleTaxIdChange = (id, amount, index) => {
+  const handleTaxCodeChange = (code, amount, index) => {
     const itemL = [...itemList];
-    itemL[index].tax_id = id;
+    itemL[index].tax_code = code;
     itemL[index].total_amount = amount;
     setItemList(itemL);
   };
@@ -221,9 +221,9 @@ function CreateInvoicePopup(props) {
                   totalamount={handleTotalAmount}
                   addnewitem={addNewItem}
                   deleteitem={deleteItem}
-                  itemidchange={handleItemIdChange}
+                  itemcodechange={handleItemCodeChange}
                   quantitychange={handleQuantityChange}
-                  taxidchange={handleTaxIdChange}
+                  taxcodechange={handleTaxCodeChange}
                   reset={resteTotalAmount}
                 ></InvoiceDescription>
                 <Row>

@@ -24,9 +24,9 @@ function UploadInvoicePopup(props) {
       );
       if (filterlist.length > 0) {
         const itemobj = {
-          item_id: value.item_id,
+          item_code: value.item_code,
           quantity: value.quantity,
-          tax_id: value.tax_id,
+          tax_code: value.tax_code,
           total_amount: value.total_amount,
         };
         const id = temp.findIndex((item) => item.number === value.number);
@@ -42,9 +42,9 @@ function UploadInvoicePopup(props) {
           ccode: value.ccode,
           items: [
             {
-              item_id: value.item_id,
+              item_code: value.item_code,
               quantity: value.quantity,
-              tax_id: value.tax_id,
+              tax_code: value.tax_code,
               total_amount: value.total_amount,
             },
           ],

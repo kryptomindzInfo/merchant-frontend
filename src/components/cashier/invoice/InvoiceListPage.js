@@ -156,13 +156,13 @@ function InvoiceListPage(props) {
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <span
+                {/* <span
                   onClick={() =>
                     handleCreateInvoicePopupClick('update', invoice)
                   }
                 >
                   Edit
-                </span>
+                </span> */}
                 <span
                   onClick={async () =>
                     invoiceApi(

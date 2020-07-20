@@ -45,7 +45,7 @@ const InvoiceDescription = (props) => {
           description: '',
           denomination: '',
           unitOfMeasure: '',
-          unitPrice: '',
+          unitPrice: 0,
           quantity: 0,
           tax: 0,
           amount: 0,
@@ -65,7 +65,7 @@ const InvoiceDescription = (props) => {
           description: '',
           denomination: '',
           unitOfMeasure: '',
-          unitPrice: '',
+          unitPrice: 0,
           quantity: 0,
           tax: 0,
           amount: 0,
@@ -75,32 +75,44 @@ const InvoiceDescription = (props) => {
     }
   };
 
+  const deleteRow = (value, index) => {
+    setDescriptionList(descriptionList.filter((sindex) => value !== sindex));
+    props.deleteitem(index);
+  };
+
   const handleOfferingNameChange = (e) => {
     const descriptionL = [...descriptionList];
-    const olist = props.offeringlist.filter(
-      (sindex) => sindex.name === e.target.value,
-    );
-    const ta = descriptionL[e.target.id].tax;
-    const ind = descriptionL[e.target.id].index;
-    const quan = descriptionL[e.target.id].quantity;
-    const prevamount = parseFloat(descriptionL[e.target.id].amount);
-    const amountWithoutTax = parseFloat(olist[0].unit_price) * parseFloat(quan);
-    const taxOnAmount = amountWithoutTax * (parseFloat(ta) / 100);
-    const newamount = parseFloat(amountWithoutTax + taxOnAmount);
-    props.totalamount(prevamount, newamount);
-    descriptionL[e.target.id] = {
-      index: ind,
-      name: olist[0].name,
-      description: olist[0].description,
-      denomination: olist[0].denomination,
-      unitOfMeasure: olist[0].unit_of_measure,
-      unitPrice: olist[0].unit_price,
-      quantity: quan,
-      tax: ta,
-      amount: newamount,
-    };
-    setDescriptionList(descriptionL);
-    props.itemidchange(olist[0]._id, e.target.id);
+    if (
+      descriptionL.filter((sindex) => sindex.name === e.target.value).length > 0
+    ) {
+      deleteRow(descriptionL[e.target.id], e.target.id);
+    } else {
+      const olist = props.offeringlist.filter(
+        (sindex) => sindex.name === e.target.value,
+      );
+      const ta = descriptionL[e.target.id].tax;
+      const ind = descriptionL[e.target.id].index;
+      const quan = descriptionL[e.target.id].quantity;
+      const prevamount = parseFloat(descriptionL[e.target.id].amount);
+      const amountWithoutTax =
+        parseFloat(olist[0].unit_price) * parseFloat(quan);
+      const taxOnAmount = amountWithoutTax * (parseFloat(ta) / 100);
+      const newamount = parseFloat(amountWithoutTax + taxOnAmount);
+      props.totalamount(prevamount, newamount);
+      descriptionL[e.target.id] = {
+        index: ind,
+        name: olist[0].name,
+        description: olist[0].description,
+        denomination: olist[0].denomination,
+        unitOfMeasure: olist[0].unit_of_measure,
+        unitPrice: olist[0].unit_price,
+        quantity: quan,
+        tax: ta,
+        amount: newamount,
+      };
+      setDescriptionList(descriptionL);
+      props.itemcodechange(olist[0].code, e.target.id);
+    }
   };
 
   const handleTaxChange = (e) => {
@@ -125,7 +137,7 @@ const InvoiceDescription = (props) => {
     const amount = parseFloat(amountWithoutTax + taxOnAmount);
     descriptionL[e.target.id].amount = amount;
     setDescriptionList(descriptionL);
-    props.taxidchange(tlist[0]._id, amount, e.target.id);
+    props.taxcodechange(tlist[0].code, amount, e.target.id);
     props.totalamount(prevamount, amount);
   };
 
@@ -161,18 +173,13 @@ const InvoiceDescription = (props) => {
         description: '',
         denomination: '',
         unitOfMeasure: '',
-        unitPrice: '',
+        unitPrice: 0,
         quantity: 0,
         tax: 0,
         amount: 0,
       },
     ]);
     props.addnewitem();
-  };
-
-  const deleteRow = (value, index) => {
-    setDescriptionList(descriptionList.filter((sindex) => value !== sindex));
-    props.deleteitem(index);
   };
 
   const taxSelectInput = () => {
