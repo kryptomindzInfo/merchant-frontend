@@ -16,13 +16,15 @@ const EWalletBalanceSendAndClaimMoneyCard = (props) => {
   return (
     <Card marginBottom="54px" buttonMarginTop="32px" bigPadding>
       <h3>E-WALLET</h3>
+      <div>
+        <a href="/merchant/operationalHistory">
+          <h4 className="history">History</h4>
+        </a>
+      </div>
       <h5>Available:</h5>
       <div className="cardValue">
         {CURRENCY} {balance}
       </div>
-      <a href="/merchant/operationalHistory">
-        <span className="history">History</span>
-      </a>
     </Card>
   );
 };

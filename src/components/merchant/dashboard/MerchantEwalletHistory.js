@@ -175,7 +175,7 @@ export default class MerchantEwalletHistory extends Component {
                   <i className="material-icons">playlist_add_check</i>
                 </div>
                 <div className="cardHeaderRight">
-                  <h3>Escrow Wallet Transaction</h3>
+                  <h3>E-Wallet Transaction</h3>
                   <h5>E-wallet activity</h5>
                 </div>
               </div>

@@ -21,12 +21,14 @@ const MerchantOperationalWallet = () => {
     <Card marginBottom="54px" buttonMarginTop="32px" bigPadding>
       <h3>Operational Wallet</h3>
       <h5>Available</h5>
+      <div style={{marginTop='2px'}}>
+        <A href={'/merchant/operationalHistory'}>
+          <span className="history">History</span>
+        </A>
+      </div>
       <div className="cardValue">
         {CURRENCY} {balance.toFixed(2)}
       </div>
-      <A href={'/merchant/operationalHistory'}>
-          <span className="history">History</span>
-      </A>
     </Card>
   );
 };

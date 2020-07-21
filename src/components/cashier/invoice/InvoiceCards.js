@@ -11,14 +11,14 @@ const InvoiceCards = (props) => {
 
   return (
     <Row>
-      <Col>
+      {/* <Col>
         <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
           <h4>Total Payment Received </h4>
           <div className="cardValue">
             {CURRENCY} {limit.toFixed(2)}
           </div>
         </Card>
-      </Col>
+      </Col> */}
       <Col>
         <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
           <h4>No. of Invoice Paid</h4>

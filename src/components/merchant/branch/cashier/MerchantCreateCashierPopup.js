@@ -50,7 +50,7 @@ function MerchantCreateCashierPopup(props) {
           return (
             <div>
               <h1>
-                {props.type === 'update' ? `Update Cashier` : `Add Cashier`}
+                {props.type === 'update' ? `Update Position` : `Add Position`}
               </h1>
               <Form>
                 <FormGroup>
@@ -149,8 +149,8 @@ function MerchantCreateCashierPopup(props) {
                     <span>
                       {' '}
                       {props.type === 'update'
-                        ? `Update Cashier`
-                        : `Add Cashier`}
+                        ? `Update Position`
+                        : `Add Position`}
                     </span>
                   </Button>
                 )}
