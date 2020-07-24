@@ -42,10 +42,16 @@ const BillPeriodSettingPage = (props) => {
 
   const getBillPeriodList = () => {
     return billPeriodList.map((billperiod) => {
+      const start = new Date(billperiod.start_date);
+      const end = new Date(billperiod.end_date);
       return (
         <tr key={billperiod._id}>
-          <td className="tac">{billperiod.start_date}</td>
-          <td className="tac">{billperiod.end_date}</td>
+          <td className="tac">
+            {start.getFullYear()}-{start.getMonth() + 1}-{start.getDate()}
+          </td>
+          <td className="tac">
+            {end.getFullYear()}-{end.getMonth() + 1}-{end.getDate()}
+          </td>
           <td className="tac">{billperiod.period_name}</td>
         </tr>
       );

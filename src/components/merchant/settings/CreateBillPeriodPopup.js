@@ -30,7 +30,7 @@ function CreateBillPeriodPopup(props) {
           period_name: props.billperiod.period_name || '',
         }}
         onSubmit={async (values) => {
-          values.zone_id = props.zoneId;
+          console.log(values);
           if (props.type === 'update') {
             console.log('in process');
           } else {
