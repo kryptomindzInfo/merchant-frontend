@@ -28,6 +28,8 @@ import {
   invoiceApi,
   fetchTaxList,
   fetchOfferingList,
+  getBillPeriods,
+  getBillTerms,
 } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
@@ -35,6 +37,8 @@ function InvoiceListPage(props) {
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [offeringList, setOfferingList] = React.useState([]);
+  const [billPeriodList, setBillPeriodList] = React.useState([]);
+  const [billTermList, setBillTermList] = React.useState([]);
   const [taxList, setTaxList] = React.useState([]);
   const [invoiceList, setInvoiceList] = React.useState([]);
   const [invoiceType, setInvoiceType] = React.useState('new');
@@ -60,6 +64,22 @@ function InvoiceListPage(props) {
     setLoading(true);
     fetchOfferingList().then((data) => {
       setOfferingList(data.list);
+      setLoading(data.loading);
+    });
+  };
+
+  const refreshBillPeriodList = async () => {
+    setLoading(true);
+    getBillPeriods().then((data) => {
+      setBillPeriodList(data.list);
+      setLoading(data.loading);
+    });
+  };
+
+  const refreshBillTermList = async () => {
+    setLoading(true);
+    getBillTerms().then((data) => {
+      setBillTermList(data.list);
       setLoading(data.loading);
     });
   };
@@ -206,6 +226,8 @@ function InvoiceListPage(props) {
     refreshGroupList();
     getOfferingList();
     getTaxList();
+    refreshBillPeriodList();
+    refreshBillTermList();
   }, []);
 
   if (isLoading) {
@@ -216,7 +238,7 @@ function InvoiceListPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Invoice | CASHIER | E-WALLET </title>
+        <title>Invoice | Staff Position | E-WALLET </title>
       </Helmet>
       <CashierHeader active="invoice" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
@@ -328,6 +350,8 @@ function InvoiceListPage(props) {
           taxlist={taxList}
           offeringlist={offeringList}
           groupId={id}
+          termlist={billTermList}
+          periodlist={billPeriodList}
           refreshInvoiceList={() => {
             refreshInvoiceList();
           }}

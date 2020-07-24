@@ -28,7 +28,7 @@ function MerchantCashierInfoPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Cashier | MERCHANT | E-WALLET</title>
+        <title>Staff Position | MERCHANT | E-WALLET</title>
       </Helmet>
       <MerchantHeader
         page="info"

@@ -42,10 +42,10 @@ function BranchEditCashierPopup(props) {
 
           return (
             <div>
-              <h1>Update Cashier</h1>
+              <h1>Update Position</h1>
               <Form>
                 <FormGroup>
-                  <label>Cashier Name*</label>
+                  <label>Position Name*</label>
                   <TextInput
                     type="text"
                     name="name"

@@ -230,6 +230,42 @@ const onCsvFileChange = (e) => {
   return parsedData;
 };
 
+const getBillPeriods = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.setting.bill_period, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const getBillTerms = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.setting.bill_term, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
 export {
   fetchGroups,
   groupAPI,
@@ -243,4 +279,6 @@ export {
   processJson,
   fetchTaxList,
   fetchOfferingList,
+  getBillPeriods,
+  getBillTerms,
 };

@@ -7,7 +7,7 @@ import Table from '../../shared/Table';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import CreateZonePopup from './CreateZonePopup';
-import { fetchZoneList } from '../api/MerchantAPI';
+import { fetchZoneList, getZoneDetails } from '../api/MerchantAPI';
 import A from '../../shared/A';
 import history from '../../utils/history';
 
@@ -16,10 +16,12 @@ function ZoneCard(props) {
   const [zoneList, setZoneList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
   const [editingZone, setEditingZone] = React.useState({});
+  const [zoneName, setZoneName] = React.useState('');
+  const [subzoneName, setSubzoneName] = React.useState('');
   const [isLoading, setLoading] = React.useState(false);
 
-  const handleZonePopupClick = (type, zone) => {
-    setEditingZone(zone);
+  const handleZonePopupClick = (type, subzone) => {
+    setEditingZone(subzone);
     setPopupType(type);
     setZonePopup(true);
   };
@@ -35,6 +37,16 @@ function ZoneCard(props) {
     props.refreshZone();
   };
 
+  const refreshZoneDetails = async () => {
+    setLoading(true);
+    getZoneDetails().then((data) => {
+      console.log(data);
+      setZoneName(data.zone_name);
+      setSubzoneName(data.subzone_name);
+      setLoading(data.loading);
+    });
+  };
+
   useEffect(() => {
     setLoading(true);
     const getZoneList = async () => {
@@ -43,6 +55,7 @@ function ZoneCard(props) {
       setLoading(data.loading);
     };
     getZoneList();
+    refreshZoneDetails();
   }, []); // Or [] if effect doesn't need props or state
 
   const getZones = () => {
@@ -51,11 +64,6 @@ function ZoneCard(props) {
         <tr key={zone._id}>
           <td className="tac">{zone.name}</td>
           <td className="tac">
-            {zone.branches_count === undefined
-              ? 'No branch found'
-              : zone.branches_count}
-          </td>
-          <td className="tac bold">
             <div
               style={{
                 display: 'flex',
@@ -70,10 +78,10 @@ function ZoneCard(props) {
                     onClick={() => {
                       localStorage.setItem('selectedZone', zone._id);
                       localStorage.setItem('currentZone', JSON.stringify(zone));
-                      history.push(`/merchant/${zone._id}/branches`);
+                      history.push(`/merchant/${zone._id}/subzones`);
                     }}
                   >
-                    <span>Branches</span>
+                    <span>{subzoneName}</span>
                   </span>
                   <span onClick={() => handleZonePopupClick('update', zone)}>
                     Edit
@@ -107,7 +115,7 @@ function ZoneCard(props) {
           onClick={() => handleZonePopupClick('new', {})}
         >
           <AddIcon className="material-icons" />
-          <span>Add Zone</span>
+          <span>Add {zoneName}</span>
         </Button>
       </ActionBar>
       <Card bigPadding>
@@ -116,7 +124,7 @@ function ZoneCard(props) {
             <SupervisedUserCircleIcon className="material-icons" />
           </div>
           <div className="cardHeaderRight">
-            <h3>Zone List</h3>
+            <h3>{zoneName} List</h3>
           </div>
         </div>
         <div className="cardBody">
@@ -124,8 +132,7 @@ function ZoneCard(props) {
             <thead>
               <tr>
                 <th>Name</th>
-                <th>Total Branches</th>
-                <th>Zone Code</th>
+                <th>{zoneName} Code</th>
               </tr>
             </thead>
             <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>
@@ -136,6 +143,7 @@ function ZoneCard(props) {
         <CreateZonePopup
           type={popupType}
           zone={editingZone}
+          zonename={zoneName}
           refreshZoneList={(data) => refreshZoneList(data)}
           onClose={() => onPopupClose()}
         />

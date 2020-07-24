@@ -10,65 +10,67 @@ import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
 import Table from '../../shared/Table';
 import Main from '../../shared/Main';
-import CreateBranchPopup from './CreateBranchPopup';
+import CreateSubzonePopup from './CreateSubzonePopup';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-import {
-  blockMerchantBranch,
-  fetchBranchList,
-  fetchBranchListBySubzone,
-  unblockMerchantBranch,
-} from '../api/MerchantAPI';
+import { fetchSubzoneListByZone, getZoneDetails } from '../api/MerchantAPI';
 import history from '../../utils/history';
 
-function MerchantBranchListPage(props) {
-  const [addBranchPopup, setAddBranchPopup] = React.useState(false);
-  const [branchList, setBranchList] = React.useState([]);
+function MerchantSubzoneListPage(props) {
+  const [addSubzonePopup, setAddSubzonePopup] = React.useState(false);
+  const [subzoneList, setSubzoneList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
-  const [editingBranch, setEditingBranch] = React.useState({});
+  const [zoneName, setZoneName] = React.useState('');
+  const [subzoneName, setSubzoneName] = React.useState('');
+  const [editingSubzone, setEditingSubzone] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
   const { match } = props;
   const { id } = match.params;
 
-  const handleBranchPopupClick = (type, merchant) => {
-    setEditingBranch(merchant);
+  const handleSubzonePopupClick = (type, subzone) => {
+    setEditingSubzone(subzone);
     setPopupType(type);
-    setAddBranchPopup(true);
-  };
-
-  const handleBranchInfoClick = (branchInfo) => {
-    localStorage.setItem(`selectedBranch`, JSON.stringify(branchInfo));
-    history.push(`/merchant/branch/info/${branchInfo._id}`);
+    setAddSubzonePopup(true);
   };
 
   const onPopupClose = () => {
-    setAddBranchPopup(false);
+    setAddSubzonePopup(false);
   };
 
-  const refreshBranchList = async () => {
+  const refreshSubzoneList = async () => {
     setLoading(true);
-    fetchBranchListBySubzone(id).then((data) => {
-      setBranchList(data.list);
+    fetchSubzoneListByZone(id).then((data) => {
+      setSubzoneList(data.list);
+      setLoading(data.loading);
+    });
+  };
+
+  const refreshZoneDetails = async () => {
+    setLoading(true);
+    getZoneDetails().then((data) => {
+      console.log(data);
+      setZoneName(data.zone_name);
+      setSubzoneName(data.subzone_name);
       setLoading(data.loading);
     });
   };
 
   useEffect(() => {
-    refreshBranchList();
+    refreshSubzoneList();
+    refreshZoneDetails();
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
     return <Loader fullPage />;
   }
 
-  const getBranchList = () => {
-    return branchList.map((branch) => {
+  const getSubzoneList = () => {
+    return subzoneList.map((subzone) => {
       return (
-        <tr key={branch._id}>
-          <td className="tac">{branch.name}</td>
-          <td className="tac">{branch.code}</td>
-          <td className="tac">{branch.total_cashiers}</td>
+        <tr key={subzone._id}>
+          <td className="tac">{subzone.name}</td>
+          <td className="tac">{subzone.code}</td>
           <td className="tac bold">
             <div
               style={{
@@ -76,39 +78,29 @@ function MerchantBranchListPage(props) {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{branch.username}</td>
+              <td className="tac">
+                {subzone.branch_count
+                  ? subzone.branch_count
+                  : 'No branch found'}
+              </td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
-                  <span onClick={() => handleBranchInfoClick(branch)}>
-                    Info
-                  </span>
                   <span
-                    onClick={() => handleBranchPopupClick('update', branch)}
+                    onClick={() => {
+                      localStorage.setItem('selectedSubzone', subzone._id);
+                      localStorage.setItem(
+                        'currentSubzone',
+                        JSON.stringify(subzone),
+                      );
+                      history.push(`/merchant/${subzone._id}/branches`);
+                    }}
                   >
-                    Edit
+                    <span>Branches</span>
                   </span>
-                  {branch.status === 2 ? (
-                    <span
-                      onClick={() =>
-                        unblockMerchantBranch(branch._id).then(() =>
-                          refreshBranchList(),
-                        )
-                      }
-                    >
-                      Unblock
-                    </span>
-                  ) : (
-                    <span
-                      onClick={async () =>
-                        blockMerchantBranch(branch._id).then(() => {
-                          refreshBranchList();
-                        })
-                      }
-                    >
-                      Block
-                    </span>
-                  )}
+                  {/* <span onClick={() => handleZonePopupClick('update', zone)}>
+                    Edit
+                  </span> */}
                 </div>
               </span>
             </div>
@@ -124,11 +116,11 @@ function MerchantBranchListPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | Branches</title>
+        <title>Merchant | Subzones</title>
       </Helmet>
       <MerchantHeader
         page="info"
-        middleTitle={name}
+        middleTitle={zoneName}
         goto="/merchant/dashboard"
       />
       <Container verticalMargin>
@@ -149,10 +141,10 @@ function MerchantBranchListPage(props) {
             <Button
               className="addBankButton"
               flex
-              onClick={() => handleBranchPopupClick('new', {})}
+              onClick={() => handleSubzonePopupClick('new', {})}
             >
               <AddIcon className="material-icons" />
-              <span>Add Branch</span>
+              <span>Add {subzoneName}</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
@@ -161,7 +153,7 @@ function MerchantBranchListPage(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>Branch List</h3>
+                <h3>{subzoneName} List</h3>
               </div>
             </div>
             <div className="cardBody">
@@ -169,26 +161,27 @@ function MerchantBranchListPage(props) {
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Branch Code</th>
-                    <th>Total Staff Position</th>
-                    <th>Branch Admin</th>
+                    <th>{subzoneName} Code</th>
+                    <th>Total Branches</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {branchList && branchList.length > 0 ? getBranchList() : null}
+                  {subzoneList && subzoneList.length > 0
+                    ? getSubzoneList()
+                    : null}
                 </tbody>
               </Table>
             </div>
           </Card>
         </Main>
       </Container>
-      {addBranchPopup ? (
-        <CreateBranchPopup
+      {addSubzonePopup ? (
+        <CreateSubzonePopup
           type={popupType}
-          subzoneId={id}
-          zone={localStorage.getItem('currentZone')}
-          branch={editingBranch}
-          refreshBranchList={(data) => refreshBranchList()}
+          zoneId={id}
+          subzone={editingSubzone}
+          subzonename={subzoneName}
+          refreshSubzoneList={(data) => refreshSubzoneList(data)}
           onClose={() => onPopupClose()}
         />
       ) : null}
@@ -196,4 +189,4 @@ function MerchantBranchListPage(props) {
   );
 }
 
-export default MerchantBranchListPage;
+export default MerchantSubzoneListPage;

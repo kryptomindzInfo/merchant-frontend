@@ -19,7 +19,7 @@ function CashierSettingsPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Settings | CASHIER | E-WALLET</title>
+        <title>Settings | Staff Position | E-WALLET</title>
       </Helmet>
       <CashierHeader
         page="info"

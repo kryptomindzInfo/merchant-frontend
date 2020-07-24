@@ -56,7 +56,7 @@ function ViewInvoicePopup(props) {
               <Row style={{ display: 'flex', justifyContent: 'left' }}>
                 <h3>Bill Period: </h3>
                 <h3 style={{ marginLeft: '5px' }}>
-                  {props.invoice.bill_period}
+                  {props.invoice.bill_period.period_name}
                 </h3>
               </Row>
             </Col>

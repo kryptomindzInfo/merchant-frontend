@@ -13,12 +13,16 @@ import MerchantDashboardPage from './merchant/dashboard/MerchantDashboardPage';
 import MerchantEwalletHistory from './merchant/dashboard/MerchantEwalletHistory';
 import MerchantStaffListPage from './merchant/staff/MerchantStaffListPage';
 import MerchantBranchListPage from './merchant/branch/MerchantBranchListPage';
+import MerchantSubzoneListPage from './merchant/subzone/MerchantSubzoneListPage';
 import MerchantBranchInfoPage from './merchant/branch/MerchantBranchInfoPage';
 import MerchantOfferingListPage from './merchant/offerings/MerchantOfferingListPage';
 import MerchantTaxListPage from './merchant/taxes/MerchantTaxListPage';
 import GlobalStyle from '../styles/global-styles';
 import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
+import ZoneSettingPage from './merchant/settings/ZoneSettingPage';
+import BillPeriodSettingPage from './merchant/settings/BillPeriodSettingPage';
+import BillTermSettingPage from './merchant/settings/BillTermSettingPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
 import CashierDashboardPage from './cashier/dashboard/CashierDashboardPage';
 import InvoiceListPage from './cashier/invoice/InvoiceListPage';
@@ -56,11 +60,15 @@ import {
   staffUrl,
   verifyUrl,
   zoneBranchUrl,
+  zoneSubzoneUrl,
   cashierSettingsUrl,
   defaultLoginUrl,
   merchantOfferingsUrl,
   merchantTaxesUrl,
   merchantOperationalHistoryUrl,
+  merchantZoneSettings,
+  merchantBillPeriodSettings,
+  merchantBillTermSettings,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
@@ -153,6 +161,12 @@ function App() {
             <ProtectedRoute
               type="merchant"
               exact
+              path={zoneSubzoneUrl}
+              component={(props) => <MerchantSubzoneListPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
               path={merchantBranchInfoUrl}
               component={(props) => <MerchantBranchInfoPage {...props} />}
             />
@@ -209,6 +223,24 @@ function App() {
               component={(props) => (
                 <SharingRulesPage ruleType="Commission" {...props} />
               )}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantZoneSettings}
+              component={(props) => <ZoneSettingPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantBillPeriodSettings}
+              component={(props) => <BillPeriodSettingPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantBillTermSettings}
+              component={(props) => <BillTermSettingPage {...props} />}
             />
             {/* ====================== */}
             {/* Merchant Public Routes */}

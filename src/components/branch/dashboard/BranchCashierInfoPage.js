@@ -26,7 +26,7 @@ function BranchCashierInfoPage(props) {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Cashier | BRANCH | E-WALLET</title>
+        <title>Position | BRANCH | E-WALLET</title>
       </Helmet>
       <BranchHeader
         page="info"

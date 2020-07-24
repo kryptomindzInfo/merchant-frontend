@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import PersonIcon from '@material-ui/icons/PersonAdd';
 import FolderIcon from '@material-ui/icons/Folder';
+import SettingsIcon from '@material-ui/icons/Settings';
 import MobileScreenShareIcon from '@material-ui/icons/MobileScreenShare';
 import Card from '../../shared/Card';
 import A from '../../shared/A';
@@ -59,6 +60,9 @@ class SettingSidebar extends Component {
     const documents = this.props.active === 'documents';
     const revenue = this.props.active === 'Revenue';
     const commission = this.props.active === 'Commission';
+    const zonesettings = this.props.active === 'ZoneSettings';
+    const billperiodsettings = this.props.active === 'BillPeriodSettings';
+    const billtermsettings = this.props.active === 'BillTermSettings';
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>
@@ -92,6 +96,30 @@ class SettingSidebar extends Component {
               <MobileScreenShareIcon />
             </i>
             <h3>Commission Rules</h3>
+          </Card>
+        </A>
+        <A href="/merchant/settings/zoneSettings">
+          <Card rounded selected={zonesettings} className="sideNav">
+            <i className="material-icons">
+              <SettingsIcon />
+            </i>
+            <h3>Zone Settings</h3>
+          </Card>
+        </A>
+        <A href="/merchant/settings/billTermSettings">
+          <Card rounded selected={billtermsettings} className="sideNav">
+            <i className="material-icons">
+              <SettingsIcon />
+            </i>
+            <h3>Bill Term Settings</h3>
+          </Card>
+        </A>
+        <A href="/merchant/settings/billPeriodSettings">
+          <Card rounded selected={billperiodsettings} className="sideNav">
+            <i className="material-icons">
+              <SettingsIcon />
+            </i>
+            <h3>Bill Period Settings</h3>
           </Card>
         </A>
       </SidebarStyle>

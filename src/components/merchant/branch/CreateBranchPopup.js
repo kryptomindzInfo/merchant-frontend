@@ -38,7 +38,7 @@ function CreateBranchPopup(props) {
           working_to: props.branch.working_to || '',
         }}
         onSubmit={async (values) => {
-          values.zone_id = props.zoneId || props.branch.zone_id;
+          values.subzone_id = props.subzoneId || props.branch.subzone_id;
           if (props.type === 'update') {
             await branchAPI(props, values, 'update');
           } else {

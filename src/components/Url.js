@@ -6,6 +6,7 @@ const loginUrl = '/merchant/:name/login';
 const forgotPasswordUrl = '/merchant/:name/forgot-password';
 const otpUrl = '/merchant/:name/otp-forgot-password';
 const zoneBranchUrl = '/merchant/:id/branches';
+const zoneSubzoneUrl = '/merchant/:id/subzones';
 const staffUrl = '/merchant/staff';
 const merchantCashierUrl = '/merchant/:id/cashiers';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
@@ -13,6 +14,9 @@ const merchantBranchInfoUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/settings';
 const merchantFeeRules = '/merchant/settings/fee-rules';
 const merchantCommissionRules = '/merchant/settings/commission-rules';
+const merchantZoneSettings = '/merchant/settings/zoneSettings';
+const merchantBillPeriodSettings = '/merchant/settings/billPeriodSettings';
+const merchantBillTermSettings = '/merchant/settings/billTermSettings';
 const merchantOfferingsUrl = '/merchant/offerings';
 const merchantTaxesUrl = '/merchant/taxes';
 const merchantOperationalHistoryUrl = '/merchant/operationalHistory';
@@ -44,6 +48,7 @@ export {
   forgotPasswordUrl,
   otpUrl,
   zoneBranchUrl,
+  zoneSubzoneUrl,
   staffUrl,
   merchantCashierUrl,
   merchantSettingsUrl,
@@ -71,4 +76,7 @@ export {
   merchantOfferingsUrl,
   merchantTaxesUrl,
   merchantOperationalHistoryUrl,
+  merchantZoneSettings,
+  merchantBillPeriodSettings,
+  merchantBillTermSettings,
 };

@@ -3,6 +3,23 @@ import { MERCHANT_API, API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
+
+const getzone = async () => {
+  try {
+    const res = await axios.get(`${MERCHANT_API}/getZone`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return 0;
+      }
+      return res.data.zone;
+    }
+  } catch (e) {
+    notify('Could not fetch balance!', 'error');
+    return 0;
+  }
+};
+
 const getWalletBalance = async () => {
   try {
     const res = await axios.get(`${MERCHANT_API}/getWalletBalance`);
@@ -69,7 +86,7 @@ const zoneAPI = async (props, values, apiType) => {
 
 const fetchZoneList = async () => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listZones`);
+    const res = await axios.get(`${MERCHANT_API}/getZoneList`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -80,6 +97,56 @@ const fetchZoneList = async () => {
   } catch (e) {
     notify('Could not fetch zones!', 'error');
     return { list: [], loading: false };
+  }
+};
+
+// API's for Merchant Subzones
+
+const fetchSubzoneListByZone = async (zoneId) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/listSubzonesByZoneId`, {
+      zone_id: zoneId,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.subzones, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const subzoneAPI = async (props, values, apiType) => {
+  let API = '';
+  if (apiType === 'update') {
+    API = '/editSubzone';
+  } else {
+    API = '/createSubzone';
+  }
+  try {
+    const res = await axios.post(`${MERCHANT_API}${API}`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshSubzoneList(res.data.data);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    console.log(e);
+    notify('Something went wrong', 'error');
   }
 };
 
@@ -111,10 +178,10 @@ const branchAPI = async (props, values, apiType) => {
   }
 };
 
-const fetchBranchListByZone = async (zoneId) => {
+const fetchBranchListBySubzone = async (subzoneId) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listBranchesByZoneId`, {
-      zone_id: zoneId,
+    const res = await axios.post(`${MERCHANT_API}/listBranchesBySubzoneId`, {
+      subzone_id: subzoneId,
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
@@ -444,6 +511,138 @@ const editMerchant = async (props, values) => {
   }
 };
 
+const getBillTerms = async () => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.setting.bill_term, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const addBillTerm = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/addBillTerm`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshbilltermlist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
+const getBillPeriods = async () => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.setting.bill_period, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const addBillPeriod = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/addBillPeriod`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshbillperiodlist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
+const getZoneDetails = async () => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return {
+          zone_name: 'Zone',
+          subzone_name: 'Sub zone',
+          loading: false,
+        };
+      }
+      return {
+        zone_name: res.data.setting.zone_name,
+        subzone_name: res.data.setting.subzone_name,
+        loading: false,
+      };
+    }
+    notify(res.data.message, 'error');
+    return {
+      zone_name: 'Zone',
+      subzone_name: 'Sub zone',
+      loading: false,
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { zone_name: 'Zone', subzone_name: 'Sub zone', loading: false };
+  }
+};
+
+const ZoneDetails = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/zoneSetting`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreszonedetails(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
 const getRules = async (ruleType) => {
   try {
     let URL = '';
@@ -541,6 +740,7 @@ const getMerchantCashier = async (id) => {
 };
 
 export {
+  getzone,
   branchAPI,
   fetchBranchList,
   staffAPI,
@@ -565,5 +765,13 @@ export {
   createTax,
   editTax,
   deleteTax,
-  fetchBranchListByZone,
+  fetchBranchListBySubzone,
+  fetchSubzoneListByZone,
+  subzoneAPI,
+  getBillTerms,
+  addBillTerm,
+  addBillPeriod,
+  getBillPeriods,
+  getZoneDetails,
+  ZoneDetails,
 };

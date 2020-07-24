@@ -12,6 +12,7 @@ import Main from '../../shared/Main';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import ZoneCard from './ZoneCard';
 import Loader from '../../shared/Loader';
+import { getzone } from '../api/MerchantAPI';
 
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
@@ -27,6 +28,7 @@ const MerchantDashboardPage = () => {
   const refreshPage = () => {
     setLoading(false);
   };
+
   useEffect(() => {
     setLoading(true);
     refreshPage();

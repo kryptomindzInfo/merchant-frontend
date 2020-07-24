@@ -12,10 +12,10 @@ import {
   inputFocus,
 } from '../../utils/handleInputFocus';
 import ErrorText from '../../shared/ErrorText';
-import { zoneAPI } from '../api/MerchantAPI';
+import { subzoneAPI } from '../api/MerchantAPI';
 import TextArea from '../../shared/TextArea';
 
-function CreateZonePopup(props) {
+function CreateSubzoneonePopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   }, []);
@@ -24,24 +24,25 @@ function CreateZonePopup(props) {
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <h1>
         {props.type === 'update' ? (
-          <span>Update {props.zonename}</span>
+          <span>Update {props.subzonename}</span>
         ) : (
-          <span>Create {props.zonename}</span>
+          <span>Create {props.subzonename}</span>
         )}
       </h1>
       <Formik
         initialValues={{
-          code: props.zone.code || '',
-          name: props.zone.name || '',
-          description: props.zone.description || '',
-          type: props.zone.type || '',
+          code: props.subzone.code || '',
+          name: props.subzone.name || '',
+          description: props.subzone.description || '',
+          type: props.subzone.type || '',
         }}
         onSubmit={async (values) => {
+          values.zone_id = props.zoneId;
           if (props.type === 'update') {
             values.zone_id = props.zone._id;
-            await zoneAPI(props, values, 'update');
+            await subzoneAPI(props, values, 'update');
           } else {
-            await zoneAPI(props, values, 'create');
+            await subzoneAPI(props, values, 'create');
           }
         }}
         validationSchema={Yup.object().shape({
@@ -59,7 +60,7 @@ function CreateZonePopup(props) {
             <div>
               <Form>
                 <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="code">{props.zonename} ID*</label>
+                  <label htmlFor="code">{props.subzonename} ID*</label>
                   <Field
                     type="text"
                     name="code"
@@ -77,7 +78,7 @@ function CreateZonePopup(props) {
                   <ErrorMessage name="code" component={ErrorText} />
                 </FormField>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="name">{props.zonename} Name</label>
+                  <label htmlFor="name">{props.subzonename} Name</label>
                   <Field
                     type="text"
                     name="name"
@@ -92,7 +93,7 @@ function CreateZonePopup(props) {
                   <ErrorMessage name="name" component={ErrorText} />
                 </FormField>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="type">{props.zonename} Type</label>
+                  <label htmlFor="type">{props.subzonename} Type</label>
                   <Field
                     type="text"
                     name="type"
@@ -137,9 +138,9 @@ function CreateZonePopup(props) {
                   ) : (
                     <span>
                       {props.type === 'update' ? (
-                        <span>Update {props.zonename}</span>
+                        <span>Update {props.subzonename}</span>
                       ) : (
-                        <span>Create {props.zonename}</span>
+                        <span>Create {props.subzonename}</span>
                       )}
                     </span>
                   )}
@@ -153,4 +154,4 @@ function CreateZonePopup(props) {
   );
 }
 
-export default CreateZonePopup;
+export default CreateSubzoneonePopup;

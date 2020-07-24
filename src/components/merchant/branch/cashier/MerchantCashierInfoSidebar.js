@@ -72,7 +72,7 @@ class MerchantCashierInfoSidebar extends Component {
             <i className="material-icons">
               <PersonIcon />
             </i>
-            <h3>Cashier Info</h3>
+            <h3>Staff Position Info</h3>
           </Card>
         </A>
         <A href="/reports/">

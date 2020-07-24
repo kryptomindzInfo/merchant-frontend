@@ -7,7 +7,7 @@ const TotalCashierCard = () => {
   return (
     <Col cW="25%">
       <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
-        <h4>Total Cashiers</h4>
+        <h4>Total Staff Position</h4>
         <div className="cardValue">1</div>
       </Card>
     </Col>

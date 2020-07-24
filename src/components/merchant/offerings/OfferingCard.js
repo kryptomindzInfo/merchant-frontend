@@ -103,10 +103,6 @@ function OfferingCard(props) {
             <td className="tac">{offering.name}</td>
             <td className="tac">{offering.description}</td>
             <td className="tac">{offering.code}</td>
-            <td className="tac">
-              {offering.type === '0' ? 'Product' : 'Service'}
-            </td>
-            <td className="tac">{offering.denomination}</td>
             <td className="tac">{offering.unit_of_measure}</td>
             <td className="tac bold">
               <div
@@ -207,8 +203,6 @@ function OfferingCard(props) {
                 <th>Name</th>
                 <th>Description</th>
                 <th>Code</th>
-                <th>Type</th>
-                <th>Denomination</th>
                 <th>Unit of measure</th>
                 <th>Unit Price</th>
               </tr>

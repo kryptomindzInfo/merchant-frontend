@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
-import * as Yup from 'yup';
 import Popup from '../../shared/Popup';
 import FormField from '../../shared/FormField';
+import FormGroup from '../../shared/FormGroup';
 import Button from '../../shared/Button';
 import TextInput from '../../shared/TextInput';
 import {
@@ -12,57 +12,43 @@ import {
   inputFocus,
 } from '../../utils/handleInputFocus';
 import ErrorText from '../../shared/ErrorText';
-import { zoneAPI } from '../api/MerchantAPI';
+import { addBillPeriod } from '../api/MerchantAPI';
 import TextArea from '../../shared/TextArea';
 
-function CreateZonePopup(props) {
+function CreateBillPeriodPopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   }, []);
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1>
-        {props.type === 'update' ? (
-          <span>Update {props.zonename}</span>
-        ) : (
-          <span>Create {props.zonename}</span>
-        )}
-      </h1>
+      <h1> {props.type === 'update' ? 'Update Bill Term' : 'Add Bill Term'}</h1>
       <Formik
         initialValues={{
-          code: props.zone.code || '',
-          name: props.zone.name || '',
-          description: props.zone.description || '',
-          type: props.zone.type || '',
+          start_date: props.billperiod.start_date || '',
+          end_date: props.billperiod.end_date || '',
+          period_name: props.billperiod.period_name || '',
         }}
         onSubmit={async (values) => {
+          values.zone_id = props.zoneId;
           if (props.type === 'update') {
-            values.zone_id = props.zone._id;
-            await zoneAPI(props, values, 'update');
+            console.log('in process');
           } else {
-            await zoneAPI(props, values, 'create');
+            await addBillPeriod(props, values);
           }
         }}
-        validationSchema={Yup.object().shape({
-          name: Yup.string()
-            .min(3, 'Zone name should be atleast 3 characters')
-            .required('Zone name is required'),
-          code: Yup.string()
-            .min(3, 'Zone Id should be atleast 3 characters')
-            .required('Zone Id is required'),
-        })}
       >
         {(formikProps) => {
           const { isSubmitting, handleChange, handleBlur } = formikProps;
           return (
             <div>
               <Form>
-                <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="code">{props.zonename} ID*</label>
-                  <Field
-                    type="text"
-                    name="code"
+                <FormGroup>
+                  <label className="focused">Start Date</label>
+                  <TextInput
+                    type="date"
+                    format="dd-mm-yyyy"
+                    name="start_date"
                     onFocus={(e) => {
                       handleChange(e);
                       inputFocus(e);
@@ -72,15 +58,34 @@ function CreateZonePopup(props) {
                       handleChange(e);
                       inputBlur(e);
                     }}
-                    as={TextInput}
+                    onChange={handleChange}
+                    required
                   />
-                  <ErrorMessage name="code" component={ErrorText} />
-                </FormField>
+                </FormGroup>
+                <FormGroup>
+                  <label className="focused">End Date</label>
+                  <TextInput
+                    type="date"
+                    format="dd-mm-yyyy"
+                    name="end_date"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="name">{props.zonename} Name</label>
+                  <label htmlFor="name">Period Name*</label>
                   <Field
                     type="text"
-                    name="name"
+                    name="period_name"
                     onFocus={(e) => {
                       inputFocus(e);
                     }}
@@ -88,38 +93,9 @@ function CreateZonePopup(props) {
                       inputBlur(e);
                     }}
                     as={TextInput}
+                    required
                   />
-                  <ErrorMessage name="name" component={ErrorText} />
-                </FormField>
-                <FormField mB="14px" background="#fff">
-                  <label htmlFor="type">{props.zonename} Type</label>
-                  <Field
-                    type="text"
-                    name="type"
-                    onFocus={(e) => {
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      inputBlur(e);
-                    }}
-                    as={TextInput}
-                  />
-                  <ErrorMessage name="type" component={ErrorText} />
-                </FormField>
-                <FormField mB="14px" background="#fff">
-                  <label htmlFor="description">Description</label>
-                  <Field
-                    type="text"
-                    name="description"
-                    rows="3"
-                    onFocus={(e) => {
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      inputBlur(e);
-                    }}
-                    as={TextArea}
-                  />
+                  <ErrorMessage name="period_name" component={ErrorText} />
                 </FormField>
                 <Button
                   type="submit"
@@ -136,11 +112,9 @@ function CreateZonePopup(props) {
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
                     <span>
-                      {props.type === 'update' ? (
-                        <span>Update {props.zonename}</span>
-                      ) : (
-                        <span>Create {props.zonename}</span>
-                      )}
+                      {props.type === 'update'
+                        ? 'Update Bill Term'
+                        : 'Add Bill Period'}
                     </span>
                   )}
                 </Button>
@@ -153,4 +127,4 @@ function CreateZonePopup(props) {
   );
 }
 
-export default CreateZonePopup;
+export default CreateBillPeriodPopup;

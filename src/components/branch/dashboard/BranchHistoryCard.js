@@ -183,7 +183,7 @@ const BranchHistoryCard = () => {
           />
         </div>
         <div className="cardHeaderRight">
-          <h3>Cashier Activity</h3>
+          <h3>Staff Position Activity</h3>
           <h5>Daily activity</h5>
         </div>
       </div>

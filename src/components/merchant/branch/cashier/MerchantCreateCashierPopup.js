@@ -54,7 +54,7 @@ function MerchantCreateCashierPopup(props) {
               </h1>
               <Form>
                 <FormGroup>
-                  <label>Cashier Name*</label>
+                  <label>Staff Position Name*</label>
                   <TextInput
                     type="text"
                     name="name"

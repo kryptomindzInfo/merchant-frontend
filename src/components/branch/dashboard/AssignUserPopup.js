@@ -35,7 +35,7 @@ function AssignUserPopup(props) {
               <h1>Assign User</h1>
               <Form>
                 <FormGroup>
-                  <label>Cashier Name*</label>
+                  <label>Position Name*</label>
                   <TextInput
                     type="text"
                     name="name"
