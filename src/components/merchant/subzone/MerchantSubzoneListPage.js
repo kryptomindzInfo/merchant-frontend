@@ -118,11 +118,7 @@ function MerchantSubzoneListPage(props) {
         <meta charSet="utf-8" />
         <title>Merchant | Subzones</title>
       </Helmet>
-      <MerchantHeader
-        page="info"
-        middleTitle={zoneName}
-        goto="/merchant/dashboard"
-      />
+      <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
         <MerchantSideBar showClaimButton />
         <Main>
@@ -153,7 +149,9 @@ function MerchantSubzoneListPage(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>{subzoneName} List</h3>
+                <h3>
+                  {subzoneName} List for {zoneName}
+                </h3>
               </div>
             </div>
             <div className="cardBody">
@@ -182,6 +180,7 @@ function MerchantSubzoneListPage(props) {
           subzone={editingSubzone}
           subzonename={subzoneName}
           refreshSubzoneList={(data) => refreshSubzoneList(data)}
+          zonename={zoneName}
           onClose={() => onPopupClose()}
         />
       ) : null}

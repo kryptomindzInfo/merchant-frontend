@@ -19,11 +19,14 @@ import {
   fetchBranchList,
   fetchBranchListBySubzone,
   unblockMerchantBranch,
+  getZoneDetails,
 } from '../api/MerchantAPI';
 import history from '../../utils/history';
 
 function MerchantBranchListPage(props) {
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
+  const [zoneName, setZoneName] = React.useState('');
+  const [subzoneName, setSubzoneName] = React.useState('');
   const [branchList, setBranchList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
   const [editingBranch, setEditingBranch] = React.useState({});
@@ -54,8 +57,19 @@ function MerchantBranchListPage(props) {
     });
   };
 
+  const refreshZoneDetails = async () => {
+    setLoading(true);
+    getZoneDetails().then((data) => {
+      console.log(data);
+      setZoneName(data.zone_name);
+      setSubzoneName(data.subzone_name);
+      setLoading(data.loading);
+    });
+  };
+
   useEffect(() => {
     refreshBranchList();
+    refreshZoneDetails();
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
@@ -126,11 +140,7 @@ function MerchantBranchListPage(props) {
         <meta charSet="utf-8" />
         <title>Merchant | Branches</title>
       </Helmet>
-      <MerchantHeader
-        page="info"
-        middleTitle={name}
-        goto="/merchant/dashboard"
-      />
+      <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
         <MerchantSideBar showClaimButton />
         <Main>
@@ -161,7 +171,7 @@ function MerchantBranchListPage(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>Branch List</h3>
+                <h3>Branch List for {subzoneName}</h3>
               </div>
             </div>
             <div className="cardBody">
@@ -184,6 +194,7 @@ function MerchantBranchListPage(props) {
       </Container>
       {addBranchPopup ? (
         <CreateBranchPopup
+          subzonename={subzoneName}
           type={popupType}
           subzoneId={id}
           zone={localStorage.getItem('currentZone')}

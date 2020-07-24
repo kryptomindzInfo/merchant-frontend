@@ -24,9 +24,13 @@ function CreateSubzoneonePopup(props) {
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <h1>
         {props.type === 'update' ? (
-          <span>Update {props.subzonename}</span>
+          <span>
+            Update {props.subzonename} for {props.zonename}
+          </span>
         ) : (
-          <span>Create {props.subzonename}</span>
+          <span>
+            Create {props.subzonename} for {props.zonename}
+          </span>
         )}
       </h1>
       <Formik
