@@ -95,7 +95,8 @@ const Welcome = (props) => {
         </Icon>
         <div className="dropdown fl">
           <Name>
-            <span>{type.toUpperCase()}:</span> {name}
+            <span>{type === 'cashier' ? 'STAFF' : type.toUpperCase()}:</span>{' '}
+            {name}
           </Name>
           <SubNav className="bankSubNav">
             <A href={settingsUrl}>Settings</A>

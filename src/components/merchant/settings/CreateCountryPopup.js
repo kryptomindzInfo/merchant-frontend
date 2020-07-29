@@ -11,29 +11,23 @@ import {
   inputFocus,
 } from '../../utils/handleInputFocus';
 import ErrorText from '../../shared/ErrorText';
-import { addBillTerm } from '../api/MerchantAPI';
-import TextArea from '../../shared/TextArea';
+import { addCountry } from '../api/MerchantAPI';
 
-function CreateBillTermPopup(props) {
+function CreateCountryPopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   }, []);
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1> {props.type === 'update' ? 'Update Bill Term' : 'Add Bill Term'}</h1>
+      <h1>Add Country</h1>
       <Formik
         initialValues={{
-          days: props.billterm.days || '',
-          name: props.billterm.name || '',
+          ccode: '',
+          name: '',
         }}
         onSubmit={async (values) => {
-          values.zone_id = props.zoneId;
-          if (props.type === 'update') {
-            console.log('in process');
-          } else {
-            await addBillTerm(props, values);
-          }
+          await addCountry(props, values);
         }}
       >
         {(formikProps) => {
@@ -41,27 +35,11 @@ function CreateBillTermPopup(props) {
           return (
             <div>
               <Form>
-                <FormField mB="14px" background="#fff">
-                  <label htmlFor="name">Name*</label>
+                <FormField textAlign="start" mB="14px" background="#fff">
+                  <label htmlFor="cdays">Name*</label>
                   <Field
                     type="text"
                     name="name"
-                    onFocus={(e) => {
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      inputBlur(e);
-                    }}
-                    as={TextInput}
-                    required
-                  />
-                  <ErrorMessage name="name" component={ErrorText} />
-                </FormField>
-                <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="cdays">Days*</label>
-                  <Field
-                    type="number"
-                    name="days"
                     onFocus={(e) => {
                       handleChange(e);
                       inputFocus(e);
@@ -74,7 +52,23 @@ function CreateBillTermPopup(props) {
                     as={TextInput}
                     required
                   />
-                  <ErrorMessage name="days" component={ErrorText} />
+                  <ErrorMessage name="name" component={ErrorText} />
+                </FormField>
+                <FormField mB="14px" background="#fff">
+                  <label htmlFor="name">Country Code*</label>
+                  <Field
+                    type="text"
+                    name="ccode"
+                    onFocus={(e) => {
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      inputBlur(e);
+                    }}
+                    as={TextInput}
+                    required
+                  />
+                  <ErrorMessage name="ccode" component={ErrorText} />
                 </FormField>
                 <Button
                   type="submit"
@@ -106,4 +100,4 @@ function CreateBillTermPopup(props) {
   );
 }
 
-export default CreateBillTermPopup;
+export default CreateCountryPopup;

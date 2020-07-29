@@ -18,11 +18,16 @@ import TextArea from '../../shared/TextArea';
 function CreateBillPeriodPopup(props) {
   useEffect(() => {
     correctFocus(props.type);
+    console.log(props.startdate);
   }, []);
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1> {props.type === 'update' ? 'Update Bill Term' : 'Add Bill Term'}</h1>
+      {props.type === 'update' ? (
+        <h1>Update Bill Period</h1>
+      ) : (
+        <h1>Add Bill Period</h1>
+      )}
       <Formik
         initialValues={{
           start_date: props.billperiod.start_date || '',
@@ -30,6 +35,9 @@ function CreateBillPeriodPopup(props) {
           period_name: props.billperiod.period_name || '',
         }}
         onSubmit={async (values) => {
+          if (props.startdate !== null) {
+            values.start_date = new Date(props.startdate);
+          }
           console.log(values);
           if (props.type === 'update') {
             console.log('in process');
@@ -43,44 +51,6 @@ function CreateBillPeriodPopup(props) {
           return (
             <div>
               <Form>
-                <FormGroup>
-                  <label className="focused">Start Date</label>
-                  <TextInput
-                    type="date"
-                    format="dd-mm-yyyy"
-                    name="start_date"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
-                <FormGroup>
-                  <label className="focused">End Date</label>
-                  <TextInput
-                    type="date"
-                    format="dd-mm-yyyy"
-                    name="end_date"
-                    onFocus={(e) => {
-                      handleChange(e);
-                      inputFocus(e);
-                    }}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                      inputBlur(e);
-                    }}
-                    onChange={handleChange}
-                    required
-                  />
-                </FormGroup>
                 <FormField mB="14px" background="#fff">
                   <label htmlFor="name">Period Name*</label>
                   <Field
@@ -97,6 +67,68 @@ function CreateBillPeriodPopup(props) {
                   />
                   <ErrorMessage name="period_name" component={ErrorText} />
                 </FormField>
+                {props.startdate === null ? (
+                  <FormGroup>
+                    <label className="focused">Start Date</label>
+                    <TextInput
+                      type="date"
+                      format="dd-mm-yyyy"
+                      value="30-06-2020"
+                      name="start_date"
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
+                      onChange={handleChange}
+                      required
+                    />
+                  </FormGroup>
+                ) : (
+                  <FormGroup>
+                    <label className="focused">Start Date</label>
+                    <TextInput
+                      type="text"
+                      name="start_date"
+                      onFocus={(e) => {
+                        handleChange(e);
+                        inputFocus(e);
+                      }}
+                      onBlur={(e) => {
+                        handleBlur(e);
+                        handleChange(e);
+                        inputBlur(e);
+                      }}
+                      onChange={handleChange}
+                      placeholder={props.startdate}
+                      value={props.startdate}
+                      required
+                      disabled
+                    />
+                  </FormGroup>
+                )}
+                <FormGroup>
+                  <label className="focused">End Date</label>
+                  <TextInput
+                    type="date"
+                    name="end_date"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
                 <Button
                   type="submit"
                   disabled={isSubmitting}

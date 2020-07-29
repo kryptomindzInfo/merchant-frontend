@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { date } from 'yup';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
 import Wrapper from '../../shared/Wrapper';
@@ -12,19 +13,33 @@ import Card from '../../shared/Card';
 import SettingSideBar from './SettingSidebar';
 import Table from '../../shared/Table';
 import CreateBillPeriodPopup from './CreateBillPeriodPopup';
+import DefaultBillPeriodPopup from './DefaultPeriodPopup';
 import { getBillPeriods } from '../api/MerchantAPI';
 
 const BillPeriodSettingPage = (props) => {
   const [addBillPeriodPopup, setAddBillPeriodPopup] = React.useState(false);
   const [billPeriodList, setBillPeriodList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
+  const [nextPeriodStartDate, setNextPeriodStartDate] = React.useState(null);
+  const [defaultBillPeriod, setDefaultBillPeriod] = React.useState({});
   const [editingBillPeriod, setEditingBillPeriod] = React.useState({});
+  const [defaultBillPeriodPopup, setDefaultBillPeriodPopup] = React.useState(
+    false,
+  );
   const [isLoading, setLoading] = React.useState(false);
 
   const handleBillPeriodPopupClick = (type, billterm) => {
     setEditingBillPeriod(billterm);
     setPopupType(type);
     setAddBillPeriodPopup(true);
+  };
+
+  const handleDefaultBillPeriodPopupClick = () => {
+    setDefaultBillPeriodPopup(true);
+  };
+
+  const onDefaultBillPeriodPopupClose = () => {
+    setDefaultBillPeriodPopup(false);
   };
 
   const onPopupClose = () => {
@@ -35,7 +50,16 @@ const BillPeriodSettingPage = (props) => {
     setLoading(true);
     getBillPeriods().then((data) => {
       console.log(data);
+      if (data.list.length > 0) {
+        const startdate = new Date(data.list[data.list.length - 1].end_date);
+        startdate.setDate(startdate.getDate() + 1);
+        const nextStartDate = `${startdate.getDate()}/${
+          startdate.getMonth() + 1
+        }/${startdate.getFullYear()}`;
+        setNextPeriodStartDate(nextStartDate);
+      }
       setBillPeriodList(data.list);
+      setDefaultBillPeriod(data.default_bill_period);
       setLoading(data.loading);
     });
   };
@@ -46,13 +70,13 @@ const BillPeriodSettingPage = (props) => {
       const end = new Date(billperiod.end_date);
       return (
         <tr key={billperiod._id}>
-          <td className="tac">
-            {start.getFullYear()}-{start.getMonth() + 1}-{start.getDate()}
-          </td>
-          <td className="tac">
-            {end.getFullYear()}-{end.getMonth() + 1}-{end.getDate()}
-          </td>
           <td className="tac">{billperiod.period_name}</td>
+          <td className="tac">
+            {start.getDate()}-{start.getMonth() + 1}-{start.getFullYear()}
+          </td>
+          <td className="tac">
+            {end.getDate()}-{end.getMonth() + 1}-{end.getFullYear()}
+          </td>
         </tr>
       );
     });
@@ -68,11 +92,7 @@ const BillPeriodSettingPage = (props) => {
         <meta charSet="utf-8" />
         <title>Merchant | Bill Period Setting</title>
       </Helmet>
-      <MerchantHeader
-        page="info"
-        middleTitle="Bill Period Setting"
-        goto="/merchant/dashboard"
-      />
+      <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
         <SettingSideBar active="BillPeriodSettings" />
         <Main big>
@@ -97,6 +117,30 @@ const BillPeriodSettingPage = (props) => {
               <span>Add Bill Period</span>
             </Button>
           </ActionBar>
+          <ActionBar
+            marginBottom="33px"
+            inputWidth="calc(100% - 241px)"
+            className="clr"
+          >
+            <div>
+              {defaultBillPeriod ? (
+                <h3 style={{ margin: '6px' }}>
+                  Default Bill Period : {defaultBillPeriod.period_name}
+                </h3>
+              ) : (
+                <h3 style={{ margin: '6px' }}>
+                  Please set default bill period
+                </h3>
+              )}
+            </div>
+            <Button
+              className="addBankButton"
+              style={{ float: 'right' }}
+              onClick={() => handleDefaultBillPeriodPopupClick()}
+            >
+              <span>Set Default Period</span>
+            </Button>
+          </ActionBar>
           <Card bigPadding topMargin="55px">
             <div className="cardHeader">
               <div className="cardHeaderLeft">
@@ -110,9 +154,9 @@ const BillPeriodSettingPage = (props) => {
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
+                    <th>Period Name</th>
                     <th>Start Date</th>
                     <th>End date</th>
-                    <th>Period Name</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -130,7 +174,16 @@ const BillPeriodSettingPage = (props) => {
           type={popupType}
           billperiod={editingBillPeriod}
           refreshbillperiodlist={(data) => refreshBillPeriodList(data)}
+          startdate={nextPeriodStartDate}
           onClose={() => onPopupClose()}
+        />
+      ) : null}
+      {defaultBillPeriodPopup ? (
+        <DefaultBillPeriodPopup
+          billperiod={defaultBillPeriod}
+          periodlist={billPeriodList}
+          refreshbillperiodlist={(data) => refreshBillPeriodList(data)}
+          onClose={() => onDefaultBillPeriodPopupClose()}
         />
       ) : null}
     </Wrapper>

@@ -98,9 +98,11 @@ function MerchantSubzoneListPage(props) {
                   >
                     <span>Branches</span>
                   </span>
-                  {/* <span onClick={() => handleZonePopupClick('update', zone)}>
+                  <span
+                    onClick={() => handleSubzonePopupClick('update', subzone)}
+                  >
                     Edit
-                  </span> */}
+                  </span>
                 </div>
               </span>
             </div>
@@ -150,7 +152,7 @@ function MerchantSubzoneListPage(props) {
               </div>
               <div className="cardHeaderRight">
                 <h3>
-                  {subzoneName} List for {zoneName}
+                  {subzoneName} List of {zoneName}
                 </h3>
               </div>
             </div>

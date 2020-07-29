@@ -43,7 +43,7 @@ function CreateSubzoneonePopup(props) {
         onSubmit={async (values) => {
           values.zone_id = props.zoneId;
           if (props.type === 'update') {
-            values.zone_id = props.zone._id;
+            values.subzone_id = props.subzone._id;
             await subzoneAPI(props, values, 'update');
           } else {
             await subzoneAPI(props, values, 'create');

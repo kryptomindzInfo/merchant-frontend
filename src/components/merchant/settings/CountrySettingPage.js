@@ -11,71 +11,67 @@ import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import SettingSideBar from './SettingSidebar';
 import Table from '../../shared/Table';
-import CreateBillTermPopup from './CreateBillTermPopup';
-import DefaultBillTermPopup from './DefaultTermPopup';
-import { getBillTerms } from '../api/MerchantAPI';
+import CreateCountryPopup from './CreateCountryPopup';
+import DefaultCountryPopup from './DefaultCountryPopup';
+import { getCountryList } from '../api/MerchantAPI';
 
-const BillTermSettingPage = (props) => {
-  const [addBillTermPopup, setAddBillTermPopup] = React.useState(false);
-  const [billTermList, setBillTermList] = React.useState([]);
-  const [popupType, setPopupType] = React.useState('new');
-  const [editingBillTerm, setEditingBillTerm] = React.useState({});
+const CountrySettingPage = (props) => {
+  const [addCountryPopup, setAddCountryPopup] = React.useState(false);
+  const [countryList, setCountryList] = React.useState([]);
   const [isLoading, setLoading] = React.useState(false);
-  const [defaultBillTerm, setDefaultBillTerm] = React.useState({});
-  const [defaultBillTermPopup, setDefaultBillTermPopup] = React.useState(false);
+  const [defaultCountry, setDefaultCountry] = React.useState({});
+  const [defaultCountryPopup, setDefaultCountryPopup] = React.useState(false);
 
-  const handleBillTermPopupClick = (type, billterm) => {
-    setEditingBillTerm(billterm);
-    setPopupType(type);
-    setAddBillTermPopup(true);
+  const handleCountryPopupClick = () => {
+    setAddCountryPopup(true);
   };
 
   const onPopupClose = () => {
-    setAddBillTermPopup(false);
+    setAddCountryPopup(false);
   };
 
-  const handleDefaultBillTermPopupClick = () => {
-    setDefaultBillTermPopup(true);
+  const handleDefaultCountryPopupClick = () => {
+    setDefaultCountryPopup(true);
   };
 
-  const onDefaultBillTermPopupClose = () => {
-    setDefaultBillTermPopup(false);
+  const onDefaultCountryPopupClose = () => {
+    setDefaultCountryPopup(false);
   };
 
-  const refreshBillTermList = async () => {
+  const refreshCountryList = async () => {
     setLoading(true);
-    getBillTerms().then((data) => {
+    getCountryList().then((data) => {
       console.log(data);
-      setBillTermList(data.list);
-      setDefaultBillTerm(data.default_bill_term);
+      setCountryList(data.list);
+      setDefaultCountry(data.default_country);
       setLoading(data.loading);
     });
   };
 
-  const getBillTermList = () => {
-    return billTermList.map((billterm) => {
+  const getCountry = () => {
+    return countryList.map((country) => {
       return (
-        <tr key={billterm._id}>
-          <td className="tac">{billterm.name}</td>
-          <td className="tac">{billterm.days}</td>
+        <tr key={country._id}>
+          <td className="tac">{country.name}</td>
+          <td className="tac">{country.ccode}</td>
         </tr>
       );
     });
   };
 
   useEffect(() => {
-    refreshBillTermList();
+    refreshCountryList();
   }, []);
 
   return (
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | Bill Term Setting</title>
+        <title>Merchant | Country Setting</title>
       </Helmet>
       <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
-        <SettingSideBar active="BillTermSettings" />
+        <SettingSideBar active="CountrySettings" />
         <Main big>
           <ActionBar
             marginBottom="33px"
@@ -86,16 +82,16 @@ const BillTermSettingPage = (props) => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Bill Terms" />
+              <input type="text" placeholder="Search Country" />
             </div>
 
             <Button
               className="addBankButton"
               flex
-              onClick={() => handleBillTermPopupClick('new', {})}
+              onClick={() => handleCountryPopupClick()}
             >
               <AddIcon className="material-icons" />
-              <span>Add Bill Term</span>
+              <span>Add Country</span>
             </Button>
           </ActionBar>
           <ActionBar
@@ -104,20 +100,20 @@ const BillTermSettingPage = (props) => {
             className="clr"
           >
             <div>
-              {defaultBillTerm ? (
+              {defaultCountry ? (
                 <h3 style={{ margin: '6px' }}>
-                  Default Bill Term : {defaultBillTerm.name}
+                  Default Country : {defaultCountry.name}
                 </h3>
               ) : (
-                <h3 style={{ margin: '6px' }}>Please set default bill term</h3>
+                <h3 style={{ margin: '6px' }}>Please set default country</h3>
               )}
             </div>
             <Button
               className="addBankButton"
               style={{ float: 'right' }}
-              onClick={() => handleDefaultBillTermPopupClick()}
+              onClick={() => handleDefaultCountryPopupClick()}
             >
-              <span>Set Default Term</span>
+              <span>Set Default Country</span>
             </Button>
           </ActionBar>
           <Card bigPadding topMargin="55px">
@@ -126,7 +122,7 @@ const BillTermSettingPage = (props) => {
                 <i className="material-icons">supervised_user_circle</i>
               </div>
               <div className="cardHeaderRight">
-                <h3>Bill terms</h3>
+                <h3>Country List</h3>
               </div>
             </div>
             <div className="cardBody">
@@ -134,36 +130,31 @@ const BillTermSettingPage = (props) => {
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>Days</th>
+                    <th>Country code</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {billTermList && billTermList.length > 0
-                    ? getBillTermList()
-                    : null}
+                  {countryList && countryList.length > 0 ? getCountry() : null}
                 </tbody>
               </Table>
             </div>
           </Card>
         </Main>
       </Container>
-      {addBillTermPopup ? (
-        <CreateBillTermPopup
-          type={popupType}
-          billterm={editingBillTerm}
-          refreshbilltermlist={(data) => refreshBillTermList(data)}
+      {addCountryPopup ? (
+        <CreateCountryPopup
+          refreshcountrylist={(data) => refreshCountryList(data)}
           onClose={() => onPopupClose()}
         />
       ) : null}
-      {defaultBillTermPopup ? (
-        <DefaultBillTermPopup
-          billterm={defaultBillTerm}
-          termlist={billTermList}
-          onClose={() => onDefaultBillTermPopupClose()}
-          refreshbilltermlist={(data) => refreshBillTermList(data)}
+      {defaultCountryPopup ? (
+        <DefaultCountryPopup
+          countrylist={countryList}
+          onClose={() => onDefaultCountryPopupClose()}
+          refreshcountrylist={(data) => refreshCountryList(data)}
         />
       ) : null}
     </Wrapper>
   );
 };
-export default BillTermSettingPage;
+export default CountrySettingPage;

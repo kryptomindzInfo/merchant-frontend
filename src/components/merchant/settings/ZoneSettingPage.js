@@ -86,6 +86,7 @@ const ZoneSettingPage = (props) => {
                 </Col>
                 <Col cw="20%">
                   <Button
+                    style={{ padding: '5px' }}
                     type="submit"
                     onClick={() => handleZoneSettingPopupClick()}
                   >

@@ -63,6 +63,8 @@ class SettingSidebar extends Component {
     const zonesettings = this.props.active === 'ZoneSettings';
     const billperiodsettings = this.props.active === 'BillPeriodSettings';
     const billtermsettings = this.props.active === 'BillTermSettings';
+    const countrysettings = this.props.active === 'CountrySettings';
+
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>
@@ -120,6 +122,14 @@ class SettingSidebar extends Component {
               <SettingsIcon />
             </i>
             <h3>Bill Period Settings</h3>
+          </Card>
+        </A>
+        <A href="/merchant/settings/country">
+          <Card rounded selected={countrysettings} className="sideNav">
+            <i className="material-icons">
+              <SettingsIcon />
+            </i>
+            <h3>Country Settings</h3>
           </Card>
         </A>
       </SidebarStyle>

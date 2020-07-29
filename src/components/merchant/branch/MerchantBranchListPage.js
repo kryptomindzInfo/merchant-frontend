@@ -171,7 +171,7 @@ function MerchantBranchListPage(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>Branch List for {subzoneName}</h3>
+                <h3>Branch List of {subzoneName}</h3>
               </div>
             </div>
             <div className="cardBody">

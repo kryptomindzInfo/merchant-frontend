@@ -28,8 +28,7 @@ import {
   invoiceApi,
   fetchTaxList,
   fetchOfferingList,
-  getBillPeriods,
-  getBillTerms,
+  getMerchantSettings,
 } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
@@ -37,8 +36,11 @@ function InvoiceListPage(props) {
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [offeringList, setOfferingList] = React.useState([]);
-  const [billPeriodList, setBillPeriodList] = React.useState([]);
+  const [defaultPeriod, setDefaultBillPeriod] = React.useState({});
   const [billTermList, setBillTermList] = React.useState([]);
+  const [defaultTerm, setDefaultBillTerm] = React.useState({});
+  const [countryList, setCountryList] = React.useState([]);
+  const [defaultCountry, setDefaultCountry] = React.useState({});
   const [taxList, setTaxList] = React.useState([]);
   const [invoiceList, setInvoiceList] = React.useState([]);
   const [invoiceType, setInvoiceType] = React.useState('new');
@@ -68,18 +70,15 @@ function InvoiceListPage(props) {
     });
   };
 
-  const refreshBillPeriodList = async () => {
+  const refreshMerchantSettings = async () => {
     setLoading(true);
-    getBillPeriods().then((data) => {
-      setBillPeriodList(data.list);
-      setLoading(data.loading);
-    });
-  };
-
-  const refreshBillTermList = async () => {
-    setLoading(true);
-    getBillTerms().then((data) => {
-      setBillTermList(data.list);
+    getMerchantSettings().then((data) => {
+      console.log(data);
+      setDefaultBillPeriod(data.default_bill_period);
+      setBillTermList(data.bill_term_list);
+      setDefaultBillTerm(data.default_bill_term);
+      setCountryList(data.country_list);
+      setDefaultCountry(data.default_country);
       setLoading(data.loading);
     });
   };
@@ -226,8 +225,7 @@ function InvoiceListPage(props) {
     refreshGroupList();
     getOfferingList();
     getTaxList();
-    refreshBillPeriodList();
-    refreshBillTermList();
+    refreshMerchantSettings();
   }, []);
 
   if (isLoading) {
@@ -351,7 +349,10 @@ function InvoiceListPage(props) {
           offeringlist={offeringList}
           groupId={id}
           termlist={billTermList}
-          periodlist={billPeriodList}
+          countrylist={countryList}
+          defaultterm={defaultTerm}
+          defaultperiod={defaultPeriod}
+          defaultcountry={defaultCountry}
           refreshInvoiceList={() => {
             refreshInvoiceList();
           }}

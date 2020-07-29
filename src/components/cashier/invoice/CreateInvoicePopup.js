@@ -40,12 +40,25 @@ function CreateInvoicePopup(props) {
     },
   ]);
   const [totalAmount, setTotalAmount] = React.useState(0);
-  const [billPeriodList, setBillPeriodList] = React.useState(props.periodlist);
-  const [billTermList, setBillTermList] = React.useState(props.termlist);
+  const [defaultBillPeriod, setDefaultBillPeriod] = React.useState(
+    props.defaultperiod,
+  );
+  const [billTermList, setBilltermList] = React.useState(props.termlist);
+  const [defaultBillTerm, setDefaultBillTerm] = React.useState(
+    props.defaultterm,
+  );
+  const [countryList, setCountryList] = React.useState(props.countrylist);
+  const [defaultCountry, setDefaultCountry] = React.useState(
+    props.defaultcountry,
+  );
   const today = new Date();
-  const date = `${today.getFullYear()}-${
-    today.getMonth() + 1 < 10 ? `0${today.getMonth()}` : today.getMonth()
-  }-${today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()}`;
+  const date = `${
+    today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()
+  }/${
+    today.getMonth() + 1 < 10
+      ? `0${today.getMonth() + 1}`
+      : today.getMonth() + 1
+  }/${today.getFullYear()}`;
 
   const addNewItem = () => {
     setItemList([
@@ -91,13 +104,13 @@ function CreateInvoicePopup(props) {
     setTotalAmount(0);
   };
 
-  const getUser = (value) => {
-    if (value) {
-      if (value.length === 10) {
+  const getUser = (e) => {
+    if (e) {
+      if (e.target.value.length === 10) {
         return new Promise((resolve, reject) => {
           axios
             .post(`${API_URL}/cashier/getUserFromMobile`, {
-              mobile: value,
+              mobile: e.target.value,
             })
             .then((res) => {
               if (res.data.error || res.data.status !== 1) {
@@ -118,18 +131,15 @@ function CreateInvoicePopup(props) {
     return false;
   };
 
-  const periodNameSelectInput = () => {
-    return billPeriodList.map((val, index) => {
-      return (
-        <option key={val.period_name} value={index}>
-          {val.period_name}
-        </option>
-      );
-    });
-  };
-
   const termNameSelectInput = () => {
     return billTermList.map((val, index) => {
+      // if (defaultBillTerm.name === val.name) {
+      //   return (
+      //     <option key={val.name} value={index} selected>
+      //       {val.name}
+      //     </option>
+      //   );
+      // }
       return (
         <option key={val.name} value={index}>
           {val.name}
@@ -138,9 +148,18 @@ function CreateInvoicePopup(props) {
     });
   };
 
+  const countrySelectInput = () => {
+    return countryList.map((val, index) => {
+      return (
+        <option key={val.ccode} value={index}>
+          {val.ccode}
+        </option>
+      );
+    });
+  };
+
   useEffect(() => {
     correctFocus(props.type);
-    console.log(props.periodlist);
   });
 
   return (
@@ -151,7 +170,7 @@ function CreateInvoicePopup(props) {
           name: props.invoice.name || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
-          bill_term: props.invoice.bill_term || '',
+          bill_term: props.defaultterm.name || '',
           bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
@@ -159,15 +178,22 @@ function CreateInvoicePopup(props) {
           items: [],
         }}
         onSubmit={async (values) => {
+          if (userName !== '') {
+            values.name = userName;
+          }
           values.items = itemList;
           values.amount = totalAmount;
-          const due = new Date(values.bill_date);
+          const due = new Date();
           due.setDate(due.getDate() + billTermList[values.bill_term].days);
-          values.due_date = `${due.getFullYear()}-${
-            due.getMonth() + 1
-          }-${due.getDate()}`;
+          values.due_date = `${
+            due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
+          }/${
+            due.getMonth() + 1 < 10
+              ? `0${due.getMonth() + 1}`
+              : due.getMonth() + 1
+          }/${due.getFullYear()}`;
           console.log(values.due_date);
-          values.bill_period = billPeriodList[values.bill_period];
+          values.bill_period = defaultBillPeriod;
           console.log(values);
           if (props.type === 'create') {
             const payload = {
@@ -216,9 +242,7 @@ function CreateInvoicePopup(props) {
                 <Row>
                   <Col cW="10%" mR="2%">
                     <FormGroup>
-                      <label>Country Code*</label>
-                      <TextInput
-                        type="text"
+                      <SelectInput
                         name="ccode"
                         onFocus={(e) => {
                           handleChange(e);
@@ -232,7 +256,9 @@ function CreateInvoicePopup(props) {
                         value={values.ccode}
                         onChange={handleChange}
                         required
-                      />
+                      >
+                        {countrySelectInput()}
+                      </SelectInput>
                     </FormGroup>
                   </Col>
                   <Col cW="40%">
@@ -253,7 +279,10 @@ function CreateInvoicePopup(props) {
                           inputBlur(e);
                         }}
                         value={values.mobile}
-                        onChange={handleChange}
+                        onChange={(e) => {
+                          handleChange(e);
+                          getUser(e);
+                        }}
                         required
                       />
                     </FormGroup>
@@ -306,7 +335,7 @@ function CreateInvoicePopup(props) {
                         <TextInput
                           type="text"
                           name="name"
-                          value={userName}
+                          value={values.name}
                           onFocus={(e) => {
                             handleChange(e);
                             inputFocus(e);
@@ -338,8 +367,7 @@ function CreateInvoicePopup(props) {
                     <FormGroup>
                       <label className="focused">Bill Date</label>
                       <TextInput
-                        type="date"
-                        format="dd-mm-yyyy"
+                        type="text"
                         name="bill_date"
                         onFocus={(e) => {
                           handleChange(e);
@@ -350,7 +378,8 @@ function CreateInvoicePopup(props) {
                           handleChange(e);
                           inputBlur(e);
                         }}
-                        value={values.bill_date}
+                        value={date}
+                        placeholder={date}
                         onChange={handleChange}
                         required
                       />
@@ -358,8 +387,11 @@ function CreateInvoicePopup(props) {
                   </Col>
                   <Col cW="33%" mR="2%">
                     <FormGroup>
-                      <SelectInput
+                      <label className="focused">Bill Period*</label>
+                      <TextInput
+                        type="text"
                         name="bill_period"
+                        value={defaultBillPeriod.period_name}
                         onFocus={(e) => {
                           handleChange(e);
                           inputFocus(e);
@@ -369,13 +401,9 @@ function CreateInvoicePopup(props) {
                           handleChange(e);
                           inputBlur(e);
                         }}
-                        value={values.bill_period}
-                        onChange={handleChange}
-                        required
-                      >
-                        <option value="">Select Period</option>
-                        {periodNameSelectInput()}
-                      </SelectInput>
+                        placeholder={defaultBillPeriod.period_name}
+                        disabled
+                      />
                     </FormGroup>
                   </Col>
                   <Col cW="33%" mR="2%">
@@ -393,9 +421,10 @@ function CreateInvoicePopup(props) {
                         }}
                         value={values.bill_term}
                         onChange={handleChange}
+                        defaultValue={2}
                         required
                       >
-                        <option value="">Select Term</option>
+                        <option value="2">{defaultBillTerm.name}</option>
                         {termNameSelectInput()}
                       </SelectInput>
                     </FormGroup>

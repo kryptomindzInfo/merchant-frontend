@@ -230,39 +230,53 @@ const onCsvFileChange = (e) => {
   return parsedData;
 };
 
-const getBillPeriods = async () => {
+const getMerchantSettings = async () => {
   try {
     const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
-        return { list: [], loading: false };
+        return {
+          bill_period_list: [],
+          bill_term_list: [],
+          default_bill_term: {},
+          default_bill_period: {},
+          country_list: [],
+          default_country: {},
+          loading: false,
+        };
       }
-      return { list: res.data.setting.bill_period, loading: false };
+      return {
+        bill_period_list: res.data.setting.bill_period,
+        bill_term_list: res.data.setting.bill_term,
+        default_bill_term: res.data.setting.default_bill_term,
+        default_bill_period: res.data.setting.default_bill_period,
+        country_list: res.data.setting.country_list,
+        default_country: res.data.setting.default_country,
+        loading: false,
+      };
     }
     notify(res.data.message, 'error');
-    return { list: [], loading: false };
+    return {
+      bill_period_list: [],
+      bill_term_list: [],
+      default_bill_term: {},
+      default_bill_period: {},
+      country_list: [],
+      default_country: {},
+      loading: false,
+    };
   } catch (err) {
     notify('Something went wrong', 'error');
-    return { list: [], loading: false };
-  }
-};
-
-const getBillTerms = async () => {
-  try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
-    if (res.status === 200) {
-      if (res.data.status === 0) {
-        notify(res.data.message, 'error');
-        return { list: [], loading: false };
-      }
-      return { list: res.data.setting.bill_term, loading: false };
-    }
-    notify(res.data.message, 'error');
-    return { list: [], loading: false };
-  } catch (err) {
-    notify('Something went wrong', 'error');
-    return { list: [], loading: false };
+    return {
+      bill_period_list: [],
+      bill_term_list: [],
+      default_bill_term: {},
+      default_bill_period: {},
+      country_list: [],
+      default_country: {},
+      loading: false,
+    };
   }
 };
 
@@ -279,6 +293,5 @@ export {
   processJson,
   fetchTaxList,
   fetchOfferingList,
-  getBillPeriods,
-  getBillTerms,
+  getMerchantSettings,
 };

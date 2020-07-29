@@ -511,6 +511,50 @@ const editMerchant = async (props, values) => {
   }
 };
 
+const getCountryList = async () => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], default_country: {}, loading: false };
+      }
+      return {
+        list: res.data.setting.country_list,
+        default_country: res.data.setting.default_country,
+        loading: false,
+      };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], default_country: {}, loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], default_country: {}, loading: false };
+  }
+};
+
+const addCountry = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/addCountry`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshcountrylist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
 const getBillTerms = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
@@ -518,15 +562,19 @@ const getBillTerms = async () => {
       console.log(res);
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
-        return { list: [], loading: false };
+        return { list: [], default_bill_term: {}, loading: false };
       }
-      return { list: res.data.setting.bill_term, loading: false };
+      return {
+        list: res.data.setting.bill_term,
+        default_bill_term: res.data.setting.default_bill_term,
+        loading: false,
+      };
     }
     notify(res.data.message, 'error');
-    return { list: [], loading: false };
+    return { list: [], default_bill_term: {}, loading: false };
   } catch (err) {
     notify('Something went wrong', 'error');
-    return { list: [], loading: false };
+    return { list: [], default_bill_term: {}, loading: false };
   }
 };
 
@@ -555,18 +603,21 @@ const getBillPeriods = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
     if (res.status === 200) {
-      console.log(res);
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
-        return { list: [], loading: false };
+        return { list: [], default_bill_period: {}, loading: false };
       }
-      return { list: res.data.setting.bill_period, loading: false };
+      return {
+        list: res.data.setting.bill_period,
+        default_bill_period: res.data.setting.default_bill_period,
+        loading: false,
+      };
     }
     notify(res.data.message, 'error');
-    return { list: [], loading: false };
+    return { list: [], default_bill_period: {}, loading: false };
   } catch (err) {
     notify('Something went wrong', 'error');
-    return { list: [], loading: false };
+    return { list: [], default_bill_period: {}, loading: false };
   }
 };
 
@@ -581,6 +632,69 @@ const addBillPeriod = async (props, values) => {
       } else {
         notify(res.data.message, 'success');
         props.refreshbillperiodlist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
+const setDefaultBillPeriod = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/setDefaultBillPeriod`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshbillperiodlist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
+const setDefaultBillTerm = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/setDefaultBillTerm`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshbilltermlist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
+const setDefaultCountry = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/setDefaultCountry`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshcountrylist(values);
         props.onClose();
       }
     } else {
@@ -774,4 +888,9 @@ export {
   getBillPeriods,
   getZoneDetails,
   ZoneDetails,
+  setDefaultBillPeriod,
+  setDefaultBillTerm,
+  getCountryList,
+  addCountry,
+  setDefaultCountry,
 };
