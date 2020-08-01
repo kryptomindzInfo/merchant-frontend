@@ -22,6 +22,7 @@ import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
+import notify from '../../utils/Notify';
 import {
   fetchGroups,
   fetchInvoices,
@@ -94,7 +95,11 @@ function InvoiceListPage(props) {
   const handleCreateInvoicePopupClick = (type, invoice) => {
     setInvoiceType(type);
     setEditingInvoice(invoice);
-    setCreateInvoicePopup(true);
+    if (defaultTerm === undefined || defaultPeriod === undefined) {
+      notify('Default setting not created', 'error');
+    } else {
+      setCreateInvoicePopup(true);
+    }
   };
   const handleUploadInvoicePopupClick = () => {
     setUploadInvoicePopup(true);

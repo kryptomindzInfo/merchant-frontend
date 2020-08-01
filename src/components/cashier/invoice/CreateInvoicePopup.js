@@ -180,7 +180,7 @@ function CreateInvoicePopup(props) {
           name: props.invoice.name || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
-          bill_term: props.defaultterm.name || '',
+          bill_term: '',
           bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
@@ -436,7 +436,7 @@ function CreateInvoicePopup(props) {
                         defaultValue={2}
                         required
                       >
-                        <option value="2">{defaultBillTerm.name}</option>
+                        <option value="">Select Term</option>
                         {termNameSelectInput()}
                       </SelectInput>
                     </FormGroup>
