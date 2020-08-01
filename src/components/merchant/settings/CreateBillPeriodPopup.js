@@ -90,7 +90,6 @@ function CreateBillPeriodPopup(props) {
                     <TextInput
                       type="text"
                       name="start_date"
-                      format="dd-mm-yyyy"
                       onFocus={(e) => {
                         handleChange(e);
                         inputFocus(e);
@@ -103,7 +102,6 @@ function CreateBillPeriodPopup(props) {
                       onChange={handleChange}
                       placeholder={props.startdate}
                       value={props.startdate}
-                      required
                       disabled
                     />
                   </FormGroup>
