@@ -81,6 +81,7 @@ function CreateBillPeriodPopup(props) {
                         inputBlur(e);
                       }}
                       onChange={handleChange}
+                      value={values.start_date}
                       required
                     />
                   </FormGroup>
