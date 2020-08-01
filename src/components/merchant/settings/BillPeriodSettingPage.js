@@ -90,7 +90,7 @@ const BillPeriodSettingPage = (props) => {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | Bill Period Setting</title>
+        <title>Merchant | Period Setting</title>
       </Helmet>
       <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
@@ -114,7 +114,7 @@ const BillPeriodSettingPage = (props) => {
               onClick={() => handleBillPeriodPopupClick('new', {})}
             >
               <AddIcon className="material-icons" />
-              <span>Add Bill Period</span>
+              <span>Add Period</span>
             </Button>
           </ActionBar>
           <ActionBar
@@ -125,12 +125,10 @@ const BillPeriodSettingPage = (props) => {
             <div>
               {defaultBillPeriod ? (
                 <h3 style={{ margin: '6px' }}>
-                  Default Bill Period : {defaultBillPeriod.period_name}
+                  Default Period : {defaultBillPeriod.period_name}
                 </h3>
               ) : (
-                <h3 style={{ margin: '6px' }}>
-                  Please set default bill period
-                </h3>
+                <h3 style={{ margin: '6px' }}>Please set default period</h3>
               )}
             </div>
             <Button
@@ -147,14 +145,14 @@ const BillPeriodSettingPage = (props) => {
                 <i className="material-icons">supervised_user_circle</i>
               </div>
               <div className="cardHeaderRight">
-                <h3>Bill Periods</h3>
+                <h3>Periods</h3>
               </div>
             </div>
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Period Name</th>
+                    <th>Name</th>
                     <th>Start Date</th>
                     <th>End date</th>
                   </tr>

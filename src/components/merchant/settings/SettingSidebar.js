@@ -121,7 +121,7 @@ class SettingSidebar extends Component {
             <i className="material-icons">
               <SettingsIcon />
             </i>
-            <h3>Bill Period Settings</h3>
+            <h3>Period Settings</h3>
           </Card>
         </A>
         <A href="/merchant/settings/country">

@@ -23,11 +23,7 @@ function CreateBillPeriodPopup(props) {
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      {props.type === 'update' ? (
-        <h1>Update Bill Period</h1>
-      ) : (
-        <h1>Add Bill Period</h1>
-      )}
+      {props.type === 'update' ? <h1>Update Period</h1> : <h1>Add Period</h1>}
       <Formik
         initialValues={{
           start_date: props.billperiod.start_date || '',
@@ -38,6 +34,7 @@ function CreateBillPeriodPopup(props) {
           if (props.startdate !== null) {
             values.start_date = new Date(props.startdate);
           }
+          console.log(props.startdate);
           console.log(values);
           if (props.type === 'update') {
             console.log('in process');
@@ -73,7 +70,6 @@ function CreateBillPeriodPopup(props) {
                     <TextInput
                       type="date"
                       format="dd-mm-yyyy"
-                      value="30-06-2020"
                       name="start_date"
                       onFocus={(e) => {
                         handleChange(e);
@@ -94,6 +90,7 @@ function CreateBillPeriodPopup(props) {
                     <TextInput
                       type="text"
                       name="start_date"
+                      format="dd-mm-yyyy"
                       onFocus={(e) => {
                         handleChange(e);
                         inputFocus(e);
@@ -116,6 +113,7 @@ function CreateBillPeriodPopup(props) {
                   <TextInput
                     type="date"
                     name="end_date"
+                    format="dd-mm-yyyy"
                     onFocus={(e) => {
                       handleChange(e);
                       inputFocus(e);
@@ -144,9 +142,7 @@ function CreateBillPeriodPopup(props) {
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
                     <span>
-                      {props.type === 'update'
-                        ? 'Update Bill Term'
-                        : 'Add Bill Period'}
+                      {props.type === 'update' ? 'Update Period' : 'Add Period'}
                     </span>
                   )}
                 </Button>

@@ -32,6 +32,8 @@ const InvoiceDescription = (props) => {
       quantity: 0,
       tax: 0,
       amount: 0,
+      amountNoTax: 0,
+      taxAmount: 0,
     },
   ]);
 
@@ -49,6 +51,8 @@ const InvoiceDescription = (props) => {
           quantity: 0,
           tax: 0,
           amount: 0,
+          amountNoTax: 0,
+          taxAmount: 0,
         },
       ]);
       props.reset();
@@ -69,6 +73,8 @@ const InvoiceDescription = (props) => {
           quantity: 0,
           tax: 0,
           amount: 0,
+          amountNoTax: 0,
+          taxAmount: 0,
         },
       ]);
       props.reset();
@@ -93,12 +99,16 @@ const InvoiceDescription = (props) => {
       const ta = descriptionL[e.target.id].tax;
       const ind = descriptionL[e.target.id].index;
       const quan = descriptionL[e.target.id].quantity;
+      const prevAmountNoTax = parseFloat(descriptionL[e.target.id].amountNoTax);
+      const prevTax = parseFloat(descriptionL[e.target.id].taxAmount);
       const prevamount = parseFloat(descriptionL[e.target.id].amount);
       const amountWithoutTax =
         parseFloat(olist[0].unit_price) * parseFloat(quan);
       const taxOnAmount = amountWithoutTax * (parseFloat(ta) / 100);
       const newamount = parseFloat(amountWithoutTax + taxOnAmount);
       props.totalamount(prevamount, newamount);
+      props.totalamountwithouttax(prevAmountNoTax, amountWithoutTax);
+      props.totaltax(prevTax, taxOnAmount);
       descriptionL[e.target.id] = {
         index: ind,
         name: olist[0].name,
@@ -109,6 +119,8 @@ const InvoiceDescription = (props) => {
         quantity: quan,
         tax: ta,
         amount: newamount,
+        amountNoTax: amountWithoutTax,
+        taxAmount: taxOnAmount,
       };
       setDescriptionList(descriptionL);
       props.itemcodechange(olist[0].code, e.target.id);
@@ -128,6 +140,8 @@ const InvoiceDescription = (props) => {
     } else {
       descriptionL[e.target.id].tax = parseFloat(e.target.value);
     }
+    const prevAmountNoTax = parseFloat(descriptionL[e.target.id].amountNoTax);
+    const prevTax = parseFloat(descriptionL[e.target.id].taxAmount);
     const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax =
       parseFloat(descriptionL[e.target.id].unitPrice) *
@@ -136,9 +150,13 @@ const InvoiceDescription = (props) => {
       amountWithoutTax * (parseFloat(descriptionL[e.target.id].tax) / 100);
     const amount = parseFloat(amountWithoutTax + taxOnAmount);
     descriptionL[e.target.id].amount = amount;
+    descriptionL[e.target.id].amountNoTax = amountWithoutTax;
+    descriptionL[e.target.id].taxAmount = taxOnAmount;
     setDescriptionList(descriptionL);
     props.taxcodechange(tlist[0].code, amount, e.target.id);
     props.totalamount(prevamount, amount);
+    props.totalamountwithouttax(prevAmountNoTax, amountWithoutTax);
+    props.totaltax(prevTax, taxOnAmount);
   };
 
   const handleQuantityChange = (e) => {
@@ -151,6 +169,8 @@ const InvoiceDescription = (props) => {
     } else {
       descriptionL[e.target.id].quantity = parseFloat(e.target.value);
     }
+    const prevAmountNoTax = parseFloat(descriptionL[e.target.id].amountNoTax);
+    const prevTax = parseFloat(descriptionL[e.target.id].taxAmount);
     const prevamount = parseFloat(descriptionL[e.target.id].amount);
     const amountWithoutTax =
       parseFloat(descriptionL[e.target.id].unitPrice) *
@@ -159,9 +179,13 @@ const InvoiceDescription = (props) => {
       amountWithoutTax * (parseFloat(descriptionL[e.target.id].tax) / 100);
     const amount = parseFloat(amountWithoutTax + taxOnAmount);
     descriptionL[e.target.id].amount = amount;
+    descriptionL[e.target.id].amountNoTax = amountWithoutTax;
+    descriptionL[e.target.id].taxAmount = taxOnAmount;
     setDescriptionList(descriptionL);
     props.quantitychange(parseFloat(e.target.value), amount, e.target.id);
     props.totalamount(prevamount, amount);
+    props.totalamountwithouttax(prevAmountNoTax, amountWithoutTax);
+    props.totaltax(prevTax, taxOnAmount);
   };
 
   const addNewRow = (e) => {
@@ -177,6 +201,8 @@ const InvoiceDescription = (props) => {
         quantity: 0,
         tax: 0,
         amount: 0,
+        amountNoTax: 0,
+        taxAmount: 0,
       },
     ]);
     props.addnewitem();
@@ -248,6 +274,7 @@ const InvoiceDescription = (props) => {
               />
             </FormGroup>
           </td>
+          <td>{val.amountNoTax}</td>
           <td smallTd>
             <FormGroup onChange={handleTaxChange} required>
               <SelectInput
@@ -326,7 +353,8 @@ const InvoiceDescription = (props) => {
             <th>Unit of measure</th>
             <th>Unit Price</th>
             <th>Quantity</th>
-            <th>Tax</th>
+            <th>Amount Without Tax</th>
+            <th>Tax %</th>
             <th>Amount</th>
           </tr>
         </thead>

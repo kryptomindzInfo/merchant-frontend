@@ -51,6 +51,8 @@ function CreateInvoicePopup(props) {
   const [defaultCountry, setDefaultCountry] = React.useState(
     props.defaultcountry,
   );
+  const [totalAmountWithoutTax, setTotalAmountWithoutTax] = React.useState(0);
+  const [totalTax, setTotalTax] = React.useState(0);
   const today = new Date();
   const date = `${
     today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()
@@ -98,6 +100,14 @@ function CreateInvoicePopup(props) {
 
   const handleTotalAmount = (prev, next) => {
     setTotalAmount(totalAmount - prev + next);
+  };
+
+  const handleTotalAmountWithoutTax = (prev, next) => {
+    setTotalAmountWithoutTax(totalAmountWithoutTax - prev + next);
+  };
+
+  const handleTotalTax = (prev, next) => {
+    setTotalTax(totalTax - prev + next);
   };
 
   const resteTotalAmount = () => {
@@ -357,6 +367,8 @@ function CreateInvoicePopup(props) {
                   totalamount={handleTotalAmount}
                   addnewitem={addNewItem}
                   deleteitem={deleteItem}
+                  totalamountwithouttax={handleTotalAmountWithoutTax}
+                  totaltax={handleTotalTax}
                   itemcodechange={handleItemCodeChange}
                   quantitychange={handleQuantityChange}
                   taxcodechange={handleTaxCodeChange}
@@ -428,6 +440,23 @@ function CreateInvoicePopup(props) {
                         {termNameSelectInput()}
                       </SelectInput>
                     </FormGroup>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col cW="75%"></Col>
+                  <Col cW="25%">
+                    <Row style={{ marginTop: '7px', fontSize: '18px' }}>
+                      <Col cW="50%">Total Amount</Col>
+                      <Col cW="50%">{totalAmountWithoutTax}</Col>
+                    </Row>
+                    <Row style={{ marginTop: '7px', fontSize: '18px' }}>
+                      <Col cW="50%">Total Tax</Col>
+                      <Col cW="50%">{totalTax}</Col>
+                    </Row>
+                    <Row style={{ marginTop: '7px', fontSize: '18px' }}>
+                      <Col cW="50%">Sum Total</Col>
+                      <Col cW="50%">{totalAmount}</Col>
+                    </Row>
                   </Col>
                 </Row>
                 <Button
