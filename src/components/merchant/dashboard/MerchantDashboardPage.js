@@ -30,6 +30,7 @@ const MerchantDashboardPage = () => {
   };
 
   useEffect(() => {
+    console.log(merchantDetails);
     setLoading(true);
     refreshPage();
   }, []);

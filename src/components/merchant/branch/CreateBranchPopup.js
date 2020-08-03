@@ -287,15 +287,16 @@ function CreateBranchPopup(props) {
                 </Row>
 
                 <label>Working Hours</label>
+                <hr style={{ visibility: 'hidden' }}></hr>
                 <Row>
                   <Col cW="49%" mR="2%">
                     <FormGroup>
-                      <label>From*</label>
+                      <label className="focused">From*</label>
                       <TextInput
                         type="time"
                         name="working_from"
-                        onFocus={inputFocus}
-                        onBlur={inputBlur}
+                        // onFocus={inputFocus}
+                        // onBlur={inputBlur}
                         min="00:00"
                         max="23:00"
                         autoFocus
@@ -307,15 +308,15 @@ function CreateBranchPopup(props) {
                   </Col>
                   <Col cW="49%">
                     <FormGroup>
-                      <label>To*</label>
+                      <label className="focused">To*</label>
                       <TextInput
                         type="time"
                         autoFocus
                         min="00:00"
                         max="23:00"
                         name="working_to"
-                        onFocus={inputFocus}
-                        onBlur={inputBlur}
+                        // onFocus={inputFocus}
+                        // onBlur={inputBlur}
                         value={values.working_to}
                         onChange={handleChange}
                         required

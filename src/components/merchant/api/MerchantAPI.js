@@ -517,7 +517,6 @@ const getCountryList = async () => {
     if (res.status === 200) {
       console.log(res);
       if (res.data.status === 0) {
-        notify(res.data.message, 'error');
         return { list: [], default_country: {}, loading: false };
       }
       return {
@@ -526,7 +525,6 @@ const getCountryList = async () => {
         loading: false,
       };
     }
-    notify(res.data.message, 'error');
     return { list: [], default_country: {}, loading: false };
   } catch (err) {
     notify('Something went wrong', 'error');

@@ -7,6 +7,7 @@ import Table from '../../shared/Table';
 import FormGroup from '../../shared/FormGroup';
 import TextInput from '../../shared/TextInput';
 import SelectInput from '../../shared/SelectInput';
+import { currency } from '../../constants';
 
 const InvoiceDescription = (props) => {
   const [offeringList, setOfferingList] = React.useState(
@@ -259,7 +260,6 @@ const InvoiceDescription = (props) => {
             </FormGroup>
           </td>
           <td smallTd>{val.description}</td>
-          <td smallTd>{val.denomination}</td>
           <td smallTd>{val.unitOfMeasure}</td>
           <td smallTd>{val.unitPrice}</td>
           <td smallTd>
@@ -349,7 +349,6 @@ const InvoiceDescription = (props) => {
           <tr>
             <th>Offering Name</th>
             <th>Description</th>
-            <th>Denomination</th>
             <th>Unit of measure</th>
             <th>Unit Price</th>
             <th>Quantity</th>

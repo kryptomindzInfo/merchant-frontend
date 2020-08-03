@@ -73,22 +73,23 @@ function MerchantCreateCashierPopup(props) {
                   />
                 </FormGroup>
                 <label>Working Hours</label>
+                <hr style={{ visibility: 'hidden' }}></hr>
                 <Row>
                   <Col cW="49%" mR="2%">
                     <FormGroup>
-                      <label>From*</label>
+                      <label className="focused">From*</label>
                       <TextInput
                         type="time"
                         name="working_from"
-                        onFocus={(e) => {
-                          handleChange(e);
-                          inputFocus(e);
-                        }}
-                        onBlur={(e) => {
-                          handleBlur(e);
-                          handleChange(e);
-                          inputBlur(e);
-                        }}
+                        // onFocus={(e) => {
+                        //   handleChange(e);
+                        //   inputFocus(e);
+                        // }}
+                        // onBlur={(e) => {
+                        //   handleBlur(e);
+                        //   handleChange(e);
+                        //   inputBlur(e);
+                        // }}
                         min="00:00"
                         max="23:00"
                         value={values.working_from}
@@ -99,21 +100,21 @@ function MerchantCreateCashierPopup(props) {
                   </Col>
                   <Col cW="49%">
                     <FormGroup>
-                      <label>To*</label>
+                      <label className="focused">To*</label>
                       <TextInput
                         type="time"
                         min="00:00"
                         max="23:00"
                         name="working_to"
-                        onFocus={(e) => {
-                          handleChange(e);
-                          inputFocus(e);
-                        }}
-                        onBlur={(e) => {
-                          handleBlur(e);
-                          handleChange(e);
-                          inputBlur(e);
-                        }}
+                        // onFocus={(e) => {
+                        //   handleChange(e);
+                        //   inputFocus(e);
+                        // }}
+                        // onBlur={(e) => {
+                        //   handleBlur(e);
+                        //   handleChange(e);
+                        //   inputBlur(e);
+                        // }}
                         value={values.working_to}
                         onChange={handleChange}
                         required

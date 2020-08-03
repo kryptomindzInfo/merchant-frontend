@@ -40,8 +40,8 @@ function CreateBranchPopup(props) {
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string()
-            .min(3, 'Group name should be atleast 3 characters')
-            .required('Group name name is required'),
+            .min(3, 'Category name should be atleast 3 characters')
+            .required('Caterory name name is required'),
         })}
       >
         {(formikProps) => {

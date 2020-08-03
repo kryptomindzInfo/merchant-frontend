@@ -59,7 +59,7 @@ const login = (loginCreds) => {
     .then((res) => {
       if (res.status === 200) {
         if (res.data.status === 0) {
-          notify(res.data.error, 'error');
+          notify(res.data.message, 'error');
         } else {
           redirectUser(loginCreds.type, res);
         }

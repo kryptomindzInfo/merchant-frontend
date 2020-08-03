@@ -19,6 +19,7 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 // export const CONTRACT_URL = 'http://localhost:3001/uploads/';
 
 // for server
+export const currency = 'XOF';
 export const MERCHANT_API =
   'http://91d90ac373dc.sn.mynetname.net:30301/api/merchant';
 export const API_URL = ' http://91d90ac373dc.sn.mynetname.net:30301/api';

@@ -23,7 +23,7 @@ import {
   getBillPeriods,
   getBillTerms,
 } from '../api/CashierAPI';
-import { CURRENCY, API_URL } from '../../constants';
+import { currency, API_URL } from '../../constants';
 import TextArea from '../../shared/TextArea';
 
 function CreateInvoicePopup(props) {
@@ -447,15 +447,21 @@ function CreateInvoicePopup(props) {
                   <Col cW="25%">
                     <Row style={{ marginTop: '7px', fontSize: '18px' }}>
                       <Col cW="50%">Total Amount</Col>
-                      <Col cW="50%">{totalAmountWithoutTax}</Col>
+                      <Col cW="50%">
+                        {currency} {totalAmountWithoutTax}
+                      </Col>
                     </Row>
                     <Row style={{ marginTop: '7px', fontSize: '18px' }}>
                       <Col cW="50%">Total Tax</Col>
-                      <Col cW="50%">{totalTax}</Col>
+                      <Col cW="50%">
+                        {currency} {totalTax}
+                      </Col>
                     </Row>
                     <Row style={{ marginTop: '7px', fontSize: '18px' }}>
                       <Col cW="50%">Sum Total</Col>
-                      <Col cW="50%">{totalAmount}</Col>
+                      <Col cW="50%">
+                        {currency} {totalAmount}
+                      </Col>
                     </Row>
                   </Col>
                 </Row>
