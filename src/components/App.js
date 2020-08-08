@@ -16,6 +16,7 @@ import MerchantBranchListPage from './merchant/branch/MerchantBranchListPage';
 import MerchantSubzoneListPage from './merchant/subzone/MerchantSubzoneListPage';
 import MerchantBranchInfoPage from './merchant/branch/MerchantBranchInfoPage';
 import MerchantOfferingListPage from './merchant/offerings/MerchantOfferingListPage';
+import MerchantCustomerListPage from './merchant/customers/MerchantCustomerListPage';
 import MerchantTaxListPage from './merchant/taxes/MerchantTaxListPage';
 import GlobalStyle from '../styles/global-styles';
 import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
@@ -63,9 +64,11 @@ import {
   zoneBranchUrl,
   zoneSubzoneUrl,
   cashierSettingsUrl,
+  cashierBillSettingsUrl,
   defaultLoginUrl,
   merchantOfferingsUrl,
   merchantTaxesUrl,
+  merchantCustomersUrl,
   merchantOperationalHistoryUrl,
   merchantZoneSettings,
   merchantBillPeriodSettings,
@@ -75,6 +78,7 @@ import {
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
 import CashierSettingsPage from './cashier/settings/CashierSettingsPage';
+import CashierBillSettingsPage from './cashier/settings/CashierBillSettingsPage';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -189,6 +193,12 @@ function App() {
               exact
               path={merchantTaxesUrl}
               component={(props) => <MerchantTaxListPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantCustomersUrl}
+              component={(props) => <MerchantCustomerListPage {...props} />}
             />
             <ProtectedRoute
               exact
@@ -361,6 +371,12 @@ function App() {
               exact
               path={cashierSettingsUrl}
               component={(props) => <CashierSettingsPage {...props} />}
+            />
+            <ProtectedRoute
+              type="cashier"
+              exact
+              path={cashierBillSettingsUrl}
+              component={(props) => <CashierBillSettingsPage {...props} />}
             />
             {/* ===================== */}
             {/* Cashier Public Routes */}

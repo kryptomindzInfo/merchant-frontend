@@ -20,6 +20,7 @@ const merchantCountrySettings = '/merchant/settings/country';
 const merchantBillTermSettings = '/merchant/settings/billTermSettings';
 const merchantOfferingsUrl = '/merchant/offerings';
 const merchantTaxesUrl = '/merchant/taxes';
+const merchantCustomersUrl = '/merchant/customers';
 const merchantOperationalHistoryUrl = '/merchant/operationalHistory';
 
 // branch URL's
@@ -41,6 +42,7 @@ const cashierForgotPasswordUrl = '/cashier/:name/forgot-password';
 const cashierOtpUrl = '/cashier/:name/otp-forgot-password';
 const cashierVerifyUrl = '/cashier/:name/login-verify';
 const cashierSettingsUrl = '/cashier/settings';
+const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
   merchantDashboardUrl,
@@ -81,4 +83,6 @@ export {
   merchantBillPeriodSettings,
   merchantBillTermSettings,
   merchantCountrySettings,
+  merchantCustomersUrl,
+  cashierBillSettingsUrl,
 };

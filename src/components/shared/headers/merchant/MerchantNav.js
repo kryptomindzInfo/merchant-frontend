@@ -25,6 +25,7 @@ class MerchantNav extends Component {
     const reports = this.props.active === 'reports' ? 'true' : '';
     const offerings = this.props.active === 'offerings' ? 'true' : '';
     const taxes = this.props.active === 'taxes' ? 'true' : '';
+    const customers = this.props.active === 'customers' ? 'true' : '';
 
     return (
       <React.Fragment>
@@ -43,6 +44,9 @@ class MerchantNav extends Component {
           </A>
           <A href="/merchant/taxes">
             <Link active={taxes}>Taxes</Link>
+          </A>
+          <A href="/merchant/customers">
+            <Link active={customers}>Customers</Link>
           </A>
         </NavTag>
       </React.Fragment>

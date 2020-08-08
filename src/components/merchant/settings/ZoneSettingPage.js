@@ -15,15 +15,19 @@ import ZoneSettingPopup from './ZoneSettingPopup';
 
 const ZoneSettingPage = (props) => {
   const [addZoneSettingPopup, setAddZoneSettingPopup] = React.useState(false);
+  const [
+    addBillNumberSettingPopup,
+    setAddBillNumberSettingPopup,
+  ] = React.useState(false);
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
   const [isLoading, setLoading] = React.useState(false);
 
-  const handleZoneSettingPopupClick = (type, billterm) => {
+  const handleZoneSettingPopupClick = () => {
     setAddZoneSettingPopup(true);
   };
 
-  const onPopupClose = () => {
+  const onZonePopupClose = () => {
     setAddZoneSettingPopup(false);
   };
 
@@ -45,13 +49,9 @@ const ZoneSettingPage = (props) => {
     <Wrapper>
       <Helmet>
         <meta charSet="utf-8" />
-        <title>Merchant | ZoneSettings </title>
+        <title>Merchant | CustomSettings </title>
       </Helmet>
-      <MerchantHeader
-        page="info"
-        middleTitle="Zone Settings"
-        goto="/merchant/dashboard"
-      />
+      <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
         <SettingSideBar active="ZoneSettings" />
         <Main big>
@@ -101,7 +101,7 @@ const ZoneSettingPage = (props) => {
       {addZoneSettingPopup ? (
         <ZoneSettingPopup
           refreszonedetails={(data) => refreshZoneDetails(data)}
-          onClose={() => onPopupClose()}
+          onClose={() => onZonePopupClose()}
         />
       ) : null}
     </Wrapper>

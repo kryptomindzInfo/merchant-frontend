@@ -22,28 +22,14 @@ const InvoiceDescription = (props) => {
   const [totalAmount, setTotalAmount] = React.useState(0);
   const [toggleButton, setToggleButton] = React.useState('product');
   const [taxList, setTaxList] = React.useState(props.taxlist);
-  const [descriptionList, setDescriptionList] = React.useState([
-    {
-      index: Math.random(),
-      name: '',
-      description: '',
-      denomination: '',
-      unitOfMeasure: '',
-      unitPrice: '',
-      quantity: 0,
-      tax: 0,
-      amount: 0,
-      amountNoTax: 0,
-      taxAmount: 0,
-    },
-  ]);
+  const [descriptionList, setDescriptionList] = React.useState(props.items);
 
   const toggleProduct = () => {
+    console.log(props.items);
     if (toggleButton !== 'product') {
       setToggleButton('product');
       setDescriptionList([
         {
-          index: Math.random(),
           name: '',
           description: '',
           denomination: '',
@@ -65,7 +51,6 @@ const InvoiceDescription = (props) => {
       setToggleButton('service');
       setDescriptionList([
         {
-          index: Math.random(),
           name: '',
           description: '',
           denomination: '',
@@ -98,7 +83,6 @@ const InvoiceDescription = (props) => {
         (sindex) => sindex.name === e.target.value,
       );
       const ta = descriptionL[e.target.id].tax;
-      const ind = descriptionL[e.target.id].index;
       const quan = descriptionL[e.target.id].quantity;
       const prevAmountNoTax = parseFloat(descriptionL[e.target.id].amountNoTax);
       const prevTax = parseFloat(descriptionL[e.target.id].taxAmount);
@@ -111,7 +95,6 @@ const InvoiceDescription = (props) => {
       props.totalamountwithouttax(prevAmountNoTax, amountWithoutTax);
       props.totaltax(prevTax, taxOnAmount);
       descriptionL[e.target.id] = {
-        index: ind,
         name: olist[0].name,
         description: olist[0].description,
         denomination: olist[0].denomination,
@@ -193,7 +176,6 @@ const InvoiceDescription = (props) => {
     setDescriptionList([
       ...descriptionList,
       {
-        index: Math.random(),
         name: '',
         description: '',
         denomination: '',
@@ -233,14 +215,6 @@ const InvoiceDescription = (props) => {
 
   const tableRows = () => {
     return descriptionList.map((val, index) => {
-      const name = `name-${index}`;
-      const description = `description-${index}`;
-      const denomination = `denomination-${index}`;
-      const unitOfMeasure = `unitOfMeasure-${index}`;
-      const uPrice = `uPrice-${index}`;
-      const quantity = `quantity-${index}`;
-      const tax = `tax-${index}`;
-      const amount = `amount-${index}`;
       return (
         <tr key={val.index}>
           <td smallTd>

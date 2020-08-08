@@ -53,6 +53,7 @@ function InvoiceListPage(props) {
   const [allRow, setAllRow] = React.useState([]);
   const [paidRow, setPaidRow] = React.useState([]);
   const [unpaidRow, setUnpaidRow] = React.useState([]);
+  const [draftRow, setDraftRow] = React.useState([]);
   const [groupList, setGroupList] = React.useState([]);
   const { match } = props;
   const { id } = match.params;
@@ -74,7 +75,6 @@ function InvoiceListPage(props) {
   const refreshMerchantSettings = async () => {
     setLoading(true);
     getMerchantSettings().then((data) => {
-      console.log(data);
       setDefaultBillPeriod(data.default_bill_period);
       setBillTermList(data.bill_term_list);
       setDefaultBillTerm(data.default_bill_term);
@@ -119,16 +119,19 @@ function InvoiceListPage(props) {
   };
 
   const setInvoices = (list) => {
-    setInvoiceList(list);
-    setAllRow(list);
+    const draftRows = list.filter((invoice) => {
+      return invoice.is_validated === 0;
+    });
     const paidRows = list.filter((invoice) => {
-      return invoice.paid === 1;
+      return invoice.paid === 1 && invoice.is_validated === 1;
     });
     const unpaidRows = list.filter((invoice) => {
-      return invoice.paid === 0;
+      return invoice.paid === 0 && invoice.is_validated === 1;
     });
+    setInvoiceList(paidRows);
     setPaidRow(paidRows);
     setUnpaidRow(unpaidRows);
+    setDraftRow(draftRows);
   };
 
   const refreshInvoiceList = async () => {
@@ -177,29 +180,31 @@ function InvoiceListPage(props) {
           </td>
           <td className="tac">
             {invoice.due_date}
-            <span className="absoluteMiddleRight primary popMenuTrigger">
-              <i className="material-icons ">more_vert</i>
-              <div className="popMenu">
-                {/* <span
-                  onClick={() =>
-                    handleCreateInvoicePopupClick('update', invoice)
-                  }
-                >
-                  Edit
-                </span> */}
-                <span
-                  onClick={async () =>
-                    invoiceApi(
-                      {},
-                      { invoice_id: invoice._id },
-                      'delete',
-                    ).then((data) => refreshInvoiceList())
-                  }
-                >
-                  Delete
-                </span>
-              </div>
-            </span>
+            {invoice.is_validated === 0 ? (
+              <span className="absoluteMiddleRight primary popMenuTrigger">
+                <i className="material-icons ">more_vert</i>
+                <div className="popMenu">
+                  <span
+                    onClick={() =>
+                      handleCreateInvoicePopupClick('update', invoice)
+                    }
+                  >
+                    Edit
+                  </span>
+                  <span
+                    onClick={async () =>
+                      invoiceApi(
+                        {},
+                        { invoice_id: invoice._id },
+                        'delete',
+                      ).then((data) => refreshInvoiceList())
+                    }
+                  >
+                    Delete
+                  </span>
+                </div>
+              </span>
+            ) : null}
           </td>
         </tr>
       );
@@ -210,18 +215,26 @@ function InvoiceListPage(props) {
     setValue(newValue);
     switch (newValue) {
       case 0:
-        setInvoiceList(allRow);
-        break;
-      case 1:
         setPage(0);
         setInvoiceList(paidRow);
         break;
-      case 2:
-        setPage(0);
+      case 1:
+        setPage(1);
         setInvoiceList(unpaidRow);
         break;
+      case 2:
+        setPage(2);
+        setInvoiceList(draftRow);
+        break;
       default:
-        setInvoiceList(allRow);
+        if (value === 0) {
+          setInvoiceList(paidRow);
+        } else if (value === 1) {
+          setInvoiceList(unpaidRow);
+        } else {
+          setInvoiceList(draftRow);
+        }
+        break;
     }
   };
 
@@ -231,6 +244,7 @@ function InvoiceListPage(props) {
     getOfferingList();
     getTaxList();
     refreshMerchantSettings();
+    console.log(value);
   }, []);
 
   if (isLoading) {
@@ -312,10 +326,10 @@ function InvoiceListPage(props) {
                   <TabItem
                     disableFocusRipple
                     disableRipple
-                    label="All Invoices"
+                    label="Paid Invoices"
                   />
-                  <TabItem label="Paid Invoices" />
                   <TabItem label="Pending Invoices" />
+                  <TabItem label="Draft Invoices" />
                 </Tabs>
               </Grid>
               {invoiceList && invoiceList.length > 0 ? (
@@ -375,8 +389,10 @@ function InvoiceListPage(props) {
       ) : null}
       {viewInvoicePopup ? (
         <ViewInvoicePopup
+          groupId={id}
           invoice={viewingInvoice}
           onClose={() => onViewInvoicePopupClose()}
+          refreshInvoiceList={() => refreshInvoiceList()}
         />
       ) : null}
     </Wrapper>

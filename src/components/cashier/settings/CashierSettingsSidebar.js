@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
+import SettingsIcon from '@material-ui/icons/Settings';
 import PersonIcon from '@material-ui/icons/PersonAdd';
 import Card from '../../shared/Card';
 import A from '../../shared/A';
@@ -54,6 +55,7 @@ const H1 = styled.h1`
 class CashierSettingsSidebar extends Component {
   render() {
     const info = this.props.active === 'info';
+    const billnumber = this.props.active === 'billnumber';
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>
@@ -63,6 +65,14 @@ class CashierSettingsSidebar extends Component {
               <PersonIcon />
             </i>
             <h3>Staff Position Info</h3>
+          </Card>
+        </A>
+        <A href="/cashier/billsettings">
+          <Card rounded selected={billnumber} className="sideNav">
+            <i className="material-icons">
+              <SettingsIcon />
+            </i>
+            <h3>Bill Number</h3>
           </Card>
         </A>
       </SidebarStyle>

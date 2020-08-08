@@ -3,6 +3,71 @@ import Papa from 'papaparse';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
+const getCounter = async () => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/merchantCashier/getCashierSettings`,
+      {},
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      }
+      return {
+        counter: res.data.setting.counter,
+        loading: false,
+      };
+    }
+    notify(res.data.message, 'error');
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const setCounter = async (props, values) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/merchantCashier/billNumberSetting`,
+      {
+        ...values,
+      },
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refresbillnumber();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const incCounter = async (props, values) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/merchantCashier/increaseCounter`,
+      {},
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const fetchGroups = async () => {
   try {
     const res = await axios.get(`${API_URL}/merchantCashier/listInvoiceGroups`);
@@ -55,8 +120,8 @@ const groupAPI = async (props, values, apiType) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        props.refreshGroupList();
-        props.onClose();
+        // props.refreshGroupList();
+        // props.onClose();
       }
     } else {
       notify(res.data.message, 'error');
@@ -101,6 +166,70 @@ const uploadInvoice = async (props, invoiceList) => {
         notify(res.data.message, 'success');
         props.refreshInvoiceList();
         props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const createInvoice = async (props, values) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/createInvoice`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        // props.refreshInvoiceList();
+        // props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const createCounterInvoice = async (props, values) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/merchantCashier/createCounterInvoice`,
+      {
+        ...values,
+      },
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshInvoiceList();
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const createCustomer = async (props, values) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/createCustomer`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
       }
     } else {
       notify(res.data.message, 'error');
@@ -281,6 +410,9 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  incCounter,
+  setCounter,
+  getCounter,
   fetchGroups,
   groupAPI,
   fetchInvoices,
@@ -294,4 +426,7 @@ export {
   fetchTaxList,
   fetchOfferingList,
   getMerchantSettings,
+  createInvoice,
+  createCustomer,
+  createCounterInvoice,
 };
