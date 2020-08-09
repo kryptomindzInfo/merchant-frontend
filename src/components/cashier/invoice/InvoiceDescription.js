@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { ErrorMessage } from 'formik';
 import { strategy } from 'webpack-merge';
 import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
 import AddCircleIcon from '@material-ui/icons/AddCircle';
 import Button from '../../shared/Button';
 import Table from '../../shared/Table';
 import FormGroup from '../../shared/FormGroup';
+import ErrorText from '../../shared/ErrorText';
 import TextInput from '../../shared/TextInput';
 import SelectInput from '../../shared/SelectInput';
 import { currency } from '../../constants';
@@ -227,6 +229,7 @@ const InvoiceDescription = (props) => {
                   marginBottom: '0px',
                 }}
                 required
+                value={val.name}
               >
                 <option value="">Select Name</option>
                 {nameSelectInput()}
@@ -245,6 +248,7 @@ const InvoiceDescription = (props) => {
                 name="quantity"
                 id={index}
                 required
+                value={val.quantity}
               />
             </FormGroup>
           </td>
@@ -258,6 +262,7 @@ const InvoiceDescription = (props) => {
                 style={{
                   marginBottom: '0px',
                 }}
+                value={val.tax}
                 required
               >
                 <option value="">Select tax</option>
@@ -294,7 +299,7 @@ const InvoiceDescription = (props) => {
   };
 
   return (
-    <div>
+    <form>
       <div
         style={{
           display: 'flex',
@@ -347,7 +352,7 @@ const InvoiceDescription = (props) => {
           }}
         />
       </div>
-    </div>
+    </form>
   );
 };
 

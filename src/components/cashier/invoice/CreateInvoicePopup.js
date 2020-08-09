@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Form, Formik } from 'formik';
+import { ErrorMessage, Form, Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import { number } from 'prop-types';
 import axios from 'axios';
@@ -12,6 +12,7 @@ import Col from '../../shared/Col';
 import TextInput from '../../shared/TextInput';
 import InvoiceDescription from './InvoiceDescription';
 import SelectInput from '../../shared/SelectInput';
+import ErrorText from '../../shared/ErrorText';
 import notify from '../../utils/Notify';
 import Loader from '../../shared/Loader';
 import {
@@ -59,23 +60,13 @@ function CreateInvoicePopup(props) {
   const [userEmail, setUserEmail] = React.useState('');
   const [userCode, setUserCode] = React.useState('');
   const [createUser, setCreateUser] = React.useState(false);
-  const [itemList, setItemList] = React.useState([
-    {
-      item_code: '',
-      quantity: 0,
-      tax_code: '',
-      total_amount: 0,
-    },
-  ]);
-
+  const [itemList, setItemList] = React.useState([]);
   const [totalAmount, setTotalAmount] = React.useState(0);
   const [defaultBillPeriod, setDefaultBillPeriod] = React.useState(
     props.defaultperiod,
   );
   const [billTermList, setBilltermList] = React.useState(props.termlist);
-  const [defaultBillTerm, setDefaultBillTerm] = React.useState(
-    props.defaultterm,
-  );
+  const [defaultBillTerm, setDefaultBillTerm] = React.useState({});
   const [countryList, setCountryList] = React.useState(props.countrylist);
   const [defaultCountry, setDefaultCountry] = React.useState(
     props.defaultcountry,
@@ -98,6 +89,14 @@ function CreateInvoicePopup(props) {
       setCurrentBillNumber(billnumber);
       // setLoading(data.loading);
     });
+  };
+
+  const dbillterm = () => {
+    return props.termlist.reduce((a, b) => {
+      if (b.name === props.defaultterm.name) {
+        return b;
+      }
+    }, 0);
   };
 
   const addNewItem = () => {
@@ -152,10 +151,6 @@ function CreateInvoicePopup(props) {
     setTotalAmount(0);
   };
 
-  const increaseBillCounter = async () => {
-    await incCounter();
-  };
-
   const getUser = (e) => {
     if (e) {
       if (e.target.value.length === 10) {
@@ -191,13 +186,6 @@ function CreateInvoicePopup(props) {
 
   const termNameSelectInput = () => {
     return billTermList.map((val, index) => {
-      // if (defaultBillTerm.name === val.name) {
-      //   return (
-      //     <option key={val.name} value={index} selected>
-      //       {val.name}
-      //     </option>
-      //   );
-      // }
       return (
         <option key={val.name} value={index}>
           {val.name}
@@ -213,7 +201,13 @@ function CreateInvoicePopup(props) {
     if (userCode !== '') {
       values.customer_code = userCode;
     }
+    if (props.type === 'update') {
+      values.number = props.invoice.number;
+    } else {
+      values.number = `Draft${Math.floor(Math.random() * 1000000000)}`;
+    }
     values.items = itemList;
+    values.paid = 0;
     values.is_validated = 0;
     values.amount = totalAmount;
     const due = new Date();
@@ -227,7 +221,7 @@ function CreateInvoicePopup(props) {
     values.group_id = props.groupId;
     console.log(values);
     if (props.type === 'create') {
-      await createInvoice(props, values);
+      await createInvoice(props, values, 'draft');
     } else {
       values.invoice_id = props.invoice._id;
       values.group_id = props.groupId;
@@ -237,6 +231,7 @@ function CreateInvoicePopup(props) {
 
   const handleSubmit3 = async (values) => {
     await createCustomer(props, values);
+    setCreateUser(false);
   };
 
   const countrySelectInput = () => {
@@ -277,7 +272,7 @@ function CreateInvoicePopup(props) {
         description: '',
         denomination: '',
         unitOfMeasure: '',
-        unitPrice: '',
+        unitPrice: 0,
         quantity: 0,
         tax: 0,
         amount: 0,
@@ -290,11 +285,51 @@ function CreateInvoicePopup(props) {
     }
   };
 
+  const setList2 = () => {
+    if (props.type === 'update') {
+      const list = [];
+      props.invoice.items.map((val) => {
+        const obj = {
+          item_code: val.item_desc.code,
+          quantity: val.quantity,
+          tax_code: val.tax_desc.code,
+          total_amount: val.total_amount,
+        };
+        list.push(obj);
+      });
+      setItemList(list);
+    } else {
+      const list = [];
+      const obj = {
+        item_code: '',
+        quantity: 0,
+        tax_code: '',
+        total_amount: 0,
+      };
+      list.push(obj);
+      setItemList(list);
+    }
+  };
+
+  const amountset = () => {
+    if (props.type === 'update') {
+      const total = props.invoice.items.reduce((a, b) => {
+        return a + b.quantity * b.item_desc.unit_price;
+      }, 0);
+      setTotalAmountWithoutTax(total);
+      setTotalAmount(props.invoice.amount);
+      setTotalTax(props.invoice.amount - total);
+    }
+  };
+
   useEffect(() => {
     correctFocus(props.type);
     setList();
+    setList2();
+    amountset();
     refreshCounter();
     setLoading(false);
+    console.log(defaultBillPeriod);
   }, []);
 
   if (isLoading) {
@@ -340,37 +375,28 @@ function CreateInvoicePopup(props) {
           }/${due.getFullYear()}`;
           values.bill_period = defaultBillPeriod;
           values.group_id = props.groupId;
-          if (props.type === 'create') {
-            await createInvoice(props, values).then((err, data) => {
+          await createInvoice(props, values, 'invoice').then(
+            async (err, data) => {
               if (err) {
+                console.log(err);
                 notify(err, 'error');
               } else {
-                increaseBillCounter();
+                await incCounter(props);
               }
-              // props.refreshGroupList();
-              // props.onClose();
-            });
-          } else {
-            values.invoice_id = props.invoice._id;
-            values.group_id = props.groupId;
-            await invoiceApi(props, values, 'update');
-          }
+            },
+          );
         }}
-        // validationSchema={Yup.object().shape({
-        //   mobile: Yup.string()
-        //     .min(10, 'number should be atleast 10 digits')
-        //     .max(10, 'number cannot exceed 10 digits')
-        //     .matches(
-        //       /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
-        //       'Mobile no must be valid',
-        //     )
-        //     .required('Mobile no is required')
-        //     .test(
-        //       // 'WalletCheck',
-        //       // 'Wallet for this number does not exist!',
-        //       (value) => getUser(value),
-        //     ),
-        // })}
+        validationSchema={Yup.object().shape({
+          mobile: Yup.string()
+            .min(10, 'number should be atleast 10 digits')
+            .max(10, 'number cannot exceed 10 digits')
+            .matches(
+              /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/,
+              'Mobile no must be valid',
+            )
+            .required('Mobile no is required'),
+          bill_term: Yup.string().required('Bill Term is required'),
+        })}
       >
         {(formikProps) => {
           const {
@@ -415,7 +441,7 @@ function CreateInvoicePopup(props) {
                   </Col>
                   <Col cW="40%">
                     <FormGroup>
-                      <label>Mobile Number*</label>
+                      <label className="focused">Mobile Number*</label>
                       <TextInput
                         type="text"
                         pattern="[0-9]{10}"
@@ -437,6 +463,7 @@ function CreateInvoicePopup(props) {
                         }}
                         required
                       />
+                      <ErrorMessage name="mobile" component={ErrorText} />
                     </FormGroup>
                   </Col>
                   <Col cW="25%" mR="2%">
@@ -464,7 +491,7 @@ function CreateInvoicePopup(props) {
                   <Col cW="25%" mR="2%">
                     {userCode === '' ? (
                       <FormGroup>
-                        <label>Customer Code*</label>
+                        <label className="focused">Customer Code*</label>
                         <TextInput
                           type="text"
                           name="customer_code"
@@ -496,10 +523,10 @@ function CreateInvoicePopup(props) {
                   </Col>
                 </Row>
                 <Row>
-                  <Col cW="40%" mR="2%">
+                  <Col cW="30%" mR="2%">
                     {userName === '' ? (
                       <FormGroup>
-                        <label>Name*</label>
+                        <label className="focused">Name*</label>
                         <TextInput
                           type="text"
                           name="name"
@@ -529,10 +556,10 @@ function CreateInvoicePopup(props) {
                       </FormGroup>
                     )}
                   </Col>
-                  <Col cW="60%" mR="2%">
+                  <Col cW="50%" mR="2%">
                     {userEmail === '' ? (
                       <FormGroup>
-                        <label>Email*</label>
+                        <label className="focused">Email*</label>
                         <TextInput
                           type="email"
                           name="email"
@@ -562,24 +589,28 @@ function CreateInvoicePopup(props) {
                       </FormGroup>
                     )}
                   </Col>
+                  <Col cW="20%">
+                    {createUser ? (
+                      <FormGroup>
+                        <Button
+                          type="button"
+                          onClick={() => {
+                            handleSubmit3(values);
+                          }}
+                          marginTop="10px"
+                          style={{
+                            padding: '5px',
+                            fontFamily: 'Roboto, sans-serif',
+                            fontWeight: 500,
+                            marginBottom: '6px',
+                          }}
+                        >
+                          <span>Create Customer</span>
+                        </Button>
+                      </FormGroup>
+                    ) : null}
+                  </Col>
                 </Row>
-                {createUser ? (
-                  <Button
-                    type="button"
-                    onClick={() => {
-                      handleSubmit3(values);
-                    }}
-                    marginTop="10px"
-                    style={{
-                      padding: '5px',
-                      fontFamily: 'Roboto, sans-serif',
-                      fontWeight: 500,
-                      float: 'right',
-                    }}
-                  >
-                    <span>Create Customer</span>
-                  </Button>
-                ) : null}
                 <InvoiceDescription
                   offeringlist={offeringList}
                   taxlist={taxList}
@@ -592,6 +623,7 @@ function CreateInvoicePopup(props) {
                   quantitychange={handleQuantityChange}
                   taxcodechange={handleTaxCodeChange}
                   reset={resteTotalAmount}
+                  type={props.type}
                   items={descList}
                 ></InvoiceDescription>
                 <Row>
@@ -651,14 +683,13 @@ function CreateInvoicePopup(props) {
                           handleChange(e);
                           inputBlur(e);
                         }}
-                        value={values.bill_term}
                         onChange={handleChange}
-                        defaultValue={2}
                         required
                       >
                         <option value="">Select Term</option>
                         {termNameSelectInput()}
                       </SelectInput>
+                      <ErrorMessage name="bill_term" component={ErrorText} />
                     </FormGroup>
                   </Col>
                 </Row>
@@ -735,8 +766,8 @@ function CreateInvoicePopup(props) {
                         <span>
                           {' '}
                           {props.type === 'update'
-                            ? 'Update Invoice'
-                            : 'Create Invoice'}
+                            ? 'Update and Validate Invoice'
+                            : 'Validate Invoice'}
                         </span>
                       )}
                       <span> Total XOF {totalAmount}</span>

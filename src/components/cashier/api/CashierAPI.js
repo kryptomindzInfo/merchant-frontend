@@ -48,7 +48,7 @@ const setCounter = async (props, values) => {
   }
 };
 
-const incCounter = async (props, values) => {
+const incCounter = async (props) => {
   try {
     const res = await axios.post(
       `${API_URL}/merchantCashier/increaseCounter`,
@@ -59,11 +59,14 @@ const incCounter = async (props, values) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
+        props.refreshInvoiceList();
+        props.onClose();
       }
     } else {
       notify(res.data.message, 'error');
     }
   } catch (err) {
+    console.log(err);
     notify('Something went wrong', 'error');
   }
 };
@@ -175,7 +178,7 @@ const uploadInvoice = async (props, invoiceList) => {
   }
 };
 
-const createInvoice = async (props, values) => {
+const createInvoice = async (props, values, type) => {
   try {
     const res = await axios.post(`${API_URL}/merchantCashier/createInvoice`, {
       ...values,
@@ -185,8 +188,10 @@ const createInvoice = async (props, values) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        // props.refreshInvoiceList();
-        // props.onClose();
+        if (type === 'draft') {
+          props.refreshInvoiceList();
+          props.onClose();
+        }
       }
     } else {
       notify(res.data.message, 'error');

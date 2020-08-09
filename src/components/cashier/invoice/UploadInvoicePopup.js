@@ -34,10 +34,14 @@ function UploadInvoicePopup(props) {
       } else {
         const obj = {
           number: value.number,
+          customer_code: value.customer_code,
           name: value.name,
           amount: value.amount,
           due_date: value.due_date,
+          bill_date: value.bill_date,
           description: value.description,
+          is_created: 0,
+          is_validated: 1,
           mobile: value.mobile,
           ccode: value.ccode,
           items: [
@@ -48,6 +52,11 @@ function UploadInvoicePopup(props) {
               total_amount: value.total_amount,
             },
           ],
+          bill_period: {
+            start_date: value.start_date,
+            end_date: value.end_date,
+            period_name: value.period_name,
+          },
         };
         temp.push(obj);
       }

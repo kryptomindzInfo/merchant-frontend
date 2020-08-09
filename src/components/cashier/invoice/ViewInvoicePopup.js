@@ -36,6 +36,7 @@ function ViewInvoicePopup(props) {
   };
 
   const getItems = () => {
+    console.log(props.invoice);
     return props.invoice.items.map((item) => {
       return (
         <tr key={item._id}>
@@ -45,8 +46,9 @@ function ViewInvoicePopup(props) {
           <td>{item.item_desc.unit_of_measure}</td>
           <td>{item.item_desc.unit_price}</td>
           <td>{item.quantity}</td>
-          <td>{item.tax_desc.value}</td>
           <td>{item.quantity * item.item_desc.unit_price}</td>
+          <td>{item.tax_desc.value}</td>
+          <td>{item.total_amount}</td>
         </tr>
       );
     });
@@ -87,8 +89,14 @@ function ViewInvoicePopup(props) {
           <Row>
             <Col cW="33%">
               <Row>
-                <Col className="popInfoLeft">Name</Col>
-                <Col className="popInfoRight">{props.invoice.name}</Col>
+                <Col className="popInfoLeft">Customer Code</Col>
+                {props.invoice.customer_code ? (
+                  <Col className="popInfoRight">
+                    {props.invoice.customer_code}
+                  </Col>
+                ) : (
+                  <Col className="popInfoRight">Passing by customer</Col>
+                )}
               </Row>
               <Row>
                 <Col className="popInfoLeft">Mobile</Col>
@@ -131,8 +139,9 @@ function ViewInvoicePopup(props) {
                   <th>Unit of measure</th>
                   <th>Unit Price</th>
                   <th>Quantity</th>
-                  <th>Tax %</th>
                   <th>Amount</th>
+                  <th>Tax %</th>
+                  <th>Amount with tax</th>
                 </tr>
               </thead>
               <tbody>
@@ -172,8 +181,8 @@ function ViewInvoicePopup(props) {
               </Row>
               {props.invoice.counter_invoices.length > 0 ? (
                 <Row>
-                  <Col className="popInfoLeft">Total Discount</Col>
-                  <Col className="popInfoRight">{discount()}</Col>
+                  <Col className="popInfoLeft">Amount Adjusted</Col>
+                  <Col className="popInfoRight">-{discount()}</Col>
                 </Row>
               ) : null}
               {props.invoice.counter_invoices.length > 0 ? (

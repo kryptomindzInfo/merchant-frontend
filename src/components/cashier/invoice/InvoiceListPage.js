@@ -47,7 +47,7 @@ function InvoiceListPage(props) {
   const [invoiceType, setInvoiceType] = React.useState('new');
   const [editingInvoice, setEditingInvoice] = React.useState({});
   const [viewingInvoice, setViewingInvoice] = React.useState({});
-  const [isLoading, setLoading] = React.useState(false);
+  const [isLoading, setLoading] = React.useState(true);
   const [value, setValue] = React.useState(0);
   const [page, setPage] = React.useState(0);
   const [allRow, setAllRow] = React.useState([]);
@@ -135,10 +135,10 @@ function InvoiceListPage(props) {
   };
 
   const refreshInvoiceList = async () => {
-    setLoading(true);
     fetchInvoices(id)
       .then((data) => {
         setInvoices(data.list);
+        console.log(data.list);
         setLoading(false);
       })
       .catch((err) => setLoading(false));
@@ -244,7 +244,6 @@ function InvoiceListPage(props) {
     getOfferingList();
     getTaxList();
     refreshMerchantSettings();
-    console.log(value);
   }, []);
 
   if (isLoading) {
@@ -372,6 +371,7 @@ function InvoiceListPage(props) {
           defaultterm={defaultTerm}
           defaultperiod={defaultPeriod}
           defaultcountry={defaultCountry}
+          draftnumber={draftRow.length}
           refreshInvoiceList={() => {
             refreshInvoiceList();
           }}
