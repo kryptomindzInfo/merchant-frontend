@@ -3,6 +3,19 @@ import Papa from 'papaparse';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
+const getCountries = async () => {
+  try {
+    const res = await axios.get(`${API_URL}/get-country`);
+    if (res.data[0].country_list.length !== 0) {
+      return { list: res.data[0].country_list, loading: false };
+    }
+    return { list: [], loading: false };
+  } catch (err) {
+    console.log(err.messages);
+    return { list: [], loading: false };
+  }
+};
+
 const getCounter = async () => {
   try {
     const res = await axios.post(
@@ -188,7 +201,7 @@ const createInvoice = async (props, values, type) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        if (type === 'draft') {
+        if (type === 'draft' || props.mode !== 'invoice') {
           props.refreshInvoiceList();
           props.onClose();
         }
@@ -434,4 +447,5 @@ export {
   createInvoice,
   createCustomer,
   createCounterInvoice,
+  getCountries,
 };

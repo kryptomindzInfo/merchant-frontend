@@ -70,7 +70,11 @@ const InvoiceDescription = (props) => {
   };
 
   const deleteRow = (value, index) => {
-    setDescriptionList(descriptionList.filter((sindex) => value !== sindex));
+    const list = descriptionList.filter((sindex) => value !== sindex);
+    props.totalamount(descriptionList[index].amount, 0);
+    props.totalamountwithouttax(descriptionList[index].amountNoTax, 0);
+    props.totaltax(descriptionList[index].taxAmount, 0);
+    setDescriptionList(list);
     props.deleteitem(index);
   };
 

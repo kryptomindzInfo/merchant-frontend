@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Popup from '../../shared/Popup';
 import Card from '../../shared/Card';
 import Table from '../../shared/Table';
@@ -11,7 +13,10 @@ import { invoiceApi } from '../api/CashierAPI';
 import CounterInvoicePopup from './CounterInvoicePopup';
 
 function ViewInvoicePopup(props) {
-  const [counterInvoicePopup, setCounterInvoicePopup] = React.useState(false);
+  const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(
+    JSON.parse(localStorage.getItem('cashierLogged')).cashier
+      .counter_invoice_access,
+  );
   const [totalAmount, setTotalAmount] = useState(
     props.invoice.items.reduce((a, b) => {
       return a + b.quantity * b.item_desc.unit_price;
@@ -22,9 +27,6 @@ function ViewInvoicePopup(props) {
       return a + (b.total_amount - b.quantity * b.item_desc.unit_price);
     }, 0),
   );
-  const handleCounterInvoicePopup = () => {
-    setCounterInvoicePopup(true);
-  };
 
   const handleValidate = async () => {
     const values = {
@@ -54,32 +56,12 @@ function ViewInvoicePopup(props) {
     });
   };
 
-  const getCounterInvoiceItems = () => {
-    return props.invoice.counter_invoices.map((item) => {
-      return (
-        <tr key={item._id}>
-          <td>{item.number}</td>
-          <td>{item.description}</td>
-          <td>{item.amount}</td>
-        </tr>
-      );
-    });
-  };
-
-  const discount = () => {
-    return props.invoice.counter_invoices.reduce((a, b) => {
-      return a + b.amount;
-    }, 0);
-  };
-
-  const sumtotal = () => {
-    const totaldiscount = discount();
-    return totalAmount + totalTax - totaldiscount;
-  };
-
-  const sumtotal2 = () => {
-    return totalAmount + totalTax;
-  };
+  useEffect(() => {
+    console.log(
+      JSON.parse(localStorage.getItem('cashierLogged')).cashier
+        .counter_invoice_access,
+    );
+  });
 
   return (
     <Popup bigBody accentedH1 close={props.onClose.bind(this)}>
@@ -152,23 +134,7 @@ function ViewInvoicePopup(props) {
             </Table>
           </div>
           <Row style={{ marginTop: '8px' }}>
-            <Col cW="50%">
-              {props.invoice.counter_invoices.length > 0 ? (
-                <div className="cardBody">
-                  <div className="popInfoLeft">Counter Invoices</div>
-                  <Table marginTop="5px" smallTd>
-                    <thead>
-                      <tr>
-                        <th>Number</th>
-                        <th>Description</th>
-                        <th>Amount</th>
-                      </tr>
-                    </thead>
-                    <tbody>{getCounterInvoiceItems()}</tbody>
-                  </Table>
-                </div>
-              ) : null}
-            </Col>
+            <Col cW="50%"></Col>
             <Col cW="25%"></Col>
             <Col cW="25%">
               <Row>
@@ -179,51 +145,83 @@ function ViewInvoicePopup(props) {
                 <Col className="popInfoLeft">Total Tax</Col>
                 <Col className="popInfoRight">{totalTax}</Col>
               </Row>
-              {props.invoice.counter_invoices.length > 0 ? (
-                <Row>
-                  <Col className="popInfoLeft">Amount Adjusted</Col>
-                  <Col className="popInfoRight">-{discount()}</Col>
-                </Row>
-              ) : null}
-              {props.invoice.counter_invoices.length > 0 ? (
-                <Row>
-                  <Col className="popInfoLeft">Sum Total</Col>
-                  <Col className="popInfoRight">{sumtotal()}</Col>
-                </Row>
-              ) : (
-                <Row>
-                  <Col className="popInfoLeft">Sum Total</Col>
-                  <Col className="popInfoRight">{sumtotal2()}</Col>
-                </Row>
-              )}
+              <Row>
+                <Col className="popInfoLeft">Sum Total</Col>
+                <Col className="popInfoRight">{props.invoice.amount}</Col>
+              </Row>
             </Col>
           </Row>
+          {props.invoice.is_validated === 0 ? (
+            <Row style={{ display: 'flex', justifyContent: 'center' }}>
+              <Col cW="25%">
+                <Button
+                  type="button"
+                  filledBtn
+                  onClick={() => {
+                    props.edit('update', props.invoice, 'invoice');
+                  }}
+                  marginTop="10px"
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                  }}
+                >
+                  <span>
+                    <i className="material-icons" style={{ marginRight: '2%' }}>
+                      <EditIcon />
+                    </i>
+                    Edit
+                  </span>
+                </Button>
+              </Col>
+              <Col cW="25%">
+                <Button
+                  type="button"
+                  filledBtn
+                  onClick={() => {
+                    props.delete(props.invoice._id);
+                  }}
+                  marginTop="10px"
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                  }}
+                >
+                  <span>
+                    <i className="material-icons" style={{ marginRight: '2%' }}>
+                      <DeleteIcon />
+                    </i>
+                    Delete
+                  </span>
+                </Button>
+              </Col>
+            </Row>
+          ) : null}
           {props.invoice.is_validated === 1 && props.invoice.paid === 0 ? (
-            <Button
-              type="button"
-              filledBtn
-              onClick={() => {
-                handleCounterInvoicePopup();
-              }}
-              marginTop="10px"
-              style={{
-                padding: '5px',
-                fontFamily: 'Roboto, sans-serif',
-                fontWeight: 500,
-              }}
-            >
-              <span>Raise Counter Invoice</span>
-            </Button>
+            <div>
+              {props.invoice.is_counter === false && counterInvoiceAccess ? (
+                <Button
+                  type="button"
+                  filledBtn
+                  onClick={() => {
+                    props.edit('update', props.invoice, 'counterinvoice');
+                  }}
+                  marginTop="10px"
+                  style={{
+                    padding: '5px',
+                    fontFamily: 'Roboto, sans-serif',
+                    fontWeight: 500,
+                  }}
+                >
+                  <span>Raise Counter Invoice</span>
+                </Button>
+              ) : null}
+            </div>
           ) : null}
         </Container>
       </Card>
-      {counterInvoicePopup ? (
-        <CounterInvoicePopup
-          invoiceId={props.invoice._id}
-          onClose={props.onClose}
-          refreshInvoiceList={props.refreshInvoiceList}
-        />
-      ) : null}
     </Popup>
   );
 }

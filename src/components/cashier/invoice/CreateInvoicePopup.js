@@ -195,6 +195,7 @@ function CreateInvoicePopup(props) {
   };
 
   const handleSubmit2 = async (values) => {
+    console.log(values.term);
     if (userName !== '') {
       values.name = userName;
     }
@@ -344,7 +345,7 @@ function CreateInvoicePopup(props) {
           name: props.invoice.name || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
-          bill_term: '',
+          bill_term: props.invoice.bill_term || '',
           bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
@@ -354,16 +355,24 @@ function CreateInvoicePopup(props) {
           items: [],
         }}
         onSubmit={async (values) => {
+          console.log(values);
           if (userName !== '') {
             values.name = userName;
           }
           if (userCode !== '') {
             values.customer_code = userCode;
           }
-          values.number = currentBillNumber;
+          if (props.mode === 'invoice') {
+            values.number = `${currentBillNumber}`;
+            values.amount = totalAmount;
+          } else {
+            values.number = `${values.number}C`;
+            values.is_counter = 1;
+            values.reference_invoice = props.invoice.number;
+            values.amount = -totalAmount;
+          }
           values.items = itemList;
           values.is_validated = 1;
-          values.amount = totalAmount;
           const due = new Date();
           due.setDate(due.getDate() + billTermList[values.bill_term].days);
           values.due_date = `${
@@ -375,12 +384,13 @@ function CreateInvoicePopup(props) {
           }/${due.getFullYear()}`;
           values.bill_period = defaultBillPeriod;
           values.group_id = props.groupId;
+          console.log(values);
           await createInvoice(props, values, 'invoice').then(
             async (err, data) => {
               if (err) {
                 console.log(err);
                 notify(err, 'error');
-              } else {
+              } else if (props.mode === 'invoice') {
                 await incCounter(props);
               }
             },
@@ -413,9 +423,13 @@ function CreateInvoicePopup(props) {
 
           return (
             <div>
-              <h1>
-                {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice'}
-              </h1>
+              {props.mode === 'invoice' ? (
+                <h1>
+                  {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice'}
+                </h1>
+              ) : (
+                <h1>Counter Invoice</h1>
+              )}
               <Form>
                 <Row>
                   <Col cW="10%" mR="2%">
@@ -467,26 +481,49 @@ function CreateInvoicePopup(props) {
                     </FormGroup>
                   </Col>
                   <Col cW="25%" mR="2%">
-                    <FormGroup>
-                      <label className="focused">Bill Number</label>
-                      <TextInput
-                        type="text"
-                        name="number"
-                        onFocus={(e) => {
-                          handleChange(e);
-                          inputFocus(e);
-                        }}
-                        onBlur={(e) => {
-                          handleBlur(e);
-                          handleChange(e);
-                          inputBlur(e);
-                        }}
-                        value={currentBillNumber}
-                        placeholder={currentBillNumber}
-                        onChange={handleChange}
-                        required
-                      />
-                    </FormGroup>
+                    {props.mode === 'invoice' ? (
+                      <FormGroup>
+                        <label className="focused">Bill Number</label>
+                        <TextInput
+                          type="text"
+                          name="number"
+                          onFocus={(e) => {
+                            handleChange(e);
+                            inputFocus(e);
+                          }}
+                          onBlur={(e) => {
+                            handleBlur(e);
+                            handleChange(e);
+                            inputBlur(e);
+                          }}
+                          value={currentBillNumber}
+                          placeholder={currentBillNumber}
+                          onChange={handleChange}
+                          required
+                        />
+                      </FormGroup>
+                    ) : (
+                      <FormGroup>
+                        <label className="focused">Bill Number</label>
+                        <TextInput
+                          type="text"
+                          name="number"
+                          onFocus={(e) => {
+                            handleChange(e);
+                            inputFocus(e);
+                          }}
+                          onBlur={(e) => {
+                            handleBlur(e);
+                            handleChange(e);
+                            inputBlur(e);
+                          }}
+                          value={`${values.number}C`}
+                          placeholder={`${values.number}C`}
+                          onChange={handleChange}
+                          required
+                        />
+                      </FormGroup>
+                    )}
                   </Col>
                   <Col cW="25%" mR="2%">
                     {userCode === '' ? (
@@ -686,7 +723,9 @@ function CreateInvoicePopup(props) {
                         onChange={handleChange}
                         required
                       >
-                        <option value="">Select Term</option>
+                        <option key="" value="">
+                          Select Term
+                        </option>
                         {termNameSelectInput()}
                       </SelectInput>
                       <ErrorMessage name="bill_term" component={ErrorText} />
@@ -716,64 +755,94 @@ function CreateInvoicePopup(props) {
                     </Row>
                   </Col>
                 </Row>
-                <Row>
-                  <Col cW="50%">
-                    <Button
-                      type="button"
-                      filledBtn
-                      onClick={() => {
-                        handleSubmit2(values);
-                      }}
-                      marginTop="10px"
-                      style={{
-                        padding: '5px',
-                        fontFamily: 'Roboto, sans-serif',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <CircularProgress
-                          size={30}
-                          thickness={5}
-                          color="primary"
-                        />
-                      ) : (
-                        <span>Save As Draft</span>
-                      )}
-                      <span> Total XOF {totalAmount}</span>
-                    </Button>
-                  </Col>
-                  <Col cw="50%">
-                    <Button
-                      type="submit"
-                      disabled={isSubmitting}
-                      onClick={handleSubmit}
-                      filledBtn
-                      marginTop="10px"
-                      style={{
-                        padding: '5px',
-                        fontFamily: 'Roboto, sans-serif',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {isSubmitting ? (
-                        <CircularProgress
-                          size={30}
-                          thickness={5}
-                          color="primary"
-                        />
-                      ) : (
-                        <span>
-                          {' '}
-                          {props.type === 'update'
-                            ? 'Update and Validate Invoice'
-                            : 'Validate Invoice'}
-                        </span>
-                      )}
-                      <span> Total XOF {totalAmount}</span>
-                    </Button>
-                  </Col>
-                </Row>
+                {props.mode === 'invoice' ? (
+                  <Row>
+                    <Col cW="50%">
+                      <Button
+                        type="button"
+                        filledBtn
+                        onClick={() => {
+                          handleSubmit2(values);
+                        }}
+                        marginTop="10px"
+                        style={{
+                          padding: '5px',
+                          fontFamily: 'Roboto, sans-serif',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {isSubmitting ? (
+                          <CircularProgress
+                            size={30}
+                            thickness={5}
+                            color="primary"
+                          />
+                        ) : (
+                          <span>Save As Draft</span>
+                        )}
+                        <span> Total XOF {totalAmount}</span>
+                      </Button>
+                    </Col>
+                    <Col cw="50%">
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        onClick={handleSubmit}
+                        filledBtn
+                        marginTop="10px"
+                        style={{
+                          padding: '5px',
+                          fontFamily: 'Roboto, sans-serif',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {isSubmitting ? (
+                          <CircularProgress
+                            size={30}
+                            thickness={5}
+                            color="primary"
+                          />
+                        ) : (
+                          <span>
+                            {' '}
+                            {props.type === 'update'
+                              ? 'Update and Validate Invoice'
+                              : 'Validate Invoice'}
+                          </span>
+                        )}
+                        <span> Total XOF {totalAmount}</span>
+                      </Button>
+                    </Col>
+                  </Row>
+                ) : (
+                  <Row>
+                    <Col cw="33%">
+                      <Button
+                        type="submit"
+                        disabled={isSubmitting}
+                        onClick={handleSubmit}
+                        filledBtn
+                        marginTop="10px"
+                        style={{
+                          padding: '5px',
+                          fontFamily: 'Roboto, sans-serif',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {isSubmitting ? (
+                          <CircularProgress
+                            size={30}
+                            thickness={5}
+                            color="primary"
+                          />
+                        ) : (
+                          <span>Create Counter Invoice</span>
+                        )}
+                        <span> Total XOF {-totalAmount}</span>
+                      </Button>
+                    </Col>
+                  </Row>
+                )}
               </Form>
             </div>
           );

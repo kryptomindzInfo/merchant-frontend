@@ -30,6 +30,7 @@ import {
   fetchTaxList,
   fetchOfferingList,
   getMerchantSettings,
+  getCountries,
 } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
@@ -38,6 +39,7 @@ function InvoiceListPage(props) {
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [offeringList, setOfferingList] = React.useState([]);
   const [defaultPeriod, setDefaultBillPeriod] = React.useState({});
+  const [mode, setMode] = React.useState('');
   const [billTermList, setBillTermList] = React.useState([]);
   const [defaultTerm, setDefaultBillTerm] = React.useState({});
   const [countryList, setCountryList] = React.useState([]);
@@ -54,6 +56,7 @@ function InvoiceListPage(props) {
   const [paidRow, setPaidRow] = React.useState([]);
   const [unpaidRow, setUnpaidRow] = React.useState([]);
   const [draftRow, setDraftRow] = React.useState([]);
+  const [counterRow, setCounterRow] = React.useState([]);
   const [groupList, setGroupList] = React.useState([]);
   const { match } = props;
   const { id } = match.params;
@@ -72,13 +75,20 @@ function InvoiceListPage(props) {
     });
   };
 
+  const getCountryList = async () => {
+    setLoading(true);
+    getCountries().then((data) => {
+      setCountryList(data.list);
+      setLoading(false);
+    });
+  };
+
   const refreshMerchantSettings = async () => {
     setLoading(true);
     getMerchantSettings().then((data) => {
       setDefaultBillPeriod(data.default_bill_period);
       setBillTermList(data.bill_term_list);
       setDefaultBillTerm(data.default_bill_term);
-      setCountryList(data.country_list);
       setDefaultCountry(data.default_country);
       setLoading(data.loading);
     });
@@ -92,8 +102,10 @@ function InvoiceListPage(props) {
     });
   };
 
-  const handleCreateInvoicePopupClick = (type, invoice) => {
+  const handleCreateInvoicePopupClick = (type, invoice, mod) => {
     setInvoiceType(type);
+    setMode(mod);
+    setViewInvoicePopup(false);
     setEditingInvoice(invoice);
     if (defaultTerm === undefined || defaultPeriod === undefined) {
       notify('Default setting not created', 'error');
@@ -126,15 +138,28 @@ function InvoiceListPage(props) {
       return invoice.paid === 1 && invoice.is_validated === 1;
     });
     const unpaidRows = list.filter((invoice) => {
-      return invoice.paid === 0 && invoice.is_validated === 1;
+      return (
+        invoice.paid === 0 &&
+        invoice.is_validated === 1 &&
+        invoice.is_counter === false
+      );
     });
-    setInvoiceList(paidRows);
-    setPaidRow(paidRows);
-    setUnpaidRow(unpaidRows);
-    setDraftRow(draftRows);
+    const counterRows = list.filter((invoice) => {
+      return (
+        invoice.paid === 0 &&
+        invoice.is_validated === 1 &&
+        invoice.is_counter === true
+      );
+    });
+    setCounterRow(counterRows.reverse());
+    setInvoiceList(paidRows.reverse());
+    setPaidRow(paidRows.reverse());
+    setUnpaidRow(unpaidRows.reverse());
+    setDraftRow(draftRows.reverse());
   };
 
   const refreshInvoiceList = async () => {
+    setLoading(true);
     fetchInvoices(id)
       .then((data) => {
         setInvoices(data.list);
@@ -168,6 +193,7 @@ function InvoiceListPage(props) {
             {CURRENCY} {invoice.amount}
           </td>
           <td>{invoice.mobile}</td>
+          <td>{invoice.due_date}</td>
           <td
             style={{
               display: 'flex',
@@ -177,34 +203,6 @@ function InvoiceListPage(props) {
             <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
               View
             </Button>
-          </td>
-          <td className="tac">
-            {invoice.due_date}
-            {invoice.is_validated === 0 ? (
-              <span className="absoluteMiddleRight primary popMenuTrigger">
-                <i className="material-icons ">more_vert</i>
-                <div className="popMenu">
-                  <span
-                    onClick={() =>
-                      handleCreateInvoicePopupClick('update', invoice)
-                    }
-                  >
-                    Edit
-                  </span>
-                  <span
-                    onClick={async () =>
-                      invoiceApi(
-                        {},
-                        { invoice_id: invoice._id },
-                        'delete',
-                      ).then((data) => refreshInvoiceList())
-                    }
-                  >
-                    Delete
-                  </span>
-                </div>
-              </span>
-            ) : null}
           </td>
         </tr>
       );
@@ -226,6 +224,10 @@ function InvoiceListPage(props) {
         setPage(2);
         setInvoiceList(draftRow);
         break;
+      case 3:
+        setPage(2);
+        setInvoiceList(counterRow);
+        break;
       default:
         if (value === 0) {
           setInvoiceList(paidRow);
@@ -238,12 +240,20 @@ function InvoiceListPage(props) {
     }
   };
 
+  const deleteInvoice = (invoiceid) => {
+    invoiceApi({}, { invoice_id: invoiceid }, 'delete').then((data) => {
+      refreshInvoiceList();
+      setViewInvoicePopup(false);
+    });
+  };
+
   useEffect(() => {
     refreshInvoiceList();
     refreshGroupList();
     getOfferingList();
     getTaxList();
     refreshMerchantSettings();
+    getCountryList();
   }, []);
 
   if (isLoading) {
@@ -277,7 +287,9 @@ function InvoiceListPage(props) {
                 <Button
                   className="addBankButton"
                   flex
-                  onClick={() => handleCreateInvoicePopupClick('create', {})}
+                  onClick={() =>
+                    handleCreateInvoicePopupClick('create', {}, 'invoice')
+                  }
                 >
                   <AddIcon className="material-icons" />
                   <span>Create Invoice</span>
@@ -329,6 +341,7 @@ function InvoiceListPage(props) {
                   />
                   <TabItem label="Pending Invoices" />
                   <TabItem label="Draft Invoices" />
+                  <TabItem label="Counter Invoices" />
                 </Tabs>
               </Grid>
               {invoiceList && invoiceList.length > 0 ? (
@@ -339,8 +352,8 @@ function InvoiceListPage(props) {
                       <th>Name</th>
                       <th>Amount</th>
                       <th>Mobile No</th>
-                      <th>View Details</th>
                       <th>Due Date</th>
+                      <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>{getInvoices()}</tbody>
@@ -366,6 +379,7 @@ function InvoiceListPage(props) {
           taxlist={taxList}
           offeringlist={offeringList}
           groupId={id}
+          mode={mode}
           termlist={billTermList}
           countrylist={countryList}
           defaultterm={defaultTerm}
@@ -393,6 +407,12 @@ function InvoiceListPage(props) {
           invoice={viewingInvoice}
           onClose={() => onViewInvoicePopupClose()}
           refreshInvoiceList={() => refreshInvoiceList()}
+          edit={(type, i, m) => {
+            handleCreateInvoicePopupClick(type, i, m);
+          }}
+          delete={(i) => {
+            deleteInvoice(i);
+          }}
         />
       ) : null}
     </Wrapper>
