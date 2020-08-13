@@ -212,7 +212,7 @@ function CreateInvoicePopup(props) {
     values.is_validated = 0;
     values.amount = totalAmount;
     const due = new Date();
-    due.setDate(due.getDate() + billTermList[values.bill_term].days);
+    due.setDate(due.getDate() + billTermList[values.term].days);
     values.due_date = `${
       due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
     }/${
@@ -345,7 +345,7 @@ function CreateInvoicePopup(props) {
           name: props.invoice.name || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
-          bill_term: props.invoice.bill_term || '',
+          term: props.invoice.term || Number,
           bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
@@ -374,7 +374,7 @@ function CreateInvoicePopup(props) {
           values.items = itemList;
           values.is_validated = 1;
           const due = new Date();
-          due.setDate(due.getDate() + billTermList[values.bill_term].days);
+          due.setDate(due.getDate() + billTermList[values.term].days);
           values.due_date = `${
             due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
           }/${
@@ -405,7 +405,7 @@ function CreateInvoicePopup(props) {
               'Mobile no must be valid',
             )
             .required('Mobile no is required'),
-          bill_term: Yup.string().required('Bill Term is required'),
+          term: Yup.string().required('Bill Term is required'),
         })}
       >
         {(formikProps) => {
@@ -710,7 +710,7 @@ function CreateInvoicePopup(props) {
                   <Col cW="33%" mR="2%">
                     <FormGroup>
                       <SelectInput
-                        name="bill_term"
+                        name="term"
                         onFocus={(e) => {
                           handleChange(e);
                           inputFocus(e);
@@ -721,6 +721,7 @@ function CreateInvoicePopup(props) {
                           inputBlur(e);
                         }}
                         onChange={handleChange}
+                        value={values.term}
                         required
                       >
                         <option key="" value="">
@@ -728,7 +729,7 @@ function CreateInvoicePopup(props) {
                         </option>
                         {termNameSelectInput()}
                       </SelectInput>
-                      <ErrorMessage name="bill_term" component={ErrorText} />
+                      <ErrorMessage name="term" component={ErrorText} />
                     </FormGroup>
                   </Col>
                 </Row>

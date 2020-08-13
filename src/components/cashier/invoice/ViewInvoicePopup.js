@@ -13,10 +13,6 @@ import { invoiceApi } from '../api/CashierAPI';
 import CounterInvoicePopup from './CounterInvoicePopup';
 
 function ViewInvoicePopup(props) {
-  const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).cashier
-      .counter_invoice_access,
-  );
   const [totalAmount, setTotalAmount] = useState(
     props.invoice.items.reduce((a, b) => {
       return a + b.quantity * b.item_desc.unit_price;

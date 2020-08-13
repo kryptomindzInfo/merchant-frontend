@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
@@ -36,6 +36,10 @@ import {
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
+  const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(
+    JSON.parse(localStorage.getItem('cashierLogged')).cashier
+      .counter_invoice_access,
+  );
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [toggleButton, setToggleButton] = React.useState('myinvoices');
   const [counterInvoice, SetCounterInvoice] = React.useState(false);
@@ -67,18 +71,6 @@ function InvoiceListPage(props) {
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);
-  };
-
-  const toggleMyInvoice = () => {
-    if (toggleButton !== 'myinvoices') {
-      setToggleButton('myinvoices');
-    }
-  };
-
-  const toggleAllInvoice = () => {
-    if (toggleButton !== 'allinvoices') {
-      setToggleButton('allinvoices');
-    }
   };
 
   const getOfferingList = async () => {
@@ -176,8 +168,18 @@ function InvoiceListPage(props) {
     setLoading(true);
     fetchInvoices(id)
       .then((data) => {
-        setInvoices(data.list);
-        console.log(data.list);
+        if (toggleButton === 'myinvoices') {
+          const mylist = data.list.filter((invoice) => {
+            return invoice.group_id === id;
+          });
+          console.log(mylist);
+          setInvoices(mylist);
+        } else {
+          const otherlist = data.list.filter((invoice) => {
+            return invoice.group_id !== id;
+          });
+          setInvoices(otherlist);
+        }
         setLoading(false);
       })
       .catch((err) => setLoading(false));
@@ -197,6 +199,18 @@ function InvoiceListPage(props) {
       .catch((err) => setLoading(false));
   };
 
+  const toggleMyInvoice = async () => {
+    if (toggleButton !== 'myinvoices') {
+      await setToggleButton('myinvoices');
+    }
+  };
+
+  const toggleAllInvoice = async () => {
+    if (toggleButton !== 'allinvoices') {
+      await setToggleButton('allinvoices');
+    }
+  };
+
   const getInvoices = () => {
     return invoiceList.map((invoice) => {
       return (
@@ -208,7 +222,7 @@ function InvoiceListPage(props) {
           </td>
           <td>{invoice.mobile}</td>
           <td>{invoice.due_date}</td>
-          {counterInvoice ? (
+          {counterInvoice && counterInvoiceAccess ? (
             <td className="tac bold">
               <div
                 style={{
@@ -278,7 +292,7 @@ function InvoiceListPage(props) {
         setInvoiceList(draftRow);
         break;
       case 3:
-        setPage(2);
+        setPage(3);
         setInvoiceList(counterRow);
         break;
       default:
@@ -307,7 +321,7 @@ function InvoiceListPage(props) {
     getTaxList();
     refreshMerchantSettings();
     getCountryList();
-  }, []);
+  }, [toggleButton]);
 
   if (isLoading) {
     return <Loader fullPage />;
@@ -370,29 +384,31 @@ function InvoiceListPage(props) {
                 <h5>List of your invoices</h5>
               </div>
             </div>
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'left',
-                marginTop: '10px',
-              }}
-            >
-              <Button
-                className={toggleButton === 'myinvoices' ? 'active' : ''}
-                onClick={toggleMyInvoice}
-                marginRight="5px"
-                padding="5px"
+            {counterInvoiceAccess ? (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'left',
+                  marginTop: '10px',
+                }}
               >
-                My invoices
-              </Button>
-              <Button
-                className={toggleButton === 'allinvoices' ? 'active' : ''}
-                onClick={toggleAllInvoice}
-                marginLeft="20px"
-              >
-                All Invoices
-              </Button>
-            </div>
+                <Button
+                  className={toggleButton === 'myinvoices' ? 'active' : ''}
+                  onClick={toggleMyInvoice}
+                  marginRight="5px"
+                  padding="5px"
+                >
+                  My invoices
+                </Button>
+                <Button
+                  className={toggleButton === 'allinvoices' ? 'active' : ''}
+                  onClick={toggleAllInvoice}
+                  marginLeft="20px"
+                >
+                  Other Invoices
+                </Button>
+              </div>
+            ) : null}
             <div className="cardBody">
               <Grid container>
                 <Tabs
