@@ -37,6 +37,8 @@ function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
+  const [toggleButton, setToggleButton] = React.useState('myinvoices');
+  const [counterInvoice, SetCounterInvoice] = React.useState(false);
   const [offeringList, setOfferingList] = React.useState([]);
   const [defaultPeriod, setDefaultBillPeriod] = React.useState({});
   const [mode, setMode] = React.useState('');
@@ -65,6 +67,18 @@ function InvoiceListPage(props) {
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);
+  };
+
+  const toggleMyInvoice = () => {
+    if (toggleButton !== 'myinvoices') {
+      setToggleButton('myinvoices');
+    }
+  };
+
+  const toggleAllInvoice = () => {
+    if (toggleButton !== 'allinvoices') {
+      setToggleButton('allinvoices');
+    }
   };
 
   const getOfferingList = async () => {
@@ -194,16 +208,54 @@ function InvoiceListPage(props) {
           </td>
           <td>{invoice.mobile}</td>
           <td>{invoice.due_date}</td>
-          <td
-            style={{
-              display: 'flex',
-              justifyContent: 'center',
-            }}
-          >
-            <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
-              View
-            </Button>
-          </td>
+          {counterInvoice ? (
+            <td className="tac bold">
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <td
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
+                    View
+                  </Button>
+                </td>
+                <span className="absoluteMiddleRight primary popMenuTrigger">
+                  <i className="material-icons ">more_vert</i>
+                  <div className="popMenu">
+                    <span
+                      onClick={() => {
+                        handleCreateInvoicePopupClick(
+                          'update',
+                          invoice,
+                          'counterinvoice',
+                        );
+                      }}
+                    >
+                      Create Counter Invoice
+                    </span>
+                  </div>
+                </span>
+              </div>
+            </td>
+          ) : (
+            <td
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
+                View
+              </Button>
+            </td>
+          )}
         </tr>
       );
     });
@@ -218,6 +270,7 @@ function InvoiceListPage(props) {
         break;
       case 1:
         setPage(1);
+        SetCounterInvoice(1);
         setInvoiceList(unpaidRow);
         break;
       case 2:
@@ -316,14 +369,29 @@ function InvoiceListPage(props) {
                 <h3>Invoice List</h3>
                 <h5>List of your invoices</h5>
               </div>
-              <div
-                className="cardHeaderRight"
-                style={{
-                  float: 'right',
-                }}
+            </div>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'left',
+                marginTop: '10px',
+              }}
+            >
+              <Button
+                className={toggleButton === 'myinvoices' ? 'active' : ''}
+                onClick={toggleMyInvoice}
+                marginRight="5px"
+                padding="5px"
               >
-                <h3>{groupName}</h3>
-              </div>
+                My invoices
+              </Button>
+              <Button
+                className={toggleButton === 'allinvoices' ? 'active' : ''}
+                onClick={toggleAllInvoice}
+                marginLeft="20px"
+              >
+                All Invoices
+              </Button>
             </div>
             <div className="cardBody">
               <Grid container>

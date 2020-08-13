@@ -199,27 +199,6 @@ function ViewInvoicePopup(props) {
               </Col>
             </Row>
           ) : null}
-          {props.invoice.is_validated === 1 && props.invoice.paid === 0 ? (
-            <div>
-              {props.invoice.is_counter === false && counterInvoiceAccess ? (
-                <Button
-                  type="button"
-                  filledBtn
-                  onClick={() => {
-                    props.edit('update', props.invoice, 'counterinvoice');
-                  }}
-                  marginTop="10px"
-                  style={{
-                    padding: '5px',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontWeight: 500,
-                  }}
-                >
-                  <span>Raise Counter Invoice</span>
-                </Button>
-              ) : null}
-            </div>
-          ) : null}
         </Container>
       </Card>
     </Popup>
