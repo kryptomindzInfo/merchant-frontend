@@ -372,6 +372,7 @@ function CreateInvoicePopup(props) {
             values.amount = -totalAmount;
           }
           values.items = itemList;
+          values.paid = 0;
           values.is_validated = 1;
           const due = new Date();
           due.setDate(due.getDate() + billTermList[values.term].days);
@@ -385,16 +386,31 @@ function CreateInvoicePopup(props) {
           values.bill_period = defaultBillPeriod;
           values.group_id = props.groupId;
           console.log(values);
-          await createInvoice(props, values, 'invoice').then(
-            async (err, data) => {
-              if (err) {
-                console.log(err);
-                notify(err, 'error');
-              } else if (props.mode === 'invoice') {
-                await incCounter(props);
-              }
-            },
-          );
+          if (props.type === 'create') {
+            await createInvoice(props, values, 'invoice').then(
+              async (err, data) => {
+                if (err) {
+                  console.log(err);
+                  notify(err, 'error');
+                } else if (props.mode === 'invoice') {
+                  await incCounter(props);
+                }
+              },
+            );
+          } else {
+            values.invoice_id = props.invoice._id;
+            values.group_id = props.groupId;
+            await invoiceApi(props, values, 'update').then(
+              async (err, data) => {
+                if (err) {
+                  console.log(err);
+                  notify(err, 'error');
+                } else if (props.mode === 'invoice') {
+                  await incCounter(props);
+                }
+              },
+            );
+          }
         }}
         validationSchema={Yup.object().shape({
           mobile: Yup.string()

@@ -136,8 +136,8 @@ const groupAPI = async (props, values, apiType) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        // props.refreshGroupList();
-        // props.onClose();
+        props.refreshGroupList();
+        props.onClose();
       }
     } else {
       notify(res.data.message, 'error');

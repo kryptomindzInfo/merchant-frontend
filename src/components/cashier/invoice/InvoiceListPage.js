@@ -281,22 +281,26 @@ function InvoiceListPage(props) {
     switch (newValue) {
       case 0:
         setPage(0);
+        SetCounterInvoice(false);
         setInvoiceList(paidRow);
         break;
       case 1:
         setPage(1);
-        SetCounterInvoice(1);
+        SetCounterInvoice(true);
         setInvoiceList(unpaidRow);
         break;
       case 2:
         setPage(2);
+        SetCounterInvoice(false);
         setInvoiceList(draftRow);
         break;
       case 3:
         setPage(3);
+        SetCounterInvoice(false);
         setInvoiceList(counterRow);
         break;
       default:
+        SetCounterInvoice(false);
         if (value === 0) {
           setInvoiceList(paidRow);
         } else if (value === 1) {
