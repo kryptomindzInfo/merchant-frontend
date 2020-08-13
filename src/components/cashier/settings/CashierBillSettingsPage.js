@@ -86,7 +86,7 @@ const CashierBillSettingsPage = (props) => {
                     </Col>
                   </Row>
                 </Col>
-                <Col cw="20%">
+                {/* <Col cw="20%">
                   <Button
                     style={{ padding: '5px' }}
                     type="submit"
@@ -94,7 +94,7 @@ const CashierBillSettingsPage = (props) => {
                   >
                     Set Counter
                   </Button>
-                </Col>
+                </Col> */}
               </Row>
             </div>
           </Card>
