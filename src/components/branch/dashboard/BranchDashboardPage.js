@@ -45,7 +45,7 @@ const BranchDashboardPage = (props) => {
       <Container verticalMargin>
         <Main fullWidth>
           <Row textAlign="start" justify="start">
-            <PaymentReceivedCard amount={stats.todays_payment} />
+            {/* <PaymentReceivedCard amount={stats.todays_payment} /> */}
             <InvoiceNumberCard no={stats.bills_paid} />
             <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
             <OverDueInvoiceCard no={stats.due} />

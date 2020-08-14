@@ -10,7 +10,7 @@ const EWalletBalanceSendAndClaimMoneyCard = (props) => {
     const interval = setInterval(async () => {
       const data = await getWalletBalance();
       setBalance(data.toFixed(2));
-    }, 15000);
+    }, 5000);
     return () => clearInterval(interval);
   }, []);
   return (
