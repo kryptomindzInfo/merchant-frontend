@@ -6,7 +6,7 @@ const TabItem = withStyles((theme) => ({
     margin: '1%',
     color: '#417505',
     textAlign: 'center',
-    width: '50%',
+    width: '23%',
     textTransform: 'none',
     fontSize: 18,
     outline: 0,

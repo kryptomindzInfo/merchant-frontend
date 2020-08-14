@@ -241,22 +241,24 @@ function InvoiceListPage(props) {
                     View
                   </Button>
                 </td>
-                <span className="absoluteMiddleRight primary popMenuTrigger">
-                  <i className="material-icons ">more_vert</i>
-                  <div className="popMenu">
-                    <span
-                      onClick={() => {
-                        handleCreateInvoicePopupClick(
-                          'update',
-                          invoice,
-                          'counterinvoice',
-                        );
-                      }}
-                    >
-                      Create Counter Invoice
-                    </span>
-                  </div>
-                </span>
+                {invoice.has_counter_invoice === false ? (
+                  <span className="absoluteMiddleRight primary popMenuTrigger">
+                    <i className="material-icons ">more_vert</i>
+                    <div className="popMenu">
+                      <span
+                        onClick={() => {
+                          handleCreateInvoicePopupClick(
+                            'update',
+                            invoice,
+                            'counterinvoice',
+                          );
+                        }}
+                      >
+                        Create Counter Invoice
+                      </span>
+                    </div>
+                  </span>
+                ) : null}
               </div>
             </td>
           ) : (
