@@ -37,6 +37,24 @@ const getCounter = async () => {
   }
 };
 
+const getinfo = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/getDetails`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      }
+      return {
+        access: res.data.cashier.counter_invoice_access,
+        loading: false,
+      };
+    }
+    notify(res.data.message, 'error');
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const setCounter = async (props, values) => {
   try {
     const res = await axios.post(
@@ -448,4 +466,5 @@ export {
   createCustomer,
   createCounterInvoice,
   getCountries,
+  getinfo,
 };

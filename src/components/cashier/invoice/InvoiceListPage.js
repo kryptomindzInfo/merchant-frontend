@@ -31,15 +31,13 @@ import {
   fetchOfferingList,
   getMerchantSettings,
   getCountries,
+  getinfo,
 } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
-  const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).cashier
-      .counter_invoice_access,
-  );
+  const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [toggleButton, setToggleButton] = React.useState('myinvoices');
   const [counterInvoice, SetCounterInvoice] = React.useState(false);
@@ -97,6 +95,14 @@ function InvoiceListPage(props) {
       setDefaultBillTerm(data.default_bill_term);
       setDefaultCountry(data.default_country);
       setLoading(data.loading);
+    });
+  };
+
+  const refreshInfo = async () => {
+    setLoading(true);
+    getinfo().then((data) => {
+      setCounterInvoiceAccess(data.access);
+      setLoading(false);
     });
   };
 
@@ -323,6 +329,7 @@ function InvoiceListPage(props) {
 
   useEffect(() => {
     refreshInvoiceList();
+    refreshInfo();
     refreshGroupList();
     getOfferingList();
     getTaxList();
