@@ -50,6 +50,7 @@ function CreateStaffPopup(props) {
       <Formik
         initialValues={{
           name: props.staff.name || '',
+          code: props.staff.name || '',
           logo: props.staff.logo || '',
           email: props.staff.email || '',
           mobile: props.staff.mobile || '',
@@ -104,6 +105,27 @@ function CreateStaffPopup(props) {
                     inputBlur(e);
                   }}
                   value={values.name}
+                  onChange={handleChange}
+                  required
+                />
+              </FormGroup>
+              <FormGroup mR="10%" mL="10%">
+                <label>Code*</label>
+                <TextInput
+                  type="text"
+                  name="code"
+                  pattern=".{4,15}"
+                  title="Minimum 4 characters"
+                  onFocus={(e) => {
+                    handleChange(e);
+                    inputFocus(e);
+                  }}
+                  onBlur={(e) => {
+                    handleBlur(e);
+                    handleChange(e);
+                    inputBlur(e);
+                  }}
+                  value={values.code}
                   onChange={handleChange}
                   required
                 />
