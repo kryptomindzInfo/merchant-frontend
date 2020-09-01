@@ -21,12 +21,19 @@ const Link = styled.span`
 class CashierNav extends Component {
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
+    const bills = this.props.active === 'bills' ? 'true' : '';
+    const { bankName } = this.props;
 
     return (
       <React.Fragment>
         <NavTag>
           <A href="/cashier/dashboard">
             <Link active={dashboard}>Dashboard</Link>
+          </A>
+          <A href="/paybills">
+            <Link active={bills}>
+              <span> Pay Bills </span>
+            </Link>
           </A>
         </NavTag>
       </React.Fragment>

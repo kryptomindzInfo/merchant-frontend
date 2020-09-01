@@ -79,6 +79,7 @@ import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierLi
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
 import CashierSettingsPage from './cashier/settings/CashierSettingsPage';
 import CashierBillSettingsPage from './cashier/settings/CashierBillSettingsPage';
+import MerchantPayBills from './cashier/MerchantPayBills/CashierMerchantListPage';
 
 WebFont.load({ google: { families: ['Roboto: 200,300,400,500'] } });
 
@@ -142,6 +143,13 @@ function App() {
               exact
               path="/"
               component={(props) => <SignInPage type="merchant" {...props} />}
+            />
+            <Route
+              exact
+              path="/paybills"
+              component={(props) => (
+                <MerchantPayBills type="merchant" {...props} />
+              )}
             />
             {/* =============== */}
             {/* Merchant Routes */}
