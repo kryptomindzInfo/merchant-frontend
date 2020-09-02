@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import FormGroup from '../../components/FormGroup';
-import Button from '../../components/Button';
-import Loader from '../../components/Loader';
-import TextInput from '../../components/TextInput';
-import { inputBlur, inputFocus } from '../../components/handleInputFocus';
+import FormGroup from '../../FormGroup';
+import Button from '../../Button';
+import Loader from '../../Loader';
+import TextInput from '../../TextInput';
+import { inputBlur, inputFocus } from '../../handleInputFocus';
 import { toast } from 'react-toastify';
 import { payInvoice } from './api/PayBillsAPI';
 

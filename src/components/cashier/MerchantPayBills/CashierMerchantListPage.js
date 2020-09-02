@@ -18,7 +18,7 @@ import PayBillPopup from './PayBillPopup';
 
 function MerchantPayBills(props) {
   const [addMerchantPopup, setAddMerchantPopup] = React.useState(false);
-  const [payBillsPopup, setPayBillsPopup] = React.useState(false);
+  const [payBillsPopup, setPayBillsPopup] = React.useState(true);
   const [merchantList, setMerchantList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
   const [editingMerchant, setEditingMerchant] = React.useState({});
@@ -160,15 +160,15 @@ function MerchantPayBills(props) {
           </Card>
         </Main> 
       </Container> */}
-      <PayBillPopup
-        close={() => onPayBillsPopupClose()}
-        merchant={editingMerchant}
-      />
-      {/* {payBillsPopup ? (
-        
+
+      {payBillsPopup ? (
+        <PayBillPopup
+          close={() => onPayBillsPopupClose()}
+          merchant={editingMerchant}
+        />
       ) : (
         ''
-      )} */}
+      )}
     </Wrapper>
   );
 }

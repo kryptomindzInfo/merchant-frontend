@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
-import Table from '../../components/Table';
-import Button from '../../components/Button';
-import FormGroup from '../../components/FormGroup';
-import Loader from '../../components/Loader';
-import Row from '../../components/Row';
-import Col from '../../components/Col';
-import Container from '../../components/Container';
+import Table from '../../Table';
+import Button from '../../Button';
+import FormGroup from '../../FormGroup';
+import Loader from '../../Loader';
+import Row from '../../Row';
+import Col from '../../Col';
+import Container from '../../Container';
 import * as Yup from 'yup';
-import { correctFocus } from '../../components/handleInputFocus';
+import { correctFocus } from '../../handleInputFocus';
 import { checkCashierFee } from './api/CashierMerchantAPI';
 import { CURRENCY, STATIC_URL } from '../constants';
 

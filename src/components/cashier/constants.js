@@ -23,7 +23,7 @@ export const SERVER_URL = 'http://91d90ac373dc.sn.mynetname.net:31080';
 export const API_URL = 'http://91d90ac373dc.sn.mynetname.net:30301/api';
 export const CONTRACT_URL = ' http://91d90ac373dc.sn.mynetname.net:30880';
 export const STATIC_URL =
-  'http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/';
+  'http://91d90ac373dc.sn.mynetname.net:30301/api/uploads';
 // export const API_URL = 'http://91d90ac373dc.sn.mynetname.net:2020/api';
 // export const STATIC_URL = 'http://91d90ac373dc.sn.mynetname.net:2020/api/uploads/';
 // export const CONTRACT_URL = 'http://91d90ac373dc.sn.mynetname.net:2020/ipfs/';
