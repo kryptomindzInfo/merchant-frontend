@@ -10,14 +10,14 @@ import Popup from '../../Popup';
 import Row from '../../Row';
 import SelectInput from '../../SelectInput';
 import TextInput from '../../TextInput';
-// import PayBillsInvoiceList from './PayBillsInvoiceList';
-// import PayBillsInvoiceDetails from './PayBillsInvoiceDetails';
+import PayBillsInvoiceList from './PayBillsInvoiceList';
+import PayBillsInvoiceDetails from './PayBillsInvoiceDetails';
 import {
   getInvoiceDetails,
   getUserInvoices,
   getInvoiceByCustomerCode,
 } from './api/PayBillsAPI';
-// import PayBillOTP from './PayBillOTP';
+import PayBillOTP from './PayBillOTP';
 
 const PayBillPopup = (props) => {
   const { merchant } = props;
@@ -45,13 +45,15 @@ const PayBillPopup = (props) => {
   };
 
   useEffect(() => {
-    console.log(merchant._id);
+    // console.log(merchant._id);
   }, []);
 
   return (
     <div>
       <Popup accentedH1 bigBody close={props.close}>
-        {paybillOTP ? null : ( // <PayBillOTP close={props.close} invoice={editingInvoice} />
+        {paybillOTP ? (
+          <PayBillOTP close={props.close} invoice={editingInvoice} />
+        ) : (
           <div>
             <h1>Pay {invoiceName} Bills</h1>
             {!displayInvoiceList && !displayInvoiceDetailForm ? (
@@ -169,7 +171,7 @@ const PayBillPopup = (props) => {
             ) : (
               ''
             )}
-            {/* {displayInvoiceList ? (
+            {displayInvoiceList ? (
               <PayBillsInvoiceList
                 merchant={merchant}
                 invoiceList={invoiceList}
@@ -182,8 +184,8 @@ const PayBillPopup = (props) => {
               />
             ) : (
               ''
-            )} */}
-            {/* {displayInvoiceDetailForm ? (
+            )}
+            {displayInvoiceDetailForm ? (
               <PayBillsInvoiceDetails
                 merchantId={merchant._id}
                 showOTPPopup={(values) => {
@@ -196,7 +198,7 @@ const PayBillPopup = (props) => {
               />
             ) : (
               ''
-            )} */}
+            )}
           </div>
         )}
       </Popup>

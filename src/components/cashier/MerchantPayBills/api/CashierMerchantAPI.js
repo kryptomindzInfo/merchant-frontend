@@ -1,8 +1,9 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import { API_URL } from '../../App/constants';
+import { API_URL } from '../../constants';
 
-const token = localStorage.getItem('cashierLogged');
+const token = 'D2N2cgDpRz';
+// const token = localStorage.getItem('cashierLogged');
 const fetchCashierMerchantList = async () => {
   try {
     const res = await axios.post(`${API_URL}/cashier/listMerchants`, {
@@ -23,7 +24,7 @@ const fetchCashierMerchantList = async () => {
   }
 };
 
-const checkCashierFee = async payload => {
+const checkCashierFee = async (payload) => {
   try {
     const res = await axios.post(`${API_URL}/cashier/checkMerchantFee`, {
       token,

@@ -2,7 +2,8 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../constants';
 
-const token = localStorage.getItem('cashierLogged');
+// const token = localStorage.getItem('cashierLogged');
+const token = 'D2N2cgDpRz';
 const getUserInvoices = async (mobile) => {
   try {
     const res = await axios.post(`${API_URL}/cashier/getUserInvoices`, {

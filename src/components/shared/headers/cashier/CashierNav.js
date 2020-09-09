@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { PropTypes } from 'prop-types';
+import PayBillPopup from '../../../cashier/MerchantPayBills/PayBillPopup';
 import A from '../../A';
+import Button from '../../Button';
 
 const NavTag = styled.nav`
   float: left;
@@ -19,13 +20,29 @@ const Link = styled.span`
 `;
 
 class CashierNav extends Component {
+  /* constructor() {
+    super();
+    this.state = { payBillsPopup: false };
+
+    this.onPayBillsPopupClose = this.onPayBillsPopupClose.bind(this);
+    this.onPayBillsPopupOpen = this.onPayBillsPopupOpen.bind(this);
+  } */
+
+  /* onPayBillsPopupClose = (e) => {
+    e.stopPropagation();
+    this.setState({ payBillsPopup: false });
+  };
+
+  onPayBillsPopupOpen = () => {
+    this.setState({ payBillsPopup: true });
+  }; */
+
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
     const bills = this.props.active === 'bills' ? 'true' : '';
-    const { bankName } = this.props;
 
     return (
-      <React.Fragment>
+      <>
         <NavTag>
           <A href="/cashier/dashboard">
             <Link active={dashboard}>Dashboard</Link>
@@ -35,8 +52,15 @@ class CashierNav extends Component {
               <span> Pay Bills </span>
             </Link>
           </A>
+          {/* <Button onClick={this.onPayBillsPopupOpen}>Pay Bills</Button> */}
         </NavTag>
-      </React.Fragment>
+
+        {/* {this.state.payBillsPopup ? (
+          <PayBillPopup close={() => this.onPayBillsPopupClose()} />
+        ) : (
+          ''
+        )} */}
+      </>
     );
   }
 }

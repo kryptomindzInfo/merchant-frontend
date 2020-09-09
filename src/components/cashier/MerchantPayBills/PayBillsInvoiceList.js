@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import Button from '../../components/Button';
-import Row from '../../components/Row';
-import Col from '../../components/Col';
-import FormGroup from '../../components/FormGroup';
-import Loader from '../../components/Loader';
-import Card from '../../components/Card';
-import Table from '../../components/Table';
+import Button from '../../Button';
+import Card from '../../Card';
+import Col from '../../Col';
+import FormGroup from '../../FormGroup';
+import Loader from '../../Loader';
+import Row from '../../Row';
+import Table from '../../Table';
 import { STATIC_URL } from '../constants';
 import { checkCashierFee } from './api/CashierMerchantAPI';
-import { isEmpty } from 'lodash';
 
 const PayBillsInvoiceList = (props) => {
+  const merchant_id = '5f49e1f6bf97ce0008efd9fd';
   const { merchant } = props;
   const [isLoading, setLoading] = useState(true);
   const [isButtonLoading, setButtonLoading] = useState(false);
@@ -30,7 +30,8 @@ const PayBillsInvoiceList = (props) => {
         );
         setTotalAmount(totalAmount + invoice.amount + counterInvoice[0].amount);
         const data = await checkCashierFee({
-          merchant_id: merchant._id,
+          // merchant_id: merchant._id,
+          merchant_id,
           amount: totalAmount + invoice.amount + counterInvoice[0].amount,
         });
         setTotalFee(data.fee);
@@ -44,7 +45,8 @@ const PayBillsInvoiceList = (props) => {
       } else {
         setTotalAmount(totalAmount + invoice.amount);
         const data = await checkCashierFee({
-          merchant_id: merchant._id,
+          // merchant_id: merchant._id,
+          merchant_id,
           amount: totalAmount + invoice.amount,
         });
         setTotalFee(data.fee);
@@ -68,24 +70,25 @@ const PayBillsInvoiceList = (props) => {
         setSelectedInvoiceList(list);
         setTotalAmount(totalAmount - invoice.amount - counterInvoice[0].amount);
         setButtonLoading(false);
-      } else {
-        const data = await checkCashierFee({
-          merchant_id: merchant._id,
-          amount: totalAmount - invoice.amount,
-        });
-        setTotalFee(data.fee);
-        const list = selectedInvoiceList.filter((val) => val !== invoice._id);
-        setSelectedInvoiceList(list);
-        setTotalAmount(totalAmount - invoice.amount);
-        setButtonLoading(false);
       }
+      const data = await checkCashierFee({
+        // merchant_id: merchant._id,
+        merchant_id,
+        amount: totalAmount - invoice.amount,
+      });
+      setTotalFee(data.fee);
+      const list = selectedInvoiceList.filter((val) => val !== invoice._id);
+      setSelectedInvoiceList(list);
+      setTotalAmount(totalAmount - invoice.amount);
+      setButtonLoading(false);
     }
   };
 
   const handleMultipleInvoiceSubmit = () => {
     const obj = {
       invoice_ids: selectedInvoiceList,
-      merchant_id: merchant._id,
+      // merchant_id: merchant._id,
+      merchant_id,
     };
     props.showOTPPopup(obj);
   };
@@ -162,17 +165,18 @@ const PayBillsInvoiceList = (props) => {
     const feelist = invoiceList.map(async (invoice) => {
       if (invoice.amount < 0) {
         const data = await checkCashierFee({
-          merchant_id: merchant._id,
+          // merchant_id: merchant._id,
+          merchant_id,
           amount: invoice.amount * -1,
         });
         return -data.fee;
-      } else {
-        const data = await checkCashierFee({
-          merchant_id: merchant._id,
-          amount: invoice.amount,
-        });
-        return data.fee;
       }
+      const data = await checkCashierFee({
+        // merchant_id: merchant._id,
+        merchant_id,
+        amount: invoice.amount,
+      });
+      return data.fee;
     });
     const result = await Promise.all(feelist);
     return result;
