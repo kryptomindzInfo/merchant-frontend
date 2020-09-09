@@ -23,7 +23,7 @@ import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
 import ZoneSettingPage from './merchant/settings/ZoneSettingPage';
 import BillPeriodSettingPage from './merchant/settings/BillPeriodSettingPage';
-import CountrySettingPage from './merchant/settings/CountrySettingPage';
+import PenaltySettingPage from './merchant/settings/PenaltySettingPage';
 import BillTermSettingPage from './merchant/settings/BillTermSettingPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
 import CashierDashboardPage from './cashier/dashboard/CashierDashboardPage';
@@ -73,7 +73,7 @@ import {
   merchantZoneSettings,
   merchantBillPeriodSettings,
   merchantBillTermSettings,
-  merchantCountrySettings,
+  merchantPenaltySettings,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
@@ -265,8 +265,8 @@ function App() {
             <ProtectedRoute
               type="merchant"
               exact
-              path={merchantCountrySettings}
-              component={(props) => <CountrySettingPage {...props} />}
+              path={merchantPenaltySettings}
+              component={(props) => <PenaltySettingPage {...props} />}
             />
             {/* ====================== */}
             {/* Merchant Public Routes */}

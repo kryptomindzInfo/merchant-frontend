@@ -47,7 +47,6 @@ function InvoiceListPage(props) {
   const [billTermList, setBillTermList] = React.useState([]);
   const [defaultTerm, setDefaultBillTerm] = React.useState({});
   const [countryList, setCountryList] = React.useState([]);
-  const [defaultCountry, setDefaultCountry] = React.useState({});
   const [taxList, setTaxList] = React.useState([]);
   const [invoiceList, setInvoiceList] = React.useState([]);
   const [invoiceType, setInvoiceType] = React.useState('new');
@@ -92,8 +91,7 @@ function InvoiceListPage(props) {
     getMerchantSettings().then((data) => {
       setDefaultBillPeriod(data.default_bill_period);
       setBillTermList(data.bill_term_list);
-      setDefaultBillTerm(data.default_bill_term);
-      setDefaultCountry(data.default_country);
+      // setDefaultBillTerm(data.default_bill_term);
       setLoading(data.loading);
     });
   };
@@ -482,7 +480,6 @@ function InvoiceListPage(props) {
           countrylist={countryList}
           defaultterm={defaultTerm}
           defaultperiod={defaultPeriod}
-          defaultcountry={defaultCountry}
           draftnumber={draftRow.length}
           refreshInvoiceList={() => {
             refreshInvoiceList();

@@ -5,29 +5,32 @@ import Popup from '../../shared/Popup';
 import FormField from '../../shared/FormField';
 import Button from '../../shared/Button';
 import TextInput from '../../shared/TextInput';
+import SelectInput from '../../shared/SelectInput';
 import {
   correctFocus,
   inputBlur,
   inputFocus,
 } from '../../utils/handleInputFocus';
 import ErrorText from '../../shared/ErrorText';
-import { addCountry } from '../api/MerchantAPI';
+import { PenaltyRule } from '../api/MerchantAPI';
 
-function CreateCountryPopup(props) {
+function PenaltyRulePopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   }, []);
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1>Add Country</h1>
+      <h1>Edit Penalty Rule</h1>
       <Formik
         initialValues={{
-          ccode: '',
-          name: '',
+          type: '',
+          fixed_amount: '',
+          percentage: '',
         }}
         onSubmit={async (values) => {
-          await addCountry(props, values);
+          console.log(values);
+          await PenaltyRule(props, values);
         }}
       >
         {(formikProps) => {
@@ -36,10 +39,35 @@ function CreateCountryPopup(props) {
             <div>
               <Form>
                 <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="cdays">Name*</label>
+                  <label htmlFor="type" className="focused">
+                    Type*
+                  </label>
                   <Field
                     type="text"
-                    name="name"
+                    name="type"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    as={SelectInput}
+                    required
+                  >
+                    <option value="">Select period</option>
+                    <option value="once">Once</option>
+                    <option value="perday">Per Day</option>
+                  </Field>
+                  <ErrorMessage name="type" component={ErrorText} />
+                </FormField>
+                <FormField textAlign="start" mB="14px" background="#fff">
+                  <label htmlFor="fixed_amount">Fixed Amount*</label>
+                  <Field
+                    type="number"
+                    name="fixed_amount"
                     onFocus={(e) => {
                       handleChange(e);
                       inputFocus(e);
@@ -52,13 +80,13 @@ function CreateCountryPopup(props) {
                     as={TextInput}
                     required
                   />
-                  <ErrorMessage name="name" component={ErrorText} />
+                  <ErrorMessage name="fixed_amount" component={ErrorText} />
                 </FormField>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="name">Country Code*</label>
+                  <label htmlFor="percentage">Percentage*</label>
                   <Field
-                    type="text"
-                    name="ccode"
+                    type="number"
+                    name="percentage"
                     onFocus={(e) => {
                       inputFocus(e);
                     }}
@@ -68,7 +96,7 @@ function CreateCountryPopup(props) {
                     as={TextInput}
                     required
                   />
-                  <ErrorMessage name="ccode" component={ErrorText} />
+                  <ErrorMessage name="percentage" component={ErrorText} />
                 </FormField>
                 <Button
                   type="submit"
@@ -84,11 +112,7 @@ function CreateCountryPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>
-                      {props.type === 'update'
-                        ? 'Update Bill Term'
-                        : 'Add Bill Term'}
-                    </span>
+                    <span>Submit</span>
                   )}
                 </Button>
               </Form>
@@ -100,4 +124,4 @@ function CreateCountryPopup(props) {
   );
 }
 
-export default CreateCountryPopup;
+export default PenaltyRulePopup;

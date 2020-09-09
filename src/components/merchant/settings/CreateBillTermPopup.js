@@ -58,7 +58,7 @@ function CreateBillTermPopup(props) {
                   <ErrorMessage name="name" component={ErrorText} />
                 </FormField>
                 <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="cdays">Days*</label>
+                  <label htmlFor="days">Days*</label>
                   <Field
                     type="number"
                     name="days"

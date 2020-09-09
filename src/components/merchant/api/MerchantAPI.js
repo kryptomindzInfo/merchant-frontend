@@ -552,30 +552,29 @@ const editMerchant = async (props, values) => {
   }
 };
 
-const getCountryList = async () => {
+const getPenaltyRule = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
     if (res.status === 200) {
       console.log(res);
       if (res.data.status === 0) {
-        return { list: [], default_country: {}, loading: false };
+        return { penalty_rule: {}, loading: false };
       }
       return {
-        list: res.data.setting.country_list,
-        default_country: res.data.setting.default_country,
+        penalty_rule: res.data.setting.penalty_rule,
         loading: false,
       };
     }
-    return { list: [], default_country: {}, loading: false };
+    return { penalty_rule: {}, loading: false };
   } catch (err) {
     notify('Something went wrong', 'error');
-    return { list: [], default_country: {}, loading: false };
+    return { penalty_rule: {}, loading: false };
   }
 };
 
-const addCountry = async (props, values) => {
+const PenaltyRule = async (props, values) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/addCountry`, {
+    const res = await axios.post(`${MERCHANT_API}/editPenaltyRule`, {
       ...values,
     });
     if (res.status === 200) {
@@ -583,7 +582,7 @@ const addCountry = async (props, values) => {
         notify(res.data.message, 'error');
       } else {
         notify(res.data.message, 'success');
-        props.refreshcountrylist(values);
+        props.refreshpenaltyrule(values);
         props.onClose();
       }
     } else {
@@ -713,27 +712,6 @@ const setDefaultBillTerm = async (props, values) => {
       } else {
         notify(res.data.message, 'success');
         props.refreshbilltermlist(values);
-        props.onClose();
-      }
-    } else {
-      notify(res.data.message, 'error');
-    }
-  } catch (e) {
-    notify('Something went wrong');
-  }
-};
-
-const setDefaultCountry = async (props, values) => {
-  try {
-    const res = await axios.post(`${MERCHANT_API}/setDefaultCountry`, {
-      ...values,
-    });
-    if (res.status === 200) {
-      if (res.data.status === 0) {
-        notify(res.data.message, 'error');
-      } else {
-        notify(res.data.message, 'success');
-        props.refreshcountrylist(values);
         props.onClose();
       }
     } else {
@@ -954,9 +932,8 @@ export {
   ZoneDetails,
   setDefaultBillPeriod,
   setDefaultBillTerm,
-  getCountryList,
-  addCountry,
-  setDefaultCountry,
+  getPenaltyRule,
+  PenaltyRule,
   uploadCustomer,
   fetchCustomerList,
   BillDetails,

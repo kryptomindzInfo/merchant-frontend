@@ -58,6 +58,8 @@ function CreateInvoicePopup(props) {
   const [isLoading, setLoading] = React.useState(true);
   const [userName, setUserName] = React.useState('');
   const [userEmail, setUserEmail] = React.useState('');
+  const [userLastName, setUserLastName] = React.useState('');
+  const [userAddress, setUserAddress] = React.useState('');
   const [userCode, setUserCode] = React.useState('');
   const [createUser, setCreateUser] = React.useState(false);
   const [itemList, setItemList] = React.useState([]);
@@ -343,6 +345,8 @@ function CreateInvoicePopup(props) {
         initialValues={{
           number: props.invoice.number || '',
           name: props.invoice.name || '',
+          last_name: props.invoice.last_name || '',
+          address: props.invoice.address || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
           term: props.invoice.term || Number,
@@ -679,7 +683,7 @@ function CreateInvoicePopup(props) {
                 )}
                 {props.mode === 'invoice' ? (
                   <Row>
-                    <Col cW="30%" mR="2%">
+                    <Col cW="15%" mR="2%">
                       {userName === '' ? (
                         <FormGroup>
                           <label className="focused">Name*</label>
@@ -712,7 +716,40 @@ function CreateInvoicePopup(props) {
                         </FormGroup>
                       )}
                     </Col>
-                    <Col cW="50%" mR="2%">
+                    <Col cW="15%" mR="2%">
+                      {userLastName === '' ? (
+                        <FormGroup>
+                          <label className="focused">Last Name</label>
+                          <TextInput
+                            type="text"
+                            name="last_name"
+                            onFocus={(e) => {
+                              handleChange(e);
+                              inputFocus(e);
+                            }}
+                            onBlur={(e) => {
+                              handleBlur(e);
+                              handleChange(e);
+                              inputBlur(e);
+                            }}
+                            value={values.last_name}
+                            onChange={handleChange}
+                            required
+                          />
+                        </FormGroup>
+                      ) : (
+                        <FormGroup>
+                          <label className="focused">Last Name*</label>
+                          <TextInput
+                            type="text"
+                            name="last_name"
+                            value={values.last_name}
+                            placeholder={userLastName}
+                          />
+                        </FormGroup>
+                      )}
+                    </Col>
+                    <Col cW="25%" mR="2%">
                       {userEmail === '' ? (
                         <FormGroup>
                           <label className="focused">Email*</label>
@@ -728,6 +765,7 @@ function CreateInvoicePopup(props) {
                               handleChange(e);
                               inputBlur(e);
                             }}
+                            value={values.email}
                             onChange={handleChange}
                             required
                           />
@@ -740,6 +778,39 @@ function CreateInvoicePopup(props) {
                             name="email"
                             value={values.email}
                             placeholder={userEmail}
+                          />
+                        </FormGroup>
+                      )}
+                    </Col>
+                    <Col cW="25%" mR="2%">
+                      {userAddress === '' ? (
+                        <FormGroup>
+                          <label className="focused">Address*</label>
+                          <TextInput
+                            type="text"
+                            name="address"
+                            onFocus={(e) => {
+                              handleChange(e);
+                              inputFocus(e);
+                            }}
+                            onBlur={(e) => {
+                              handleBlur(e);
+                              handleChange(e);
+                              inputBlur(e);
+                            }}
+                            value={values.address}
+                            onChange={handleChange}
+                            required
+                          />
+                        </FormGroup>
+                      ) : (
+                        <FormGroup>
+                          <label className="focused">Address</label>
+                          <TextInput
+                            type="text"
+                            name="address"
+                            value={values.address}
+                            placeholder={userAddress}
                           />
                         </FormGroup>
                       )}
@@ -768,7 +839,7 @@ function CreateInvoicePopup(props) {
                   </Row>
                 ) : (
                   <Row>
-                    <Col cW="30%" mR="2%">
+                    <Col cW="15%" mR="2%">
                       {userName === '' ? (
                         <FormGroup>
                           <label className="focused">Name*</label>
@@ -802,7 +873,41 @@ function CreateInvoicePopup(props) {
                         </FormGroup>
                       )}
                     </Col>
-                    <Col cW="50%" mR="2%">
+                    <Col cW="15%" mR="2%">
+                      {userLastName === '' ? (
+                        <FormGroup>
+                          <label className="focused">Last Name*</label>
+                          <TextInput
+                            type="text"
+                            name="last_name"
+                            onFocus={(e) => {
+                              handleChange(e);
+                              inputFocus(e);
+                            }}
+                            onBlur={(e) => {
+                              handleBlur(e);
+                              handleChange(e);
+                              inputBlur(e);
+                            }}
+                            value={values.last_name}
+                            onChange={handleChange}
+                            required
+                            disabled
+                          />
+                        </FormGroup>
+                      ) : (
+                        <FormGroup>
+                          <label className="focused">Last Name</label>
+                          <TextInput
+                            type="text"
+                            name="last_name"
+                            value={values.last_name}
+                            placeholder={userLastName}
+                          />
+                        </FormGroup>
+                      )}
+                    </Col>
+                    <Col cW="25%" mR="2%">
                       {userEmail === '' ? (
                         <FormGroup>
                           <label className="focused">Email*</label>
@@ -818,6 +923,7 @@ function CreateInvoicePopup(props) {
                               handleChange(e);
                               inputBlur(e);
                             }}
+                            value={values.email}
                             onChange={handleChange}
                             required
                             disabled
@@ -831,6 +937,40 @@ function CreateInvoicePopup(props) {
                             name="email"
                             value={values.email}
                             placeholder={userEmail}
+                          />
+                        </FormGroup>
+                      )}
+                    </Col>
+                    <Col cW="25%" mR="2%">
+                      {userAddress === '' ? (
+                        <FormGroup>
+                          <label className="focused">Address*</label>
+                          <TextInput
+                            type="text"
+                            name="address"
+                            onFocus={(e) => {
+                              handleChange(e);
+                              inputFocus(e);
+                            }}
+                            onBlur={(e) => {
+                              handleBlur(e);
+                              handleChange(e);
+                              inputBlur(e);
+                            }}
+                            value={values.address}
+                            onChange={handleChange}
+                            required
+                            disabled
+                          />
+                        </FormGroup>
+                      ) : (
+                        <FormGroup>
+                          <label className="focused">Address*</label>
+                          <TextInput
+                            type="text"
+                            name="address"
+                            value={values.address}
+                            placeholder={userAddress}
                           />
                         </FormGroup>
                       )}

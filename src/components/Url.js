@@ -16,7 +16,7 @@ const merchantFeeRules = '/merchant/settings/fee-rules';
 const merchantCommissionRules = '/merchant/settings/commission-rules';
 const merchantZoneSettings = '/merchant/settings/zoneSettings';
 const merchantBillPeriodSettings = '/merchant/settings/billPeriodSettings';
-const merchantCountrySettings = '/merchant/settings/country';
+const merchantPenaltySettings = '/merchant/settings/penalty';
 const merchantBillTermSettings = '/merchant/settings/billTermSettings';
 const merchantOfferingsUrl = '/merchant/offerings';
 const merchantTaxesUrl = '/merchant/taxes';
@@ -82,7 +82,7 @@ export {
   merchantZoneSettings,
   merchantBillPeriodSettings,
   merchantBillTermSettings,
-  merchantCountrySettings,
+  merchantPenaltySettings,
   merchantCustomersUrl,
   cashierBillSettingsUrl,
 };

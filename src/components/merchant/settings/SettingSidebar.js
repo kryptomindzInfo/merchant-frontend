@@ -63,7 +63,7 @@ class SettingSidebar extends Component {
     const zonesettings = this.props.active === 'ZoneSettings';
     const billperiodsettings = this.props.active === 'BillPeriodSettings';
     const billtermsettings = this.props.active === 'BillTermSettings';
-    const countrysettings = this.props.active === 'CountrySettings';
+    const penaltysettings = this.props.active === 'PenaltySettings';
 
     return (
       <SidebarStyle marginRight>
@@ -124,12 +124,12 @@ class SettingSidebar extends Component {
             <h3>Period Settings</h3>
           </Card>
         </A>
-        <A href="/merchant/settings/country">
-          <Card rounded selected={countrysettings} className="sideNav">
+        <A href="/merchant/settings/penalty">
+          <Card rounded selected={penaltysettings} className="sideNav">
             <i className="material-icons">
               <SettingsIcon />
             </i>
-            <h3>Country Settings</h3>
+            <h3>Penalty Rules</h3>
           </Card>
         </A>
       </SidebarStyle>
