@@ -17,7 +17,7 @@ import CreateInvoicePopup from './CreateInvoicePopup';
 import UploadInvoicePopup from './UploadInvoicePopup';
 import ViewInvoicePopup from './ViewInvoicePopup';
 import InvoiceCards from './InvoiceCards';
-import CashierHeader from '../../shared/headers/cashier/CashierHeader';
+import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
 import Row from '../../shared/Row';
@@ -345,7 +345,7 @@ function InvoiceListPage(props) {
         <meta charSet="utf-8" />
         <title>Invoice | Staff Position | E-WALLET </title>
       </Helmet>
-      <CashierHeader active="invoice" />
+      <StaffHeader active="invoice" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
         <Main fullWidth>
           <InvoiceCards paid={paidRow.length} unpaid={unpaidRow.length} />

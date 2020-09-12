@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Wrapper from '../../shared/Wrapper';
-import CashierHeader from '../../shared/headers/cashier/CashierHeader';
+import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import Container from '../../shared/Container';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
@@ -69,7 +69,7 @@ const CashierBillSettingsPage = (props) => {
         <meta charSet="utf-8" />
         <title>Merchant | CustomSettings </title>
       </Helmet>
-      <CashierHeader page="info" goto="/cashier/dashboard" />
+      <StaffHeader page="info" goto="/staff/dashboard" />
       <Container verticalMargin>
         <CashierSettingsSidebar active="billnumber" type="Cashier" />
         <Main big>

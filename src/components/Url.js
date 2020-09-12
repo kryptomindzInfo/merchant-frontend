@@ -36,6 +36,7 @@ const branchVerifyUrl = '/branch/:name/login-verify';
 // cashier URL's
 const defaultCashierLoginUrl = '/merchant/cashier/:name';
 const cashierLoginUrl = '/merchant/cashier/:name/login';
+const staffDashboardUrl = '/staff/dashboard';
 const cashierDashboardUrl = '/cashier/dashboard';
 const invoiceUrl = '/cashier/:id/invoices';
 const cashierForgotPasswordUrl = '/cashier/:name/forgot-password';
@@ -85,4 +86,5 @@ export {
   merchantPenaltySettings,
   merchantCustomersUrl,
   cashierBillSettingsUrl,
+  staffDashboardUrl,
 };

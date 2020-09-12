@@ -50,6 +50,7 @@ function CreateStaffPopup(props) {
       <Formik
         initialValues={{
           name: props.staff.name || '',
+          role: props.staff.role || '',
           code: props.staff.name || '',
           logo: props.staff.logo || '',
           email: props.staff.email || '',
@@ -87,7 +88,7 @@ function CreateStaffPopup(props) {
 
           return (
             <div>
-              <h1> {props.type === 'update' ? 'UpdatStaff' : 'Add Staff'}</h1>
+              <h1> {props.type === 'update' ? 'Update Staff' : 'Add Staff'}</h1>
               <FormGroup mR="10%" mL="10%">
                 <label>Name*</label>
                 <TextInput
@@ -129,6 +130,20 @@ function CreateStaffPopup(props) {
                   onChange={handleChange}
                   required
                 />
+              </FormGroup>
+              <FormGroup mR="10%" mL="10%">
+                <label>Role*</label>
+                <SelectInput
+                  type="text"
+                  name="role"
+                  value={values.role}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Role*</option>
+                  <option value="staff">Staff</option>
+                  <option value="cashier">Cashier</option>
+                </SelectInput>
               </FormGroup>
               <FormGroup mR="10%" mL="10%">
                 <label>Email*</label>

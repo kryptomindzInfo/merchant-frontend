@@ -4,7 +4,7 @@ import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import GroupListCard from './GroupListCard';
 
-import CashierHeader from '../../shared/headers/cashier/CashierHeader';
+import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import Container from '../../shared/Container';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
@@ -43,10 +43,10 @@ const StaffDashboardPage = (props) => {
   return (
     <Fragment>
       <Helmet>
-        <title>Merchant Dashboard | Cashier | E-WALLET </title>
+        <title>Merchant Dashboard | STAFF | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <CashierHeader active="dashboard" />
+      <StaffHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
           <Row>
@@ -54,6 +54,7 @@ const StaffDashboardPage = (props) => {
             <InvoiceNumberCard no={stats.bills_paid} />
             <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
           </Row>
+          <GroupListCard setLoading={(val) => {}} group={setGroupList} />
         </Main>
       </Container>
     </Fragment>

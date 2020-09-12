@@ -7,7 +7,7 @@ import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CashierWallet from '../../branch/dashboard/CashierWallets';
-import CashierHeader from '../../shared/headers/cashier/CashierHeader';
+import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import CashierSettingsSidebar from './CashierSettingsSidebar';
 
 function CashierSettingsPage(props) {
@@ -21,10 +21,10 @@ function CashierSettingsPage(props) {
         <meta charSet="utf-8" />
         <title>Settings | Staff Position | E-WALLET</title>
       </Helmet>
-      <CashierHeader
+      <StaffHeader
         page="info"
         middleTitle={cashierInfo.name}
-        goto="/cashier/dashboard"
+        goto="/staff/dashboard"
       />
       <Container verticalMargin>
         <CashierSettingsSidebar active="info" type="Cashier" />

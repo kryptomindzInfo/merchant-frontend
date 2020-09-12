@@ -32,6 +32,7 @@ const MerchantStaffListPage = () => {
   const refreshStaffList = async () => {
     setLoading(true);
     const data = await fetchStaffList();
+    console.log(data);
     setStaff(data.list);
     setLoading(data.loading);
   };

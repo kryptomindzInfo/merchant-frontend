@@ -30,7 +30,11 @@ const redirectUser = (type, response) => {
       if (response.data.status === 0) {
         history.push(`/cashier/${name}/login-verify`);
       } else {
-        history.push(`/cashier/dashboard`);
+        if(response.data.staff.role === 'staff') {
+          history.push(`/staff/dashboard`);
+        } else {
+          history.push(`/cashier/dashboard`);
+        }
       }
       break;
     default:

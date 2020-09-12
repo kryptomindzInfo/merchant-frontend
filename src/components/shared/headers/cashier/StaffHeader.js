@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import CashierNav from './CashierNav';
+import StaffNav from './StaffNav';
 import TopBar from '../TopBar';
 import Welcome from '../Welcome';
 import Container from '../../Container';
@@ -22,7 +22,7 @@ const MiddleTitle = styled.div`
   justify-content: center;
 `;
 
-const CashierHeader = (props) => {
+const StaffHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
   const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).cashier;
 
@@ -36,16 +36,16 @@ const CashierHeader = (props) => {
           </A>
         ) : null}
 
-        <A href="/cashier/dashboard" float="left">
+        <A href="/staff/dashboard" float="left">
           <h2>{name.toUpperCase()}</h2>
         </A>
         {props.middleTitle ? (
           <MiddleTitle className="middleTitle">{middleTitle}</MiddleTitle>
         ) : null}
-        {page === 'info' ? null : <CashierNav active={active} />}
+        {page === 'info' ? null : <StaffNav active={active} />}
       </Container>
     </TopBar>
   );
 };
 
-export default CashierHeader;
+export default StaffHeader;
