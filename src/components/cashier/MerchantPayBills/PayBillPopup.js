@@ -20,7 +20,7 @@ import {
 import PayBillOTP from './PayBillOTP';
 
 const PayBillPopup = (props) => {
-  const { merchant } = props;
+  const { merchant } = JSON.parse(localStorage.getItem('cashierLogged')).merchant;
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
   const [editingInvoice, setEditingInvoice] = useState({});
@@ -45,7 +45,7 @@ const PayBillPopup = (props) => {
   };
 
   useEffect(() => {
-    // console.log(merchant._id);
+    console.log(localStorage);
   }, []);
 
   return (
@@ -66,7 +66,6 @@ const PayBillPopup = (props) => {
                   console.log(values);
                   if (values.searchBy === 'Mobile') {
                     getUserInvoices(values.invoiceIdOrMobile).then((data) => {
-                      console.log(data.list);
                       setInvoiceList(data.list);
                       setDisplayInvoiceList(true);
                       if (data.list.length > 0) {
@@ -78,7 +77,6 @@ const PayBillPopup = (props) => {
                       values.invoiceIdOrMobile,
                       merchant._id,
                     ).then((data) => {
-                      console.log(data.list);
                       setInvoiceList(data.list);
                       setDisplayInvoiceList(true);
                       if (data.list.length > 0) {
@@ -90,7 +88,6 @@ const PayBillPopup = (props) => {
                       values.invoiceIdOrMobile,
                       merchant._id,
                     ).then((data) => {
-                      console.log(data.list);
                       setInvoiceList(data.list);
                       setDisplayInvoiceList(true);
                       if (data.list.length > 0) {

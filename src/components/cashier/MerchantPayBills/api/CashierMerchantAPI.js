@@ -2,32 +2,30 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../constants';
 
-const token = 'D2N2cgDpRz';
+//const token = 'D2N2cgDpRz';
 // const token = localStorage.getItem('cashierLogged');
-const fetchCashierMerchantList = async () => {
+
+const getPenaltyRule = async () => {
   try {
-    const res = await axios.post(`${API_URL}/cashier/listMerchants`, {
-      token,
-    });
+    const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         toast.error(res.data.message);
-        return { list: [], loading: false };
+        return { rule: {}, loading: false };
       }
-      return { list: res.data.list, loading: false };
+      return { rule: res.data.setting.penalty_rule, loading: false };
     }
     toast.error(res.data.message);
-    return { list: [], loading: false };
+    return { rule: {}, loading: false };
   } catch (err) {
     toast.error('Something went wrong');
-    return { list: [], loading: false };
+    return { rule: {}, loading: false };
   }
 };
 
 const checkCashierFee = async (payload) => {
   try {
-    const res = await axios.post(`${API_URL}/cashier/checkMerchantFee`, {
-      token,
+    const res = await axios.post(`${API_URL}/merchantCashier/checkMerchantFee`, {
       ...payload,
     });
     if (res.status === 200) {
@@ -45,4 +43,4 @@ const checkCashierFee = async (payload) => {
   }
 };
 
-export { fetchCashierMerchantList, checkCashierFee };
+export { checkCashierFee, getPenaltyRule };

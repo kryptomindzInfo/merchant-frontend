@@ -1,13 +1,11 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../constants';
+const token = JSON.parse(localStorage.getItem('cashierLogged')).token;
 
-// const token = localStorage.getItem('cashierLogged');
-const token = 'D2N2cgDpRz';
 const getUserInvoices = async (mobile) => {
   try {
-    const res = await axios.post(`${API_URL}/cashier/getUserInvoices`, {
-      token,
+    const res = await axios.post(`${API_URL}/merchantCashier/getInvoicesByMobile`, {
       mobile,
     });
     if (res.status === 200) {
@@ -25,12 +23,10 @@ const getUserInvoices = async (mobile) => {
   }
 };
 
-const getInvoiceDetails = async (number, merchantId) => {
+const getInvoiceDetails = async (number) => {
   try {
-    const res = await axios.post(`${API_URL}/cashier/getInvoiceDetails`, {
-      token,
+    const res = await axios.post(`${API_URL}/merchantCashier/getInvoicesByNumber`, {
       number,
-      merchant_id: merchantId,
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
@@ -50,11 +46,9 @@ const getInvoiceDetails = async (number, merchantId) => {
 const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
   try {
     const res = await axios.post(
-      `${API_URL}/cashier/getInvoicesForCustomerCode`,
+      `${API_URL}/merchantCashier/getInvoicesByCustomerCode`,
       {
-        token,
         customer_code: customerCode,
-        merchant_id: merchantId,
       },
     );
     if (res.status === 200) {
@@ -74,8 +68,7 @@ const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
 
 const payInvoice = async (values) => {
   try {
-    const res = await axios.post(`${API_URL}/cashier/payInvoice`, {
-      token,
+    const res = await axios.post(`${API_URL}/merchantCashier/payInvoice`, {
       ...values,
     });
     if (res.status === 200) {

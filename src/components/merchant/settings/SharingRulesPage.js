@@ -66,9 +66,9 @@ const SharingRulesPage = (props) => {
           <td className="tac">
             <span>
               {' '}
-              {rule.type === 0
-                ? 'Wallet to Merchant'
-                : 'Non-wallet to Merchant'}
+              {rule.type === 0 ? 'Wallet to Merchant': ''}
+              {rule.type === 1 ? 'Non Wallet to Merchant' : ''}
+              {rule.type === 2 ? 'Merchant Cashier to Merchant' : ''}
             </span>
           </td>
           <td>
