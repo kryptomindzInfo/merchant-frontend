@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../constants';
-const token = JSON.parse(localStorage.getItem('cashierLogged')).token;
 
 const getUserInvoices = async (mobile) => {
   try {
