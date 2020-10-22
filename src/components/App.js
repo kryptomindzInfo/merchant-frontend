@@ -76,6 +76,8 @@ import {
   merchantBillPeriodSettings,
   merchantBillTermSettings,
   merchantPenaltySettings,
+  merchantInterBankFeeRules,
+  merchantInterBankCommissionRules,
 } from './Url';
 import MerchantCashierListPage from './merchant/branch/cashier/MerchantCashierListPage';
 import MerchantCashierInfoPage from './merchant/branch/cashier/MerchantCashierInfo';
@@ -235,7 +237,7 @@ function App() {
               exact
               path={merchantFeeRules}
               component={(props) => (
-                <SharingRulesPage ruleType="Fee" {...props} />
+                <SharingRulesPage active="fee" bank="intrabank" ruleType="Fee" {...props} />
               )}
             />
             <ProtectedRoute
@@ -243,7 +245,23 @@ function App() {
               exact
               path={merchantCommissionRules}
               component={(props) => (
-                <SharingRulesPage ruleType="Commission" {...props} />
+                <SharingRulesPage active="commission" bank="intrabank" ruleType="commission" {...props} />
+              )}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantInterBankFeeRules}
+              component={(props) => (
+                <SharingRulesPage active="interbankfee" bank="interbank" ruleType="Fee" {...props} />
+              )}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantInterBankCommissionRules}
+              component={(props) => (
+                <SharingRulesPage active="interbankcommission" bank="interbank" ruleType="Commission" {...props} />
               )}
             />
             <ProtectedRoute

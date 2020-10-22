@@ -5,6 +5,8 @@ import FolderIcon from '@material-ui/icons/Folder';
 import SettingsIcon from '@material-ui/icons/Settings';
 import MobileScreenShareIcon from '@material-ui/icons/MobileScreenShare';
 import Card from '../../shared/Card';
+import Row from '../../shared/Row';
+import Col from '../../shared/Col';
 import A from '../../shared/A';
 
 const SidebarStyle = styled.aside`
@@ -58,8 +60,10 @@ class SettingSidebar extends Component {
   render() {
     const info = this.props.active === 'info';
     const documents = this.props.active === 'documents';
-    const revenue = this.props.active === 'Revenue';
-    const commission = this.props.active === 'Commission';
+    const fee = this.props.active === 'fee';
+    const interbankfee = this.props.active === 'interbankfee';
+    const interbankcommission = this.props.active === 'interbankcommission';
+    const commission = this.props.active === 'commission';
     const zonesettings = this.props.active === 'ZoneSettings';
     const billperiodsettings = this.props.active === 'BillPeriodSettings';
     const billtermsettings = this.props.active === 'BillTermSettings';
@@ -84,22 +88,48 @@ class SettingSidebar extends Component {
             <h3>Documents</h3>
           </Card>
         </A>
-        <A href="/merchant/settings/fee-rules">
-          <Card rounded selected={revenue} className="sideNav">
-            <i className="material-icons">
-              <MobileScreenShareIcon />
-            </i>
-            <h3>Fee Rules</h3>
-          </Card>
-        </A>
-        <A href="/merchant/settings/commission-rules">
-          <Card rounded selected={commission} className="sideNav">
-            <i className="material-icons">
-              <MobileScreenShareIcon />
-            </i>
-            <h3>Commission Rules</h3>
-          </Card>
-        </A>
+        <Card rounded className="containerNav">
+        <h4>Intra Bank Rules</h4>
+        <Card display="flex">
+          <Row style={{width:'-webkit-fill-available'}}>
+            <Col cW="50%">
+              <A href={`/merchant/settings/fee-rules`}>
+                <Card rounded selected={fee} className="sideNav">
+                  <h3>Fee</h3>
+                </Card>
+              </A>
+            </Col>
+            <Col cW="50%">
+              <A href={`/merchant/settings/commission-rules`}>
+                <Card rounded selected={commission} className="sideNav">
+                  <h3>Commission</h3>
+                </Card>
+              </A>
+            </Col>
+          </Row>
+        </Card>
+      </Card>
+      <Card rounded className="containerNav">
+        <h4>Inter Bank Rules</h4>
+        <Card display="flex">
+         <Row style={{width:'-webkit-fill-available'}}>
+            <Col cW="50%">
+              <A href={`/merchant/settings/interbank-fee-rules`}>
+                <Card rounded selected={interbankfee} className="sideNav">
+                  <h3>Fee</h3>
+                </Card>
+              </A>
+            </Col>
+            <Col cW="50%">
+              <A href={`/merchant/settings/inter-bank-commission-rules`}>
+                <Card rounded selected={interbankcommission} className="sideNav">
+                  <h3>Commission</h3>
+                </Card>
+              </A>
+            </Col>
+          </Row>
+        </Card>
+      </Card>
         <A href="/merchant/settings/zoneSettings">
           <Card rounded selected={zonesettings} className="sideNav">
             <i className="material-icons">

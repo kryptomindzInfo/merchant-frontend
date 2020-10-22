@@ -799,15 +799,16 @@ const BillDetails = async (props, values) => {
   }
 };
 
-const getRules = async (ruleType) => {
+const getRules = async (ruleType, type) => {
   try {
+    console.log(type);
     let URL = '';
-    if (ruleType === 'Fee') {
-      URL = `${MERCHANT_API}/merchantFee/getRules`;
+    if (type === 'interbank') {
+      URL = `${MERCHANT_API}/interBank/getRules`;
     } else {
-      URL = `${MERCHANT_API}/commission/getRules`;
+      URL = `${MERCHANT_API}/getRules`;
     }
-    const res = await axios.get(URL);
+    const res = await axios.post(URL, { page:ruleType });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -823,12 +824,12 @@ const getRules = async (ruleType) => {
   }
 };
 
-const ruleAPI = async (props, ruleType, ruleStatus, payload) => {
+const ruleAPI = async (bank, ruleStatus, payload) => {
   let URL = '';
-  if (ruleType === 'Fee') {
-    URL = `${MERCHANT_API}/merchantFee/${ruleStatus}`;
+  if (bank === 'interbank') {
+    URL = `${MERCHANT_API}/merchantRule/interBank/${ruleStatus}`;
   } else {
-    URL = `${MERCHANT_API}/commission/${ruleStatus}`;
+    URL = `${MERCHANT_API}/merchantRule/${ruleStatus}`;
   }
   try {
     const res = await axios.post(URL, payload);

@@ -13,6 +13,8 @@ const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
 const merchantBranchInfoUrl = '/merchant/branch/info/:id';
 const merchantSettingsUrl = '/merchant/settings';
 const merchantFeeRules = '/merchant/settings/fee-rules';
+const merchantInterBankCommissionRules = '/merchant/settings/inter-bank-commission-rules';
+const merchantInterBankFeeRules = '/merchant/settings/interbank-fee-rules';
 const merchantCommissionRules = '/merchant/settings/commission-rules';
 const merchantZoneSettings = '/merchant/settings/zoneSettings';
 const merchantBillPeriodSettings = '/merchant/settings/billPeriodSettings';
@@ -58,6 +60,8 @@ export {
   merchantSettingsUrl,
   merchantFeeRules,
   merchantCommissionRules,
+  merchantInterBankFeeRules,
+  merchantInterBankCommissionRules,
   branchLoginUrl,
   merchantBranchInfoUrl,
   branchDashboardUrl,

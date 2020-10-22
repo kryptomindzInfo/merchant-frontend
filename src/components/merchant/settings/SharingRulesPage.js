@@ -27,7 +27,7 @@ const SharingRulesPage = (props) => {
     setLoading(true);
     setRuleForApproval({});
     setApprovalPopup(false);
-    getRules(props.ruleType).then((rules) => {
+    getRules(props.ruleType.toLowerCase(), props.bank).then((rules) => {
       setRules(rules.list);
       setLoading(rules.loading);
     });
@@ -66,9 +66,9 @@ const SharingRulesPage = (props) => {
           <td className="tac">
             <span>
               {' '}
-              {rule.type === 0 ? 'Wallet to Merchant': ''}
-              {rule.type === 1 ? 'Non Wallet to Merchant' : ''}
-              {rule.type === 2 ? 'Merchant Cashier to Merchant' : ''}
+              {rule.type === 'IBWM-C' || rule.type === 'IBWM-F' || rule.type === 'WM-C' || rule.type === 'WM-F' ? 'Wallet to Merchant': 'Non Wallet to Merchant'}
+              {/* {rule.type === 1 ? 'Non Wallet to Merchant' : ''}
+              {rule.type === 2 ? 'Merchant Cashier to Merchant' : ''} */}
             </span>
           </td>
           <td>
@@ -132,7 +132,7 @@ const SharingRulesPage = (props) => {
         goto="/merchant/dashboard"
       />
       <Container verticalMargin>
-        <SettingSideBar active={props.ruleType} />
+        <SettingSideBar active={props.active} />
         <Main big>
           <Card bigPadding topMargin="55px">
             <div className="cardHeader">
@@ -179,7 +179,7 @@ const SharingRulesPage = (props) => {
                 Transaction Type :
                 <span id="poptype">
                   {' '}
-                  {ruleForApproval.type === 0
+                  {ruleForApproval.type === 'IBWM-C' || ruleForApproval.type === 'IBWM-F' || ruleForApproval.type === 'WM-C' || ruleForApproval.type === 'WM-F'
                     ? 'Wallet to Merchant'
                     : 'Non-wallet to Merchant'}
                 </span>
@@ -222,8 +222,8 @@ const SharingRulesPage = (props) => {
                         style={{ padding: '8px' }}
                         type="button"
                         onClick={() =>
-                          ruleAPI(props, props.ruleType, 'decline', {
-                            fee_id: ruleForApproval._id,
+                          ruleAPI(props.bank, 'decline', {
+                            rule_id: ruleForApproval._id,
                           }).then(() => {
                             refreshRuleList();
                           })
@@ -243,9 +243,8 @@ const SharingRulesPage = (props) => {
                     ) : (
                       <Button
                         onClick={() =>
-                          ruleAPI(props, props.ruleType, 'approve', {
-                            fee_id: ruleForApproval._id,
-                            commission_id: ruleForApproval._id,
+                          ruleAPI(props.bank, 'approve', {
+                            rule_id: ruleForApproval._id,
                           }).then(() => {
                             refreshRuleList();
                           })
