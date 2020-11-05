@@ -15,8 +15,6 @@ const PayBillsInvoiceList = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [isButtonLoading, setButtonLoading] = useState(false);
   const [selectedInvoiceList, setSelectedInvoiceList] = useState([]);
-  const [totalFee, setTotalFee] = useState(0);
-  const [feeList, setFeeList] = useState([]);
   const [penaltyList, setPenaltyList] = useState([]);
   const [penaltyRule, setPenaltyRule] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
@@ -29,10 +27,6 @@ const PayBillsInvoiceList = (props) => {
       if(invoice.has_counter_invoice === true){
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
         setTotalAmount(totalAmount + invoice.amount + counterInvoice[0].amount + penaltyList[index]);
-        const data = await checkCashierFee({
-          amount: totalAmount + invoice.amount + counterInvoice[0].amount + penaltyList[index],
-        });
-        setTotalFee(data.fee);
         const obj1 = {
           id: invoice._id,
           penalty: penaltyList[index],
@@ -48,10 +42,6 @@ const PayBillsInvoiceList = (props) => {
         setButtonLoading(false);
       } else {
         setTotalAmount(totalAmount + invoice.amount + penaltyList[index]);
-        const data = await checkCashierFee({
-          amount: totalAmount + invoice.amount + penaltyList[index],
-        });
-        setTotalFee(data.fee);
         const obj1 = {
           id: invoice._id,
           penalty: penaltyList[index],
@@ -64,19 +54,11 @@ const PayBillsInvoiceList = (props) => {
     } else {
       if(invoice.has_counter_invoice === true){
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
-        const data = await checkCashierFee({
-          amount: totalAmount - invoice.amount - counterInvoice[0].amount - penaltyList[index],
-        });
-        setTotalFee(data.fee);
         const list = selectedInvoiceList.filter((val) => val.id !== invoice._id &&  val.id !== counterInvoice[0]._id);
         setSelectedInvoiceList(list);
         setTotalAmount(totalAmount-invoice.amount-counterInvoice[0].amount - penaltyList[index]);
         setButtonLoading(false);
       } else {
-        const data = await checkCashierFee({
-          amount: totalAmount - invoice.amount - penaltyList[index],
-        });
-        setTotalFee(data.fee);
         const list = selectedInvoiceList.filter((val) => val.id !== invoice._id);
         setSelectedInvoiceList(list);
         setTotalAmount(totalAmount- invoice.amount - penaltyList[index]);
@@ -143,10 +125,7 @@ const PayBillsInvoiceList = (props) => {
         <td className="tac">{invoice.amount}</td>
         <td className="tac">{penaltyList[index]}</td>
         <td className="tac">
-          {feeList[index] > 0 ? feeList[index].toFixed(2) : 'NA'}
-        </td>
-        <td className="tac">
-        {feeList[index] > 0 ? invoice.amount+feeList[index]+penaltyList[index] : 'NA'}</td>
+        {invoice.amount+penaltyList[index]}</td>
         <td className="tac">{invoice.due_date} </td>
         <td className="tac bold">
           <div
@@ -165,44 +144,30 @@ const PayBillsInvoiceList = (props) => {
       </tr>
     ));
 
-  const fetchfee = async(penaltylist) => {
-    const feelist = invoiceList.map(async (invoice,index) => {
-      if (invoice.amount + penaltylist[index] < 0) {
-        const data = await checkCashierFee({
-          amount: invoice.amount * -1,
-        });
-        return (-data.fee);
-      } else {
-        const data = await checkCashierFee({
-          amount: invoice.amount + penaltylist[index],
-        });
-        return (data.fee);
-      }
-    })
-    const result= await Promise.all(feelist);
-    return({res:result, loading:false});
-  }
-
   const calculatePenalty = async(rule) => {
     const penaltylist = invoiceList.map(async invoice => {
       if (invoice.amount < 0) {
         return (0);
       }
       const datesplit = invoice.due_date.split("/");
-      const dueDate = new Date(datesplit[0],datesplit[1],datesplit[2]);
-      if (currentDate.getDate() <= dueDate.getDate()) {
+      const dueDate = new Date(datesplit[2],datesplit[1]-1,datesplit[0]);
+      if (currentDate<= dueDate) {
           return (0);
       } else {
         if(rule.type === 'once') {
-            return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
+          return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
         } else {
-            const diffDays = currentDate.getDate() - dueDate.getDate();
-            return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*diffDays);
+          // To calculate the time difference of two dates 
+          var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
+          // To calculate the no. of days between two dates 
+          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
+          console.log(currentDate,dueDate,Difference_In_Days);     
+          return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
         }
       }
     });
     const result= await Promise.all(penaltylist);
-    return(result);
+    return({res:result, loading:false});
   };
 
   const fetchPenaltyRule = async() => {
@@ -215,11 +180,11 @@ const PayBillsInvoiceList = (props) => {
     setLoading(true);
     const getRule = async() => {
       const res1= await fetchPenaltyRule();
+      console.log(res1);
       const res2= await calculatePenalty(res1);
-      setPenaltyList(res2);
-      const res3= await fetchfee(res2);
-      setFeeList(res3.res);
-      setLoading(res3.loading);
+      console.log(res2.res);
+      setPenaltyList(res2.res);
+      setLoading(res2.loading);
     }
     getRule();
     }, []); 
@@ -250,8 +215,7 @@ const PayBillsInvoiceList = (props) => {
               <th>Number</th>
               <th>Amount</th>
               <th>Penalty</th>
-              <th>Fees</th>
-              <th>Amount With Fees</th> 
+              <th>Total AMount</th> 
               <th>Due Date</th>
               <th />
             </tr>
@@ -266,9 +230,7 @@ const PayBillsInvoiceList = (props) => {
               {isButtonLoading ? (
                 <Loader />
               ) : (
-                `Collect Amount ${totalAmount} + Fee ${totalFee} = Total ${
-                  totalAmount + totalFee
-                } and Pay Bill`
+                `Collect Amount ${totalAmount} and Pay Bill`
               )}
             </Button>
           ) : null}
