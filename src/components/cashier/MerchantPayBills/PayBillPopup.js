@@ -24,6 +24,7 @@ const PayBillPopup = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
   const [editingInvoice, setEditingInvoice] = useState({});
+  const [editingInvoicePenalty, setEditingInvoicePenalty] = useState({});
   const [displayInvoiceList, setDisplayInvoiceList] = useState(false);
   const [paybillOTP, setPaybillOTP] = useState(false);
   const [displayInvoiceDetailForm, setDisplayInvoiceDetailForm] = useState(
@@ -32,7 +33,8 @@ const PayBillPopup = (props) => {
   const [invoiceName, setInvoiceName] = useState('');
   const [isBackButtonEnabled, setBackButtonEnabled] = useState(false);
 
-  const handleSetEditingInvoice = (invoice) => {
+  const handleSetEditingInvoice = (invoice, penalty) => {
+    setEditingInvoicePenalty(penalty);
     setEditingInvoice(invoice);
     setDisplayInvoiceList(false);
     setBackButtonEnabled(true);
@@ -147,10 +149,10 @@ const PayBillPopup = (props) => {
                                 inputBlur(e);
                                 handleBlur(e);
                               }}
+                              required
                               onChange={handleChange}
                               value={values.invoiceIdOrMobile}
                             />
-                            <ErrorMessage name="invoiceIdOrMobile" />
                           </FormGroup>
                         </Col>
                       </Row>
@@ -170,7 +172,7 @@ const PayBillPopup = (props) => {
               <PayBillsInvoiceList
                 merchant={merchant}
                 invoiceList={invoiceList}
-                setEditingInvoice={(value) => handleSetEditingInvoice(value)}
+                setEditingInvoice={(value, penalty) => handleSetEditingInvoice(value, penalty)}
                 close={props.close}
                 showOTPPopup={(values) => {
                   setEditingInvoice(values);
@@ -187,6 +189,7 @@ const PayBillPopup = (props) => {
                   setEditingInvoice(values);
                   setPaybillOTP(true);
                 }}
+                penalty={editingInvoicePenalty}
                 close={props.close}
                 invoice={editingInvoice}
                 merchant={merchant}

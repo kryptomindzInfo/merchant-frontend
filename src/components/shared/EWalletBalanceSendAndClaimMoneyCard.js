@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
+import A from './A';
 import { getWalletBalance } from '../merchant/api/MerchantAPI';
 import { CURRENCY } from '../constants';
 
@@ -15,13 +16,15 @@ const EWalletBalanceSendAndClaimMoneyCard = (props) => {
   }, []);
   return (
     <Card marginBottom="54px" buttonMarginTop="32px" bigPadding>
-      <h3>E-WALLET</h3>
-      <div>
-        <a href="/merchant/operationalHistory">
-          <h4 className="history">History</h4>
-        </a>
-      </div>
-      <h5>Available:</h5>
+      <h3>
+        E-WALLET
+      </h3>
+      <h5 style={{ display: 'flex', justifyContent: 'space-between' }}>
+        Available:
+        <A href="/merchant/operationalHistory">
+          <span className="history" style={{ position: 'inherit' }}>History</span>
+        </A>
+      </h5>
       <div className="cardValue">
         {CURRENCY} {balance}
       </div>

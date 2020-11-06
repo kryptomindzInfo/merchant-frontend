@@ -14,6 +14,7 @@ function CashierSettingsPage(props) {
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
+  const role = JSON.parse(localStorage.getItem('cashierLogged')).staff.role;
 
   return (
     <Wrapper>
@@ -24,7 +25,7 @@ function CashierSettingsPage(props) {
       <StaffHeader
         page="info"
         middleTitle={cashierInfo.name}
-        goto="/staff/dashboard"
+        goto={role === 'staff' ? '/staff/dashboard' : '/cashier/dashboard'}
       />
       <Container verticalMargin>
         <CashierSettingsSidebar active="info" type="Cashier" />

@@ -9,7 +9,6 @@ import Col from '../../Col';
 import Container from '../../Container';
 import * as Yup from 'yup';
 import { correctFocus } from '../../handleInputFocus';
-import { checkCashierFee } from './api/CashierMerchantAPI';
 import { CURRENCY, STATIC_URL } from '../constants';
 
 const PayBillsInvoiceDetails = (props) => {
@@ -26,17 +25,7 @@ const PayBillsInvoiceDetails = (props) => {
       return a + (b.total_amount - b.quantity * b.item_desc.unit_price);
     }, 0),
   );
-  const [fee, setFee] = useState();
   const { merchant } = props;
-
-  const checkFee = () => {
-    checkCashierFee({
-      amount: invoice.amount,
-    }).then((data) => {
-      console.log(data.fee);
-      setFee(data.fee);
-    });
-  };
 
   const getItems = () =>
     invoice.items.map((item) => {
@@ -73,18 +62,12 @@ const PayBillsInvoiceDetails = (props) => {
     }, 0);
   };
 
-  const sumtotal = () => {
-    const totaldiscount = discount();
-    return totalAmount + totalTax - totaldiscount + fee;
-  };
-
   const sumtotal2 = () => {
-    return totalAmount + totalTax + fee;
+    return totalAmount + totalTax + props.penalty;
   };
 
   useEffect(() => {
     setDataLoading(true);
-    checkFee();
     correctFocus('update');
     setDataLoading(false);
   });
@@ -133,7 +116,7 @@ const PayBillsInvoiceDetails = (props) => {
                   >
                     <div className="cardHeaderLeft">
                       <img
-                        src={`${STATIC_URL}${merchant.logo}`}
+                        src={`${STATIC_URL}/${merchant.logo}`}
                         alt=""
                         style={{
                           height: '60px',
@@ -230,26 +213,9 @@ const PayBillsInvoiceDetails = (props) => {
                           <Col className="popInfoRight">{totalTax}</Col>
                         </Row>
                         <Row>
-                          <Col className="popInfoLeft">Total Fees</Col>
-                          <Col className="popInfoRight">{fee}</Col>
+                          <Col className="popInfoLeft">Penalty</Col>
+                          <Col className="popInfoRight">{props.penalty}</Col>
                         </Row>
-                        {/* {props.invoice.counter_invoices.length > 0 ? (
-                          <Row>
-                            <Col className="popInfoLeft">Total Discount</Col>
-                            <Col className="popInfoRight">{discount()}</Col>
-                          </Row>
-                        ) : null}
-                        {props.invoice.counter_invoices.length > 0 ? (
-                          <Row>
-                            <Col className="popInfoLeft">Sum Total</Col>
-                            <Col className="popInfoRight">{sumtotal()}</Col>
-                          </Row>
-                        ) : (
-                          <Row>
-                            <Col className="popInfoLeft">Sum Total</Col>
-                            <Col className="popInfoRight">{sumtotal2()}</Col>
-                          </Row>
-                        )} */}
                         <Row>
                           <Col className="popInfoLeft">Sum Total</Col>
                           <Col className="popInfoRight">{sumtotal2()}</Col>
@@ -260,7 +226,7 @@ const PayBillsInvoiceDetails = (props) => {
                 </Row>
               </Container>
               <FormGroup>
-                {isNaN(Number(fee) + Number(values.amount)) ? (
+                {Number(values.amount)? (
                   <h5 style={{ marginTop: '10px', textAlign: 'center' }}>
                     Can't process transaction right now
                   </h5>
