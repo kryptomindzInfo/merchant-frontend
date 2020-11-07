@@ -5,6 +5,7 @@ import TopBar from '../TopBar';
 import Welcome from '../Welcome';
 import Container from '../../Container';
 import A from '../../A';
+import { STATIC_URL } from '../../../constants';
 
 const Link = styled.span`
   color: #fff;
@@ -25,6 +26,7 @@ const MiddleTitle = styled.div`
 const CashierHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
   const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).cashier;
+  const logo = JSON.parse(localStorage.getItem(`cashierLogged`)).merchant.logo || '';
 
   return (
     <TopBar>
@@ -37,6 +39,9 @@ const CashierHeader = (props) => {
         ) : null}
 
         <A href="/cashier/dashboard" float="left">
+        <div className="bankLogo">
+            <img src={STATIC_URL + logo} alt="Merchant Logo" />
+          </div>
           <h2>{name.toUpperCase()}</h2>
         </A>
         {props.middleTitle ? (

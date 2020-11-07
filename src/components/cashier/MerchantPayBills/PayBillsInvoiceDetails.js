@@ -44,24 +44,6 @@ const PayBillsInvoiceDetails = (props) => {
       );
     });
 
-  const getCounterInvoiceItems = () => {
-    return invoice.counter_invoices.map((item) => {
-      return (
-        <tr key={item._id}>
-          <td>{item.number}</td>
-          <td>{item.description}</td>
-          <td>{item.amount}</td>
-        </tr>
-      );
-    });
-  };
-
-  const discount = () => {
-    return invoice.counter_invoices.reduce((a, b) => {
-      return a + b.amount;
-    }, 0);
-  };
-
   const sumtotal2 = () => {
     return totalAmount + totalTax + props.penalty;
   };
@@ -85,10 +67,14 @@ const PayBillsInvoiceDetails = (props) => {
           counter_invoices: invoice.counter_invoices || [],
         }}
         onSubmit={(values) => {
-          values.invoice_ids = [invoice._id];
-          values.merchant_id = props.merchantId;
-          //setInvoice(values);
-          props.showOTPPopup(values);
+          console.log(invoice.has_counter_invoice);
+            const obj = {
+              invoices : [{
+                id: invoice._id,
+                penalty: props.penalty,
+              }]
+            }
+            props.showOTPPopup(obj);
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().required('Name is required.'),
@@ -226,7 +212,7 @@ const PayBillsInvoiceDetails = (props) => {
                 </Row>
               </Container>
               <FormGroup>
-                {Number(values.amount)? (
+                {Number(values.amount < 0 || invoice.has_counter_invoice === true)? (
                   <h5 style={{ marginTop: '10px', textAlign: 'center' }}>
                     Can't process transaction right now
                   </h5>

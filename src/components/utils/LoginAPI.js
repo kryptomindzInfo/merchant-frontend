@@ -6,6 +6,7 @@ import { verifyUrl, merchantDashboardUrl, loginUrl } from '../Url';
 import { getNameBasedOnType, getUrlBasedOnType } from './urlUtils';
 
 const redirectUser = (type, response) => {
+  console.log(response);
   const name = localStorage.getItem(`${type}_name`);
   switch (type) {
     case 'merchant':
