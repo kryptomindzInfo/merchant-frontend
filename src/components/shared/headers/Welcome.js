@@ -29,9 +29,13 @@ const Icon = styled.i`
 const Welcome = (props) => {
   const { type } = props;
   let name = '';
+  let role = '';
   if (type === 'merchant') {
     // eslint-disable-next-line prefer-destructuring
     name = JSON.parse(localStorage.getItem(`${type}Logged`)).details.name;
+  } else if (type === 'cashier'){
+    name = localStorage.getItem(`${type}_name`);
+    role = JSON.parse(localStorage.getItem('cashierLogged')).staff.role;
   } else {
     name = localStorage.getItem(`${type}_name`);
   }
@@ -95,7 +99,7 @@ const Welcome = (props) => {
         </Icon>
         <div className="dropdown fl">
           <Name>
-            <span>{type === 'cashier' ? 'STAFF' : type.toUpperCase()}:</span>{' '}
+            <span>{type === 'cashier' ? role.toUpperCase() : type.toUpperCase()}:</span>{' '}
             {name}
           </Name>
           <SubNav className="bankSubNav">

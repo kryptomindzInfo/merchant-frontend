@@ -6,7 +6,7 @@ import FormGroup from '../../FormGroup';
 import Loader from '../../Loader';
 import Row from '../../Row';
 import Table from '../../Table';
-import { STATIC_URL } from '../constants';
+import { STATIC_URL, CURRENCY } from '../constants';
 import { checkCashierFee, getPenaltyRule } from './api/CashierMerchantAPI';
 
 const PayBillsInvoiceList = (props) => {
@@ -230,7 +230,7 @@ const PayBillsInvoiceList = (props) => {
               {isButtonLoading ? (
                 <Loader />
               ) : (
-                `Collect Amount ${totalAmount} and Pay Bill`
+                `Collect Amount ${CURRENCY} ${totalAmount} and Pay Bill`
               )}
             </Button>
           ) : null}
