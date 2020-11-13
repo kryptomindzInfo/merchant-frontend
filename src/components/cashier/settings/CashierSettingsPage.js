@@ -28,7 +28,7 @@ function CashierSettingsPage(props) {
         goto={role === 'staff' ? '/staff/dashboard' : '/cashier/dashboard'}
       />
       <Container verticalMargin>
-        <CashierSettingsSidebar active="info" type="Cashier" />
+        <CashierSettingsSidebar active="info" type="Cashier"/>
         <Main style={{ marginTop: '50px' }}>
           <CashierWallet />
           <Card bigPadding bordered>

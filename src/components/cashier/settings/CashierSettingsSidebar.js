@@ -52,10 +52,10 @@ const H1 = styled.h1`
   text-align: center;
 `;
 
-class CashierSettingsSidebar extends Component {
-  render() {
-    const info = this.props.active === 'info';
-    const billnumber = this.props.active === 'billnumber';
+function CashierSettingsSidebar(props)  {
+    const info = props.active === 'info';
+    const billnumber = props.active === 'billnumber';
+    const role = JSON.parse(localStorage.getItem('cashierLogged')).staff.role;
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>
@@ -67,17 +67,18 @@ class CashierSettingsSidebar extends Component {
             <h3>Staff Position Info</h3>
           </Card>
         </A>
-        <A href="/cashier/billsettings">
-          <Card rounded selected={billnumber} className="sideNav">
-            <i className="material-icons">
-              <SettingsIcon />
-            </i>
-            <h3>Bill Number</h3>
-          </Card>
-        </A>
+        {role === 'staff' ? (
+          <A href="/cashier/billsettings">
+            <Card rounded selected={billnumber} className="sideNav">
+              <i className="material-icons">
+                <SettingsIcon />
+              </i>
+              <h3>Bill Number</h3>
+            </Card>
+          </A>
+        ) : null}
       </SidebarStyle>
     );
   }
-}
 
 export default CashierSettingsSidebar;
