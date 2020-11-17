@@ -24,9 +24,9 @@ function PenaltyRulePopup(props) {
       <h1>Edit Penalty Rule</h1>
       <Formik
         initialValues={{
-          type: '',
-          fixed_amount: '',
-          percentage: '',
+          type: props.penaltyrule.type || '',
+          fixed_amount: props.penaltyrule.fixed_amount || '',
+          percentage: props.penaltyrule.percentage || '',
         }}
         onSubmit={async (values) => {
           console.log(values);
@@ -64,7 +64,7 @@ function PenaltyRulePopup(props) {
                   <ErrorMessage name="type" component={ErrorText} />
                 </FormField>
                 <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="fixed_amount">Fixed Amount*</label>
+                  <label className="focused" htmlFor="fixed_amount">Fixed Amount*</label>
                   <Field
                     type="number"
                     name="fixed_amount"
@@ -83,7 +83,7 @@ function PenaltyRulePopup(props) {
                   <ErrorMessage name="fixed_amount" component={ErrorText} />
                 </FormField>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="percentage">Percentage*</label>
+                  <label className="focused" htmlFor="percentage">Percentage*</label>
                   <Field
                     type="number"
                     name="percentage"
