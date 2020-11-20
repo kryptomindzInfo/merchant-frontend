@@ -187,6 +187,25 @@ const fetchInvoices = async (id) => {
   }
 };
 
+const fetchPaidInvoices = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantCashier/getPaidInvoiceList`, {
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
 const uploadInvoice = async (props, invoiceList) => {
   try {
     const res = await axios.post(
@@ -452,6 +471,7 @@ export {
   fetchGroups,
   groupAPI,
   fetchInvoices,
+  fetchPaidInvoices,
   uploadInvoice,
   invoiceApi,
   fetchStats,

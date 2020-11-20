@@ -6,7 +6,6 @@ import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
-import CashierWallet from '../../branch/dashboard/CashierWallets';
 import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import CashierSettingsSidebar from './CashierSettingsSidebar';
 
@@ -30,7 +29,6 @@ function CashierSettingsPage(props) {
       <Container verticalMargin>
         <CashierSettingsSidebar active="info" type="Cashier"/>
         <Main style={{ marginTop: '50px' }}>
-          <CashierWallet />
           <Card bigPadding bordered>
             <div className="cardBody">
               <Row>

@@ -40,14 +40,11 @@ class CashierNav extends Component {
     return (
       <>
         <NavTag>
-          {/* <A href="/paybills"> */}
-          <A>
+          {/* <A>
             <Link>
               <span onClick={() => {this.onPayBillsPopupOpen()}}> Pay Bills </span>
             </Link>
-          </A>
-          {/* <Button onClick={this.onPayBillsPopupOpen}>Pay Bills</Button> */}
-          {/* <PayBillPopup close={() => this.onPayBillsPopupClose()} /> */}
+          </A> */}
         </NavTag>
 
         {this.state.payBillsPopup ? (

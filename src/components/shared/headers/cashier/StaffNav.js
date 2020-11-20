@@ -33,7 +33,6 @@ class StaffNav extends Component {
           <A href="/staff/dashboard">
             <Link active={dashboard}>Dashboard</Link>
           </A>
-          {/* <A href="/paybills"> */}
         </NavTag>
       </>
     );

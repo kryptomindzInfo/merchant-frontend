@@ -36,12 +36,9 @@ const StaffHeader = (props) => {
           </A>
         ) : null}
 
-        <A href="/staff/dashboard" float="left">
+        <A href={goto} float="left">
           <h2>{name.toUpperCase()}</h2>
         </A>
-        {props.middleTitle ? (
-          <MiddleTitle className="middleTitle">{middleTitle}</MiddleTitle>
-        ) : null}
         {page === 'info' ? null : <StaffNav active={active} />}
       </Container>
     </TopBar>

@@ -38,15 +38,12 @@ const CashierHeader = (props) => {
           </A>
         ) : null}
 
-        <A href="/cashier/dashboard" float="left">
+        <A href={goto} float="left">
         <div className="bankLogo">
             <img src={STATIC_URL + logo} alt="Merchant Logo" />
           </div>
           <h2>{name.toUpperCase()}</h2>
         </A>
-        {props.middleTitle ? (
-          <MiddleTitle className="middleTitle">{middleTitle}</MiddleTitle>
-        ) : null}
         {page === 'info' ? null : <CashierNav active={active} />}
       </Container>
     </TopBar>

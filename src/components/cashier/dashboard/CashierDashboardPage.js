@@ -2,7 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
-import GroupListCard from './GroupListCard';
+import TotalAmountCollectedCard from '../../shared/TotalAmountCollectedCard';
+import TotalPenaltyCollectedCard from '../../shared/TotalPenaltyCollectedCard';
+import InvoiceListCard from './InvoiceListCard';
+
 
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Container from '../../shared/Container';
@@ -14,7 +17,7 @@ import Loader from '../../shared/Loader';
 
 const StaffDashboardPage = (props) => {
   const [isLoading, setLoading] = useState(false);
-  const [groupList, setGroupList] = useState([]);
+  const [invoiceList, setInvoiceList] = useState([]);
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
@@ -24,6 +27,7 @@ const StaffDashboardPage = (props) => {
     setLoading(true);
     fetchStats()
       .then((data) => {
+        console.log(data);
         setStats(data.stats);
         setLoading(false);
       })
@@ -50,10 +54,11 @@ const StaffDashboardPage = (props) => {
       <Container verticalMargin>
         <Main fullWidth>
           <Row>
-            <GroupNumberCard no={groupList.length} />
             <InvoiceNumberCard no={stats.bills_paid} />
-            <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
+            <TotalAmountCollectedCard amount={stats.amount_collected} />
+            <TotalPenaltyCollectedCard penalty={stats.penalty_collected} />
           </Row>
+          <InvoiceListCard setLoading={(val) => {}} invoice={setInvoiceList} />
         </Main>
       </Container>
     </Fragment>
