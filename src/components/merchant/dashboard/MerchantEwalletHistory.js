@@ -128,7 +128,7 @@ export default class MerchantEwalletHistory extends Component {
       const isoformat = b.Timestamp;
       const readable = new Date(isoformat);
       const m = readable.getMonth(); // returns 6
-      const d = readable.getDay(); // returns 15
+      const d = readable.getDate(); // returns 15
       const y = readable.getFullYear();
       const h = readable.getHours();
       const mi = readable.getMinutes();
