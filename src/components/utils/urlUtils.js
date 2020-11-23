@@ -18,7 +18,7 @@ const getNameBasedOnType = (type) => {
     case 'branch':
       return 'merchantBranch';
     case 'cashier':
-      return '/merchantStaff/';
+      return 'merchantStaff';
     default:
       return 'merchant';
   }

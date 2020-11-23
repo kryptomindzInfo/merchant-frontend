@@ -24,7 +24,7 @@ const MiddleTitle = styled.div`
 
 const StaffHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
-  const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).cashier;
+  const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).staff;
 
   return (
     <TopBar>

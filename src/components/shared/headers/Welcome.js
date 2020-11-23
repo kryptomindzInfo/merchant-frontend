@@ -35,7 +35,7 @@ const Welcome = (props) => {
     name = JSON.parse(localStorage.getItem(`${type}Logged`)).details.name;
   } else if (type === 'cashier'){
     name = localStorage.getItem(`${type}_name`);
-    role = JSON.parse(localStorage.getItem('cashierLogged')).staff.role;
+    role = JSON.parse(localStorage.getItem('cashierLogged')).position.type;
   } else {
     name = localStorage.getItem(`${type}_name`);
   }

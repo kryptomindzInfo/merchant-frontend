@@ -55,7 +55,7 @@ const H1 = styled.h1`
 function CashierSettingsSidebar(props)  {
     const info = props.active === 'info';
     const billnumber = props.active === 'billnumber';
-    const role = JSON.parse(localStorage.getItem('cashierLogged')).staff.role;
+    const role = JSON.parse(localStorage.getItem('cashierLogged')).position.type;
     return (
       <SidebarStyle marginRight>
         <h3>SETTINGS</h3>

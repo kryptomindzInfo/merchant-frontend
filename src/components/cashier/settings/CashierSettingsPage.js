@@ -13,7 +13,7 @@ function CashierSettingsPage(props) {
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
-  const role = JSON.parse(localStorage.getItem('cashierLogged')).staff.role;
+  const role = JSON.parse(localStorage.getItem('cashierLogged')).position.type;
 
   return (
     <Wrapper>
