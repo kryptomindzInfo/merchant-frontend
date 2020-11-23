@@ -19,7 +19,7 @@ const getCountries = async () => {
 const getCounter = async () => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/getCashierSettings`,
+      `${API_URL}/merchantStaff/getCashierSettings`,
       {},
     );
     if (res.status === 200) {
@@ -39,7 +39,7 @@ const getCounter = async () => {
 
 const getinfo = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getDetails`, {});
+    const res = await axios.post(`${API_URL}/merchantStaff/getDetails`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -58,7 +58,7 @@ const getinfo = async () => {
 const setCounter = async (props, values) => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/billNumberSetting`,
+      `${API_URL}/merchantStaff/billNumberSetting`,
       {
         ...values,
       },
@@ -82,7 +82,7 @@ const setCounter = async (props, values) => {
 const incCounter = async (props) => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/increaseCounter`,
+      `${API_URL}/merchantStaff/increaseCounter`,
       {},
     );
     if (res.status === 200) {
@@ -104,7 +104,7 @@ const incCounter = async (props) => {
 
 const fetchGroups = async () => {
   try {
-    const res = await axios.get(`${API_URL}/merchantCashier/listInvoiceGroups`);
+    const res = await axios.get(`${API_URL}/merchantStaff/listInvoiceGroups`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -122,7 +122,7 @@ const fetchGroups = async () => {
 
 const fetchStats = async () => {
   try {
-    const res = await axios.get(`${API_URL}/merchantCashier/todaysStatus`);
+    const res = await axios.get(`${API_URL}/merchantStaff/todaysStatus`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -146,7 +146,7 @@ const groupAPI = async (props, values, apiType) => {
     API = 'createInvoiceGroup';
   }
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/${API}`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/${API}`, {
       ...values,
     });
     if (res.status === 200) {
@@ -169,7 +169,7 @@ const groupAPI = async (props, values, apiType) => {
 
 const fetchInvoices = async (id) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/listInvoices`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/listInvoices`, {
       group_id: id,
     });
     if (res.status === 200) {
@@ -189,7 +189,7 @@ const fetchInvoices = async (id) => {
 
 const fetchPaidInvoices = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getPaidInvoiceList`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/getPaidInvoiceList`, {
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
@@ -209,7 +209,7 @@ const fetchPaidInvoices = async () => {
 const uploadInvoice = async (props, invoiceList) => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/uploadInvoices`,
+      `${API_URL}/merchantStaff/uploadInvoices`,
       invoiceList,
     );
     if (res.status === 200) {
@@ -230,7 +230,7 @@ const uploadInvoice = async (props, invoiceList) => {
 
 const createInvoice = async (props, values, type) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/createInvoice`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/createInvoice`, {
       ...values,
     });
     if (res.status === 200) {
@@ -254,7 +254,7 @@ const createInvoice = async (props, values, type) => {
 const createCounterInvoice = async (props, values) => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/createCounterInvoice`,
+      `${API_URL}/merchantStaff/createCounterInvoice`,
       {
         ...values,
       },
@@ -277,7 +277,7 @@ const createCounterInvoice = async (props, values) => {
 
 const createCustomer = async (props, values) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/createCustomer`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/createCustomer`, {
       ...values,
     });
     if (res.status === 200) {
@@ -303,7 +303,7 @@ const invoiceApi = async (props, values, type) => {
     API = 'deleteInvoice';
   }
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/${API}`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/${API}`, {
       ...values,
     });
     if (res.status === 200) {
@@ -369,7 +369,7 @@ const processCsv = (e, sendResult) => {
 
 const fetchTaxList = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/listTaxes`, {});
+    const res = await axios.post(`${API_URL}/merchantStaff/listTaxes`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -388,7 +388,7 @@ const fetchTaxList = async () => {
 const fetchOfferingList = async () => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/listOfferings`,
+      `${API_URL}/merchantStaff/listOfferings`,
       {},
     );
     if (res.status === 200) {
@@ -416,7 +416,7 @@ const onCsvFileChange = (e) => {
 
 const getMerchantSettings = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
+    const res = await axios.post(`${API_URL}/merchantStaff/getSettings`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

@@ -7,7 +7,7 @@ import { API_URL } from '../../constants';
 
 const getPenaltyRule = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getSettings`, {});
+    const res = await axios.post(`${API_URL}/merchantStaff/getSettings`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         toast.error(res.data.message);
@@ -25,7 +25,7 @@ const getPenaltyRule = async () => {
 
 const checkCashierFee = async (payload) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/checkMerchantFee`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/checkMerchantFee`, {
       ...payload,
     });
     if (res.status === 200) {

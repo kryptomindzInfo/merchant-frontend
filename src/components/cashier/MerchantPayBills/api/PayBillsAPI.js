@@ -4,7 +4,7 @@ import { API_URL } from '../../constants';
 
 const getUserInvoices = async (mobile) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getInvoicesByMobile`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/getInvoicesByMobile`, {
       mobile,
     });
     if (res.status === 200) {
@@ -24,7 +24,7 @@ const getUserInvoices = async (mobile) => {
 
 const getInvoiceDetails = async (number) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/getInvoicesByNumber`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/getInvoicesByNumber`, {
       number,
     });
     if (res.status === 200) {
@@ -45,7 +45,7 @@ const getInvoiceDetails = async (number) => {
 const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantCashier/getInvoicesByCustomerCode`,
+      `${API_URL}/merchantStaff/getInvoicesByCustomerCode`,
       {
         customer_code: customerCode,
       },
@@ -67,7 +67,7 @@ const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
 
 const payInvoice = async (values) => {
   try {
-    const res = await axios.post(`${API_URL}/merchantCashier/payInvoice`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/payInvoice`, {
       ...values,
     });
     if (res.status === 200) {

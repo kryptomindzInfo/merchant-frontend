@@ -158,7 +158,7 @@ function CreateInvoicePopup(props) {
       if (e.target.value.length === 10) {
         return new Promise((resolve, reject) => {
           axios
-            .post(`${API_URL}/merchantCashier/getCustomerForMobile`, {
+            .post(`${API_URL}/merchantStaff/getCustomerForMobile`, {
               mobile: e.target.value,
             })
             .then((res) => {

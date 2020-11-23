@@ -5,6 +5,7 @@ import FormGroup from '../../../shared/FormGroup';
 import Button from '../../../shared/Button';
 import Row from '../../../shared/Row';
 import Col from '../../../shared/Col';
+import SelectInput from '../../../shared/SelectInput';
 import TextInput from '../../../shared/TextInput';
 import Loader from '../../../shared/Loader';
 import {
@@ -12,11 +13,13 @@ import {
   inputFocus,
   correctFocus,
 } from '../../../utils/handleInputFocus';
-import { merchantCashierAPI } from '../../api/MerchantAPI';
+import { merchantStaffPositionAPI } from '../../api/MerchantAPI';
 
 function MerchantCreateCashierPopup(props) {
   const selectedBranch = JSON.parse(localStorage.getItem('selectedBranch'));
   useEffect(() => {
+    console.log(props.cashier);
+    console.log(props.cashier);
     correctFocus(props.type);
   });
   return (
@@ -27,15 +30,16 @@ function MerchantCreateCashierPopup(props) {
           working_from:
             props.cashier.working_from || selectedBranch.working_from,
           working_to: props.cashier.working_to || selectedBranch.working_to,
+          type: props.cashier.type || '',
         }}
         onSubmit={async (values) => {
           if (props.type === 'update') {
-            values.cashier_id = props.cashier._id;
+            values.position_id = props.cashier._id;
             values.branch_id = props.cashier.branch_id;
-            await merchantCashierAPI(props, values, 'update');
+            await merchantStaffPositionAPI(props, values, 'update');
           } else {
             values.branch_id = props.branchId;
-            await merchantCashierAPI(props, values, 'create');
+            await merchantStaffPositionAPI(props, values, 'create');
           }
         }}
       >
@@ -71,6 +75,20 @@ function MerchantCreateCashierPopup(props) {
                     onChange={handleChange}
                     required
                   />
+                </FormGroup>
+                <FormGroup>
+                  <label className="focused">Type*</label>
+                  <SelectInput
+                    type="text"
+                    name="type"
+                    value={values.type}
+                    onChange={handleChange}
+                    required
+                  >
+                    <option value="">Select Type*</option>
+                    <option value="staff">Staff</option>
+                    <option value="cashier">Cashier</option>
+                  </SelectInput>
                 </FormGroup>
                 <label>Working Hours</label>
                 <hr style={{ visibility: 'hidden' }}></hr>

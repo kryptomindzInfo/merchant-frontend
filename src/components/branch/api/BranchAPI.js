@@ -44,13 +44,13 @@ const editBranchCashier = async (props, values) => {
 
 const getBranchCashier = async () => {
   try {
-    const res = await axios.get(`${API_URL}/merchantBranch/listCashier`);
+    const res = await axios.get(`${API_URL}/merchantBranch/listPosition`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.cashiers, loading: false };
+      return { list: res.data.positions, loading: false };
     }
     notify(res.data.message, 'error');
     return { list: [], loading: false };

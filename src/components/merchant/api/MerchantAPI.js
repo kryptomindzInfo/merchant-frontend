@@ -849,12 +849,12 @@ const ruleAPI = async (bank, ruleStatus, payload) => {
 
 // Merchant Cashier APIs
 
-const merchantCashierAPI = async (props, values, apiType) => {
+const merchantStaffPositionAPI = async (props, values, apiType) => {
   let URL = '';
   if (apiType === 'update') {
-    URL = `${MERCHANT_API}/editCashier`;
+    URL = `${MERCHANT_API}/editPosition`;
   } else {
-    URL = `${MERCHANT_API}/addCashier`;
+    URL = `${MERCHANT_API}/addPosition`;
   }
   try {
     const res = await axios.post(URL, {
@@ -876,9 +876,9 @@ const merchantCashierAPI = async (props, values, apiType) => {
   }
 };
 
-const getMerchantCashier = async (id) => {
+const getMerchantPositions = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listCashier`, {
+    const res = await axios.post(`${MERCHANT_API}/listPosition`, {
       branch_id: id,
     });
     if (res.status === 200) {
@@ -886,7 +886,7 @@ const getMerchantCashier = async (id) => {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.cashiers, loading: false };
+      return { list: res.data.positions, loading: false };
     }
     notify(res.data.message, 'error');
     return { list: [], loading: false };
@@ -912,8 +912,8 @@ export {
   ruleAPI,
   blockMerchantBranch,
   unblockMerchantBranch,
-  merchantCashierAPI,
-  getMerchantCashier,
+  merchantStaffPositionAPI,
+  getMerchantPositions,
   uploadOffering,
   fetchOfferingList,
   deleteOffering,

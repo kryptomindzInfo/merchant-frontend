@@ -15,7 +15,7 @@ import Button from '../../../shared/Button';
 import MerchantHeader from '../../../shared/headers/merchant/MerchantHeader';
 import MerchantBranchInfoSidebar from '../MerchantBranchInfoSidebar';
 import MerchantCreateCashierPopup from './MerchantCreateCashierPopup';
-import { getMerchantCashier } from '../../api/MerchantAPI';
+import { getMerchantPositions } from '../../api/MerchantAPI';
 
 function MerchantCashierListPage(props) {
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
@@ -40,7 +40,7 @@ function MerchantCashierListPage(props) {
 
   const refreshCashierList = async () => {
     setLoading(true);
-    const data = await getMerchantCashier(id);
+    const data = await getMerchantPositions(id);
     setCashierList(data.list);
     setLoading(data.loading);
   };
@@ -66,7 +66,7 @@ function MerchantCashierListPage(props) {
             {cashier.status === 1 ? 'Opened' : 'Closed'}
           </td>
           <td className="tac bold green">
-            {cashier.max_trans_count}
+            {cashier.type}
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
@@ -137,7 +137,7 @@ function MerchantCashierListPage(props) {
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
               <div className="cardHeaderRight">
-                <h3>Staff List</h3>
+                <h3>Staff Position List</h3>
                 <h5>List of your staff</h5>
               </div>
             </div>
@@ -147,7 +147,7 @@ function MerchantCashierListPage(props) {
                   <tr>
                     <th>Name</th>
                     <th>Status</th>
-                    <th>Transaction Count</th>
+                    <th>Type</th>
                   </tr>
                 </thead>
                 <tbody>

@@ -18,7 +18,7 @@ function AssignUserPopup(props) {
           staff_id: props.cashier.staff_id || '',
         }}
         onSubmit={async (values) => {
-          values.cashier_id = props.cashier._id;
+          values.position_id = props.cashier._id;
           await assignStaff(props, values);
         }}
       >

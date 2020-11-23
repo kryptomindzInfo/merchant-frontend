@@ -85,7 +85,7 @@ function BranchCashierList(props) {
             {cashier.status === 2 ? 'Closed' : 'Opened'}
           </td>
           <td className="tac bold green">
-            {cashier.max_trans_count}
+            {cashier.type}
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
@@ -170,7 +170,7 @@ function BranchCashierList(props) {
                     <th>Staff Name</th>
                     <th>Assigned to</th>
                     <th>Status</th>
-                    <th>Transaction Count</th>
+                    <th>Type</th>
                   </tr>
                 </thead>
                 <tbody>
