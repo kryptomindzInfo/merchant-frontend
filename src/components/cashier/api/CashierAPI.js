@@ -19,7 +19,7 @@ const getCountries = async () => {
 const getCounter = async () => {
   try {
     const res = await axios.post(
-      `${API_URL}/merchantStaff/getCashierSettings`,
+      `${API_URL}/merchantStaff/getPositionDetails`,
       {},
     );
     if (res.status === 200) {
@@ -27,7 +27,7 @@ const getCounter = async () => {
         notify(res.data.message, 'error');
       }
       return {
-        counter: res.data.setting.counter,
+        counter: res.data.position.counter,
         loading: false,
       };
     }
@@ -39,13 +39,13 @@ const getCounter = async () => {
 
 const getinfo = async () => {
   try {
-    const res = await axios.post(`${API_URL}/merchantStaff/getDetails`, {});
+    const res = await axios.post(`${API_URL}/merchantStaff/getPositionDetails`, {});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
       }
       return {
-        access: res.data.cashier.counter_invoice_access,
+        access: res.data.position.counter_invoice_access,
         loading: false,
       };
     }
@@ -120,10 +120,11 @@ const fetchGroups = async () => {
   }
 };
 
-const fetchStats = async () => {
+const fetchStats = async (type) => {
   try {
-    const res = await axios.get(`${API_URL}/merchantStaff/todaysStatus`);
+    const res = await axios.get(`${API_URL}/merchantStaff/${type}DashStatus`);
     if (res.status === 200) {
+      console.log(res);
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return { stats: {}, loading: false };

@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Wrapper from '../../shared/Wrapper';
 import Container from '../../shared/Container';
 import Main from '../../shared/Main';
@@ -11,10 +11,15 @@ import CashierSettingsSidebar from './CashierSettingsSidebar';
 
 function CashierSettingsPage(props) {
   const [cashierInfo, setCashierInfo] = useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).cashier,
+    JSON.parse(localStorage.getItem('cashierLogged')).staff,
+  );
+  const [positionInfo, setPositionInfo] = useState(
+    JSON.parse(localStorage.getItem('cashierLogged')).position,
   );
   const role = JSON.parse(localStorage.getItem('cashierLogged')).position.type;
-
+  useEffect(() => {
+    console.log(cashierInfo);
+  }, []); 
   return (
     <Wrapper>
       <Helmet>
@@ -43,27 +48,12 @@ function CashierSettingsPage(props) {
 
               <Row>
                 <Col className="infoLeft">From</Col>
-                <Col className="infoRight">{cashierInfo.working_from}</Col>
+                <Col className="infoRight">{positionInfo.working_from}</Col>
               </Row>
 
               <Row>
                 <Col className="infoLeft">To</Col>
-                <Col className="infoRight">{cashierInfo.working_to}</Col>
-              </Row>
-
-              <Row>
-                <Col className="infoLeft">Maximum per transaction amount</Col>
-                <Col className="infoRight">{cashierInfo.per_trans_amt}</Col>
-              </Row>
-
-              <Row>
-                <Col className="infoLeft">Maximum daily transaction amount</Col>
-                <Col className="infoRight">{cashierInfo.max_trans_amt}</Col>
-              </Row>
-
-              <Row>
-                <Col className="infoLeft">Maximum daily transaction count</Col>
-                <Col className="infoRight">{cashierInfo.max_trans_count}</Col>
+                <Col className="infoRight">{positionInfo.working_to}</Col>
               </Row>
             </div>
           </Card>

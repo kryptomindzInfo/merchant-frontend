@@ -25,7 +25,7 @@ const StaffDashboardPage = (props) => {
 
   const getStats = () => {
     setLoading(true);
-    fetchStats()
+    fetchStats('cashier')
       .then((data) => {
         console.log(data);
         setStats(data.stats);

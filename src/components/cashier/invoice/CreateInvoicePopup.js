@@ -47,7 +47,7 @@ function CreateInvoicePopup(props) {
     ),
   );
   const [cashierName, setCashierName] = React.useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).cashier.username.slice(
+    JSON.parse(localStorage.getItem('cashierLogged')).staff.username.slice(
       0,
       3,
     ),

@@ -28,6 +28,7 @@ const redirectUser = (type, response) => {
       break;
     case 'cashier':
       localStorage.setItem('cashierLogged', JSON.stringify(response.data));
+      console.log(response);
       if (response.data.status === 0) {
         history.push(`/cashier/${name}/login-verify`);
       } else {

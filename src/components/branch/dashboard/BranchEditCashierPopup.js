@@ -37,7 +37,7 @@ function BranchEditCashierPopup(props) {
         }}
         onSubmit={async (values) => {
           values.counter_invoice_access = checkboxValue;
-          values.cashier_id = props.cashier._id;
+          values.position_id = props.cashier._id;
           await editBranchCashier(props, values);
         }}
       >

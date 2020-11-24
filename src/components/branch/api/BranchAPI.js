@@ -21,7 +21,7 @@ const fetchDailyStats = async () => {
 };
 
 const editBranchCashier = async (props, values) => {
-  const API = `${API_URL}/merchantBranch/editCashier`;
+  const API = `${API_URL}/merchantBranch/editPosition`;
   try {
     const res = await axios.post(`${API}`, {
       ...values,

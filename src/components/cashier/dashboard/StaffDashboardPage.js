@@ -22,7 +22,7 @@ const StaffDashboardPage = (props) => {
 
   const getStats = () => {
     setLoading(true);
-    fetchStats()
+    fetchStats('staff')
       .then((data) => {
         setStats(data.stats);
         setLoading(false);
