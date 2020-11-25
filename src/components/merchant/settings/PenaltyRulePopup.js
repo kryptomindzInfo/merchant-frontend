@@ -24,9 +24,9 @@ function PenaltyRulePopup(props) {
       <h1>Edit Penalty Rule</h1>
       <Formik
         initialValues={{
-          type: props.penaltyrule.type || '',
-          fixed_amount: props.penaltyrule.fixed_amount || '',
-          percentage: props.penaltyrule.percentage || '',
+          type: props.penaltyrule ? props.penaltyrule.type : '',
+          fixed_amount: props.penaltyrule ? props.penaltyrule.fixed_amount : '',
+          percentage: props.penaltyrule ? props.penaltyrule.percentage : '',
         }}
         onSubmit={async (values) => {
           console.log(values);
@@ -58,8 +58,8 @@ function PenaltyRulePopup(props) {
                     required
                   >
                     <option value="">Select period</option>
-                    <option value="once">Once</option>
-                    <option value="perday">Per Day</option>
+                    <option value="once">Flat Penalty</option>
+                    <option value="perday">Per Day Penalty</option>
                   </Field>
                   <ErrorMessage name="type" component={ErrorText} />
                 </FormField>

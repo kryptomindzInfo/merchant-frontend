@@ -69,7 +69,7 @@ const PenaltySettingPage = (props) => {
                       <h2>Rule Type:</h2>
                     </Col>
                     <Col cw="50%">
-                      <h2>{penaltyRule ? penaltyRule.type : ''}</h2>
+                      <h2>{penaltyRule ? penaltyRule.type === 'once' ? 'Flat Penalty' : 'Perday Penalty' : ''}</h2>
                     </Col>
                   </Row>
                   <Row>
