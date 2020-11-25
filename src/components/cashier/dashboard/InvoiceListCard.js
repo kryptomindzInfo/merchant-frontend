@@ -10,6 +10,7 @@ import { useTheme } from '@material-ui/core/styles';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import SearchIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import AddIcon from '@material-ui/icons/Add';
+import ViewInvoicePopup from '../invoice/ViewInvoicePopup';
 import Card from '../../shared/Card';
 import Table from '../../shared/Table';
 import ActionBar from '../../shared/ActionBar';
@@ -21,6 +22,8 @@ import PayBillPopup from '../../cashier/MerchantPayBills/PayBillPopup';
 import Button from '../../shared/Button';
 import history from '../../utils/history';
 import { fetchPaidInvoices } from '../api/CashierAPI';
+import { CURRENCY } from '../../constants';
+
 
 const useStyles = makeStyles(() => ({
   paper: {
@@ -119,10 +122,13 @@ TablePaginationActions.propTypes = {
 
 const InvoiceListCard = (props) => {
   const [addGroupPopup, setGroupPopup] = useState(false);
+  const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
+  const [viewingInvoice, setViewingInvoice] = React.useState({});
   const [payBillsPopup, setPayBillsPopup] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
 
   const onPayBillsPopupClose = () => {
+    refreshInvoiceList();
     setPayBillsPopup(false);
   };
 
@@ -140,6 +146,15 @@ const InvoiceListCard = (props) => {
       .catch((err) => {
         props.setLoading(false);
       });
+  };
+
+  const handleViewInvoicePopupClick = (invoice) => {
+    setViewingInvoice(invoice);
+    setViewInvoicePopup(true);
+  };
+
+  const onViewInvoicePopupClose = () => {
+    setViewInvoicePopup(false);
   };
 
   useEffect(() => {
@@ -163,56 +178,16 @@ const InvoiceListCard = (props) => {
           </td>
           <td>{invoice.mobile}</td>
           <td>{invoice.due_date}</td>
-          {/* {counterInvoice && counterInvoiceAccess ? (
-            <td className="tac bold">
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'center',
-                }}
-              >
-                <td
-                  style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
-                    View
-                  </Button>
-                </td>
-                {invoice.has_counter_invoice === false ? (
-                  <span className="absoluteMiddleRight primary popMenuTrigger">
-                    <i className="material-icons ">more_vert</i>
-                    <div className="popMenu">
-                      <span
-                        onClick={() => {
-                          handleCreateInvoicePopupClick(
-                            'update',
-                            invoice,
-                            'counterinvoice',
-                          );
-                        }}
-                      >
-                        Create Counter Invoice
-                      </span>
-                    </div>
-                  </span>
-                ) : null}
-              </div>
-            </td>
-          ) : (
-            <td
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
-                View
-              </Button>
-            </td>
-          )} */}
+          <td
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
+              View
+            </Button>
+          </td>
         </tr>
       );
     });
@@ -252,7 +227,7 @@ const InvoiceListCard = (props) => {
               </div>
               <div className="cardHeaderRight" style={{ paddingLeft: '10px' }}>
                 <h3>Paid Invoices</h3>
-                <h5>List of your Categories</h5>
+                <h5>List of your paid invoices</h5>
               </div>
             </div>
             <div className="cardBody">
@@ -268,7 +243,7 @@ const InvoiceListCard = (props) => {
                       <th>Actions</th>
                     </tr>
                   </thead>
-                  {/* <tbody>{getInvoices()}</tbody> */}
+                  <tbody>{getInvoices()}</tbody>
                 </Table>
               ) : (
                 <h3
@@ -289,6 +264,12 @@ const InvoiceListCard = (props) => {
       ) : (
         ''
       )}
+      {viewInvoicePopup ? (
+        <ViewInvoicePopup
+          invoice={viewingInvoice}
+          onClose={() => onViewInvoicePopupClose()}
+        />
+      ) : null}
     </Wrapper>
   );
 };

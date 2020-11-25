@@ -52,12 +52,6 @@ function ViewInvoicePopup(props) {
     });
   };
 
-  useEffect(() => {
-    console.log(
-      JSON.parse(localStorage.getItem('cashierLogged')).cashier
-        .counter_invoice_access,
-    );
-  });
 
   return (
     <Popup bigBody accentedH1 close={props.onClose.bind(this)}>

@@ -215,7 +215,7 @@ const PayBillsInvoiceList = (props) => {
               <th>Number</th>
               <th>Amount</th>
               <th>Penalty</th>
-              <th>Total AMount</th> 
+              <th>Total Amount</th> 
               <th>Due Date</th>
               <th />
             </tr>
