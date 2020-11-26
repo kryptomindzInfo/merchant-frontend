@@ -24,20 +24,23 @@ const StaffDashboardPage = (props) => {
   const [stats, setStats] = useState({});
 
   const getStats = () => {
-    setLoading(true);
     fetchStats('cashier')
       .then((data) => {
-        console.log(data);
         setStats(data.stats);
-        setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
       });
   };
+
+  const status = () => {
+    setInterval(function(){
+      getStats();
+     }, 3000);
+  };
+
   useEffect(() => {
-    getStats();
-    console.log(localStorage);
+    status();      
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
