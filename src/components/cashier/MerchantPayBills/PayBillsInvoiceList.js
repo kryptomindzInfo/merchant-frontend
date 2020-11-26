@@ -148,6 +148,8 @@ const PayBillsInvoiceList = (props) => {
     const penaltylist = invoiceList.map(async invoice => {
       if (invoice.amount < 0) {
         return (0);
+      }else if(!rule){
+        return (0);
       }else if(!rule.type){
         return (0);
       }
