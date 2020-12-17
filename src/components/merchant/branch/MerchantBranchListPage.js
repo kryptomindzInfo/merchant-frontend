@@ -28,6 +28,8 @@ function MerchantBranchListPage(props) {
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
   const [branchList, setBranchList] = React.useState([]);
+  const [copyBranchList, setCopyBranchList] = React.useState([]);
+
   const [popupType, setPopupType] = React.useState('new');
   const [editingBranch, setEditingBranch] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
@@ -53,6 +55,7 @@ function MerchantBranchListPage(props) {
     setLoading(true);
     fetchBranchListBySubzone(id).then((data) => {
       setBranchList(data.list);
+      setCopyBranchList(data.list)
       setLoading(data.loading);
     });
   };
@@ -82,7 +85,8 @@ function MerchantBranchListPage(props) {
         <tr key={branch._id}>
           <td className="tac">{branch.name}</td>
           <td className="tac">{branch.code}</td>
-          <td className="tac">{branch.total_cashiers}</td>
+          {/* <td className="tac">{branch.total_cashiers}</td> */}
+          <td className="tac">{branch.total_positions}</td>
           <td className="tac bold">
             <div
               style={{
@@ -113,16 +117,16 @@ function MerchantBranchListPage(props) {
                       Unblock
                     </span>
                   ) : (
-                    <span
-                      onClick={async () =>
-                        blockMerchantBranch(branch._id).then(() => {
-                          refreshBranchList();
-                        })
-                      }
-                    >
-                      Block
-                    </span>
-                  )}
+                      <span
+                        onClick={async () =>
+                          blockMerchantBranch(branch._id).then(() => {
+                            refreshBranchList();
+                          })
+                        }
+                      >
+                        Block
+                      </span>
+                    )}
                 </div>
               </span>
             </div>
@@ -131,6 +135,21 @@ function MerchantBranchListPage(props) {
       );
     });
   };
+
+  const searchlistfunction = (value) => {
+    console.log(value)
+    // console.log(staff)
+    console.log(branchList)
+
+    const newfilterdata = copyBranchList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setBranchList(newfilterdata)
+
+
+  }
 
   const { name } = JSON.parse(localStorage.getItem('currentZone'));
 
@@ -153,7 +172,9 @@ function MerchantBranchListPage(props) {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Merchants" />
+              <input type="text" placeholder="Search Merchants" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
 
             <Button

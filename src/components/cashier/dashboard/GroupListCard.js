@@ -78,8 +78,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
-          <KeyboardArrowLeft />
-        )}
+            <KeyboardArrowLeft />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -92,8 +92,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
-          <KeyboardArrowRight />
-        )}
+            <KeyboardArrowRight />
+          )}
       </IconButton>
       <IconButton
         className={

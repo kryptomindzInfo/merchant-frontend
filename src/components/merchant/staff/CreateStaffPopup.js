@@ -55,7 +55,8 @@ function CreateStaffPopup(props) {
           logo: props.staff.logo || '',
           email: props.staff.email || '',
           mobile: props.staff.mobile || '',
-          ccode: props.staff.ccode || '+221',
+          // ccode: props.staff.ccode || '+221',
+          ccode: props.staff.ccode || '+91',
           username: props.staff.username || '',
           password: props.staff.password || '',
           branch_id: props.staff.branch_id || '',
@@ -145,6 +146,7 @@ function CreateStaffPopup(props) {
                   <option value="cashier">Cashier</option>
                 </SelectInput>
               </FormGroup>
+
               <FormGroup mR="10%" mL="10%">
                 <label>Email*</label>
                 <TextInput
@@ -168,7 +170,7 @@ function CreateStaffPopup(props) {
               <Row mR="10%" mL="10%">
                 <Col cW="30%">
                   <FormGroup>
-                    <label>Country Code*</label>
+                    {/* <label>Country Code*</label> */}
                     <TextInput
                       type="text"
                       name="ccode"
@@ -278,8 +280,8 @@ function CreateStaffPopup(props) {
                       target="_BLANK"
                     />
                   ) : (
-                    ' '
-                  )}
+                      ' '
+                    )}
                   <div
                     className="uploadTrigger"
                     onClick={() => triggerBrowse('logo')}
@@ -297,14 +299,14 @@ function CreateStaffPopup(props) {
                     {!values.logo ? (
                       <i className="material-icons">cloud_upload</i>
                     ) : (
-                      ' '
-                    )}
+                        ' '
+                      )}
                     <label>
                       {values.logo === '' ? (
                         <span>Profile Photo</span>
                       ) : (
-                        <span>Change Profile Photo</span>
-                      )}
+                          <span>Change Profile Photo</span>
+                        )}
                       *
                     </label>
                   </div>
@@ -318,22 +320,22 @@ function CreateStaffPopup(props) {
                   <Loader />
                 </Button>
               ) : (
-                <Button
-                  type="submit"
-                  onClick={handleSubmit}
-                  filledBtn
-                  marginTop="20px"
-                  style={{
-                    padding: '5px',
-                    fontFamily: 'Roboto, sans-serif',
-                    fontWeight: 500,
-                  }}
-                >
-                  <span>
-                    {props.type === 'update' ? 'Update Staff' : 'Add Staff'}
-                  </span>
-                </Button>
-              )}
+                  <Button
+                    type="submit"
+                    onClick={handleSubmit}
+                    filledBtn
+                    marginTop="20px"
+                    style={{
+                      padding: '5px',
+                      fontFamily: 'Roboto, sans-serif',
+                      fontWeight: 500,
+                    }}
+                  >
+                    <span>
+                      {props.type === 'update' ? 'Update Staff' : 'Add Staff'}
+                    </span>
+                  </Button>
+                )}
             </div>
           );
         }}
