@@ -11,7 +11,7 @@ import { checkCashierFee, getPenaltyRule } from './api/CashierMerchantAPI';
 
 const PayBillsInvoiceList = (props) => {
   const currentDate = new Date();
-  const merchant  = JSON.parse(localStorage.getItem('cashierLogged')).merchant;
+  const merchant = JSON.parse(localStorage.getItem('cashierLogged')).merchant;
   const [isLoading, setLoading] = useState(true);
   const [isButtonLoading, setButtonLoading] = useState(false);
   const [selectedInvoiceList, setSelectedInvoiceList] = useState([]);
@@ -23,8 +23,8 @@ const PayBillsInvoiceList = (props) => {
   );
   const handleCheckboxClick = async (e, invoice, index) => {
     setButtonLoading(true);
-    if(e.target.checked) {
-      if(invoice.has_counter_invoice === true){
+    if (e.target.checked) {
+      if (invoice.has_counter_invoice === true) {
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
         setTotalAmount(totalAmount + invoice.amount + counterInvoice[0].amount + penaltyList[index]);
         const obj1 = {
@@ -52,16 +52,16 @@ const PayBillsInvoiceList = (props) => {
         setButtonLoading(false);
       }
     } else {
-      if(invoice.has_counter_invoice === true){
+      if (invoice.has_counter_invoice === true) {
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
-        const list = selectedInvoiceList.filter((val) => val.id !== invoice._id &&  val.id !== counterInvoice[0]._id);
+        const list = selectedInvoiceList.filter((val) => val.id !== invoice._id && val.id !== counterInvoice[0]._id);
         setSelectedInvoiceList(list);
-        setTotalAmount(totalAmount-invoice.amount-counterInvoice[0].amount - penaltyList[index]);
+        setTotalAmount(totalAmount - invoice.amount - counterInvoice[0].amount - penaltyList[index]);
         setButtonLoading(false);
       } else {
         const list = selectedInvoiceList.filter((val) => val.id !== invoice._id);
         setSelectedInvoiceList(list);
-        setTotalAmount(totalAmount- invoice.amount - penaltyList[index]);
+        setTotalAmount(totalAmount - invoice.amount - penaltyList[index]);
         setButtonLoading(false);
       }
     }
@@ -69,49 +69,49 @@ const PayBillsInvoiceList = (props) => {
 
   const handleMultipleInvoiceSubmit = () => {
     const obj = {
-      invoices : selectedInvoiceList,
+      invoices: selectedInvoiceList,
     }
     props.showOTPPopup(obj);
   };
-  
+
   const getInvoiceList = () =>
-    invoiceList.map((invoice,index) => (
+    invoiceList.map((invoice, index) => (
       <tr key={invoice._id}>
         <td
           className="tac"
         >
           <Row>
             <Col cW="10%">
-            {invoice.is_counter ? (
-              <div>
-                {selectedInvoiceList.map(a => a.id).includes(invoice._id) ? (
-                  <FormGroup>
+              {invoice.is_counter ? (
+                <div>
+                  {selectedInvoiceList.map(a => a.id).includes(invoice._id) ? (
+                    <FormGroup>
+                      <input
+                        type="checkbox"
+                        checked
+                        value={invoice._id}>
+                      </input>
+                    </FormGroup>
+                  ) : (
+                      <FormGroup>
+                        <input
+                          type="checkbox"
+                          disabled
+                          value={invoice._id}>
+                        </input>
+                      </FormGroup>
+                    )}
+                </div>
+              ) : (
+                  <FormGroup onChange={(e) => handleCheckboxClick(e, invoice, index)}>
                     <input
                       type="checkbox"
-                      checked
-                      value={invoice._id}>
-                    </input>
-                  </FormGroup>
-                ) : (
-                  <FormGroup>
-                    <input
-                      type="checkbox"
-                      disabled
                       value={invoice._id}>
                     </input>
                   </FormGroup>
                 )}
-              </div>
-            ) : (
-              <FormGroup onChange={(e) => handleCheckboxClick(e, invoice, index)}>
-                <input
-                  type="checkbox"
-                  value={invoice._id}>
-                </input>
-                </FormGroup>
-            )}
             </Col>
-            <Col 
+            <Col
               cW="90%"
               style={{
                 display: "flex",
@@ -125,7 +125,7 @@ const PayBillsInvoiceList = (props) => {
         <td className="tac">{invoice.amount}</td>
         <td className="tac">{penaltyList[index]}</td>
         <td className="tac">
-        {invoice.amount+penaltyList[index]}</td>
+          {invoice.amount + penaltyList[index]}</td>
         <td className="tac">{invoice.due_date} </td>
         <td className="tac bold">
           <div
@@ -144,54 +144,54 @@ const PayBillsInvoiceList = (props) => {
       </tr>
     ));
 
-  const calculatePenalty = async(rule) => {
+  const calculatePenalty = async (rule) => {
     const penaltylist = invoiceList.map(async invoice => {
       if (invoice.amount < 0) {
         return (0);
-      }else if(!rule){
+      } else if (!rule) {
         return (0);
-      }else if(!rule.type){
+      } else if (!rule.type) {
         return (0);
       }
       const datesplit = invoice.due_date.split("/");
-      const dueDate = new Date(datesplit[2],datesplit[1]-1,datesplit[0]);
-      if (currentDate<= dueDate) {
-          return (0);
+      const dueDate = new Date(datesplit[2], datesplit[1] - 1, datesplit[0]);
+      if (currentDate <= dueDate) {
+        return (0);
       } else {
-        if(rule.type === 'once') {
-          return (rule.fixed_amount + (invoice.amount*rule.percentage)/100);
+        if (rule.type === 'once') {
+          return (rule.fixed_amount + (invoice.amount * rule.percentage) / 100);
         } else {
           // To calculate the time difference of two dates 
-          var Difference_In_Time = currentDate.getTime() - dueDate.getTime(); 
+          var Difference_In_Time = currentDate.getTime() - dueDate.getTime();
           // To calculate the no. of days between two dates 
-          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
-          console.log(currentDate,dueDate,Difference_In_Days);     
-          return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
+          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));
+          console.log(currentDate, dueDate, Difference_In_Days);
+          return ((rule.fixed_amount + (invoice.amount * rule.percentage) / 100) * Difference_In_Days.toFixed(2));
         }
       }
     });
-    const result= await Promise.all(penaltylist);
-    return({res:result, loading:false});
+    const result = await Promise.all(penaltylist);
+    return ({ res: result, loading: false });
   };
 
-  const fetchPenaltyRule = async() => {
+  const fetchPenaltyRule = async () => {
     const data = await getPenaltyRule({});
     console.log(data);
-    return(data.rule);
+    return (data.rule);
   }
 
   useEffect(() => {
     setLoading(true);
-    const getRule = async() => {
-      const res1= await fetchPenaltyRule();
+    const getRule = async () => {
+      const res1 = await fetchPenaltyRule();
       console.log(res1);
-      const res2= await calculatePenalty(res1);
+      const res2 = await calculatePenalty(res1);
       console.log(res2.res);
       setPenaltyList(res2.res);
       setLoading(res2.loading);
     }
     getRule();
-    }, []); 
+  }, []);
 
   if (isLoading) {
     return <Loader />;
@@ -213,34 +213,41 @@ const PayBillsInvoiceList = (props) => {
           </div>
         </div>
         <div />
-        <Table marginTop="34px" smallTd>
-          <thead>
-            <tr>
-              <th>Number</th>
-              <th>Amount</th>
-              <th>Penalty</th>
-              <th>Total Amount</th> 
-              <th>Due Date</th>
-              <th />
-            </tr>
-          </thead>
-          <tbody>
-            {invoiceList && invoiceList.length > 0 ? getInvoiceList() : null}
-          </tbody>
-        </Table>
+        {invoiceList && invoiceList.length > 0 ? (
+          <Table marginTop="34px" smallTd>
+            <thead>
+              <tr>
+                <th>Number</th>
+                <th>Amount</th>
+                <th>Penalty</th>
+                <th>Total Amount</th>
+                <th>Due Date</th>
+                <th />
+              </tr>
+            </thead>
+            <tbody>
+              {invoiceList && invoiceList.length > 0 ? getInvoiceList() : null}
+            </tbody>
+          </Table>
+        ) : (
+            <center><h2>No Bill Available Found</h2></center>
+          )
+        }
+
+
         <FormGroup>
           {totalAmount > 0 ? (
             <Button onClick={handleMultipleInvoiceSubmit} filledBtn>
               {isButtonLoading ? (
                 <Loader />
               ) : (
-                `Collect Amount ${CURRENCY} ${totalAmount} and Pay Bill`
-              )}
+                  `Collect Amount ${CURRENCY} ${totalAmount} and Pay Bill`
+                )}
             </Button>
           ) : null}
         </FormGroup>
-      </Card>
-    </div>
+      </Card >
+    </div >
   );
 };
 

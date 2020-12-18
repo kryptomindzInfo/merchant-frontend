@@ -13,6 +13,8 @@ import DeletePopup from '../../shared/DeletePopup';
 
 function OfferingCard(props) {
   const [offeringList, setOfferingList] = React.useState([]);
+  const [copyofferingList, setcopyOffering] = React.useState([]);
+
   const [productList, setProductList] = React.useState([]);
   const [serviceList, setServiceList] = React.useState([]);
   const [toggleButton, setToggleButton] = React.useState('product');
@@ -79,6 +81,7 @@ function OfferingCard(props) {
     setLoading(true);
     fetchOfferingList().then((data) => {
       setOffering(data.list);
+      setcopyOffering(data.list)
       setLoading(data.loading);
     });
     props.refreshoffering();
@@ -137,6 +140,20 @@ function OfferingCard(props) {
     );
   };
 
+  const searchlistfunction = (value) => {
+    console.log(value)
+
+
+    const newfilterdata = copyofferingList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setOfferingList(newfilterdata)
+
+
+  }
+
   return (
     <div style={{ marginBottom: '50px' }}>
       <ActionBar
@@ -148,7 +165,9 @@ function OfferingCard(props) {
           <i className="material-icons">
             <SearchIcon />
           </i>
-          <input type="text" placeholder="Search Offering" />
+          <input type="text" placeholder="Search Offering Name" onChange={(e) => {
+            searchlistfunction(e.target.value)
+          }} />
         </div>
 
         <Button className="addBankButton" flex>
