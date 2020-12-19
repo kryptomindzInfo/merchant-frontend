@@ -172,7 +172,7 @@ function MerchantBranchListPage(props) {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Merchants" onChange={(e) => {
+              <input type="text" placeholder="Search Branches" onChange={(e) => {
                 searchlistfunction(e.target.value)
               }} />
             </div>

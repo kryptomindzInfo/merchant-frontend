@@ -531,6 +531,7 @@ const uploadCustomer = async (props, customerList) => {
 
 // API's for Merchant Settings
 const editMerchant = async (props, values) => {
+  console.log("merchant value")
   try {
     values.username = values.merchant_id;
     const res = await axios.post(`${MERCHANT_API}/editDetails`, {
@@ -808,7 +809,7 @@ const getRules = async (ruleType, type) => {
     } else {
       URL = `${MERCHANT_API}/getRules`;
     }
-    const res = await axios.post(URL, { page:ruleType });
+    const res = await axios.post(URL, { page: ruleType });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

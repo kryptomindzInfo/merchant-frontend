@@ -183,7 +183,7 @@ const GroupListCard = (props) => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Groups" />
+              <input type="text" placeholder="Search Category" />
             </div>
             <Button
               className="addBankButton"
