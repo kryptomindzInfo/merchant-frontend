@@ -27,7 +27,6 @@ const InvoiceDescription = (props) => {
   const [descriptionList, setDescriptionList] = React.useState(props.items);
 
   const toggleProduct = () => {
-    console.log(props.items);
     if (toggleButton !== 'product') {
       setToggleButton('product');
       setDescriptionList([

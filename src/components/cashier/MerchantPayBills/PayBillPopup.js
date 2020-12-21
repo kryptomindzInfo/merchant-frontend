@@ -23,6 +23,7 @@ const PayBillPopup = (props) => {
   const merchant = JSON.parse(localStorage.getItem('cashierLogged')).merchant;
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
+  const [payingInvoiceList, setPayingInvoiceList] = useState([]);
   const [editingInvoice, setEditingInvoice] = useState({});
   const [editingInvoicePenalty, setEditingInvoicePenalty] = useState({});
   const [displayInvoiceList, setDisplayInvoiceList] = useState(false);
@@ -47,14 +48,13 @@ const PayBillPopup = (props) => {
   };
 
   useEffect(() => {
-    console.log(merchant);
   }, []);
 
   return (
     <div>
       <Popup accentedH1 bigBody close={props.close}>
         {paybillOTP ? (
-          <PayBillOTP close={props.close} invoice={editingInvoice} />
+          <PayBillOTP close={props.close} invoice={editingInvoice} show={props.show}/>
         ) : (
           <div>
             <h1>Pay {invoiceName} Bills</h1>
@@ -65,7 +65,6 @@ const PayBillPopup = (props) => {
                   searchBy: 'Mobile',
                 }}
                 onSubmit={async (values) => {
-                  console.log(values);
                   if (values.searchBy === 'Mobile') {
                     getUserInvoices(values.invoiceIdOrMobile).then((data) => {
                       setInvoiceList(data.list);
@@ -174,8 +173,11 @@ const PayBillPopup = (props) => {
                 invoiceList={invoiceList}
                 setEditingInvoice={(value, penalty) => handleSetEditingInvoice(value, penalty)}
                 close={props.close}
-                showOTPPopup={(values) => {
+                showOTPPopup={(values,invoices) => {
                   setEditingInvoice(values);
+                  setPayingInvoiceList(invoices);
+                  console.log(invoices);
+                  props.showReceiptPopup(invoices);
                   setPaybillOTP(true);
                 }}
               />
@@ -185,8 +187,10 @@ const PayBillPopup = (props) => {
             {displayInvoiceDetailForm ? (
               <PayBillsInvoiceDetails
                 merchantId={merchant._id}
-                showOTPPopup={(values) => {
+                showOTPPopup={(values,invoices) => {
+                  setPayingInvoiceList(invoices);
                   setEditingInvoice(values);
+                  props.showReceiptPopup(invoices);
                   setPaybillOTP(true);
                 }}
                 penalty={editingInvoicePenalty}

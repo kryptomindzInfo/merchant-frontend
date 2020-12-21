@@ -18,7 +18,6 @@ function CashierSettingsPage(props) {
   );
   const role = JSON.parse(localStorage.getItem('cashierLogged')).position.type;
   useEffect(() => {
-    console.log(cashierInfo);
   }, []); 
   return (
     <Wrapper>

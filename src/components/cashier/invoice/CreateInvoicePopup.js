@@ -170,7 +170,6 @@ function CreateInvoicePopup(props) {
                 setCreateUser(true);
                 return false;
               }
-              console.log(res);
               setUserName(res.data.customer.name);
               setUserEmail(res.data.customer.email);
               setUserCode(res.data.customer.customer_code);
@@ -197,7 +196,6 @@ function CreateInvoicePopup(props) {
   };
 
   const handleSubmit2 = async (values) => {
-    console.log(values.term);
     if (userName !== '') {
       values.name = userName;
     }
@@ -222,7 +220,6 @@ function CreateInvoicePopup(props) {
     }/${due.getFullYear()}`;
     values.bill_period = defaultBillPeriod;
     values.group_id = props.groupId;
-    console.log(values);
     if (props.type === 'create') {
       await createInvoice(props, values, 'draft');
     } else {
@@ -267,7 +264,6 @@ function CreateInvoicePopup(props) {
       });
       setDescList(list);
       // setLoading(false);
-      console.log(list);
     } else {
       const list = [];
       const obj = {
@@ -332,7 +328,6 @@ function CreateInvoicePopup(props) {
     amountset();
     refreshCounter();
     setLoading(false);
-    console.log(defaultBillPeriod);
   }, []);
 
   if (isLoading) {
@@ -359,7 +354,6 @@ function CreateInvoicePopup(props) {
           items: [],
         }}
         onSubmit={async (values) => {
-          console.log(values);
           if (userName !== '') {
             values.name = userName;
           }
@@ -389,13 +383,11 @@ function CreateInvoicePopup(props) {
           }/${due.getFullYear()}`;
           values.bill_period = defaultBillPeriod;
           values.group_id = props.groupId;
-          console.log(values);
           if (props.mode === 'invoice') {
             if (props.type === 'create') {
               await createInvoice(props, values, 'invoice').then(
                 async (err, data) => {
                   if (err) {
-                    console.log(err);
                     notify(err, 'error');
                   } else if (props.mode === 'invoice') {
                     await incCounter(props);
@@ -408,7 +400,6 @@ function CreateInvoicePopup(props) {
               await invoiceApi(props, values, 'update').then(
                 async (err, data) => {
                   if (err) {
-                    console.log(err);
                     notify(err, 'error');
                   } else if (props.mode === 'invoice') {
                     await incCounter(props);
@@ -420,7 +411,6 @@ function CreateInvoicePopup(props) {
             await createInvoice(props, values, 'invoice').then(
               async (err, data) => {
                 if (err) {
-                  console.log(err);
                   notify(err, 'error');
                 } else if (props.mode === 'invoice') {
                   await incCounter(props);

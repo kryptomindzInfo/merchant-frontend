@@ -49,7 +49,6 @@ function MerchantSubzoneListPage(props) {
   const refreshZoneDetails = async () => {
     setLoading(true);
     getZoneDetails().then((data) => {
-      console.log(data);
       setZoneName(data.zone_name);
       setSubzoneName(data.subzone_name);
       setLoading(data.loading);

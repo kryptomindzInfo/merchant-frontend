@@ -65,7 +65,7 @@ const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
   }
 };
 
-const payInvoice = async (values) => {
+const payInvoice = async (values,fun,fun2) => {
   try {
     const res = await axios.post(`${API_URL}/merchantStaff/payInvoice`, {
       ...values,
@@ -73,11 +73,15 @@ const payInvoice = async (values) => {
     if (res.status === 200) {
       if (res.data.status === 0) {
         toast.error(res.data.message);
+        fun2();
       } else {
+        fun2();
+        fun();
         toast.success(res.data.message);
       }
     }
   } catch (err) {
+    fun2();
     toast.error('Something went wrong');
   }
 };

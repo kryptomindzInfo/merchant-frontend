@@ -33,7 +33,6 @@ const StaffDashboardPage = (props) => {
   };
   useEffect(() => {
     getStats();
-    console.log(localStorage);
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
