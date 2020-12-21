@@ -20,6 +20,7 @@ import history from '../../utils/history';
 function MerchantSubzoneListPage(props) {
   const [addSubzonePopup, setAddSubzonePopup] = React.useState(false);
   const [subzoneList, setSubzoneList] = React.useState([]);
+  const [copySubzoneList, setCopySubzoneList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
@@ -27,6 +28,7 @@ function MerchantSubzoneListPage(props) {
   const [isLoading, setLoading] = React.useState(false);
   const { match } = props;
   const { id } = match.params;
+  console.log(id)
 
   const handleSubzonePopupClick = (type, subzone) => {
     setEditingSubzone(subzone);
@@ -42,6 +44,7 @@ function MerchantSubzoneListPage(props) {
     setLoading(true);
     fetchSubzoneListByZone(id).then((data) => {
       setSubzoneList(data.list);
+      setCopySubzoneList(data.list)
       setLoading(data.loading);
     });
   };
@@ -114,6 +117,21 @@ function MerchantSubzoneListPage(props) {
 
   const { name } = JSON.parse(localStorage.getItem('currentZone'));
 
+  const searchlistfunction = (value) => {
+    console.log(value)
+    // console.log(staff)
+    // console.log(branchList)
+
+    const newfilterdata = copySubzoneList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setSubzoneList(newfilterdata)
+
+
+  }
+
   return (
     <Wrapper>
       <Helmet>
@@ -133,7 +151,9 @@ function MerchantSubzoneListPage(props) {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Merchants" />
+              <input type="text" placeholder="Search Subzone" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
 
             <Button

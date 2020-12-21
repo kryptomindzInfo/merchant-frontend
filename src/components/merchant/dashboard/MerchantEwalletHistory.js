@@ -27,9 +27,11 @@ export default class MerchantEwalletHistory extends Component {
       perPage: 5,
       totalCount: 100,
       allhistory: [],
+      copyallhistory: [],
       activePage: 1,
       history: [],
       notification: '',
+      filtername: "All"
     };
   }
 
@@ -37,6 +39,7 @@ export default class MerchantEwalletHistory extends Component {
     setInterval(() => {
       this.getHistory();
     }, 2000);
+    // this.getHistory()
   }
 
   onChange(e) {
@@ -70,18 +73,58 @@ export default class MerchantEwalletHistory extends Component {
         if (res.status === 200) {
           // console.log(res.data);
           const history = res.data.history.reverse();
-          this.setState(
-            {
-              allhistory: history,
-              totalCount: res.data.history.length,
-            },
-            () => {
-              this.showHistory();
-            },
-          );
+          console.log("outside")
+          if (this.state.filtername == "All") {
+            // this.setState({ history: this.state.copyallhistory })
+            console.log("inside")
+            this.setState(
+              {
+                allhistory: history,
+                copyallhistory: history,
+                totalCount: res.data.history.length,
+              },
+              () => {
+                this.showHistory();
+              },
+            );
+          } else {
+            const filterdatavalue = history.filter((element) => {
+              return element.Value.tx_data.tx_type == this.state.filtername
+            })
+            console.log(filterdatavalue)
+            this.setState(
+              {
+                allhistory: filterdatavalue,
+                copyallhistory: filterdatavalue,
+                totalCount: filterdatavalue.length,
+              },
+              () => {
+                this.showHistory();
+              },
+            );
+            // console.log(this.state.allhistory)
+            // this.setState({ history: filterdatavalue })
+          }
+
+
+
+
+
+
+
+          // this.setState(
+          //   {
+          //     allhistory: history,
+          //     copyallhistory: history,
+          //     totalCount: res.data.history.length,
+          //   },
+          //   () => {
+          //     this.showHistory();
+          //   },
+          // );
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   getHistoryTotal = () => {
@@ -94,7 +137,7 @@ export default class MerchantEwalletHistory extends Component {
           });
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
   };
 
   handlePageChange = (pageNumber) => {
@@ -141,15 +184,20 @@ export default class MerchantEwalletHistory extends Component {
           </td>
           <td>
             <div className="labelBlue">{b.Value.tx_data.tx_details}</div>
-            <div className="labelSmallGrey">Completed</div>
+            {/* <div className="labelSmallGrey">Completed</div> */}
+            {b.Value.tx_data.tx_type == "DR" ? (
+              <div className="labelSmallGrey"><h2>Debit</h2></div>
+            ) : (
+                <div className="labelSmallGrey"><h2>Credit</h2></div>
+              )}
           </td>
           <td className="right">
             <div className="labelGrey">
               {b.Value.tx_data.tx_type === 'DR' ? (
                 <span>XOF -{b.Value.amount}</span>
               ) : (
-                <span>XOF {b.Value.amount}</span>
-              )}
+                  <span>XOF {b.Value.amount}</span>
+                )}
             </div>
           </td>
         </tr>
@@ -157,8 +205,31 @@ export default class MerchantEwalletHistory extends Component {
     });
   }
 
+  filterData = (value) => {
+    console.log("clck")
+    console.log(value)
+    this.setState({ filtername: value })
+
+    // if (value == "All") {
+    //   this.setState({ history: this.state.copyallhistory })
+    // } else {
+    //   const filterdatavalue = this.state.copyallhistory.filter((element) => {
+    //     return element.Value.tx_data.tx_type == value
+    //   })
+    //   console.log(filterdatavalue)
+    //   console.log(this.state.allhistory)
+    //   this.setState({ history: filterdatavalue })
+    // }
+
+
+
+
+  }
+
+
   render() {
     const dis = this;
+    console.log(this.state.allhistory)
     return (
       <Fragment>
         <Helmet>
@@ -175,13 +246,13 @@ export default class MerchantEwalletHistory extends Component {
                   <i className="material-icons">playlist_add_check</i>
                 </div>
                 <div className="cardHeaderRight">
-                  <h3>E-Wallet Transaction</h3>
+                  <h3>Merchant Transaction</h3>
                   <h5>E-wallet activity</h5>
                 </div>
               </div>
               <div className="cardBody">
                 <div className="clr">
-                  <div className="menuTabs" onClick={() => this.filterData('')}>
+                  <div className="menuTabs" onClick={() => this.filterData('All')}>
                     All
                   </div>
                   <div

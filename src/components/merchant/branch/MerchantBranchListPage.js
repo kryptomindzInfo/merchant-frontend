@@ -35,6 +35,7 @@ function MerchantBranchListPage(props) {
   const [isLoading, setLoading] = React.useState(false);
   const { match } = props;
   const { id } = match.params;
+  console.log(id)
 
   const handleBranchPopupClick = (type, merchant) => {
     setEditingBranch(merchant);
@@ -151,6 +152,11 @@ function MerchantBranchListPage(props) {
 
   }
 
+  const backlistfunciton = () => {
+    const get_id = localStorage.getItem("selectedZone")
+    history.push(`/merchant/${get_id}/subzones`)
+  }
+
   const { name } = JSON.parse(localStorage.getItem('currentZone'));
 
   return (
@@ -184,6 +190,17 @@ function MerchantBranchListPage(props) {
             >
               <AddIcon className="material-icons" />
               <span>Add Branch</span>
+            </Button>
+            <Button
+              className="addBankButton"
+              flex
+              // onClick={() => handleBranchPopupClick('new', {})}
+              onClick={() => {
+                backlistfunciton()
+              }}
+            >
+              {/* <AddIcon className="material-icons" /> */}
+              <span>Back</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
