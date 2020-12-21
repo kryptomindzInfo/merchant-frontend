@@ -120,16 +120,16 @@ function BranchCashierList(props) {
                     Unblock
                   </span>
                 ) : (
-                  <span
-                    onClick={() =>
-                      blockCashierApi('block', cashier._id).then(() =>
-                        refreshCashierList(),
-                      )
-                    }
-                  >
-                    Block
-                  </span>
-                )}
+                    <span
+                      onClick={() =>
+                        blockCashierApi('block', cashier._id).then(() =>
+                          refreshCashierList(),
+                        )
+                      }
+                    >
+                      Block
+                    </span>
+                  )}
               </div>
             </span>
           </td>
@@ -150,7 +150,7 @@ function BranchCashierList(props) {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Cashiers" />
+              <input type="text" placeholder="Search Staff" />
             </div>
           </ActionBar>
           <Card bigPadding>

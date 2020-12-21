@@ -78,8 +78,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
-          <KeyboardArrowLeft />
-        )}
+            <KeyboardArrowLeft />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -92,8 +92,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
-          <KeyboardArrowRight />
-        )}
+            <KeyboardArrowRight />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -183,7 +183,7 @@ const GroupListCard = (props) => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Groups" />
+              <input type="text" placeholder="Search Category" />
             </div>
             <Button
               className="addBankButton"

@@ -329,8 +329,8 @@ function EditBranchPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Update Branch</span>
-                  )}
+                      <span>Update Branch</span>
+                    )}
                 </Button>
               </Form>
             </div>

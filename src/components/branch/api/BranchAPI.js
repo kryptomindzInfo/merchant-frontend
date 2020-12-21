@@ -126,6 +126,14 @@ const blockCashierApi = async (apiType, id) => {
 };
 
 const editBranch = async (props, values) => {
+  console.log("click")
+  // const token = localStorage.getItem('cashierLogged');
+  // console.log(token)
+  // const token = JSON.parse(localStorage.getItem(`branchLogged`));
+  // console.log(token)
+  // let tkvalue = token.token;
+  // console.log(tkvalue)
+
   const API = 'editDetails';
   try {
     const res = await axios.post(`${API_URL}/merchantBranch/${API}`, {

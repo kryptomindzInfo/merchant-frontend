@@ -36,7 +36,7 @@ const MerchantHeader = (props) => {
       <Container>
         {page === 'info' ? (
           <A href={props.goto} float="left">
-            <Link>Back</Link>
+            <Link>Dashboard</Link>
           </A>
         ) : null}
 

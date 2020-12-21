@@ -76,13 +76,11 @@ function CreateInvoicePopup(props) {
   const [totalAmountWithoutTax, setTotalAmountWithoutTax] = React.useState(0);
   const [totalTax, setTotalTax] = React.useState(0);
   const today = new Date();
-  const date = `${
-    today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()
-  }/${
-    today.getMonth() + 1 < 10
+  const date = `${today.getDate() + 1 < 10 ? `0${today.getDate()}` : today.getDate()
+    }/${today.getMonth() + 1 < 10
       ? `0${today.getMonth() + 1}`
       : today.getMonth() + 1
-  }/${today.getFullYear()}`;
+    }/${today.getFullYear()}`;
 
   const refreshCounter = async () => {
     setLoading(true);
@@ -213,11 +211,9 @@ function CreateInvoicePopup(props) {
     values.amount = totalAmount;
     const due = new Date();
     due.setDate(due.getDate() + billTermList[values.term].days);
-    values.due_date = `${
-      due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
-    }/${
-      due.getMonth() + 1 < 10 ? `0${due.getMonth() + 1}` : due.getMonth() + 1
-    }/${due.getFullYear()}`;
+    values.due_date = `${due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
+      }/${due.getMonth() + 1 < 10 ? `0${due.getMonth() + 1}` : due.getMonth() + 1
+      }/${due.getFullYear()}`;
     values.bill_period = defaultBillPeriod;
     values.group_id = props.groupId;
     if (props.type === 'create') {
@@ -374,13 +370,11 @@ function CreateInvoicePopup(props) {
           values.is_validated = 1;
           const due = new Date();
           due.setDate(due.getDate() + billTermList[values.term].days);
-          values.due_date = `${
-            due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
-          }/${
-            due.getMonth() + 1 < 10
+          values.due_date = `${due.getDate() + 1 < 10 ? `0${due.getDate()}` : due.getDate()
+            }/${due.getMonth() + 1 < 10
               ? `0${due.getMonth() + 1}`
               : due.getMonth() + 1
-          }/${due.getFullYear()}`;
+            }/${due.getFullYear()}`;
           values.bill_period = defaultBillPeriod;
           values.group_id = props.groupId;
           if (props.mode === 'invoice') {
@@ -448,11 +442,11 @@ function CreateInvoicePopup(props) {
             <div>
               {props.mode === 'invoice' ? (
                 <h1>
-                  {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice'}
+                  {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice1'}
                 </h1>
               ) : (
-                <h1>Counter Invoice</h1>
-              )}
+                  <h1>Counter Invoice</h1>
+                )}
               <Form>
                 {props.mode === 'invoice' ? (
                   <Row>
@@ -548,100 +542,24 @@ function CreateInvoicePopup(props) {
                           />
                         </FormGroup>
                       ) : (
-                        <FormGroup>
-                          <label className="focused">Customer Code*</label>
-                          <TextInput
-                            type="text"
-                            name="customer_code"
-                            value={values.customer_code}
-                            placeholder={userCode}
-                          />
-                        </FormGroup>
-                      )}
+                          <FormGroup>
+                            <label className="focused">Customer Code*</label>
+                            <TextInput
+                              type="text"
+                              name="customer_code"
+                              value={values.customer_code}
+                              placeholder={userCode}
+                            />
+                          </FormGroup>
+                        )}
                     </Col>
                   </Row>
                 ) : (
-                  <Row>
-                    <Col cW="10%" mR="2%">
-                      <FormGroup>
-                        <SelectInput
-                          name="ccode"
-                          onFocus={(e) => {
-                            handleChange(e);
-                            inputFocus(e);
-                          }}
-                          onBlur={(e) => {
-                            handleBlur(e);
-                            handleChange(e);
-                            inputBlur(e);
-                          }}
-                          value={values.ccode}
-                          onChange={handleChange}
-                          required
-                          disabled
-                        >
-                          {countrySelectInput()}
-                        </SelectInput>
-                      </FormGroup>
-                    </Col>
-                    <Col cW="40%">
-                      <FormGroup>
-                        <label className="focused">Mobile Number*</label>
-                        <TextInput
-                          type="text"
-                          pattern="[0-9]{10}"
-                          title="10 Digit numeric value"
-                          name="mobile"
-                          onFocus={(e) => {
-                            handleChange(e);
-                            inputFocus(e);
-                          }}
-                          onBlur={(e) => {
-                            handleBlur(e);
-                            handleChange(e);
-                            inputBlur(e);
-                          }}
-                          value={values.mobile}
-                          onChange={(e) => {
-                            handleChange(e);
-                            getUser(e);
-                          }}
-                          required
-                          disabled
-                        />
-                        <ErrorMessage name="mobile" component={ErrorText} />
-                      </FormGroup>
-                    </Col>
-                    <Col cW="25%" mR="2%">
-                      <FormGroup>
-                        <label className="focused">Bill Number</label>
-                        <TextInput
-                          type="text"
-                          name="number"
-                          onFocus={(e) => {
-                            handleChange(e);
-                            inputFocus(e);
-                          }}
-                          onBlur={(e) => {
-                            handleBlur(e);
-                            handleChange(e);
-                            inputBlur(e);
-                          }}
-                          value={`${values.number}C`}
-                          placeholder={`${values.number}C`}
-                          onChange={handleChange}
-                          required
-                          disabled
-                        />
-                      </FormGroup>
-                    </Col>
-                    <Col cW="25%" mR="2%">
-                      {userCode === '' ? (
+                    <Row>
+                      <Col cW="10%" mR="2%">
                         <FormGroup>
-                          <label className="focused">Customer Code*</label>
-                          <TextInput
-                            type="text"
-                            name="customer_code"
+                          <SelectInput
+                            name="ccode"
                             onFocus={(e) => {
                               handleChange(e);
                               inputFocus(e);
@@ -651,26 +569,102 @@ function CreateInvoicePopup(props) {
                               handleChange(e);
                               inputBlur(e);
                             }}
-                            value={values.customer_code}
+                            value={values.ccode}
+                            onChange={handleChange}
+                            required
+                            disabled
+                          >
+                            {countrySelectInput()}
+                          </SelectInput>
+                        </FormGroup>
+                      </Col>
+                      <Col cW="40%">
+                        <FormGroup>
+                          <label className="focused">Mobile Number*</label>
+                          <TextInput
+                            type="text"
+                            pattern="[0-9]{10}"
+                            title="10 Digit numeric value"
+                            name="mobile"
+                            onFocus={(e) => {
+                              handleChange(e);
+                              inputFocus(e);
+                            }}
+                            onBlur={(e) => {
+                              handleBlur(e);
+                              handleChange(e);
+                              inputBlur(e);
+                            }}
+                            value={values.mobile}
+                            onChange={(e) => {
+                              handleChange(e);
+                              getUser(e);
+                            }}
+                            required
+                            disabled
+                          />
+                          <ErrorMessage name="mobile" component={ErrorText} />
+                        </FormGroup>
+                      </Col>
+                      <Col cW="25%" mR="2%">
+                        <FormGroup>
+                          <label className="focused">Bill Number</label>
+                          <TextInput
+                            type="text"
+                            name="number"
+                            onFocus={(e) => {
+                              handleChange(e);
+                              inputFocus(e);
+                            }}
+                            onBlur={(e) => {
+                              handleBlur(e);
+                              handleChange(e);
+                              inputBlur(e);
+                            }}
+                            value={`${values.number}C`}
+                            placeholder={`${values.number}C`}
                             onChange={handleChange}
                             required
                             disabled
                           />
                         </FormGroup>
-                      ) : (
-                        <FormGroup>
-                          <label className="focused">Customer Code*</label>
-                          <TextInput
-                            type="text"
-                            name="customer_code"
-                            value={values.customer_code}
-                            placeholder={userCode}
-                          />
-                        </FormGroup>
-                      )}
-                    </Col>
-                  </Row>
-                )}
+                      </Col>
+                      <Col cW="25%" mR="2%">
+                        {userCode === '' ? (
+                          <FormGroup>
+                            <label className="focused">Customer Code*</label>
+                            <TextInput
+                              type="text"
+                              name="customer_code"
+                              onFocus={(e) => {
+                                handleChange(e);
+                                inputFocus(e);
+                              }}
+                              onBlur={(e) => {
+                                handleBlur(e);
+                                handleChange(e);
+                                inputBlur(e);
+                              }}
+                              value={values.customer_code}
+                              onChange={handleChange}
+                              required
+                              disabled
+                            />
+                          </FormGroup>
+                        ) : (
+                            <FormGroup>
+                              <label className="focused">Customer Code*</label>
+                              <TextInput
+                                type="text"
+                                name="customer_code"
+                                value={values.customer_code}
+                                placeholder={userCode}
+                              />
+                            </FormGroup>
+                          )}
+                      </Col>
+                    </Row>
+                  )}
                 {props.mode === 'invoice' ? (
                   <Row>
                     <Col cW="15%" mR="2%">
@@ -695,16 +689,16 @@ function CreateInvoicePopup(props) {
                           />
                         </FormGroup>
                       ) : (
-                        <FormGroup>
-                          <label className="focused">Name*</label>
-                          <TextInput
-                            type="text"
-                            name="name"
-                            value={values.name}
-                            placeholder={userName}
-                          />
-                        </FormGroup>
-                      )}
+                          <FormGroup>
+                            <label className="focused">Name*</label>
+                            <TextInput
+                              type="text"
+                              name="name"
+                              value={values.name}
+                              placeholder={userName}
+                            />
+                          </FormGroup>
+                        )}
                     </Col>
                     <Col cW="15%" mR="2%">
                       {userLastName === '' ? (
@@ -728,16 +722,16 @@ function CreateInvoicePopup(props) {
                           />
                         </FormGroup>
                       ) : (
-                        <FormGroup>
-                          <label className="focused">Last Name*</label>
-                          <TextInput
-                            type="text"
-                            name="last_name"
-                            value={values.last_name}
-                            placeholder={userLastName}
-                          />
-                        </FormGroup>
-                      )}
+                          <FormGroup>
+                            <label className="focused">Last Name*</label>
+                            <TextInput
+                              type="text"
+                              name="last_name"
+                              value={values.last_name}
+                              placeholder={userLastName}
+                            />
+                          </FormGroup>
+                        )}
                     </Col>
                     <Col cW="25%" mR="2%">
                       {userEmail === '' ? (
@@ -761,16 +755,16 @@ function CreateInvoicePopup(props) {
                           />
                         </FormGroup>
                       ) : (
-                        <FormGroup>
-                          <label className="focused">Email*</label>
-                          <TextInput
-                            type="email"
-                            name="email"
-                            value={values.email}
-                            placeholder={userEmail}
-                          />
-                        </FormGroup>
-                      )}
+                          <FormGroup>
+                            <label className="focused">Email*</label>
+                            <TextInput
+                              type="email"
+                              name="email"
+                              value={values.email}
+                              placeholder={userEmail}
+                            />
+                          </FormGroup>
+                        )}
                     </Col>
                     <Col cW="25%" mR="2%">
                       {userAddress === '' ? (
@@ -794,16 +788,16 @@ function CreateInvoicePopup(props) {
                           />
                         </FormGroup>
                       ) : (
-                        <FormGroup>
-                          <label className="focused">Address</label>
-                          <TextInput
-                            type="text"
-                            name="address"
-                            value={values.address}
-                            placeholder={userAddress}
-                          />
-                        </FormGroup>
-                      )}
+                          <FormGroup>
+                            <label className="focused">Address</label>
+                            <TextInput
+                              type="text"
+                              name="address"
+                              value={values.address}
+                              placeholder={userAddress}
+                            />
+                          </FormGroup>
+                        )}
                     </Col>
                     <Col cW="20%">
                       {createUser ? (
@@ -828,166 +822,166 @@ function CreateInvoicePopup(props) {
                     </Col>
                   </Row>
                 ) : (
-                  <Row>
-                    <Col cW="15%" mR="2%">
-                      {userName === '' ? (
-                        <FormGroup>
-                          <label className="focused">Name*</label>
-                          <TextInput
-                            type="text"
-                            name="name"
-                            onFocus={(e) => {
-                              handleChange(e);
-                              inputFocus(e);
-                            }}
-                            onBlur={(e) => {
-                              handleBlur(e);
-                              handleChange(e);
-                              inputBlur(e);
-                            }}
-                            value={values.name}
-                            onChange={handleChange}
-                            required
-                            disabled
-                          />
-                        </FormGroup>
-                      ) : (
-                        <FormGroup>
-                          <label className="focused">Name*</label>
-                          <TextInput
-                            type="text"
-                            name="name"
-                            value={values.name}
-                            placeholder={userName}
-                          />
-                        </FormGroup>
-                      )}
-                    </Col>
-                    <Col cW="15%" mR="2%">
-                      {userLastName === '' ? (
-                        <FormGroup>
-                          <label className="focused">Last Name*</label>
-                          <TextInput
-                            type="text"
-                            name="last_name"
-                            onFocus={(e) => {
-                              handleChange(e);
-                              inputFocus(e);
-                            }}
-                            onBlur={(e) => {
-                              handleBlur(e);
-                              handleChange(e);
-                              inputBlur(e);
-                            }}
-                            value={values.last_name}
-                            onChange={handleChange}
-                            required
-                            disabled
-                          />
-                        </FormGroup>
-                      ) : (
-                        <FormGroup>
-                          <label className="focused">Last Name</label>
-                          <TextInput
-                            type="text"
-                            name="last_name"
-                            value={values.last_name}
-                            placeholder={userLastName}
-                          />
-                        </FormGroup>
-                      )}
-                    </Col>
-                    <Col cW="25%" mR="2%">
-                      {userEmail === '' ? (
-                        <FormGroup>
-                          <label className="focused">Email*</label>
-                          <TextInput
-                            type="email"
-                            name="email"
-                            onFocus={(e) => {
-                              handleChange(e);
-                              inputFocus(e);
-                            }}
-                            onBlur={(e) => {
-                              handleBlur(e);
-                              handleChange(e);
-                              inputBlur(e);
-                            }}
-                            value={values.email}
-                            onChange={handleChange}
-                            required
-                            disabled
-                          />
-                        </FormGroup>
-                      ) : (
-                        <FormGroup>
-                          <label className="focused">Email*</label>
-                          <TextInput
-                            type="email"
-                            name="email"
-                            value={values.email}
-                            placeholder={userEmail}
-                          />
-                        </FormGroup>
-                      )}
-                    </Col>
-                    <Col cW="25%" mR="2%">
-                      {userAddress === '' ? (
-                        <FormGroup>
-                          <label className="focused">Address*</label>
-                          <TextInput
-                            type="text"
-                            name="address"
-                            onFocus={(e) => {
-                              handleChange(e);
-                              inputFocus(e);
-                            }}
-                            onBlur={(e) => {
-                              handleBlur(e);
-                              handleChange(e);
-                              inputBlur(e);
-                            }}
-                            value={values.address}
-                            onChange={handleChange}
-                            required
-                            disabled
-                          />
-                        </FormGroup>
-                      ) : (
-                        <FormGroup>
-                          <label className="focused">Address*</label>
-                          <TextInput
-                            type="text"
-                            name="address"
-                            value={values.address}
-                            placeholder={userAddress}
-                          />
-                        </FormGroup>
-                      )}
-                    </Col>
-                    <Col cW="20%">
-                      {createUser ? (
-                        <FormGroup>
-                          <Button
-                            type="button"
-                            onClick={() => {
-                              handleSubmit3(values);
-                            }}
-                            marginTop="10px"
-                            style={{
-                              padding: '5px',
-                              fontFamily: 'Roboto, sans-serif',
-                              fontWeight: 500,
-                              marginBottom: '6px',
-                            }}
-                          >
-                            <span>Create Customer</span>
-                          </Button>
-                        </FormGroup>
-                      ) : null}
-                    </Col>
-                  </Row>
-                )}
+                    <Row>
+                      <Col cW="15%" mR="2%">
+                        {userName === '' ? (
+                          <FormGroup>
+                            <label className="focused">Name*</label>
+                            <TextInput
+                              type="text"
+                              name="name"
+                              onFocus={(e) => {
+                                handleChange(e);
+                                inputFocus(e);
+                              }}
+                              onBlur={(e) => {
+                                handleBlur(e);
+                                handleChange(e);
+                                inputBlur(e);
+                              }}
+                              value={values.name}
+                              onChange={handleChange}
+                              required
+                              disabled
+                            />
+                          </FormGroup>
+                        ) : (
+                            <FormGroup>
+                              <label className="focused">Name*</label>
+                              <TextInput
+                                type="text"
+                                name="name"
+                                value={values.name}
+                                placeholder={userName}
+                              />
+                            </FormGroup>
+                          )}
+                      </Col>
+                      <Col cW="15%" mR="2%">
+                        {userLastName === '' ? (
+                          <FormGroup>
+                            <label className="focused">Last Name*</label>
+                            <TextInput
+                              type="text"
+                              name="last_name"
+                              onFocus={(e) => {
+                                handleChange(e);
+                                inputFocus(e);
+                              }}
+                              onBlur={(e) => {
+                                handleBlur(e);
+                                handleChange(e);
+                                inputBlur(e);
+                              }}
+                              value={values.last_name}
+                              onChange={handleChange}
+                              required
+                              disabled
+                            />
+                          </FormGroup>
+                        ) : (
+                            <FormGroup>
+                              <label className="focused">Last Name</label>
+                              <TextInput
+                                type="text"
+                                name="last_name"
+                                value={values.last_name}
+                                placeholder={userLastName}
+                              />
+                            </FormGroup>
+                          )}
+                      </Col>
+                      <Col cW="25%" mR="2%">
+                        {userEmail === '' ? (
+                          <FormGroup>
+                            <label className="focused">Email*</label>
+                            <TextInput
+                              type="email"
+                              name="email"
+                              onFocus={(e) => {
+                                handleChange(e);
+                                inputFocus(e);
+                              }}
+                              onBlur={(e) => {
+                                handleBlur(e);
+                                handleChange(e);
+                                inputBlur(e);
+                              }}
+                              value={values.email}
+                              onChange={handleChange}
+                              required
+                              disabled
+                            />
+                          </FormGroup>
+                        ) : (
+                            <FormGroup>
+                              <label className="focused">Email*</label>
+                              <TextInput
+                                type="email"
+                                name="email"
+                                value={values.email}
+                                placeholder={userEmail}
+                              />
+                            </FormGroup>
+                          )}
+                      </Col>
+                      <Col cW="25%" mR="2%">
+                        {userAddress === '' ? (
+                          <FormGroup>
+                            <label className="focused">Address*</label>
+                            <TextInput
+                              type="text"
+                              name="address"
+                              onFocus={(e) => {
+                                handleChange(e);
+                                inputFocus(e);
+                              }}
+                              onBlur={(e) => {
+                                handleBlur(e);
+                                handleChange(e);
+                                inputBlur(e);
+                              }}
+                              value={values.address}
+                              onChange={handleChange}
+                              required
+                              disabled
+                            />
+                          </FormGroup>
+                        ) : (
+                            <FormGroup>
+                              <label className="focused">Address*</label>
+                              <TextInput
+                                type="text"
+                                name="address"
+                                value={values.address}
+                                placeholder={userAddress}
+                              />
+                            </FormGroup>
+                          )}
+                      </Col>
+                      <Col cW="20%">
+                        {createUser ? (
+                          <FormGroup>
+                            <Button
+                              type="button"
+                              onClick={() => {
+                                handleSubmit3(values);
+                              }}
+                              marginTop="10px"
+                              style={{
+                                padding: '5px',
+                                fontFamily: 'Roboto, sans-serif',
+                                fontWeight: 500,
+                                marginBottom: '6px',
+                              }}
+                            >
+                              <span>Create Customer</span>
+                            </Button>
+                          </FormGroup>
+                        ) : null}
+                      </Col>
+                    </Row>
+                  )}
                 <InvoiceDescription
                   offeringlist={offeringList}
                   taxlist={taxList}
@@ -1119,8 +1113,8 @@ function CreateInvoicePopup(props) {
                             color="primary"
                           />
                         ) : (
-                          <span>Save As Draft</span>
-                        )}
+                            <span>Save As Draft</span>
+                          )}
                         <span> Total XOF {totalAmount}</span>
                       </Button>
                     </Col>
@@ -1144,46 +1138,46 @@ function CreateInvoicePopup(props) {
                             color="primary"
                           />
                         ) : (
-                          <span>
-                            {' '}
-                            {props.type === 'update'
-                              ? 'Update and Validate Invoice'
-                              : 'Validate Invoice'}
-                          </span>
-                        )}
+                            <span>
+                              {' '}
+                              {props.type === 'update'
+                                ? 'Update and Validate Invoice'
+                                : 'Validate Invoice'}
+                            </span>
+                          )}
                         <span> Total XOF {totalAmount}</span>
                       </Button>
                     </Col>
                   </Row>
                 ) : (
-                  <Row>
-                    <Col cw="33%">
-                      <Button
-                        type="submit"
-                        disabled={isSubmitting}
-                        onClick={handleSubmit}
-                        filledBtn
-                        marginTop="10px"
-                        style={{
-                          padding: '5px',
-                          fontFamily: 'Roboto, sans-serif',
-                          fontWeight: 500,
-                        }}
-                      >
-                        {isSubmitting ? (
-                          <CircularProgress
-                            size={30}
-                            thickness={5}
-                            color="primary"
-                          />
-                        ) : (
-                          <span>Create Counter Invoice</span>
-                        )}
-                        <span> Total XOF {-totalAmount}</span>
-                      </Button>
-                    </Col>
-                  </Row>
-                )}
+                    <Row>
+                      <Col cw="33%">
+                        <Button
+                          type="submit"
+                          disabled={isSubmitting}
+                          onClick={handleSubmit}
+                          filledBtn
+                          marginTop="10px"
+                          style={{
+                            padding: '5px',
+                            fontFamily: 'Roboto, sans-serif',
+                            fontWeight: 500,
+                          }}
+                        >
+                          {isSubmitting ? (
+                            <CircularProgress
+                              size={30}
+                              thickness={5}
+                              color="primary"
+                            />
+                          ) : (
+                              <span>Create Counter Invoice</span>
+                            )}
+                          <span> Total XOF {-totalAmount}</span>
+                        </Button>
+                      </Col>
+                    </Row>
+                  )}
               </Form>
             </div>
           );

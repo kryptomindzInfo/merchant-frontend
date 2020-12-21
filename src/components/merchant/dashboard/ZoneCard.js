@@ -14,6 +14,7 @@ import history from '../../utils/history';
 function ZoneCard(props) {
   const [openZonePopup, setZonePopup] = React.useState(false);
   const [zoneList, setZoneList] = React.useState([]);
+  const [copyZoneList, setCopyZoneList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
   const [editingZone, setEditingZone] = React.useState({});
   const [zoneName, setZoneName] = React.useState('');
@@ -52,6 +53,7 @@ function ZoneCard(props) {
     const getZoneList = async () => {
       const data = await fetchZoneList();
       setZoneList(data.list);
+      setCopyZoneList(data.list)
       setLoading(data.loading);
     };
     getZoneList();
@@ -95,6 +97,22 @@ function ZoneCard(props) {
     });
   };
 
+
+  const searchlistfunction = (value) => {
+    console.log(value)
+    // console.log(staff)
+    console.log(copyZoneList)
+
+    const newfilterdata = copyZoneList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setZoneList(newfilterdata)
+
+
+  }
+
   return (
     <div style={{ marginBottom: '50px' }}>
       <ActionBar
@@ -106,7 +124,9 @@ function ZoneCard(props) {
           <i className="material-icons">
             <SearchIcon />
           </i>
-          <input type="text" placeholder="Search Zones" />
+          <input type="text" placeholder="Search Zones" onChange={(e) => {
+            searchlistfunction(e.target.value)
+          }} />
         </div>
 
         <Button

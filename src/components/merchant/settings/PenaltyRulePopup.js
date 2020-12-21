@@ -19,9 +19,18 @@ function PenaltyRulePopup(props) {
     correctFocus(props.type);
   }, []);
 
+
+  console.log(props.penaltyrule.percentage)
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
-      <h1>Edit Penalty Rule</h1>
+
+      {props.penaltyrule.percentage == undefined ? (
+        <h1>Create Penalty Rule</h1>
+      ) : (
+          <h1>Edit Penalty Rule</h1>
+        )}
+
+
       <Formik
         initialValues={{
           type: props.penaltyrule ? props.penaltyrule.type : '',
@@ -112,8 +121,8 @@ function PenaltyRulePopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Submit</span>
-                  )}
+                      <span>Submit</span>
+                    )}
                 </Button>
               </Form>
             </div>

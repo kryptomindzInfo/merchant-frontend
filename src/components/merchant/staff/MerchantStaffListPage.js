@@ -18,6 +18,7 @@ import Loader from '../../shared/Loader';
 
 const MerchantStaffListPage = () => {
   const [staff, setStaff] = useState([]);
+  const [staffCopy, setStaffCopy] = useState([]);
   const [showStaffPopup, setStaffPopup] = useState(false);
   const [popupType, setPopupType] = React.useState('new');
   const [isLoading, setLoading] = React.useState(false);
@@ -34,6 +35,7 @@ const MerchantStaffListPage = () => {
     const data = await fetchStaffList();
     console.log(data);
     setStaff(data.list);
+    setStaffCopy(data.list)
     setLoading(data.loading);
   };
 
@@ -79,16 +81,16 @@ const MerchantStaffListPage = () => {
                         Unblock
                       </span>
                     ) : (
-                      <span
-                        onClick={() =>
-                          blockStaffAPI('block', b._id).then(() =>
-                            refreshStaffList(),
-                          )
-                        }
-                      >
-                        Block
-                      </span>
-                    )}
+                        <span
+                          onClick={() =>
+                            blockStaffAPI('block', b._id).then(() =>
+                              refreshStaffList(),
+                            )
+                          }
+                        >
+                          Block
+                        </span>
+                      )}
                   </div>
                 </span>
               </Col>
@@ -102,6 +104,20 @@ const MerchantStaffListPage = () => {
 
   if (isLoading) {
     return <Loader fullPage />;
+  }
+
+  const searchlistfunction = (value) => {
+    console.log(value)
+    console.log(staff)
+
+    const newfilterdata = staffCopy.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+    // this.setState({ users: newfilterdata })
+    setStaff(newfilterdata)
+
+
   }
 
   return (
@@ -123,7 +139,9 @@ const MerchantStaffListPage = () => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Staff" />
+              <input type="text" placeholder="Search Staff" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
 
             <Button

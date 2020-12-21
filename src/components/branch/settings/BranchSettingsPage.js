@@ -30,20 +30,25 @@ function BranchSettingsPage(props) {
       <BranchHeader page="info" goto="/branch/dashboard" />
       <Container verticalMargin>
         <BranchSettingsSidebar active="info" />
+
         <Main>
           <ActionBar
             marginBottom="33px"
-            inputWidth="calc(100% - 241px)"
-            className="clr"
+            // inputWidth="calc(100% - 241px)"
+            // className="clr"
             style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'flex-end',
+              // display: 'flex',
+              // flexDirection: 'row',
+              // justifyContent: 'flex-end',
+              backgroundColor: ""
             }}
           >
+
+            <h2 style={{ margintop: "" }}>{branchInfo.name}</h2>
+
             <Button
               className="addBankButton"
-              style={{ padding: '8px' }}
+              style={{ padding: '2px' }}
               onClick={() => setEditBranchPopup(true)}
               flex
             >
@@ -105,22 +110,24 @@ function BranchSettingsPage(props) {
           </Card>
         </Main>
       </Container>
-      {editBranchPopup ? (
-        <EditBranchPopup
-          type="update"
-          branch={branchInfo}
-          refreshBranchList={(data) => {
-            setBranchInfo(data);
-            localStorage.setItem(
-              'branchLogged',
-              JSON.stringify({ details: data }),
-            );
-            window.location.reload();
-          }}
-          onClose={() => setEditBranchPopup(false)}
-        />
-      ) : null}
-    </Wrapper>
+      {
+        editBranchPopup ? (
+          <EditBranchPopup
+            type="update"
+            branch={branchInfo}
+            refreshBranchList={(data) => {
+              setBranchInfo(data);
+              localStorage.setItem(
+                'branchLogged',
+                JSON.stringify({ details: data }),
+              );
+              window.location.reload();
+            }}
+            onClose={() => setEditBranchPopup(false)}
+          />
+        ) : null
+      }
+    </Wrapper >
   );
 }
 

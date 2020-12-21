@@ -83,8 +83,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowRight />
         ) : (
-          <KeyboardArrowLeft />
-        )}
+            <KeyboardArrowLeft />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -97,8 +97,8 @@ function TablePaginationActions(props) {
         {theme.direction === 'rtl' ? (
           <KeyboardArrowLeft />
         ) : (
-          <KeyboardArrowRight />
-        )}
+            <KeyboardArrowRight />
+          )}
       </IconButton>
       <IconButton
         className={
@@ -129,6 +129,7 @@ const InvoiceListCard = (props) => {
   const [payBillsPopup, setPayBillsPopup] = useState(false);
   const [receiptPopup, setReceiptPopup] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
+  const [copyInvoiceList, setcopyInvoiceList] = useState([])
 
   const onPayBillsPopupClose = () => {
     refreshInvoiceList();
@@ -151,6 +152,7 @@ const InvoiceListCard = (props) => {
     fetchPaidInvoices()
       .then((data) => {
         setInvoiceList(data.list);
+        setcopyInvoiceList(data.list)
         props.setLoading(false);
         props.invoice(data.list);
       })
@@ -204,6 +206,20 @@ const InvoiceListCard = (props) => {
     });
   };
 
+  const searchlistfunction = (value) => {
+    console.log(value)
+
+
+    const newfilterdata = copyInvoiceList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setInvoiceList(newfilterdata)
+
+
+  }
+
   return (
     <Wrapper>
       <Container verticalMargin>
@@ -217,12 +233,14 @@ const InvoiceListCard = (props) => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Invoices" />
+              <input type="text" placeholder="Search Invoice Name" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
             <Button
               className="addBankButton"
               flex
-              onClick={() => {onPayBillsPopupOpen()}}
+              onClick={() => { onPayBillsPopupOpen() }}
             >
               <AddIcon className="material-icons" />
               <span>Pay Invoices</span>
@@ -242,7 +260,7 @@ const InvoiceListCard = (props) => {
               </div>
             </div>
             <div className="cardBody">
-            {invoiceList && invoiceList.length > 0 ? (
+              {invoiceList && invoiceList.length > 0 ? (
                 <Table marginTop="34px" smallTd>
                   <thead>
                     <tr>
@@ -257,15 +275,15 @@ const InvoiceListCard = (props) => {
                   <tbody>{getInvoices()}</tbody>
                 </Table>
               ) : (
-                <h3
-                  style={{
-                    textAlign: 'center',
-                    color: 'grey',
-                  }}
-                >
-                  No invoice found
-                </h3>
-              )}
+                  <h3
+                    style={{
+                      textAlign: 'center',
+                      color: 'grey',
+                    }}
+                  >
+                    No invoice found
+                  </h3>
+                )}
             </div>
           </Card>
         </Main>
@@ -288,8 +306,8 @@ const InvoiceListCard = (props) => {
         close={() => onReceiptClose()} 
       />
       ) : (
-        ''
-      )}
+          ''
+        )}
       {viewInvoicePopup ? (
         <ViewInvoicePopup
           invoice={viewingInvoice}
