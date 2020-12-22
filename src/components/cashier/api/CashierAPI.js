@@ -11,7 +11,6 @@ const getCountries = async () => {
     }
     return { list: [], loading: false };
   } catch (err) {
-    console.log(err.messages);
     return { list: [], loading: false };
   }
 };
@@ -97,7 +96,6 @@ const incCounter = async (props) => {
       notify(res.data.message, 'error');
     }
   } catch (err) {
-    console.log(err);
     notify('Something went wrong', 'error');
   }
 };
@@ -124,7 +122,6 @@ const fetchStats = async (type) => {
   try {
     const res = await axios.get(`${API_URL}/merchantStaff/${type}DashStatus`);
     if (res.status === 200) {
-      console.log(res);
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return { stats: {}, loading: false };
@@ -336,7 +333,6 @@ const processJson = (e, sendResult) => {
       header: true,
       skipEmptyLines: true,
       complete: async function demo(results) {
-        console.log(results.data);
         if (results.errors && results.errors.length > 0) {
           notify(
             'Error parsing csv file. Please check the format and try again.',

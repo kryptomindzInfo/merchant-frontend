@@ -31,7 +31,6 @@ class CashierNav extends Component {
 
   onPayBillsPopupOpen = () => {
     this.setState({ payBillsPopup: true });
-    console.log(this.state.payBillsPopup);
   }; 
 
   render() {

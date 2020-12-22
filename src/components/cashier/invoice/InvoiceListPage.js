@@ -176,13 +176,11 @@ function InvoiceListPage(props) {
           const mylist = data.list.filter((invoice) => {
             return invoice.group_id === id;
           });
-          console.log(mylist);
           setInvoices(mylist);
         } else {
           const otherlist = data.list.filter((invoice) => {
             return invoice.group_id !== id;
           });
-          console.log(otherlist);
           setInvoices(otherlist);
         }
         setLoading(false);

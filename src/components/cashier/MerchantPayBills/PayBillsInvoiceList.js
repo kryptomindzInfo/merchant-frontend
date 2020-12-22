@@ -15,6 +15,7 @@ const PayBillsInvoiceList = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [isButtonLoading, setButtonLoading] = useState(false);
   const [selectedInvoiceList, setSelectedInvoiceList] = useState([]);
+  const [payingInvoiceList, setPayingInvoiceList] = useState([]);
   const [penaltyList, setPenaltyList] = useState([]);
   const [penaltyRule, setPenaltyRule] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
@@ -35,9 +36,21 @@ const PayBillsInvoiceList = (props) => {
           id: counterInvoice[0]._id,
           penalty: 0,
         }
+        const obj4 = {
+          invoice: invoice,
+          penalty: penaltyList[index],
+        }
+        const obj3 = {
+          invoice: counterInvoice[0],
+          penalty: 0,
+        }
+        const paylist = [...payingInvoiceList];
+        paylist.push(obj3);
+        paylist.push(obj4);
         const list = [...selectedInvoiceList];
         list.push(obj1);
         list.push(obj2);
+        setPayingInvoiceList(paylist);
         setSelectedInvoiceList(list);
         setButtonLoading(false);
       } else {
@@ -46,20 +59,31 @@ const PayBillsInvoiceList = (props) => {
           id: invoice._id,
           penalty: penaltyList[index],
         }
+        const obj2 = {
+          invoice: invoice,
+          penalty: penaltyList[index],
+        }
+        const paylist = [...payingInvoiceList];
+        paylist.push(obj2);
         const list = [...selectedInvoiceList];
         list.push(obj1);
+        setPayingInvoiceList(paylist);
         setSelectedInvoiceList(list);
         setButtonLoading(false);
       }
     } else {
       if (invoice.has_counter_invoice === true) {
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
-        const list = selectedInvoiceList.filter((val) => val.id !== invoice._id && val.id !== counterInvoice[0]._id);
+        const list = selectedInvoiceList.filter((val) => val.id !== invoice._id &&  val.id !== counterInvoice[0]._id);
+        const paylist = payingInvoiceList.filter((val) => val.invoice.id !== invoice._id &&  val.invoive.id !== counterInvoice[0]._id);
+        setPayingInvoiceList(paylist);
         setSelectedInvoiceList(list);
         setTotalAmount(totalAmount - invoice.amount - counterInvoice[0].amount - penaltyList[index]);
         setButtonLoading(false);
       } else {
         const list = selectedInvoiceList.filter((val) => val.id !== invoice._id);
+        const paylist = payingInvoiceList.filter((val) => val.invoice.id !== invoice._id);
+        setPayingInvoiceList(paylist);
         setSelectedInvoiceList(list);
         setTotalAmount(totalAmount - invoice.amount - penaltyList[index]);
         setButtonLoading(false);
@@ -71,7 +95,7 @@ const PayBillsInvoiceList = (props) => {
     const obj = {
       invoices: selectedInvoiceList,
     }
-    props.showOTPPopup(obj);
+    props.showOTPPopup(obj,payingInvoiceList);
   };
 
   const getInvoiceList = () =>
@@ -164,9 +188,8 @@ const PayBillsInvoiceList = (props) => {
           // To calculate the time difference of two dates 
           var Difference_In_Time = currentDate.getTime() - dueDate.getTime();
           // To calculate the no. of days between two dates 
-          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));
-          console.log(currentDate, dueDate, Difference_In_Days);
-          return ((rule.fixed_amount + (invoice.amount * rule.percentage) / 100) * Difference_In_Days.toFixed(2));
+          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24));    
+          return ((rule.fixed_amount + (invoice.amount*rule.percentage)/100)*Difference_In_Days.toFixed(2));
         }
       }
     });
@@ -176,17 +199,14 @@ const PayBillsInvoiceList = (props) => {
 
   const fetchPenaltyRule = async () => {
     const data = await getPenaltyRule({});
-    console.log(data);
-    return (data.rule);
+    return(data.rule);
   }
 
   useEffect(() => {
     setLoading(true);
-    const getRule = async () => {
-      const res1 = await fetchPenaltyRule();
-      console.log(res1);
-      const res2 = await calculatePenalty(res1);
-      console.log(res2.res);
+    const getRule = async() => {
+      const res1= await fetchPenaltyRule();
+      const res2= await calculatePenalty(res1);
       setPenaltyList(res2.res);
       setLoading(res2.loading);
     }

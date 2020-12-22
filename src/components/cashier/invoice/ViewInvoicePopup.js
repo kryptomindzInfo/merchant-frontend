@@ -34,7 +34,6 @@ function ViewInvoicePopup(props) {
   };
 
   const getItems = () => {
-    console.log(props.invoice);
     return props.invoice.items.map((item) => {
       return (
         <tr key={item._id}>

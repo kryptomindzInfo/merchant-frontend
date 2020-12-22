@@ -80,7 +80,6 @@ const PopupBody = styled.div`
 
 class Popup extends Component {
   componentDidMount() {
-    console.log(this.props);
   }
 
   sendCloseSignal = (event) => {

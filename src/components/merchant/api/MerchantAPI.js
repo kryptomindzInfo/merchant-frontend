@@ -145,7 +145,6 @@ const subzoneAPI = async (props, values, apiType) => {
       notify(res.data.message, 'error');
     }
   } catch (e) {
-    console.log(e);
     notify('Something went wrong', 'error');
   }
 };
@@ -557,7 +556,6 @@ const getPenaltyRule = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
     if (res.status === 200) {
-      console.log(res);
       if (res.data.status === 0) {
         return { penalty_rule: {}, loading: false };
       }
@@ -598,7 +596,6 @@ const getBillTerms = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
     if (res.status === 200) {
-      console.log(res);
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return { list: [], default_bill_term: {}, loading: false };
@@ -727,7 +724,6 @@ const getZoneDetails = async () => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
     if (res.status === 200) {
-      console.log(res);
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return {
@@ -802,7 +798,6 @@ const BillDetails = async (props, values) => {
 
 const getRules = async (ruleType, type) => {
   try {
-    console.log(type);
     let URL = '';
     if (type === 'interbank') {
       URL = `${MERCHANT_API}/interBank/getRules`;

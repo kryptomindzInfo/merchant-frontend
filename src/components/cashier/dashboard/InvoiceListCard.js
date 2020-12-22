@@ -20,6 +20,7 @@ import Container from '../../shared/Container';
 import CreateGroupPopup from './CreateGroupPopup';
 import PayBillPopup from '../../cashier/MerchantPayBills/PayBillPopup';
 import Button from '../../shared/Button';
+import TransactionReceipt from './TransactionReciept';
 import history from '../../utils/history';
 import { fetchPaidInvoices } from '../api/CashierAPI';
 import { CURRENCY } from '../../constants';
@@ -121,10 +122,12 @@ TablePaginationActions.propTypes = {
 };
 
 const InvoiceListCard = (props) => {
+  const [receiptvalues, setReceiptvalues] = React.useState();
   const [addGroupPopup, setGroupPopup] = useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [viewingInvoice, setViewingInvoice] = React.useState({});
   const [payBillsPopup, setPayBillsPopup] = useState(false);
+  const [receiptPopup, setReceiptPopup] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
   const [copyInvoiceList, setcopyInvoiceList] = useState([])
 
@@ -135,6 +138,14 @@ const InvoiceListCard = (props) => {
 
   const onPayBillsPopupOpen = () => {
     setPayBillsPopup(true);
+  };
+
+  const onReceiptPopupOpen = () => {
+    setReceiptPopup(true);
+  };
+
+  const onReceiptClose = () => {
+    setReceiptPopup(false);
   };
 
   const refreshInvoiceList = () => {
@@ -278,7 +289,22 @@ const InvoiceListCard = (props) => {
         </Main>
       </Container>
       {payBillsPopup ? (
-        <PayBillPopup close={() => onPayBillsPopupClose()} />
+        <PayBillPopup
+          close={() => onPayBillsPopupClose()}
+          showReceiptPopup={(values) => {
+            console.log(values);
+            setReceiptvalues(values)
+          }}
+          show={onReceiptPopupOpen}
+        />
+      ) : (
+        ''
+      )}
+      {receiptPopup ? (
+        <TransactionReceipt
+        values={receiptvalues}
+        close={() => onReceiptClose()} 
+      />
       ) : (
           ''
         )}
