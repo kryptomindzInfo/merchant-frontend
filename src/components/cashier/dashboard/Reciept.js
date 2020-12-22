@@ -8,7 +8,10 @@ import Table from '../../Table';
 const date = new Date()
 
 export class Reciept extends Component {
-
+  componentDidMount() {
+    console.log(JSON.parse(localStorage.getItem('cashierLogged')).staff);
+    console.log(JSON.parse(localStorage.getItem('cashierLogged')).merchant);
+  }
   getInvoiceList = () =>
     this.props.values.map((node,index) => (
       <tr key={node.invoice._id}>
@@ -34,16 +37,13 @@ export class Reciept extends Component {
         </td>
       </tr>
     ));
-  componentDidMount() {
-    console.log(this.props.values);
-  }
     render() {
       return (
       <Container>
         <Row vAlign="flex-start">
-          <Col md="12">
+          <Col cW="100%">
          
-         `` <div
+          <div
               style={{
               fontSize: '34px',
               fontWeight: 'bold',
@@ -52,15 +52,39 @@ export class Reciept extends Component {
               color: '#417505',
             }}
           >
-              Transaction Receipt
+              {this.props.values.type} Transaction Receipt
             </div>
           <hr style={{border: '1px solid black'}}></hr>
-            <Row>
-              <Col className="popInfoLeft">Transaction ID :</Col>
+          <Row>
+            <Col cW="50%">
+              <Row>
+                <Col className="popInfoLeft">Transaction ID :</Col>
+                  <Col className="popInfoRight">
+                    67648821974200954
+                </Col>
+              </Row>
+              <Row>
+                <Col className="popInfoLeft">Transaction Date :</Col>
+                  <Col className="popInfoRight">
+                    {date.toLocaleDateString('en-US')}
+                </Col>
+              </Row>
+            </Col>
+            <Col cW="50%">
+              <Row>
+                <Col className="popInfoLeft">Merchant Name :</Col>
+                  <Col className="popInfoRight">
+                    {JSON.parse(localStorage.getItem('cashierLogged')).merchant.name}
+                </Col>
+              </Row>
+              <Row>
+                <Col className="popInfoLeft">Cashier Name :</Col>
                 <Col className="popInfoRight">
-                  67648821974200954
-              </Col>
-            </Row>
+                  {JSON.parse(localStorage.getItem('cashierLogged')).staff.name}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
           </Col>
         </Row>
         <hr style={{border: '1px solid black'}}></hr>
