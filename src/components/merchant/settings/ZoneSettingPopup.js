@@ -18,14 +18,15 @@ function ZoneSettingPopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   }, []);
+  console.log(props)
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <h1> Edit Zone and Subzone name </h1>
       <Formik
         initialValues={{
-          zone_name: '',
-          subzone_name: '',
+          zone_name: props.zonename || '',
+          subzone_name: props.subzonename || '',
         }}
         onSubmit={async (values) => {
           await ZoneDetails(props, values);
@@ -37,7 +38,7 @@ function ZoneSettingPopup(props) {
             <div>
               <Form>
                 <FormField textAlign="start" mB="14px" background="#fff">
-                  <label htmlFor="cdays">Zone Name*</label>
+                  {/* <label htmlFor="cdays">Zone Name*</label> */}
                   <Field
                     type="text"
                     name="zone_name"
@@ -56,7 +57,7 @@ function ZoneSettingPopup(props) {
                   <ErrorMessage name="zone_name" component={ErrorText} />
                 </FormField>
                 <FormField mB="14px" background="#fff">
-                  <label htmlFor="name">Subzone Name*</label>
+                  {/* <label htmlFor="name">Subzone Name*</label> */}
                   <Field
                     type="text"
                     name="subzone_name"
@@ -85,8 +86,8 @@ function ZoneSettingPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Submit</span>
-                  )}
+                      <span>Submit</span>
+                    )}
                 </Button>
               </Form>
             </div>

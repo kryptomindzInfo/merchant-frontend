@@ -60,13 +60,13 @@ const SharingRulesPage = (props) => {
             {rule.status === 0 ? (
               <span>{rule.name}</span>
             ) : (
-              <span>{rule.name}</span>
-            )}
+                <span>{rule.name}</span>
+              )}
           </td>
           <td className="tac">
             <span>
               {' '}
-              {rule.type === 'IBWM-C' || rule.type === 'IBWM-F' || rule.type === 'WM-C' || rule.type === 'WM-F' ? 'Wallet to Merchant': 'Non Wallet to Merchant'}
+              {rule.type === 'IBWM-C' || rule.type === 'IBWM-F' || rule.type === 'WM-C' || rule.type === 'WM-F' ? 'Wallet to Merchant' : 'Non Wallet to Merchant'}
               {/* {rule.type === 1 ? 'Non Wallet to Merchant' : ''}
               {rule.type === 2 ? 'Merchant Cashier to Merchant' : ''} */}
             </span>
@@ -99,8 +99,8 @@ const SharingRulesPage = (props) => {
             ) : rule.merchant_approve_status === 1 ? (
               <span>Approved</span>
             ) : (
-              <span>Declined</span>
-            )}
+                  <span>Declined</span>
+                )}
           </td>
         </tr>
       );
@@ -141,7 +141,7 @@ const SharingRulesPage = (props) => {
               </div>
               <div className="cardHeaderRight">
                 <h3>{props.ruleType} Rules</h3>
-                <h5>Fees created by the Bank</h5>
+                <h5><strong>Commission created by the Bank</strong></h5>
               </div>
             </div>
             <div className="cardBody">
@@ -215,23 +215,23 @@ const SharingRulesPage = (props) => {
                         <Loader />
                       </Button>
                     ) : (
-                      <Button
-                        filledBtn
-                        marginTop="50px"
-                        accentedBtn
-                        style={{ padding: '8px' }}
-                        type="button"
-                        onClick={() =>
-                          ruleAPI(props.bank, 'decline', {
-                            rule_id: ruleForApproval._id,
-                          }).then(() => {
-                            refreshRuleList();
-                          })
-                        }
-                      >
-                        <span>Decline</span>
-                      </Button>
-                    )}
+                        <Button
+                          filledBtn
+                          marginTop="50px"
+                          accentedBtn
+                          style={{ padding: '8px' }}
+                          type="button"
+                          onClick={() =>
+                            ruleAPI(props.bank, 'decline', {
+                              rule_id: ruleForApproval._id,
+                            }).then(() => {
+                              refreshRuleList();
+                            })
+                          }
+                        >
+                          <span>Decline</span>
+                        </Button>
+                      )}
                   </FormGroup>
                 </Col>
                 <Col>
@@ -241,22 +241,22 @@ const SharingRulesPage = (props) => {
                         <Loader />
                       </Button>
                     ) : (
-                      <Button
-                        onClick={() =>
-                          ruleAPI(props.bank, 'approve', {
-                            rule_id: ruleForApproval._id,
-                          }).then(() => {
-                            refreshRuleList();
-                          })
-                        }
-                        filledBtn
-                        marginTop="50px"
-                        style={{ padding: '8px' }}
-                        type="button"
-                      >
-                        <span>Approve</span>
-                      </Button>
-                    )}
+                        <Button
+                          onClick={() =>
+                            ruleAPI(props.bank, 'approve', {
+                              rule_id: ruleForApproval._id,
+                            }).then(() => {
+                              refreshRuleList();
+                            })
+                          }
+                          filledBtn
+                          marginTop="50px"
+                          style={{ padding: '8px' }}
+                          type="button"
+                        >
+                          <span>Approve</span>
+                        </Button>
+                      )}
                   </FormGroup>
                 </Col>
               </Row>

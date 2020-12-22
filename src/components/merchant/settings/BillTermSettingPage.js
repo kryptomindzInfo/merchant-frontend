@@ -67,6 +67,8 @@ const BillTermSettingPage = (props) => {
     refreshBillTermList();
   }, []);
 
+  console.log(defaultBillTerm)
+
   return (
     <Wrapper>
       <Helmet>
@@ -109,8 +111,8 @@ const BillTermSettingPage = (props) => {
                   Default Bill Term : {defaultBillTerm.name}
                 </h3>
               ) : (
-                <h3 style={{ margin: '6px' }}>Please set default bill term</h3>
-              )}
+                  <h3 style={{ margin: '6px' }}>Please set default bill term</h3>
+                )}
             </div>
             <Button
               className="addBankButton"
