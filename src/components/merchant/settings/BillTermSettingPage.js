@@ -18,6 +18,7 @@ import { getBillTerms } from '../api/MerchantAPI';
 const BillTermSettingPage = (props) => {
   const [addBillTermPopup, setAddBillTermPopup] = React.useState(false);
   const [billTermList, setBillTermList] = React.useState([]);
+  const [copyBillTermList, setCopyBillTermList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
   const [editingBillTerm, setEditingBillTerm] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
@@ -47,6 +48,7 @@ const BillTermSettingPage = (props) => {
     getBillTerms().then((data) => {
       console.log(data);
       setBillTermList(data.list);
+      setCopyBillTermList(data.list)
       setDefaultBillTerm(data.default_bill_term);
       setLoading(data.loading);
     });
@@ -68,6 +70,20 @@ const BillTermSettingPage = (props) => {
   }, []);
 
   console.log(defaultBillTerm)
+  const searchlistfunction = (value) => {
+    console.log(value)
+    console.log(copyBillTermList)
+
+
+    const newfilterdata = copyBillTermList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setBillTermList(newfilterdata)
+
+
+  }
 
   return (
     <Wrapper>
@@ -88,7 +104,9 @@ const BillTermSettingPage = (props) => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Bill Terms" />
+              <input type="text" placeholder="Search Bill Terms" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
 
             <Button

@@ -147,12 +147,16 @@ function OfferingCard(props) {
     const newfilterdata = copyofferingList.filter(element =>
       element.name.toLowerCase().includes(value.toLowerCase()),
     );
+    console.log(newfilterdata)
 
 
     setOfferingList(newfilterdata)
 
 
+
+
   }
+  console.log(offeringList.length)
 
   return (
     <div style={{ marginBottom: '50px' }}>

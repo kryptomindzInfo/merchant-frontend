@@ -17,9 +17,11 @@ import TextArea from '../../shared/TextArea';
 
 function DefaultBillPeriodPopup(props) {
   const [billPeriodName, setBillPeriodName] = React.useState();
+  const [hidetoggle, sethidetoggle] = React.useState(false)
 
   const handleChange = (e) => {
     console.log(e.target.value);
+    sethidetoggle(true)
     setBillPeriodName(e.target.value);
   };
 
@@ -33,15 +35,32 @@ function DefaultBillPeriodPopup(props) {
     await setDefaultBillPeriod(props, obj);
   };
 
+  useEffect(() => {
+
+    let indexvalue = props.periodlist.findIndex((value) => {
+      return value.period_name == props.billperiod.period_name
+    })
+    console.log(indexvalue)
+    // setBillTermName(indexvalue);
+    setBillPeriodName(props.periodlist[indexvalue].period_name)
+  }, []);
+
   const periodSelectInput = () => {
+    // console.log(billPeriodName)
     return props.periodlist.map((val, index) => {
       return (
-        <option key={val.period_name} value={index}>
-          {val.period_name}
-        </option>
+        <>
+          {billPeriodName != val.period_name &&
+            < option key={val.period_name} value={index}>
+              {val.period_name}
+            </option>
+          }
+        </>
       );
     });
   };
+
+  console.log(props.billperiod)
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
@@ -55,7 +74,10 @@ function DefaultBillPeriodPopup(props) {
           }}
           required
         >
-          <option value="">Select period</option>
+          {/* <option value="">Select period</option> */}
+          {hidetoggle ? "Select Term" : (
+            <option value="">{props.billperiod.period_name}</option>
+          )}
           {periodSelectInput()}
         </SelectInput>
       </FormGroup>
