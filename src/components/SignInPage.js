@@ -16,6 +16,9 @@ import ErrorText from './shared/ErrorText';
 import { inputBlur, inputFocus } from './utils/handleInputFocus';
 import { login } from './utils/LoginAPI';
 import { getUrlBasedOnType } from './utils/urlUtils';
+import CloseIcon from '@material-ui/icons/Visibility';
+import OpenIcon from '@material-ui/icons/VisibilityOff';
+import TextField from '@material-ui/core/TextField';
 
 const initialValues = {
   username: '',
@@ -30,6 +33,7 @@ const SignInPage = (props) => {
   const classes = styles();
   const [href, setHref] = React.useState('/merchant/forgot-password');
   const [isLoading, setLoading] = React.useState(false);
+  const [visiblity, setvisiblity] = React.useState(false)
   const { type, match } = props;
   const { name } = match.params;
 
@@ -115,24 +119,73 @@ const SignInPage = (props) => {
                     />
                     <ErrorMessage name="username" component={ErrorText} />
                   </FormField>
+                  {/* <FormField mB="14px">
+                    <div>
+                      <label htmlFor="password">Password</label>
+                      <Field
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        noMargin
+                        name="password"
+                        type="password"
+                        as={TextInput}
+                      />
+                      <ErrorMessage name="password" component={ErrorText} />
+                    </div>
+                  </FormField> */}
                   <FormField mB="14px">
-                    <label htmlFor="password">Password</label>
-                    <Field
-                      onFocus={(e) => {
-                        handleChange(e);
-                        inputFocus(e);
-                      }}
-                      onBlur={(e) => {
-                        handleBlur(e);
-                        handleChange(e);
-                        inputBlur(e);
-                      }}
-                      noMargin
-                      name="password"
-                      type="password"
-                      as={TextInput}
-                    />
-                    <ErrorMessage name="password" component={ErrorText} />
+                    <div style={{ backgroundColor: "" }}>
+                      <TextField
+                        name="password"
+                        label="Password"
+                        style={{ width: "100%", color: "", borderColor: "", backgroundColor: "" }}
+
+                        // value={this.state.password}
+                        type={visiblity ? 'text' : 'password'}
+                        // type="password"
+                        margin="normal"
+                        variant="outlined"
+                        as={TextInput}
+
+                        onChange={(e) => {
+                          handleChange(e)
+                        }}
+                        required
+                      />
+                      <span
+                        onClick={() => {
+                          // this.setState({ visiblity: !this.state.visiblity })
+                          setvisiblity(!visiblity)
+                          console.log("click")
+                        }}
+
+                        style={{
+                          position: 'relative',
+                          top: '-40px',
+                          left: "90%",
+
+                        }}
+                      >
+                        <i>
+                          {visiblity ? (
+                            <OpenIcon />
+
+                          ) : (
+                              < CloseIcon />
+                            )}
+
+
+                        </i>
+                      </span>
+                      <ErrorMessage name="password" component={ErrorText} />
+                    </div>
                   </FormField>
                   <Button
                     filledBtn

@@ -41,8 +41,8 @@ function UploadOfferingPopup(props) {
                     {values.document_hash ? (
                       <a className="uploadedImg" target="_BLANK" />
                     ) : (
-                      ' '
-                    )}
+                        ' '
+                      )}
                     <div
                       className="uploadTrigger"
                       onClick={() => triggerCsvBrowse('csv')}
@@ -65,14 +65,14 @@ function UploadOfferingPopup(props) {
                       {!values.document_hash ? (
                         <i className="material-icons">cloud_upload</i>
                       ) : (
-                        ' '
-                      )}
+                          ' '
+                        )}
                       <label>
                         {values.document_hash === '' ? (
                           <span>Uploaded File</span>
                         ) : (
-                          <span>Change File</span>
-                        )}
+                            <span>Change File</span>
+                          )}
                         *
                       </label>
                     </div>
@@ -102,8 +102,8 @@ function UploadOfferingPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Upload Offering</span>
-                  )}
+                      <span>Upload Offering</span>
+                    )}
                 </Button>
               </Form>
             </div>

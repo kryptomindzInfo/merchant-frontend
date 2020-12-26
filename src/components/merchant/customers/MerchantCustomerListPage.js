@@ -12,7 +12,7 @@ import Table from '../../shared/Table';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
 import UploadCustomerPopup from './UploadCustomerPopup';
-// import CreateCustomerPopup from './CreateCustomerPopup';
+import CreateCustomerPopup from './CreateCustomerPopup';
 import Card from '../../shared/Card';
 // import DeletePopup from '../../shared/DeletePopup';
 import { uploadCustomer, fetchCustomerList } from '../api/MerchantAPI';
@@ -20,6 +20,7 @@ import { uploadCustomer, fetchCustomerList } from '../api/MerchantAPI';
 const MerchantCustomerListPage = () => {
   const [addCustomerPopup, setAddCustomerPopup] = React.useState(false);
   const [customerList, setCustomerList] = React.useState([]);
+  const [copyCustomerList, setCopyCustomerList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
   const [editingCustomer, setEditingCustomer] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
@@ -40,6 +41,7 @@ const MerchantCustomerListPage = () => {
     setLoading(true);
     fetchCustomerList().then((data) => {
       setCustomerList(data.list);
+      setCopyCustomerList(data.list)
       setLoading(data.loading);
     });
   };
@@ -88,6 +90,13 @@ const MerchantCustomerListPage = () => {
     return <Loader fullPage />;
   }
 
+  const searchlistfunction = (value) => {
+    const newfilterdata = copyCustomerList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+    setCustomerList(newfilterdata)
+  }
+
   return (
     <Wrapper>
       <Helmet>
@@ -106,17 +115,23 @@ const MerchantCustomerListPage = () => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Customers" />
+              <input type="text" placeholder="Search Customers" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
 
-            {/* <Button
+            <Button
               className="addBankButton"
               flex
-              onClick={() => handleCustomerPopupClick('new', {})}
+              // onClick={() => handleCustomerPopupClick('new', {})}
+              onClick={() =>
+                setAddCustomerPopup(true)
+              }
+
             >
               <AddIcon className="material-icons" />
               <span>Create Customer</span>
-            </Button> */}
+            </Button>
             <Button
               className="addBankButton"
               flex
@@ -155,6 +170,7 @@ const MerchantCustomerListPage = () => {
           </Card>
         </Main>
       </Container>
+
       {/* {addCustomerPopup ? (
         <CreateCustomerPopup
           type={popupType}

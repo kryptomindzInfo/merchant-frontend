@@ -10,6 +10,7 @@ import { fetchOfferingList, deleteOffering } from '../api/MerchantAPI';
 import CreateOfferingPopup from './CreateOfferingPopup';
 import UploadOfferingPopup from './UploadOfferingPopup';
 import DeletePopup from '../../shared/DeletePopup';
+import { NextWeekRounded } from '@material-ui/icons';
 
 function OfferingCard(props) {
   const [offeringList, setOfferingList] = React.useState([]);
@@ -97,6 +98,35 @@ function OfferingCard(props) {
   useEffect(() => {
     refreshOfferingList();
   }, []);
+  const searchlistfunction = (value) => {
+    console.log(value)
+
+
+    const newfilterdata = copyofferingList.filter(element =>
+      element.name.toLowerCase().includes(value.toLowerCase()),
+    );
+    console.log(newfilterdata)
+    console.log(offeringList)
+    setOffering(newfilterdata)
+    const products = newfilterdata.filter((offering) => {
+      return offering.type === '0';
+    });
+    const services = newfilterdata.filter((offering) => {
+      return offering.type === '1';
+    });
+    setProductList(products);
+    setServiceList(services);
+
+
+
+
+
+
+
+
+
+
+  }
 
   const getOfferings = () => {
     return (toggleButton === 'product' ? productList : serviceList).map(
@@ -140,22 +170,7 @@ function OfferingCard(props) {
     );
   };
 
-  const searchlistfunction = (value) => {
-    console.log(value)
 
-
-    const newfilterdata = copyofferingList.filter(element =>
-      element.name.toLowerCase().includes(value.toLowerCase()),
-    );
-    console.log(newfilterdata)
-
-
-    setOfferingList(newfilterdata)
-
-
-
-
-  }
   console.log(offeringList.length)
 
   return (
