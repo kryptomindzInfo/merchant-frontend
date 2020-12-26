@@ -185,6 +185,8 @@ const MerchantCustomerListPage = () => {
           onClose={() => onUploadCustomerPopupClose()}
         />
       ) : null}
+
+
       {/* {deleteTaxPopup ? (
         <DeletePopup
           element={deletingTax}
