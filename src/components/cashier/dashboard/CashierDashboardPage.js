@@ -5,6 +5,7 @@ import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import TotalAmountCollectedCard from '../../shared/TotalAmountCollectedCard';
 import TotalPenaltyCollectedCard from '../../shared/TotalPenaltyCollectedCard';
 import InvoiceListCard from './InvoiceListCard';
+import SidebarCashier from '../../shared/sidebars/SidebarCashier';
 
 
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
@@ -55,7 +56,8 @@ const StaffDashboardPage = (props) => {
       </Helmet>
       <CashierHeader active="dashboard" />
       <Container verticalMargin>
-        <Main fullWidth>
+        <SidebarCashier/>
+        <Main>
           <Row>
             <InvoiceNumberCard no={stats.bills_paid} />
             <TotalAmountCollectedCard amount={stats.amount_collected} />
