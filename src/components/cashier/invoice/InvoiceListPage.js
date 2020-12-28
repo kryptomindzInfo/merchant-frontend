@@ -91,7 +91,9 @@ function InvoiceListPage(props) {
     getMerchantSettings().then((data) => {
       setDefaultBillPeriod(data.default_bill_period);
       setBillTermList(data.bill_term_list);
-      // setDefaultBillTerm(data.default_bill_term);
+      if (data.default_bill_term != undefined) {
+        setDefaultBillTerm(data.default_bill_term.name);
+      }
       setLoading(data.loading);
     });
   };
@@ -264,17 +266,17 @@ function InvoiceListPage(props) {
               </div>
             </td>
           ) : (
-            <td
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-              }}
-            >
-              <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
-                View
+              <td
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                }}
+              >
+                <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
+                  View
               </Button>
-            </td>
-          )}
+              </td>
+            )}
         </tr>
       );
     });
@@ -453,15 +455,15 @@ function InvoiceListPage(props) {
                   <tbody>{getInvoices()}</tbody>
                 </Table>
               ) : (
-                <h3
-                  style={{
-                    textAlign: 'center',
-                    color: 'grey',
-                  }}
-                >
-                  No invoice found
-                </h3>
-              )}
+                  <h3
+                    style={{
+                      textAlign: 'center',
+                      color: 'grey',
+                    }}
+                  >
+                    No invoice found
+                  </h3>
+                )}
             </div>
           </Card>
         </Main>

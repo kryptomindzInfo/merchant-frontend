@@ -7,6 +7,7 @@ import Typography from '@material-ui/core/Typography';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
 import UploadArea from '../../shared/UploadArea';
+import pdfimage from '../../../assets/images/pdf_icon.png'
 import { CONTRACT_URL, STATIC_URL } from '../../constants';
 import { onFileChange, triggerBrowse } from '../../shared/utils/FileUpload';
 import Button from '../../shared/Button';
@@ -23,6 +24,11 @@ function EditMerchantPopup(props) {
   useEffect(() => {
     correctFocus('update');
   });
+
+  console.log(STATIC_URL)
+  console.log(CONTRACT_URL)
+  console.log(props.merchant.logo)
+  console.log(props.merchant.document_hash)
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
@@ -211,8 +217,8 @@ function EditMerchantPopup(props) {
                         target="_BLANK"
                       />
                     ) : (
-                      ' '
-                    )}
+                        ' '
+                      )}
                     <div
                       className="uploadTrigger"
                       onClick={() => triggerBrowse('logo')}
@@ -227,14 +233,14 @@ function EditMerchantPopup(props) {
                       {!values.logo ? (
                         <i className="material-icons">cloud_upload</i>
                       ) : (
-                        ' '
-                      )}
+                          ' '
+                        )}
                       <label>
                         {values.logo === '' ? (
                           <span>Upload Logo</span>
                         ) : (
-                          <span>Change Logo</span>
-                        )}
+                            <span>Change Logo</span>
+                          )}
                         *
                       </label>
                     </div>
@@ -243,17 +249,19 @@ function EditMerchantPopup(props) {
                     {errors.logo && touched.logo ? errors.logo : ''}
                   </Typography>
                 </FormGroup>
+
                 <FormGroup>
-                  <UploadArea bgImg={`${STATIC_URL}main/pdf-icon.png`}>
+                  {/* <UploadArea bgImg={`${STATIC_URL}main/pdf-icon.png`}> */}
+                  <UploadArea bgImg={pdfimage}>
                     {values.document_hash ? (
                       <a
                         className="uploadedImg"
-                        href={CONTRACT_URL + values.document_hash}
+                        href={`http://91d90ac373dc.sn.mynetname.net:30880/ipfs/${values.document_hash}`}
                         target="_BLANK"
                       />
                     ) : (
-                      ' '
-                    )}
+                        ' '
+                      )}
                     <div
                       className="uploadTrigger"
                       onClick={() => triggerBrowse('document_hash')}
@@ -267,14 +275,14 @@ function EditMerchantPopup(props) {
                       {!values.document_hash ? (
                         <i className="material-icons">cloud_upload</i>
                       ) : (
-                        ' '
-                      )}
+                          ' '
+                        )}
                       <label>
                         {values.document_hash === '' ? (
                           <span>Uploaded Contract</span>
                         ) : (
-                          <span>Change Contract</span>
-                        )}
+                            <span>Change Contract</span>
+                          )}
                         *
                       </label>
                     </div>
@@ -294,8 +302,8 @@ function EditMerchantPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Update Merchant</span>
-                  )}
+                      <span>Update Merchant</span>
+                    )}
                 </Button>
               </Form>
             </div>

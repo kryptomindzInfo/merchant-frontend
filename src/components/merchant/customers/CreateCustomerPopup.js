@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Formik } from 'formik';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import * as Yup from 'yup';
@@ -14,30 +14,39 @@ import {
 } from '../../utils/handleInputFocus';
 
 function CreateCustomerPopup(props) {
+  const [merchant_id, setmerchant_id] = React.useState("");
+
   useEffect(() => {
+    const merchantLogged = JSON.parse(localStorage.getItem('merchantLogged'));
+    // console.log(merchantLogged)
+    setmerchant_id(merchantLogged.details._id)
     correctFocus(props.type);
   });
+
+  console.log(merchant_id)
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
           name: props.customer.name || '',
-          lastName: props.customer.lastName || '',
+          // lastName: props.customer.lastName || '',
           customer_code: props.customer.customer_code || '',
           mobile: props.customer.mobile || '',
           email: props.customer.email || '',
-          address: props.customer.address || '',
-          city: props.customer.city || '',
-          state: props.customer.state || '',
-          id_type: props.customer.id_type || '',
-          id_name: props.customer.id_name || '',
-          valid_till: props.customer.valid_till || '',
-          id_number: props.customer.id_number || '',
-          dob: props.customer.dob || '',
-          gender: props.customer.gender || '',
+          merchant_id: "5fcf6ff0bcc9b700079f132c",
+          // address: props.customer.address || '',
+          // city: props.customer.city || '',
+          // state: props.customer.state || '',
+          // id_type: props.customer.id_type || '',
+          // id_name: props.customer.id_name || '',
+          // valid_till: props.customer.valid_till || '',
+          // id_number: props.customer.id_number || '',
+          // dob: props.customer.dob || '',
+          // gender: props.customer.gender || '',
           document_hash: props.customer.document_hash || [],
         }}
         onSubmit={async (values) => {
+          console.log("vlaue")
           if (props.type === 'update') {
             values.customer_id = props.customer._id;
             await editTax(props, values);
@@ -47,20 +56,20 @@ function CreateCustomerPopup(props) {
         }}
         validationSchema={Yup.object().shape({
           name: Yup.string().required('Name is required'),
-          lastName: Yup.string().required('LastName is required'),
-					customer_code: Yup.string().required('Customer code is required'),
-					mobile: Yup.string().required('Mobile no is required'),
-					email: Yup.string().required('Email is required'),
-					address: Yup.string().required('Address is required'),
-					city: Yup.string().required('City is required'),
-					state: Yup.string().required('State is required'),
-					id_type: Yup.string().required('Id type is required'),
-					id_name: Yup.string().required('Id name is required'),
-					valid_till: Yup.string().required('Valid till is required'),
-					id_number: Yup.string().required('Id number is required'),
-					dob: Yup.string().required('Dob is required'),
-					gender: Yup.string().required('Gender is required'),
-					document_hash: Yup.string().required('Document is required'),	
+          // lastName: Yup.string().required('LastName is required'),
+          customer_code: Yup.string().required('Customer code is required'),
+          mobile: Yup.string().required('Mobile no is required'),
+          email: Yup.string().required('Email is required'),
+          // address: Yup.string().required('Address is required'),
+          // city: Yup.string().required('City is required'),
+          // state: Yup.string().required('State is required'),
+          // id_type: Yup.string().required('Id type is required'),
+          // id_name: Yup.string().required('Id name is required'),
+          // valid_till: Yup.string().required('Valid till is required'),
+          // id_number: Yup.string().required('Id number is required'),
+          // dob: Yup.string().required('Dob is required'),
+          // gender: Yup.string().required('Gender is required'),
+          // document_hash: Yup.string().required('Document is required'),
         })}
       >
         {(formikProps) => {
@@ -99,7 +108,7 @@ function CreateCustomerPopup(props) {
                     required
                   />
                 </FormGroup>
-                <FormGroup>
+                {/* <FormGroup>
                   <label>Last Name*</label>
                   <TextInput
                     type="text"
@@ -117,8 +126,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                <FormGroup>
                   <label>Customer code*</label>
                   <TextInput
                     type="text"
@@ -137,12 +146,12 @@ function CreateCustomerPopup(props) {
                     required
                   />
                 </FormGroup>
-								<FormGroup>
+                <FormGroup>
                   <label>Mobile*</label>
                   <TextInput
                     type="text"
-										name="mobile"
-										pattern="[0-9]{10}"
+                    name="mobile"
+                    pattern="[0-9]{10}"
                     title="10 Digit numeric value"
                     onFocus={(e) => {
                       handleChange(e);
@@ -158,7 +167,7 @@ function CreateCustomerPopup(props) {
                     required
                   />
                 </FormGroup>
-								<FormGroup>
+                <FormGroup>
                   <label>Email*</label>
                   <TextInput
                     type="email"
@@ -177,7 +186,7 @@ function CreateCustomerPopup(props) {
                     required
                   />
                 </FormGroup>
-								<FormGroup>
+                {/* <FormGroup>
                   <label>Address*</label>
                   <TextInput
                     type="text"
@@ -195,8 +204,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-                <FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>City*</label>
                   <TextInput
                     type="text"
@@ -214,8 +223,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>State*</label>
                   <TextInput
                     type="text"
@@ -233,8 +242,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>Id Type*</label>
                   <TextInput
                     type="text"
@@ -252,8 +261,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>Id Name*</label>
                   <TextInput
                     type="text"
@@ -271,8 +280,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>Valid till*</label>
                   <TextInput
                     type="text"
@@ -290,8 +299,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>Id Number*</label>
                   <TextInput
                     type="text"
@@ -309,8 +318,8 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
-								<FormGroup>
+                </FormGroup> */}
+                {/* <FormGroup>
                   <label>Id Number*</label>
                   <TextInput
                     type="text"
@@ -328,7 +337,7 @@ function CreateCustomerPopup(props) {
                     onChange={handleChange}
                     required
                   />
-                </FormGroup>
+                </FormGroup> */}
 
                 <Button
                   type="submit"
@@ -343,11 +352,11 @@ function CreateCustomerPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>
-                      {' '}
-                      {props.type === 'update' ? 'Edit TAx' : 'Create Tax'}
-                    </span>
-                  )}
+                      <span>
+                        {' '}
+                        {props.type === 'update' ? 'Edit Customer' : 'Create Customer'}
+                      </span>
+                    )}
                 </Button>
               </Form>
             </div>

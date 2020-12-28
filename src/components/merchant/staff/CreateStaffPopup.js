@@ -45,12 +45,14 @@ function CreateStaffPopup(props) {
     });
   };
 
+  console.log(props.staff.role)
+
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
         initialValues={{
           name: props.staff.name || '',
-          role: props.staff.role || '',
+          role: props.staff.role || 'staff',
           code: props.staff.name || '',
           logo: props.staff.logo || '',
           email: props.staff.email || '',
@@ -141,7 +143,8 @@ function CreateStaffPopup(props) {
                   onChange={handleChange}
                   required
                 >
-                  <option value="">Select Role*</option>
+
+                  {/* <option value="">Select Role*</option> */}
                   <option value="staff">Staff</option>
                   <option value="cashier">Cashier</option>
                 </SelectInput>

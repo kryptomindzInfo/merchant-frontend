@@ -19,6 +19,7 @@ import { getBillPeriods } from '../api/MerchantAPI';
 const BillPeriodSettingPage = (props) => {
   const [addBillPeriodPopup, setAddBillPeriodPopup] = React.useState(false);
   const [billPeriodList, setBillPeriodList] = React.useState([]);
+  const [copyBillPeriodList, setCopyBillPeriodList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
   const [nextPeriodStartDate, setNextPeriodStartDate] = React.useState(null);
   const [defaultBillPeriod, setDefaultBillPeriod] = React.useState({});
@@ -53,12 +54,12 @@ const BillPeriodSettingPage = (props) => {
       if (data.list.length > 0) {
         const startdate = new Date(data.list[data.list.length - 1].end_date);
         startdate.setDate(startdate.getDate() + 1);
-        const nextStartDate = `${startdate.getDate()}/${
-          startdate.getMonth() + 1
-        }/${startdate.getFullYear()}`;
+        const nextStartDate = `${startdate.getDate()}/${startdate.getMonth() + 1
+          }/${startdate.getFullYear()}`;
         setNextPeriodStartDate(nextStartDate);
       }
       setBillPeriodList(data.list);
+      setCopyBillPeriodList(data.list)
       setDefaultBillPeriod(data.default_bill_period);
       setLoading(data.loading);
     });
@@ -86,6 +87,21 @@ const BillPeriodSettingPage = (props) => {
     refreshBillPeriodList();
   }, []);
 
+  const searchlistfunction = (value) => {
+    console.log(value)
+    console.log(copyBillPeriodList)
+
+
+    const newfilterdata = copyBillPeriodList.filter(element =>
+      element.period_name.toLowerCase().includes(value.toLowerCase()),
+    );
+
+
+    setBillPeriodList(newfilterdata)
+
+
+  }
+
   return (
     <Wrapper>
       <Helmet>
@@ -105,7 +121,9 @@ const BillPeriodSettingPage = (props) => {
               <i className="material-icons">
                 <SearchIcon />
               </i>
-              <input type="text" placeholder="Search Bill Periods" />
+              <input type="text" placeholder="Search Bill Periods" onChange={(e) => {
+                searchlistfunction(e.target.value)
+              }} />
             </div>
 
             <Button
@@ -128,8 +146,8 @@ const BillPeriodSettingPage = (props) => {
                   Default Period : {defaultBillPeriod.period_name}
                 </h3>
               ) : (
-                <h3 style={{ margin: '6px' }}>Please set default period</h3>
-              )}
+                  <h3 style={{ margin: '6px' }}>Please set default period</h3>
+                )}
             </div>
             <Button
               className="addBankButton"

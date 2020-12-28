@@ -69,6 +69,7 @@ function CreateInvoicePopup(props) {
   );
   const [billTermList, setBilltermList] = React.useState(props.termlist);
   const [defaultBillTerm, setDefaultBillTerm] = React.useState({});
+  const [defaultselectterm, setdefaultselectterm] = React.useState("")
   const [countryList, setCountryList] = React.useState(props.countrylist);
   const [defaultCountry, setDefaultCountry] = React.useState(
     props.defaultcountry,
@@ -90,6 +91,10 @@ function CreateInvoicePopup(props) {
       // setLoading(data.loading);
     });
   };
+
+
+
+
 
   const dbillterm = () => {
     return props.termlist.reduce((a, b) => {
@@ -324,11 +329,26 @@ function CreateInvoicePopup(props) {
     amountset();
     refreshCounter();
     setLoading(false);
+
+    console.log(props.termlist)
+    console.log(props.defaultterm)
+    const index = props.termlist.findIndex(value => {
+      return value.name == props.defaultterm
+    })
+    console.log(index)
+    setdefaultselectterm(index)
+
+
   }, []);
 
   if (isLoading) {
     return <Loader />;
   }
+
+
+
+
+
 
   return (
     <Popup accentedH1 bigBody close={props.onClose.bind(this)}>
@@ -340,7 +360,8 @@ function CreateInvoicePopup(props) {
           address: props.invoice.address || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
-          term: props.invoice.term || Number,
+          // term: props.invoice.term || Number,
+          term: props.invoice.term || defaultselectterm,
           bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
           mobile: props.invoice.mobile || '',
@@ -442,7 +463,7 @@ function CreateInvoicePopup(props) {
             <div>
               {props.mode === 'invoice' ? (
                 <h1>
-                  {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice1'}
+                  {props.type === 'update' ? 'Edit Invoice' : 'Create Invoice'}
                 </h1>
               ) : (
                   <h1>Counter Invoice</h1>
@@ -1041,6 +1062,7 @@ function CreateInvoicePopup(props) {
                       />
                     </FormGroup>
                   </Col>
+
                   <Col cW="33%" mR="2%">
                     <FormGroup>
                       <SelectInput

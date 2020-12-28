@@ -102,6 +102,8 @@ const ZoneSettingPage = (props) => {
         <ZoneSettingPopup
           refreszonedetails={(data) => refreshZoneDetails(data)}
           onClose={() => onZonePopupClose()}
+          zonename={zoneName}
+          subzonename={subzoneName}
         />
       ) : null}
     </Wrapper>
