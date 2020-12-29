@@ -24,7 +24,7 @@ import TextField from '@material-ui/core/TextField';
 const token = localStorage.getItem('cashierLogged');
 const email = localStorage.getItem('cashierEmail');
 const mobile = localStorage.getItem('cashierMobile');
-const cid = JSON.parse(localStorage.getItem('cashierLogged')).staff._id;
+const cid = JSON.parse(localStorage.getItem('cashierLogged')).position._id;
 
 const styles = theme => ({
   currencyElement: {
@@ -99,7 +99,7 @@ class CashierClosingBalance extends Component {
     axios
       .post(`${API_URL}/getAll`, {
         page: 'cashierledger',
-        type: 'cashier',
+        type: 'merchantPosition',
         where: { trans_type: 'CB', cashier_id: this.state.cid },
       })
       .then(res => {
@@ -436,6 +436,7 @@ class CashierClosingBalance extends Component {
       });
   };
   componentDidMount() {
+    console.log(JSON.parse(localStorage.getItem('cashierLogged')));
     this.getStats();
     this.getDashStats();
     axios

@@ -15,11 +15,11 @@ import { API_URL, CURRENCY } from '../../constants';
 
 import notify from '../../utils/Notify';
 const token = localStorage.getItem('cashierLogged');
-const cid = localStorage.getItem('cashierId');
+const cid = JSON.parse(localStorage.getItem('cashierLogged')).position._id;
 const email = localStorage.getItem('cashierEmail');
-const mobile = localStorage.getItem('cashierMobile');
-const branchID = localStorage.getItem('cashierBranch');
-const cashierName = localStorage.getItem('cashierName');
+const mobile = JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile;
+const branchID = JSON.parse(localStorage.getItem('cashierLogged')).branch._id;
+const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).position.name;
 
 class CashierCashInHand extends Component {
   constructor() {
@@ -94,10 +94,9 @@ class CashierCashInHand extends Component {
       verifySendMoneyOTPLoading: true,
     });
     axios
-      .post(`${API_URL}/cashierCancelTransfer`, {
+      .post(`${API_URL}/merchantStaff/cashierCancelTransfer`, {
         otpId: this.state.otpId,
         otp: this.state.otp,
-        token,
         transfer_id: this.state.cancelId
       })
       .then(res => {
@@ -136,10 +135,9 @@ class CashierCashInHand extends Component {
       verifySendMoneyOTPLoading: true,
     });
     axios
-      .post(`${API_URL}/cashierAcceptIncoming`, {
+      .post(`${API_URL}/merchantStaff/cashierAcceptIncoming`, {
         otpId: this.state.otpId,
         otp: this.state.otp,
-        token,
         item: this.state.acceptId
       })
       .then(res => {
@@ -190,9 +188,8 @@ class CashierCashInHand extends Component {
         email: this.state.otpEmail,
         mobile: this.state.otpMobile,
         page: this.state.otpOpt,
-        type: 'cashier',
+        type: 'merchantPosition',
         txt: this.state.otpTxt,
-        token,
       })
       .then(res => {
         if (res.status == 200) {
@@ -248,10 +245,9 @@ class CashierCashInHand extends Component {
       verifySendMoneyOTPLoading: true,
     });
     axios
-      .post(`${API_URL}/cashierTransferMoney`, {
+      .post(`${API_URL}/merchantStaff/cashierTransferMoney`, {
         otpId: this.state.otpId,
         otp: this.state.otp,
-        token,
         amount: this.state.amount,
         sender_id: cid,
         sender_name: cashierName,
@@ -345,8 +341,7 @@ class CashierCashInHand extends Component {
 
   getTransHistory = () => {
     axios
-      .post(`${API_URL}/getCashierTransfers`, {
-        token: token
+      .post(`${API_URL}/merchantStaff/getCashierTransfers`, {
       })
       .then(res => {
         if (res.status == 200) {
@@ -420,16 +415,15 @@ class CashierCashInHand extends Component {
   };
 
   getCashiers = () => {
-    console.log(this.state.branch_id);
+    console.log(branchID);
     axios
       .post(`${API_URL}/getAll`, {
-        token: token,
-        page: "cashier",
-        type: "cashier",
+        page: "merchantPosition",
+        type: "merchantPosition",
         where: {
-          // branch_id: branchID,
+          branch_id: branchID,
+          type: 'cashier',
           _id: { $ne: cid },
-          is_closed: false
         }
       })
       .then(res => {
