@@ -14,18 +14,18 @@ import Table from '../../shared/Table';
 import { API_URL, CURRENCY } from '../../constants';
 
 import notify from '../../utils/Notify';
-const token = localStorage.getItem('cashierLogged');
-const cid = JSON.parse(localStorage.getItem('cashierLogged')).position._id;
-const email = localStorage.getItem('cashierEmail');
-const mobile = JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile;
-const branchID = JSON.parse(localStorage.getItem('cashierLogged')).branch._id;
-const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).position.name;
+
 
 class CashierCashInHand extends Component {
   constructor() {
     super();
     this.state = {
       balance: 0,
+      cid: JSON.parse(localStorage.getItem('cashierLogged')).position._id,
+      branchID: JSON.parse(localStorage.getItem('cashierLogged')).branch._id,
+      cashierName: JSON.parse(localStorage.getItem('cashierLogged')).position.name,
+      email: JSON.parse(localStorage.getItem('cashierLogged')).staff.email,
+      mobile: JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile,
       incoming: []
     }
   }
@@ -76,8 +76,8 @@ class CashierCashInHand extends Component {
         showCancelOtp: true,
         otp: '',
         otpOpt: 'cashierCancelTransfer',
-        otpEmail: email,
-        otpMobile: mobile,
+        otpEmail: this.state.email,
+        otpMobile: this.state.mobile,
         otpTxt: 'Your OTP to add cancel the transfer '
       },
       () => {
@@ -225,8 +225,8 @@ class CashierCashInHand extends Component {
           showSendMoneyOTP: true,
           otp: '',
           otpOpt: 'cashierTransferMoney',
-          otpEmail: email,
-          otpMobile: mobile,
+          otpEmail: this.state.email,
+          otpMobile: this.state.mobile,
           otpTxt: 'Your OTP to add transfer money is '
         },
         () => {
@@ -249,15 +249,15 @@ class CashierCashInHand extends Component {
         otpId: this.state.otpId,
         otp: this.state.otp,
         amount: this.state.amount,
-        sender_id: cid,
-        sender_name: cashierName,
+        sender_id: this.state.cid,
+        sender_name: this.state.cashierName,
         receiver_id: receiver[0],
         receiver_name: receiver[1]
       })
       .then(res => {
         if (res.status == 200) {
-          if (res.data.error) {
-            throw res.data.error;
+          if (res.data.status==0) {
+            throw res.data.message;
           } else {
             notify('Transaction Successfully Done', 'success');
             this.closePopup();
@@ -289,8 +289,8 @@ class CashierCashInHand extends Component {
         showAcceptOtp: true,
         otp: '',
         otpOpt: 'cashierAcceptTransfer',
-        otpEmail: email,
-        otpMobile: mobile,
+        otpEmail: this.state.email,
+        otpMobile: this.state.mobile,
         otpTxt: 'Your OTP to accept the transfer '
       },
       () => {
@@ -415,15 +415,14 @@ class CashierCashInHand extends Component {
   };
 
   getCashiers = () => {
-    console.log(branchID);
     axios
       .post(`${API_URL}/getAll`, {
         page: "merchantPosition",
         type: "merchantPosition",
         where: {
-          branch_id: branchID,
+          branch_id: this.state.branchID,
           type: 'cashier',
-          _id: { $ne: cid },
+          _id: { $ne: this.state.cid },
         }
       })
       .then(res => {
@@ -690,7 +689,7 @@ class CashierCashInHand extends Component {
                               <td>
                                 <div className="labelBlue">
                                   {
-                                    b.sender_id == cid ?
+                                    b.sender_id === JSON.parse(localStorage.getItem('cashierLogged')).position._id ?
                                       <span>Transfered {CURRENCY} {b.amount} to {b.receiver_name}</span>
                                       :
                                       <span>Received {CURRENCY} {b.amount} from {b.sender_name}</span>

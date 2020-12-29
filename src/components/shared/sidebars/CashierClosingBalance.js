@@ -22,9 +22,7 @@ import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
 const token = localStorage.getItem('cashierLogged');
-const email = localStorage.getItem('cashierEmail');
-const mobile = localStorage.getItem('cashierMobile');
-const cid = JSON.parse(localStorage.getItem('cashierLogged')).position._id;
+
 
 const styles = theme => ({
   currencyElement: {
@@ -44,14 +42,14 @@ class CashierClosingBalance extends Component {
       balance2: 0,
       total: 0,
       cashInHand: 0,
-      cid: cid,
+      cid: JSON.parse(localStorage.getItem('cashierLogged')).position._id,
       popup: false,
       showOtp: false,
       assignPop: false,
       agree: false,
       token,
-      otpEmail: email,
-      otpMobile: mobile,
+      otpEmail: JSON.parse(localStorage.getItem('cashierLogged')).staff.email,
+      otpMobile: JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile,
       openCashierPopup: false,
       denomination: [],
       // denominationValue: [],
@@ -291,7 +289,6 @@ class CashierClosingBalance extends Component {
         page: this.state.otpOpt,
         type: 'cashier',
         txt: this.state.otpTxt,
-        token,
       })
       .then(res => {
         if (res.status == 200) {

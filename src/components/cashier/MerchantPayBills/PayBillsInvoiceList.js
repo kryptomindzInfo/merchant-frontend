@@ -180,7 +180,7 @@ const PayBillsInvoiceList = (props) => {
       const datesplit = invoice.due_date.split("/");
       const dueDate = new Date(datesplit[2], datesplit[1] - 1, datesplit[0]);
       if (currentDate <= dueDate) {
-        return (0);
+        return (10);
       } else {
         if (rule.type === 'once') {
           return (rule.fixed_amount + (invoice.amount * rule.percentage) / 100);
