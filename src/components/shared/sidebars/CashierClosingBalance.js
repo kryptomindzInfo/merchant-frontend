@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import Table from '../../shared/Table';
-import Card from '../../shared/Card';
-import Button from '../../shared/Button';
+import Card from '../../shared/CashierCard';
+import Button from '../../shared/Cashierbutton';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import Popup from '../../shared/Popup';
@@ -132,6 +132,7 @@ class CashierClosingBalance extends Component {
     this.setState({
       popup: false,
       editPopup: false,
+      agree:false,
       assignPop: false,
       openingPopup: false,
       historyPop: false,
@@ -329,8 +330,8 @@ class CashierClosingBalance extends Component {
       .post(`${API_URL}/merchantStaff/openCashierBalance`, {})
       .then(res => {
         if (res.status == 200) {
-          if (res.data.error) {
-            throw res.data.error;
+          if (res.data.status===0) {
+            throw res.data.message;
           } else {
             notify('Cashier opened successfully!', 'success');
             this.setState(
@@ -338,7 +339,6 @@ class CashierClosingBalance extends Component {
                 notification: 'Cashier opened successfully!',
               },
               function() {
-                this.success();
                 this.closePopup();
                 this.getStats();
               },
@@ -405,7 +405,6 @@ class CashierClosingBalance extends Component {
                 notification: 'Closing balance submitted successfully!',
               },
               function() {
-                this.success();
                 this.closePopup();
                 this.getStats();
                 var dis = this;
@@ -510,29 +509,25 @@ class CashierClosingBalance extends Component {
           <Col>
           {
           this.state.transactionStarted && !this.state.isClosed? (
-          <button className="sendMoneyButton" disabled >
-            <i className="material-icons">send</i>
+          <Button className="sendMoneyButton disabled"  disabled >
             Open my day
-          </button>
+          </Button>
         ) : (
-          <button className="sendMoneyButton" onClick={this.openCashier}>
-            <i className="material-icons">send</i>
+          <Button className="sendMoneyButton"  onClick={this.openCashier}>
             Open my day
-          </button>
+          </Button>
         )}
           </Col>
           <Col>
           {
           this.state.transactionStarted && !this.state.isClosed? (
-          <button className="sendMoneyButton" onClick={this.showOpeningPopup}>
-            <i className="material-icons">send</i>
+          <Button className="sendMoneyButton" noMin onClick={this.showOpeningPopup}>
             Close my day
-          </button>
+          </Button>
         ) : (
-          <button className="sendMoneyButton" disabled>
-            <i className="material-icons">send</i>
+          <Button className="sendMoneyButton disabled" noMin disabled>
             Close my day
-          </button>
+          </Button>
         )}
           </Col>
         </Row>

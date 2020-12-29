@@ -507,7 +507,7 @@ class CashierCashInHand extends Component {
               className="sendMoneybutton"
               noMin
               onClick={this.showPopupSendMoney}
-
+              style={{padding:'6px'}}
             >
               <i className="material-icons">send</i> Cashier to Cashier Transfer
             </Button>
@@ -516,7 +516,7 @@ class CashierCashInHand extends Component {
               disabled
               className="sendMoneybutton"
               noMin
-
+              style={{padding:'6px'}}
             >
               <i className="material-icons">send</i> Cashier to Cashier Transfer
             </Button>
