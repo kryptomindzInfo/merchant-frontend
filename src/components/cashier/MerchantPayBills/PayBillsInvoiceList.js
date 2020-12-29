@@ -100,7 +100,7 @@ const PayBillsInvoiceList = (props) => {
 
   const getInvoiceList = () =>
     invoiceList.map((invoice, index) => (
-      <tr key={invoice._id}>
+      <tr key={invoice._id} className={ penaltyList[index] > 0 ? 'red' : ''}>
         <td
           className="tac"
         >
@@ -180,7 +180,7 @@ const PayBillsInvoiceList = (props) => {
       const datesplit = invoice.due_date.split("/");
       const dueDate = new Date(datesplit[2], datesplit[1] - 1, datesplit[0]);
       if (currentDate <= dueDate) {
-        return (10);
+        return (0);
       } else {
         if (rule.type === 'once') {
           return (rule.fixed_amount + (invoice.amount * rule.percentage) / 100);
