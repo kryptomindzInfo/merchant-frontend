@@ -620,7 +620,7 @@ class CashierClosingBalance extends Component {
                                 type="text"
                                 // name={this.state.denominationValue[index]}
                                 autoFocus
-                                value={this.state.denomination[index].num}
+                                // value={this.state.denomination[index].num}
                                 onChange={e => {
                                   const value = e.target.value;
                                   this.setState(prevState => {

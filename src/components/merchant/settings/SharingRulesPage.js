@@ -66,7 +66,7 @@ const SharingRulesPage = (props) => {
           <td className="tac">
             <span>
               {' '}
-              {rule.type === 'IBWM-C' || rule.type === 'IBWM-F' || rule.type === 'WM-C' || rule.type === 'WM-F' ? 'Wallet to Merchant' : 'Non Wallet to Merchant'}
+              {rule.type === 'M-C' ? 'Merchant Cashier Commission' : rule.type === 'IBWM-C' || rule.type === 'IBWM-F' || rule.type === 'WM-C' || rule.type === 'WM-F' ? 'Wallet to Merchant' : 'Non Wallet to Merchant'}
               {/* {rule.type === 1 ? 'Non Wallet to Merchant' : ''}
               {rule.type === 2 ? 'Merchant Cashier to Merchant' : ''} */}
             </span>
