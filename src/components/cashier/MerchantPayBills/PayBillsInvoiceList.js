@@ -19,6 +19,7 @@ const PayBillsInvoiceList = (props) => {
   const [penaltyList, setPenaltyList] = useState([]);
   const [penaltyRule, setPenaltyRule] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
+  const [all, setall] = useState(false);
   const [invoiceList, setInvoiceList] = useState(
     props.invoiceList.filter((i) => i.paid === 0),
   );
@@ -112,10 +113,18 @@ const PayBillsInvoiceList = (props) => {
   };
 
   const selectall = async(e) =>{
-    const result = selectAllInvoice();
-    setPayingInvoiceList(result.list2);
-    setSelectedInvoiceList(result.list1);
-    setTotalAmount(result.sum);
+    if (all === false) {
+      const result = selectAllInvoice();
+      setPayingInvoiceList(result.list2);
+      setSelectedInvoiceList(result.list1);
+      setTotalAmount(result.sum);
+      setall(true);
+    } else {
+      setPayingInvoiceList([]);
+      setSelectedInvoiceList([]);
+      setTotalAmount(0);
+      setall(false);
+    } 
   };
 
   const handleMultipleInvoiceSubmit = () => {
@@ -268,7 +277,7 @@ const PayBillsInvoiceList = (props) => {
           </div>
         </div>
         <div />
-        <Button style={{marginTop:"10px"}}onClick={selectall}>Select All</Button>
+        <Button className={all === true ? 'active' : ''} style={{marginTop:"10px"}}onClick={selectall}>Select All</Button>
         {invoiceList && invoiceList.length > 0 ? (
           <Table marginTop="5px" smallTd>
             <thead>
