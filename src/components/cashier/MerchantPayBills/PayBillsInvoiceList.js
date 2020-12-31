@@ -254,6 +254,7 @@ const PayBillsInvoiceList = (props) => {
       setPenaltyList(res2.res);
       setLoading(res2.loading);
     }
+    
     getRule();
   }, []);
 
