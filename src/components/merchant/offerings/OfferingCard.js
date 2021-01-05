@@ -189,7 +189,10 @@ function OfferingCard(props) {
           }} />
         </div>
 
-        <Button className="addBankButton" flex>
+        <Button className="addBankButton" flex
+          onClick={() => {
+            setAddOfferingPopup(true)
+          }}>
           <i className="material-icons">add</i>
           <span>Add Offering</span>
         </Button>

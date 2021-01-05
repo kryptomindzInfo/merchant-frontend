@@ -33,9 +33,9 @@ const MerchantCustomerListPage = () => {
   //   setAddCustomerPopup(true);
   // };
 
-  // const onPopupClose = () => {
-  //   setAddCustomerPopup(false);
-  // };
+  const onPopupClose = () => {
+    setAddCustomerPopup(false);
+  };
 
   const refreshCustomerList = async () => {
     setLoading(true);
@@ -171,14 +171,14 @@ const MerchantCustomerListPage = () => {
         </Main>
       </Container>
 
-      {/* {addCustomerPopup ? (
+      {addCustomerPopup ? (
         <CreateCustomerPopup
           type={popupType}
           customer={editingCustomer}
           refreshCustomerList={(data) => refreshCustomerList()}
           onClose={() => onPopupClose()}
         />
-      ) : null} */}
+      ) : null}
       {uploadCustomerPopup ? (
         <UploadCustomerPopup
           refreshCustomerList={() => refreshCustomerList()}
