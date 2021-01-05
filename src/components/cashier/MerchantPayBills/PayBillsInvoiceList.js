@@ -19,6 +19,7 @@ const PayBillsInvoiceList = (props) => {
   const [penaltyList, setPenaltyList] = useState([]);
   const [penaltyRule, setPenaltyRule] = useState({});
   const [totalAmount, setTotalAmount] = useState(0);
+  const [all, setall] = useState(false);
   const [invoiceList, setInvoiceList] = useState(
     props.invoiceList.filter((i) => i.paid === 0),
   );
@@ -91,6 +92,41 @@ const PayBillsInvoiceList = (props) => {
     }
   };
 
+  const selectAllInvoice =  () => {
+    const list1 =[];
+    const list2 =[];
+    let  sum=0;
+    invoiceList.map((invoice,index) => {
+      const obj1 = {
+        id: invoice._id,
+        penalty: penaltyList[index],
+      }
+      const obj2 = {
+        invoice: invoice,
+        penalty: penaltyList[index],
+      }
+      list1.push(obj1);
+      list2.push(obj2);
+      sum = sum + invoice.amount + penaltyList[index]
+    });
+    return({list1:list1,list2:list2,sum:sum})
+  };
+
+  const selectall = async(e) =>{
+    if (all === false) {
+      const result = selectAllInvoice();
+      setPayingInvoiceList(result.list2);
+      setSelectedInvoiceList(result.list1);
+      setTotalAmount(result.sum);
+      setall(true);
+    } else {
+      setPayingInvoiceList([]);
+      setSelectedInvoiceList([]);
+      setTotalAmount(0);
+      setall(false);
+    } 
+  };
+
   const handleMultipleInvoiceSubmit = () => {
     const obj = {
       invoices: selectedInvoiceList,
@@ -100,7 +136,7 @@ const PayBillsInvoiceList = (props) => {
 
   const getInvoiceList = () =>
     invoiceList.map((invoice, index) => (
-      <tr key={invoice._id}>
+      <tr key={invoice._id} className={ penaltyList[index] > 0 ? 'red' : ''}>
         <td
           className="tac"
         >
@@ -128,10 +164,18 @@ const PayBillsInvoiceList = (props) => {
                 </div>
               ) : (
                   <FormGroup onChange={(e) => handleCheckboxClick(e, invoice, index)}>
-                    <input
+                     {selectedInvoiceList.map(a => a.id).includes(invoice._id) ? (
+                     <input
+                      type="checkbox"
+                      checked
+                      value={invoice._id}>
+                    </input>
+                     ):(
+                      <input
                       type="checkbox"
                       value={invoice._id}>
                     </input>
+                     )}
                   </FormGroup>
                 )}
             </Col>
@@ -210,6 +254,7 @@ const PayBillsInvoiceList = (props) => {
       setPenaltyList(res2.res);
       setLoading(res2.loading);
     }
+    
     getRule();
   }, []);
 
@@ -233,8 +278,9 @@ const PayBillsInvoiceList = (props) => {
           </div>
         </div>
         <div />
+        <Button className={all === true ? 'active' : ''} style={{marginTop:"10px"}}onClick={selectall}>Select All</Button>
         {invoiceList && invoiceList.length > 0 ? (
-          <Table marginTop="34px" smallTd>
+          <Table marginTop="5px" smallTd>
             <thead>
               <tr>
                 <th>Number</th>
