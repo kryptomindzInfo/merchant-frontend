@@ -15,61 +15,30 @@ import { setDefaultBillTerm } from '../api/MerchantAPI';
 
 function DefaultBillTermPopup(props) {
   const [billTermName, setBillTermName] = React.useState();
-  const [hidetoggle, sethidetoggle] = React.useState(false)
 
   const handleChange = (e) => {
-    sethidetoggle(true)
     console.log(e.target.value);
     setBillTermName(e.target.value);
   };
 
   const handleSubmit = async () => {
-    console.log("clck")
     const obj = {
       days: props.termlist[parseInt(billTermName, 10)].days,
       name: props.termlist[parseInt(billTermName, 10)].name,
     };
     console.log(obj);
-    console.log(props)
     await setDefaultBillTerm(props, obj);
   };
 
-  useEffect(() => {
-    console.log(props.termlist)
-    let indexvalue = props.termlist.findIndex((value) => {
-      return value.name == props.billterm.name
-    })
-    console.log(indexvalue)
-    // setBillTermName(indexvalue);
-    setBillTermName(props.termlist[indexvalue].name)
-  }, []);
-
   const termSelectInput = () => {
-    console.log("line no 34")
-
-
     return props.termlist.map((val, index) => {
-      console.log(billTermName)
-      console.log(val.name)
       return (
-        <> {billTermName != val.name &&
-          <option key={val.name} value={index}>
-
-            {val.name}
-
-
-          </option>
-        }
-        </>
+        <option key={val.name} value={index}>
+          {val.name}
+        </option>
       );
     });
   };
-
-  // console.log(props.billterm)
-  // if (props.billterm.name != undefined) {
-  //   setBillTermName(props.billterm.name)
-  // }
-  console.log(billTermName)
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
@@ -83,9 +52,7 @@ function DefaultBillTermPopup(props) {
           }}
           required
         >
-          {hidetoggle ? "Select Term" : (
-            <option value="">{props.billterm.name}</option>
-          )}
+          <option value="">Select term</option>
           {termSelectInput()}
         </SelectInput>
       </FormGroup>
