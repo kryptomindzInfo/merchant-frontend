@@ -33,7 +33,7 @@ function CreateCustomerPopup(props) {
           customer_code: props.customer.customer_code || '',
           mobile: props.customer.mobile || '',
           email: props.customer.email || '',
-          merchant_id: "5fcf6ff0bcc9b700079f132c",
+          merchant_id: merchant_id,
           // address: props.customer.address || '',
           // city: props.customer.city || '',
           // state: props.customer.state || '',
@@ -51,7 +51,17 @@ function CreateCustomerPopup(props) {
             values.customer_id = props.customer._id;
             await editTax(props, values);
           } else {
-            await uploadCustomer(props, values);
+            // console.log(values)
+            // console.log(merchant_id)
+            values.merchant_id = merchant_id
+            // console.log(values)
+            let cutomerarray = []
+            cutomerarray.push(values)
+            const payload = {
+              customers: cutomerarray,
+            };
+            await uploadCustomer(props, payload);
+            // await uploadCustomer(props, values);
           }
         }}
         validationSchema={Yup.object().shape({

@@ -23,6 +23,7 @@ function UploadCustomerPopup(props) {
           document_hash: '',
         }}
         onSubmit={async (values) => {
+          // console.log(uploadCustomerList)
           const payload = {
             customers: uploadCustomerList,
           };
@@ -34,15 +35,15 @@ function UploadCustomerPopup(props) {
 
           return (
             <div>
-              <h1>Upload Offering</h1>
+              <h1>Upload Customers</h1>
               <Form>
                 <FormGroup>
                   <UploadArea bgImg="/src/assets/images/csvImage.jpg">
                     {values.document_hash ? (
                       <a className="uploadedImg" target="_BLANK" />
                     ) : (
-                      ' '
-                    )}
+                        ' '
+                      )}
                     <div
                       className="uploadTrigger"
                       onClick={() => triggerCsvBrowse('csv')}
@@ -65,14 +66,14 @@ function UploadCustomerPopup(props) {
                       {!values.document_hash ? (
                         <i className="material-icons">cloud_upload</i>
                       ) : (
-                        ' '
-                      )}
+                          ' '
+                        )}
                       <label>
                         {values.document_hash === '' ? (
                           <span>Uploaded File</span>
                         ) : (
-                          <span>Change File</span>
-                        )}
+                            <span>Change File</span>
+                          )}
                         *
                       </label>
                     </div>
@@ -102,8 +103,8 @@ function UploadCustomerPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>Upload Customers</span>
-                  )}
+                      <span>Upload Customers</span>
+                    )}
                 </Button>
               </Form>
             </div>

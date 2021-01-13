@@ -240,7 +240,7 @@ function CreateStaffPopup(props) {
               </FormGroup>
 
               <FormGroup mR="10%" mL="10%">
-                <label>Temporary Password*</label>
+                <label>Password*</label>
                 <TextInput
                   type="password"
                   pattern=".{8,}"

@@ -7,7 +7,7 @@ import Button from '../../shared/Button';
 import Popup from '../../shared/Popup';
 import TextInput from '../../shared/TextInput';
 import OfferingTypeSelectBox from '../../shared/OfferingTypeSelectBox';
-import { editOffering } from '../api/MerchantAPI';
+import { editOffering, uploadOffering } from '../api/MerchantAPI';
 import {
   correctFocus,
   inputBlur,
@@ -18,6 +18,8 @@ function CreateOfferingPopup(props) {
   useEffect(() => {
     correctFocus(props.type);
   });
+
+  console.log(props)
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
       <Formik
@@ -25,19 +27,32 @@ function CreateOfferingPopup(props) {
           name: props.offering.name || '',
           code: props.offering.code || '',
           denomination: props.offering.denomination || '',
+          description: props.offering.description || '',
           unit_of_measure: props.offering.unit_of_measure || '',
           unit_price: props.offering.unit_price || '',
-          type: '',
+          type: props.offering.type || '',
         }}
         onSubmit={async (values) => {
+          console.log("click")
           values.offering_id = props.offering._id;
           if (props.type === 'update') {
             await editOffering(props, values);
+          }
+          else {
+            let arrayofoffering = []
+            arrayofoffering.push(values)
+            console.log(arrayofoffering)
+            const payload = {
+              offerings: arrayofoffering
+            }
+            // await uploadOffering(props, values)
+            await uploadOffering(props, payload)
           }
         }}
         validationSchema={Yup.object().shape({
           code: Yup.string().required('Offering code is required'),
           name: Yup.string().required('Name no is required'),
+          description: Yup.string().required('Description is required'),
           denomination: Yup.string().required('Denomination is required'),
           unit_of_measure: Yup.string().required('Unit of measure is required'),
           unit_price: Yup.string().required('Unit price is required'),
@@ -57,6 +72,8 @@ function CreateOfferingPopup(props) {
           } = formikProps;
 
           const typeChange = (event) => {
+            console.log(event.target)
+            console.log(event.target.value)
             const { value } = event.target;
             setFieldValue('type', value, true);
           };
@@ -101,6 +118,25 @@ function CreateOfferingPopup(props) {
                       inputBlur(e);
                     }}
                     value={values.code}
+                    onChange={handleChange}
+                    required
+                  />
+                </FormGroup>
+                <FormGroup>
+                  <label>Description*</label>
+                  <TextInput
+                    type="text"
+                    name="description"
+                    onFocus={(e) => {
+                      handleChange(e);
+                      inputFocus(e);
+                    }}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                      inputBlur(e);
+                    }}
+                    value={values.description}
                     onChange={handleChange}
                     required
                   />
@@ -163,11 +199,12 @@ function CreateOfferingPopup(props) {
                   />
                 </FormGroup>
                 <FormGroup>
-                  <label>Select Type</label>
+                  {/* <label>Select Type</label> */}
                   <OfferingTypeSelectBox
                     type="text"
                     name="type"
                     value={values.type}
+                    // value="1"
                     onChange={typeChange}
                     required
                   />
@@ -185,13 +222,13 @@ function CreateOfferingPopup(props) {
                   {isSubmitting ? (
                     <CircularProgress size={30} thickness={5} color="primary" />
                   ) : (
-                    <span>
-                      {' '}
-                      {props.type === 'update'
-                        ? 'Update Offering'
-                        : 'Add Offering'}
-                    </span>
-                  )}
+                      <span>
+                        {' '}
+                        {props.type === 'update'
+                          ? 'Update Offering'
+                          : 'Add Offering'}
+                      </span>
+                    )}
                 </Button>
               </Form>
             </div>

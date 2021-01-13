@@ -328,6 +328,8 @@ const fetchStaffList = async () => {
 // API's for Merchant Offering
 
 const uploadOffering = async (props, offeringList) => {
+  console.log(offeringList)
+  console.log(props)
   try {
     const res = await axios.post(
       `${MERCHANT_API}/uploadOfferings`,
