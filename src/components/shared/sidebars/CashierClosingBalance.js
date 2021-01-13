@@ -130,6 +130,7 @@ class CashierClosingBalance extends Component {
 
   closePopup = () => {
     this.setState({
+      note:'',
       popup: false,
       editPopup: false,
       agree:false,

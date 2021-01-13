@@ -9,7 +9,7 @@ const PaymentReceivedCard = (props) => {
   return (
     <Col cW="100%">
       <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-        <h4>Amount Collected </h4>
+        <h4>Amount Collected Today </h4>
         <div className="cardValue">
           {CURRENCY} {props.amount}
         </div>

@@ -13,25 +13,52 @@ import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import ZoneCard from './ZoneCard';
 import Loader from '../../shared/Loader';
 import { getzone } from '../api/MerchantAPI';
+import axios from 'axios';
+import { MERCHANT_API } from '../../constants';
+import notify from '../../utils/Notify';
 
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
-  const merchantDetails = JSON.parse(localStorage.getItem('merchantLogged'))
-    .details;
-  const noOfInvoicesPaid = parseFloat(merchantDetails.bills_paid);
-  const noOfPendingInvoices = parseFloat(
-    merchantDetails.bills_raised - merchantDetails.bills_paid,
-  );
-  const amount = parseFloat(0);
-  const overDueInvoices = 0;
+  const [invoicesPaid, setInvoicesPaid] = useState(0);
+  const [pendingInvoices,setPendingInvoices] = useState(0);
+  const [amountCollected,setAmpontCollected] = useState(0);
+  const [amountDue,setAmpontDue] = useState(0);
 
   const refreshPage = () => {
     setLoading(false);
   };
 
+  const getStats = () => {
+    axios
+    .post(`${MERCHANT_API}/getDashStats`,{})
+      .then(res => {
+        if (res.status == 200) {
+          if (res.data.status===0) {
+            throw res.data.error;
+          } else {
+            console.log(res);
+            setInvoicesPaid(res.data.bills_paid);
+            setPendingInvoices(res.data.bills_raised-res.data.bills_paid);
+            setAmpontCollected(res.data.amount_collected);
+            setAmpontDue(res.data.amount_due);
+          }
+        }
+      })
+      .then(res => {
+        setTimeout(function() {
+          getStats();
+        }, 3000);
+      })
+      .catch(err => {
+        setTimeout(function() {
+          getStats();
+        }, 3000);
+      });
+  }
+
   useEffect(() => {
-    console.log(merchantDetails);
     setLoading(true);
+    getStats();
     refreshPage();
   }, []);
 
@@ -49,10 +76,11 @@ const MerchantDashboardPage = () => {
         <MerchantSideBar />
         <Main>
           <Row>
-            <PaymentReceivedCard amount={amount} />
-            <InvoiceNumberCard no={noOfInvoicesPaid} />
-            <PendingInvoiceCard no={noOfPendingInvoices} />
-            <OverDueInvoiceCard no={overDueInvoices} />
+            <PaymentReceivedCard amount={amountCollected} />
+            <OverDueInvoiceCard amountdue={amountDue} />
+            <InvoiceNumberCard no={invoicesPaid} />
+            <PendingInvoiceCard no={pendingInvoices} />
+            
           </Row>
           <ZoneCard refreshZone={() => refreshPage()} />
           {/* <HistoryCard /> */}
