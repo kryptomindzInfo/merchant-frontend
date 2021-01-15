@@ -53,7 +53,7 @@ function CreateStaffPopup(props) {
         initialValues={{
           name: props.staff.name || '',
           role: props.staff.role || 'staff',
-          code: props.staff.name || '',
+          code: props.staff.code || '',
           logo: props.staff.logo || '',
           email: props.staff.email || '',
           mobile: props.staff.mobile || '',
