@@ -42,8 +42,6 @@ const PenaltySettingPage = (props) => {
     refreshPenaltyRule();
   }, []);
 
-  console.log(penaltyRule.percentage, "123")
-
   return (
     <Wrapper>
       <Helmet>
@@ -97,7 +95,7 @@ const PenaltySettingPage = (props) => {
                     type="submit"
                     onClick={() => handlePenaltyRulePopupClick()}
                   >
-                    {penaltyRule.percentage != undefined ? "Edit" : "Create"}
+                    {penaltyRule ? "Edit" : "Create"}
                     {/* Create */}
                   </Button>
                 </Col>

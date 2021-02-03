@@ -24,10 +24,10 @@ function PenaltyRulePopup(props) {
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
 
-      {props.penaltyrule.percentage == undefined ? (
-        <h1>Create Penalty Rule</h1>
+      {props.penaltyrule ? (
+        <h1>Edit Penalty Rule</h1>
       ) : (
-          <h1>Edit Penalty Rule</h1>
+        <h1>Create Penalty Rule</h1>
         )}
 
 
