@@ -512,7 +512,7 @@ class CashierClosingBalance extends Component {
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
-          this.state.transactionStarted && !this.state.isClosed? (
+          this.state.isClosed? (
               <Button
                 dashBtn
                 onClick={this.openCashier}

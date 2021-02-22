@@ -86,6 +86,7 @@ class CashierClosingBalance extends Component {
   };
 
   showOpeningPopup = v => {
+    console.log(this.state.isClosed);
     this.setState({ openingPopup: true, cashier_id: v._id });
   };
   showHistoryPop = () => {
@@ -489,7 +490,7 @@ class CashierClosingBalance extends Component {
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
-          this.state.transactionStarted && !this.state.isClosed ? (
+          this.state.isClosed ? (
             <Button 
             dashBtn
             onClick={this.showOpeningPopup}
