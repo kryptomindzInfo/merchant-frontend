@@ -11,6 +11,8 @@ import Loader from '../../shared/Loader';
 import FormGroup from '../../shared/FormGroup';
 import TextInput from '../../shared/TextInput';
 import notify from '../../utils/Notify';
+import PayBillPopup from '../../../components/cashier/MerchantPayBills/PayBillPopup';
+import TransactionReceipt from '../../../components/cashier/dashboard/TransactionReciept';
 
 // import withStyles from '@material-ui/core/styles'
 import { withStyles } from '@material-ui/core';
@@ -37,6 +39,9 @@ class CashierClosingBalance extends Component {
       loading: true,
       lastdate: null,
       tomorrow: false,
+      payBillsPopup: false,
+      receiptPopup:false,
+      receiptvalues:{},
       otp: '',
       balance1: 0,
       balance2: 0,
@@ -65,6 +70,30 @@ class CashierClosingBalance extends Component {
   error = () => toast.error(this.state.notification);
 
   warn = () => toast.warn(this.state.notification);
+
+  onPayBillsPopupClose = () => {
+    this.setState({
+      payBillsPopup:false,
+    });
+  };
+
+  onPayBillsPopupOpen = () => {
+    this.setState({
+      payBillsPopup:true,
+    });
+  };
+
+  onReceiptPopupOpen = () => {
+    this.setState({
+      receiptPopup:true,
+    });
+  };
+
+  onReceiptClose = () => {
+    this.setState({
+      receiptPopup:false,
+    });
+  };
 
   handleInputChange = event => {
     const { value, name } = event.target;
@@ -499,242 +528,32 @@ class CashierClosingBalance extends Component {
         </Row>
         <Row style={{ marginTop: '75%' }}>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
-            <Button dashBtn disabled>
+            <Button dashBtn onClick={() => { this.onPayBillsPopupOpen() }}>
               Pay Invoices
             </Button>
           </Col>
         </Row>
-        {this.state.openingPopup ? (
-          <Popup close={this.closePopup.bind(this)} accentedH1>
-            {this.state.showOpeningOTP ? (
-              <div>
-                <h1>Verify OTP</h1>
-                <form action="" method="post" onSubmit={this.verifyOpeningOTP}>
-                  <FormGroup>
-                    <label>OTP*</label>
-                    <TextInput
-                      type="text"
-                      name="otp"
-                      onFocus={inputFocus}
-                      onBlur={inputBlur}
-                      value={this.state.otp}
-                      onChange={this.handleInputChange}
-                      required
-                    />
-                  </FormGroup>
-                  {this.verifyEditOTPLoading ? (
-                    <Button filledBtn marginTop="50px" disabled>
-                      <Loader />
-                    </Button>
-                  ) : (
-                    <Button filledBtn marginTop="50px">
-                      <span>Verify</span>
-                    </Button>
-                  )}
-
-                  <p className="resend">
-                    Wait for <span className="timer">{this.state.timer}</span>{' '}
-                    to{' '}
-                    {this.state.resend ? (
-                      <span className="go" onClick={this.generateOTP}>
-                        Resend
-                      </span>
-                    ) : (
-                      <span>Resend</span>
-                    )}
-                  </p>
-                </form>
-              </div>
-            ) : (
-              <div>
-                <h1>Enter Real Closing Bills & Coins count</h1>
-                <form action="" method="post" onSubmit={this.addOpeningBalance}>
-                  <FormGroup>
-                    <Grid container>
-                      {this.state.denomination.map((element, index) => (
-                        <Grid
-                          item
-                          key={`text-field-${index}`}
-                          xs={12}
-                          container
-                          alignItems="center"
-                          style={{ textAlign: 'center' }}
-                          // spacing={8}
-                        >
-                          <Grid item xs={3}>
-                            <Typography
-                              className={classes.currencyElement}
-                              key={`text-field-${index}`}
-                              style={{
-                                fontWeight: 600,
-                                fontSize: '14px',
-                                textAlign: 'right',
-                              }}
-                            >
-                              {this.state.currency} {element.val}
-                            </Typography>
-                          </Grid>
-
-                          <Grid item xs={2}>
-                            <Typography
-                              style={{
-                                fontSize: '14px',
-                                textAlign: 'right',
-                                paddingRight: '3px',
-                              }}
-                            >
-                              X
-                            </Typography>
-                          </Grid>
-                          <Grid item xs={7}>
-                            <Col cW="60%" style={{ marginLeft: '18%' }}>
-                              <TextInput
-                                marginTop
-                                type="text"
-                                // name={this.state.denominationValue[index]}
-                                autoFocus
-                                // value={this.state.denomination[index].num}
-                                onChange={e => {
-                                  const value = e.target.value;
-                                  this.setState(prevState => {
-                                    const { denomination } = prevState;
-                                    denomination[index].num = value;
-                                    return { ...prevState, denomination };
-                                  });
-                                }}
-                              />
-                            </Col>
-                          </Grid>
-                        </Grid>
-                      ))}
-                    </Grid>
-                  </FormGroup>
-                  <FormGroup>
-                    <Row style={{ marginTop: '5%' }}>
-                      <Col cW="15%" textAlign="right">
-                        <strong>TOTAL</strong>
-                      </Col>
-                      <Col cW="20%" textAlign="center">
-                        =
-                      </Col>
-                      <Col cW="35%">
-                        {
-                          (this.state.total = this.state.denomination.reduce(
-                            (a, c) => Number(c.num * c.val || 0) + a,
-                            0,
-                          ))
-                        }
-                      </Col>
-                    </Row>
-                    <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
-                      <Col cW="20%" textAlign="right">
-                        <strong>Cash in Hand</strong>
-                      </Col>
-                      <Col cW="20%" textAlign="center">
-                        =
-                      </Col>
-                      <Col cW="35%">{this.state.cashInHand}</Col>
-                    </Row>
-                    <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
-                      <Col cW="20%" textAlign="right">
-                        <strong>Discrepancy</strong>
-                      </Col>
-                      <Col cW="20%" textAlign="center">
-                        =
-                      </Col>
-                      <Col cW="35%">
-                        {this.state.total - this.state.cashInHand}
-                      </Col>
-                    </Row>
-                  </FormGroup>
-                  <FormGroup>
-                    <TextInput
-                      marginTop
-                      type="text"
-                      name="note"
-                      autoFocus
-                      placeholder="Remarks"
-                      value={this.state.note}
-                      onChange={this.handleInputChange}
-                    />
-                  </FormGroup>
-                  <div
-                    style={{
-                      marginTop: '20px',
-                      fontSize: '18px',
-                      textAlign: 'center',
-                    }}
-                  >
-                    <input
-                      type="checkbox"
-                      name="agree"
-                      value={this.state.agree}
-                      checked={this.state.agree}
-                      onClick={this.handleCheckbox}
-                    />{' '}
-                    Close accounts for the day?
-                  </div>
-
-                  {this.state.editBranchLoading ? (
-                    <Button filledBtn marginTop="50px" disabled>
-                      <Loader />
-                    </Button>
-                  ) : (
-                    <Button filledBtn marginTop="50px">
-                      <span>Submit</span>
-                    </Button>
-                  )}
-                </form>
-              </div>
-            )}
-          </Popup>
-        ) : null}
-
-        {this.state.historyPop ? (
-          <Popup close={this.closePopup.bind(this)} accentedH1 bigBody>
-            <div>
-              <h1>Closing Balance History</h1>
-              {this.state.historyLoading ? (
-                <Button filledBtn disabled>
-                  <Loader />
-                </Button>
-              ) : (
-                <Table marginTop="34px" smallTd>
-                  <thead>
-                    <tr>
-                      <th>Amount</th>
-                      <th>Added On</th>
-                       <th>Denomination</th>
-                       <th>Note</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {this.state.history && this.state.history.length > 0
-                      ? this.state.history.map(function(b) {
-                        var td = JSON.parse(b.transaction_details);
-                          var fulldate = dis.formatDate(b.created_at);
-                          return (
-                            <tr key={b._id}>
-                              <td>
-                                {CURRENCY} {b.amount.toFixed(2)}
-                              </td>
-                              <td>
-                                <div className="labelGrey">{fulldate}</div>
-                              </td>
-                              <td>{ td.denomination ? td.denomination.map(function(v){
-                                return( v.num != '' ? <div>{v.val} : {v.num}</div> : null)
-                              }) : null}</td>
-                               <td>{td.note}</td>
-                            </tr>
-                          );
-                        })
-                      : null}
-                  </tbody>
-                </Table>
-              )}
-            </div>
-          </Popup>
-        ) : null}
+        {this.state.payBillsPopup ? (
+        <PayBillPopup
+          close={() => this.onPayBillsPopupClose()}
+          showReceiptPopup={(values) => {
+            this.setState({
+              receiptvalues:values,
+            });
+          }}
+          show={this.onReceiptPopupOpen}
+        />
+      ) : (
+        ''
+      )}
+      {this.statereceiptPopup ? (
+        <TransactionReceipt
+        values={this.state.receiptvalues}
+        close={() => this.onReceiptClose()} 
+      />
+      ) : (
+          ''
+        )}
 
         {this.state.openCashierPopup ? (
           <Popup close={this.closePopup.bind(this)} accentedH1>
