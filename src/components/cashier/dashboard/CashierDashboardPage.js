@@ -10,6 +10,8 @@ import SidebarCashier from '../../shared/sidebars/SidebarCashier';
 
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Container from '../../shared/Container';
+import Card from '../../shared/Card';
+import Col from '../../shared/Col';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
@@ -59,9 +61,16 @@ const StaffDashboardPage = (props) => {
         <SidebarCashier/>
         <Main>
           <Row>
-            <InvoiceNumberCard no={stats.bills_paid} />
+          <Col cW="100%">
+            <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
+              <h4>Opening Balance</h4>
+              <div className="cardValue">XOF 100000</div>
+              </Card>
+           </Col>
+            
             <TotalAmountCollectedCard amount={stats.amount_collected} />
             <TotalPenaltyCollectedCard penalty={stats.penalty_collected} />
+            <InvoiceNumberCard no={stats.bills_paid} />
           </Row>
           <InvoiceListCard setLoading={(val) => {}} invoice={setInvoiceList} />
         </Main>

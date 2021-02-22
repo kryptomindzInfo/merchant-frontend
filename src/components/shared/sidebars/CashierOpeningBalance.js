@@ -480,39 +480,27 @@ class CashierClosingBalance extends Component {
     const dis = this;
     return (
       <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
-         <h3 style ={{textAlign:'center'}}>
-          Closing Balance
-        </h3>
-        <div style ={{textAlign:'center', fontSize:'20px'}} className="cardValue">
-          {CURRENCY} {this.state.balance1.toFixed(2)}
-        </div>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
-          this.state.transactionStarted && !this.state.isClosed ? (
-            <Button 
-            dashBtn
-            onClick={this.showOpeningPopup}
-            >
-              
-               Close my day
-            </Button>
-          ) : (
-            <Button
-              dashBtn
-              disabled>
-                   Close my day
+          this.state.transactionStarted && !this.state.isClosed? (
+              <Button
+                dashBtn
+                onClick={this.openCashier}
+              >
+                  Open My Counter
               </Button>
-            )}
+            ) : (
+                <Button dashBtn disabled>
+                  Open My Counter
+                </Button>
+              )}
           </Col>
         </Row>
-        <Row>
+        <Row style={{ marginTop: '75%' }}>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
-          <Button
-              dashBtn
-              onClick={this.showHistoryPop}
-            >
-              History
+            <Button dashBtn disabled>
+              Pay Invoices
             </Button>
           </Col>
         </Row>

@@ -6,8 +6,8 @@ const TotalAmountCollectedCard = (props) => {
   return (
     <Col cW="100%">
       <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-        <h4>Amount Collected</h4>
-        <div className="cardValue">{props.amount}</div>
+        <h4>Cash Received</h4>
+        <div className="cardValue"> XOF {props.amount}</div>
       </Card>
     </Col>
   );
