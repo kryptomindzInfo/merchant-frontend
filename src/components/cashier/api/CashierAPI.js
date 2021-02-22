@@ -136,6 +136,36 @@ const fetchStats = async (type) => {
   }
 };
 
+const openStaff = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/openstaff`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      }else{
+        notify(res.data.message, 'success');
+      }
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
+const closeStaff = async () => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/closestaff`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      }else{
+        notify(res.data.message, 'success');
+      }
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const groupAPI = async (props, values, apiType) => {
   let API = '';
   if (apiType === 'update') {
@@ -462,6 +492,8 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  openStaff,
+  closeStaff,
   incCounter,
   setCounter,
   getCounter,
