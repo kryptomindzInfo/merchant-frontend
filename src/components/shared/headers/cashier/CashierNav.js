@@ -35,17 +35,20 @@ class CashierNav extends Component {
 
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
+    const reports = this.props.active === 'reports' ? 'true' : '';
     
     return (
       <>
         <NavTag>
-          {/* <A>
-            <Link>
-              <span onClick={() => {this.onPayBillsPopupOpen()}}> Pay Bills </span>
-            </Link>
-          </A> */}
+          <A href="/cashier/dashboard">
+            <Link active={dashboard}>Dashboard</Link>
+          </A>
         </NavTag>
-
+        <NavTag>
+          <A href="/cashier/reports">
+            <Link active={reports}>Reports</Link>
+          </A>
+        </NavTag>
         {this.state.payBillsPopup ? (
           <PayBillPopup close={() => this.onPayBillsPopupClose()} />
         ) : (

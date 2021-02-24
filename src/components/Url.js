@@ -39,7 +39,9 @@ const branchVerifyUrl = '/branch/:name/login-verify';
 const defaultCashierLoginUrl = '/merchant/cashier/:name';
 const cashierLoginUrl = '/merchant/cashier/:name/login';
 const staffDashboardUrl = '/staff/dashboard';
+const staffReportsUrl = '/staff/reports';
 const cashierDashboardUrl = '/cashier/dashboard';
+const cashierReportsUrl = '/cashier/reports';
 const invoiceUrl = '/cashier/:id/invoices';
 const cashierForgotPasswordUrl = '/cashier/:name/forgot-password';
 const cashierOtpUrl = '/cashier/:name/otp-forgot-password';
@@ -48,6 +50,8 @@ const cashierSettingsUrl = '/cashier/settings';
 const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
+  staffReportsUrl,
+  cashierReportsUrl,
   merchantDashboardUrl,
   verifyUrl,
   loginUrl,

@@ -26,12 +26,18 @@ class StaffNav extends Component {
 
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
+    const reports = this.props.active === 'reports' ? 'true' : '';
     
     return (
       <>
         <NavTag>
           <A href="/staff/dashboard">
             <Link active={dashboard}>Dashboard</Link>
+          </A>
+        </NavTag>
+        <NavTag>
+          <A href="/staff/reports">
+            <Link active={reports}>Reports</Link>
           </A>
         </NavTag>
       </>

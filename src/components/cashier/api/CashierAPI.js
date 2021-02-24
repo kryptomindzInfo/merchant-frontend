@@ -194,6 +194,25 @@ const groupAPI = async (props, values, apiType) => {
 };
 
 // Invoice APIs
+const fetchInvoicesBydate = async (date) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/listInvoicesByDate`, {
+      date: date,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
 
 const fetchInvoices = async (id) => {
   try {
@@ -492,6 +511,7 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  fetchInvoicesBydate,
   openStaff,
   closeStaff,
   incCounter,

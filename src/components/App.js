@@ -27,6 +27,8 @@ import PenaltySettingPage from './merchant/settings/PenaltySettingPage';
 import BillTermSettingPage from './merchant/settings/BillTermSettingPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
 import StaffDashboardPage from './cashier/dashboard/StaffDashboardPage';
+import StaffReportPage from './cashier/reports/StaffReportPage';
+import CashierReportPage from './cashier/reports/CashierReportPage';
 import CashierDashboardPage from './cashier/dashboard/CashierDashboardPage';
 import InvoiceListPage from './cashier/invoice/InvoiceListPage';
 import MerchantSettingsPage from './merchant/settings/MerchantSettingsPage';
@@ -45,6 +47,8 @@ import {
   cashierDashboardUrl,
   branchVerifyUrl,
   staffDashboardUrl,
+  staffReportsUrl,
+  cashierReportsUrl,
   cashierForgotPasswordUrl,
   cashierLoginUrl,
   cashierOtpUrl,
@@ -387,6 +391,18 @@ function App() {
               exact
               path={staffDashboardUrl}
               component={(props) => <StaffDashboardPage {...props} />}
+            />
+            <ProtectedRoute
+              type="cashier"
+              exact
+              path={staffReportsUrl}
+              component={(props) => <StaffReportPage {...props} />}
+            />
+            <ProtectedRoute
+              type="cashier"
+              exact
+              path={cashierReportsUrl}
+              component={(props) => <CashierReportPage {...props} />}
             />
             <ProtectedRoute
               type="cashier"
