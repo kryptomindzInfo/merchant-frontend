@@ -167,6 +167,93 @@ function BranchCashierList(props) {
     });
   }
 
+  function mappedCardsstaff() {
+    return staffList.map((cashier) => {
+      return (
+        <tr key={cashier._id}>
+          <td style={{display:"inline-flex"}}>
+            <FiberManualRecordIcon  fontSize="small" color={cashier.status === 2 ? "secondary" : "primary"}/>
+              {cashier.name}
+          </td>
+          <td>
+            {userList.filter((u) => u._id === cashier.staff_id)[0]
+              ? userList.filter((u) => u._id === cashier.staff_id)[0].name
+              : ''}
+          </td>
+          <td>
+            -
+          </td>
+          <td>
+            -
+          </td>
+          <td className="tac bold green">
+          <Button
+            className="sendMoneyButton"
+            onClick={() => {
+              localStorage.setItem(
+                'selectedCashier',
+                JSON.stringify(cashier),
+              );
+              history.push(getCashierInfoURL(cashier._id));
+            }}
+          >
+                                  
+            View
+                                  
+        </Button>
+            <span className="absoluteMiddleRight primary popMenuTrigger">
+              <i className="material-icons ">more_vert</i>
+              <div className="popMenu">
+                <span
+                  onClick={() => {
+                    localStorage.setItem(
+                      'selectedCashier',
+                      JSON.stringify(cashier),
+                    );
+                    history.push(getCashierInfoURL(cashier._id));
+                  }}
+                >
+                  Staff Info
+                </span>
+                <span
+                  onClick={() => handleEditCashierPopupClick('update', cashier)}
+                >
+                  Edit
+                </span>
+                <span onClick={() => handleAssignUserPopupClick(cashier)}>
+                  Assign User
+                </span>
+
+                {cashier.status === 0 ? (
+                  <span
+                    onClick={() =>
+                      blockCashierApi('unblock', cashier._id).then(() =>
+                        refreshCashierList(),
+                      )
+                    }
+                  >
+                    Unblock
+                  </span>
+                ) : (
+                    <span
+                      onClick={() =>
+                        blockCashierApi('block', cashier._id).then(() =>
+                          refreshCashierList(),
+                        )
+                      }
+                    >
+                      Block
+                    </span>
+                  )}
+              </div>
+            </span>
+          </td>
+        </tr>
+      );
+    });
+  }
+
+
   if (isLoading) {
     return <Loader fullPage />;
   }
@@ -192,7 +279,7 @@ function BranchCashierList(props) {
               >
                 <Button
                   className={toggleButton === 'cashier' ? 'active' : ''}
-                  onClick={toggle}
+                  onClick={()=>toggle()}
                   marginRight="5px"
                   padding="5px"
                 >
@@ -200,30 +287,52 @@ function BranchCashierList(props) {
                 </Button>
                 <Button
                   className={toggleButton === 'staff' ? 'active' : ''}
-                  onClick={toggle}
+                  onClick={()=>toggle()}
                   marginLeft="30px"
                 >
                   Staff
                 </Button>
               </div>
             <div className="cardBody">
-              <Table marginTop="34px" smallTd>
+              {toggleButton === 'cashier'? (
+                  <Table marginTop="34px" smallTd>
+                  <thead>
+                    <tr>
+                      <th>Cashier Name</th>
+                      <th>Cash in hand (XOF)</th>
+                      <th>Assigned to</th>
+                      <th>No of Invoices</th>
+                      <th>Penalty Collected</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cashierList && cashierList.length > 0 && userList
+                      ? mappedCards()
+                      : null}
+                  </tbody>
+                </Table>
+              
+              ): (
+                <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Cashier Name</th>
-                    <th>Cash in hand (XOF)</th>
+                    <th>Staff Name</th>
                     <th>Assigned to</th>
                     <th>No of Invoices</th>
-                    <th>Penalty Collected</th>
+                    <th>No of pending invoices</th>
                     <th></th>
                   </tr>
                 </thead>
                 <tbody>
-                  {cashierList && cashierList.length > 0 && userList
-                    ? mappedCards()
+                  {staffList && staffList.length > 0 && userList
+                    ? mappedCardsstaff()
                     : null}
                 </tbody>
               </Table>
+            
+              )}
+              
             </div>
           </Card>
         </Main>
