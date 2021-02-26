@@ -14,7 +14,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import { CURRENCY } from '../../constants';
 import DateFnsUtils from '@date-io/date-fns';
 
-import { fetchInvoicesBydate } from '../api/CashierAPI';
+import { getCashierReport } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 const today = new Date();
 const CashierReportPage = (props) => {
@@ -26,7 +26,9 @@ const CashierReportPage = (props) => {
   const [formdate, setFormdate] = useState(new Date());
 
   const getReport = async() => {
-    
+    const yesterday = new Date(formdate)
+    yesterday.setDate(yesterday.getDate() - 1)
+    const res = await getCashierReport(yesterday,formdate);
   };
 
 

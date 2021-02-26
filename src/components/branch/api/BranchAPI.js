@@ -2,6 +2,28 @@ import axios from 'axios';
 import notify from '../../utils/Notify';
 import { API_URL } from '../../constants';
 
+const branchFetchInvoicesBydate = async (date, id) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantBranch/listInvoicesByDate`, {
+      date: date,
+      staff_id: id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+
 const fetchDailyStats = async () => {
   try {
     const res = await axios.get(`${API_URL}/merchantBranch/todaysStatus`);
@@ -156,6 +178,7 @@ const editBranch = async (props, values) => {
 };
 
 export {
+  branchFetchInvoicesBydate,
   editBranchCashier,
   getBranchCashier,
   fetchBranchStaffList,

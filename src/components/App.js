@@ -20,6 +20,7 @@ import MerchantCustomerListPage from './merchant/customers/MerchantCustomerListP
 import MerchantTaxListPage from './merchant/taxes/MerchantTaxListPage';
 import GlobalStyle from '../styles/global-styles';
 import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
+import BranchParticularStaffReport from './branch/Reports/BranchParticularStaffReport';
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
 import ZoneSettingPage from './merchant/settings/ZoneSettingPage';
 import BillPeriodSettingPage from './merchant/settings/BillPeriodSettingPage';
@@ -37,6 +38,7 @@ import ProtectedRoute from './ProtectedRoute';
 import SharingRulesPage from './merchant/settings/SharingRulesPage';
 import {
   branchCashierInfoUrl,
+  branchStaffReportUrl,
   branchDashboardUrl,
   branchForgotPasswordUrl,
   branchLoginUrl,
@@ -341,6 +343,14 @@ function App() {
               path={branchCashierInfoUrl}
               component={(props) => (
                 <BranchCashierInfoPage type="branch" {...props} />
+              )}
+            />
+            <ProtectedRoute
+              type="branch"
+              exact
+              path={branchStaffReportUrl}
+              component={(props) => (
+                <BranchParticularStaffReport type="branch" {...props} />
               )}
             />
             <ProtectedRoute

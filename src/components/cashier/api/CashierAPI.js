@@ -3,6 +3,33 @@ import Papa from 'papaparse';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
 
+
+
+const getCashierReport = async (after,before) => {
+    try {
+      const res = await axios.post(`${API_URL}/merchantStaff/queryTransactionStates`, {
+        bank_id: JSON.parse(localStorage.getItem('cashierLogged')).merchant.bank_id,
+        status: "2",
+        date_after: after,
+        date_before: before,
+        page_start: 0,
+        limit: 100
+      });
+      if (res.status === 200) {
+        if (res.data.status === 0) {
+          notify(res.data.message, 'error');
+          return { data: {}, loading: false };
+        }
+        return { data: res.data, loading: false };
+      }
+      notify(res.data.message, 'error');
+      return { data: {}, loading: false };
+    } catch (err) {
+      notify('Something went wrong', 'error');
+      return { data: {}, loading: false };
+    }
+  };
+
 const getCountries = async () => {
   try {
     const res = await axios.get(`${API_URL}/get-country`);
@@ -511,6 +538,7 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  getCashierReport,
   fetchInvoicesBydate,
   openStaff,
   closeStaff,

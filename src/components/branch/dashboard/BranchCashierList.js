@@ -80,6 +80,11 @@ function BranchCashierList(props) {
   const getCashierInfoURL = (cashierId) => {
     return `/branch/cashier/info/${cashierId}`;
   };
+
+  const getStaffReportURL = (cashierId) => {
+    return `/branch/staff/report/${cashierId}`;
+  };
+
   function mappedCards() {
     return cashierList.map((cashier) => {
       return (
@@ -127,7 +132,7 @@ function BranchCashierList(props) {
                     history.push(getCashierInfoURL(cashier._id));
                   }}
                 >
-                  Staff Info
+                  Info
                 </span>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
@@ -169,6 +174,9 @@ function BranchCashierList(props) {
 
   function mappedCardsstaff() {
     return staffList.map((cashier) => {
+      const assignedTo = userList.filter((u) => u._id === cashier.staff_id)[0]
+      ? userList.filter((u) => u._id === cashier.staff_id)[0].name
+      : '';
       return (
         <tr key={cashier._id}>
           <td style={{display:"inline-flex"}}>
@@ -176,9 +184,7 @@ function BranchCashierList(props) {
               {cashier.name}
           </td>
           <td>
-            {userList.filter((u) => u._id === cashier.staff_id)[0]
-              ? userList.filter((u) => u._id === cashier.staff_id)[0].name
-              : ''}
+            {assignedTo}
           </td>
           <td>
             -
@@ -210,10 +216,29 @@ function BranchCashierList(props) {
                       'selectedCashier',
                       JSON.stringify(cashier),
                     );
+                    localStorage.setItem(
+                      'assignedTo',
+                      assignedTo,
+                    );
                     history.push(getCashierInfoURL(cashier._id));
                   }}
                 >
-                  Staff Info
+                  Info
+                </span>
+                <span
+                  onClick={() => {
+                    localStorage.setItem(
+                      'selectedCashier',
+                      JSON.stringify(cashier),
+                    );
+                    localStorage.setItem(
+                      'assignedTo',
+                      assignedTo,
+                    );
+                    history.push(getStaffReportURL(cashier._id));
+                  }}
+                >
+                  Reports
                 </span>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
