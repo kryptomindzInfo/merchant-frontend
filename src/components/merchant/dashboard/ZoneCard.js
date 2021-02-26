@@ -65,6 +65,22 @@ function ZoneCard(props) {
       return (
         <tr key={zone._id}>
           <td className="tac">{zone.name}</td>
+          <td
+            className="tac popMenuTrigger"
+            onClick={() => {
+              localStorage.setItem('selectedZone', zone._id);
+              localStorage.setItem('currentZone', JSON.stringify(zone));
+              history.push(`/merchant/${zone._id}/subzones`);
+            }}
+          >
+            {zone.subzone_count}
+          </td>
+          <td className="tac">{zone.branch_count}</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
           <td className="tac">
             <div
               style={{
@@ -72,7 +88,7 @@ function ZoneCard(props) {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{zone.code}</td>
+              <td className="tac">-</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
@@ -106,11 +122,7 @@ function ZoneCard(props) {
     const newfilterdata = copyZoneList.filter(element =>
       element.name.toLowerCase().includes(value.toLowerCase()),
     );
-
-
     setZoneList(newfilterdata)
-
-
   }
 
   return (
@@ -139,20 +151,19 @@ function ZoneCard(props) {
         </Button>
       </ActionBar>
       <Card bigPadding>
-        <div className="cardHeader">
-          <div className="cardHeaderLeft">
-            <SupervisedUserCircleIcon className="material-icons" />
-          </div>
-          <div className="cardHeaderRight">
-            <h3>{zoneName} List</h3>
-          </div>
-        </div>
         <div className="cardBody">
           <Table marginTop="34px" smallTd>
             <thead>
               <tr>
-                <th>Name</th>
-                <th>{zoneName} Code</th>
+                <th>Zones</th>
+                <th>No. of subzones</th>
+                <th>No. of branches</th>
+                <th>No. of Bills</th>
+                <th>Amount Billed</th>
+                <th>No. of paid bills</th>
+                <th>Amount of paid bills</th>
+                <th>No. of pending bills</th>
+                <th>Amount of pending bills</th>
               </tr>
             </thead>
             <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>

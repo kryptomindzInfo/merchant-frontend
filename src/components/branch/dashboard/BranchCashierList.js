@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import Wrapper from '../../shared/Wrapper';
 import Loader from '../../shared/Loader';
+import Button from '../../shared/Button';
 import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
 import Table from '../../shared/Table';
@@ -22,11 +24,13 @@ function BranchCashierList(props) {
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
   const [cashierPopupType, setCashierPopupType] = React.useState('new');
+  const [staffList, setstaffList] = React.useState([]);
   const [cashierList, setCashierList] = React.useState([]);
   const [userList, setUserList] = React.useState([]);
   const [editingUser, setEditingUser] = React.useState({});
   const [editingCashier, setEditingCashier] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
+  const [toggleButton, setToggleButton] = React.useState('cashier');
 
   const handleAssignUserPopupClick = (cashier) => {
     setEditingCashier(cashier);
@@ -47,10 +51,19 @@ function BranchCashierList(props) {
     setEditCashierPopup(false);
   };
 
+  const toggle = () => {
+    if(toggleButton === 'cashier'){
+      setToggleButton('staff');
+    } else if(toggleButton === 'staff'){
+      setToggleButton('cashier');
+    }
+  }
+
   const refreshCashierList = async () => {
     setLoading(true);
     getBranchCashier().then((data) => {
-      setCashierList(data.list);
+      setCashierList(data.list.filter((u) => u.type === 'cashier'));
+      setstaffList(data.list.filter((u) => u.type === 'staff'));
     });
     fetchBranchStaffList().then((data) => {
       setUserList(data.list);
@@ -71,21 +84,37 @@ function BranchCashierList(props) {
     return cashierList.map((cashier) => {
       return (
         <tr key={cashier._id}>
-          <td>{cashier.name}</td>
+          <td style={{display:"inline-flex"}}>
+            <FiberManualRecordIcon  fontSize="small" color={cashier.status === 2 ? "secondary" : "primary"}/>
+              {cashier.name}
+          </td>
+          <td>{cashier.cash_in_hand}</td>
           <td>
             {userList.filter((u) => u._id === cashier.staff_id)[0]
               ? userList.filter((u) => u._id === cashier.staff_id)[0].name
               : ''}
           </td>
-          <td
-            style={{
-              color: cashier.status === 2 ? 'red' : 'green',
-            }}
-          >
-            {cashier.status === 2 ? 'Closed' : 'Opened'}
+          <td>
+            -
+          </td>
+          <td>
+            -
           </td>
           <td className="tac bold green">
-            {cashier.type}
+          <Button
+            className="sendMoneyButton"
+            onClick={() => {
+              localStorage.setItem(
+                'selectedCashier',
+                JSON.stringify(cashier),
+              );
+              history.push(getCashierInfoURL(cashier._id));
+            }}
+          >
+                                  
+            View
+                                  
+        </Button>
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
@@ -145,32 +174,48 @@ function BranchCashierList(props) {
     <Wrapper>
       <Container verticalMargin>
         <Main fullWidth>
-          <ActionBar marginBottom="33px" inputWidth="100%" className="clr">
-            <div className="iconedInput fl">
-              <i className="material-icons">
-                <SearchIcon />
-              </i>
-              <input type="text" placeholder="Search Staff" />
-            </div>
-          </ActionBar>
           <Card bigPadding>
-            <div className="cardHeader">
-              <div className="cardHeaderLeft">
-                <SupervisedUserCircleIcon className="material-icons" />
+          <div className="cardHeader">
+                <div className="cardHeaderLeft">
+                  <i className="material-icons">playlist_add_check</i>
+                </div>
+                <div className="cardHeaderRight">
+                  <h3>User Activity</h3>
+                </div>
               </div>
-              <div className="cardHeaderRight">
-                <h3>Staff List</h3>
-                <h5>List of your staffs</h5>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'left',
+                  marginTop: '10px',
+                }}
+              >
+                <Button
+                  className={toggleButton === 'cashier' ? 'active' : ''}
+                  onClick={toggle}
+                  marginRight="5px"
+                  padding="5px"
+                >
+                  Cashier
+                </Button>
+                <Button
+                  className={toggleButton === 'staff' ? 'active' : ''}
+                  onClick={toggle}
+                  marginLeft="30px"
+                >
+                  Staff
+                </Button>
               </div>
-            </div>
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Staff Name</th>
+                    <th>Cashier Name</th>
+                    <th>Cash in hand (XOF)</th>
                     <th>Assigned to</th>
-                    <th>Status</th>
-                    <th>Type</th>
+                    <th>No of Invoices</th>
+                    <th>Penalty Collected</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>

@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import PaymentReceivedCard from '../../shared/PaymentReceivedCard';
-import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
+import TotalInvoiceCard from '../../shared/TotalInvoiceCard';
+import PaidInvoiceCard from '../../shared/PaidInvoiceCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
-import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
 
 import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
@@ -22,7 +22,7 @@ const MerchantDashboardPage = () => {
   const [invoicesPaid, setInvoicesPaid] = useState(0);
   const [pendingInvoices,setPendingInvoices] = useState(0);
   const [amountCollected,setAmpontCollected] = useState(0);
-  const [amountDue,setAmpontDue] = useState(0);
+  const [invoicesRaised,setInvoicesRaised] = useState(0);
 
   const refreshPage = () => {
     setLoading(false);
@@ -40,7 +40,7 @@ const MerchantDashboardPage = () => {
             setInvoicesPaid(res.data.bills_paid);
             setPendingInvoices(res.data.bills_raised-res.data.bills_paid);
             setAmpontCollected(res.data.amount_collected);
-            setAmpontDue(res.data.amount_due);
+            setInvoicesRaised(res.data.amount_due);
           }
         }
       })
@@ -77,14 +77,12 @@ const MerchantDashboardPage = () => {
         <Main>
           <Row>
             <PaymentReceivedCard amount={amountCollected} />
-            <OverDueInvoiceCard amountdue={amountDue} />
-            <InvoiceNumberCard no={invoicesPaid} />
+            <TotalInvoiceCard no={invoicesRaised} />
+            <PaidInvoiceCard no={invoicesPaid} />
             <PendingInvoiceCard no={pendingInvoices} />
-            
           </Row>
-          <ZoneCard refreshZone={() => refreshPage()} />
-          {/* <HistoryCard /> */}
         </Main>
+        <ZoneCard refreshZone={() => refreshPage()} />
       </Container>
     </Fragment>
   );

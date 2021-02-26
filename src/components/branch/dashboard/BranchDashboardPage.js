@@ -2,8 +2,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import Container from '../../shared/Container';
 import Row from '../../shared/Row';
+import Col from '../../shared/Col';
 import Main from '../../shared/Main';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
+import Card from '../../shared/Card';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
 import BranchInvoiceNumberCard from '../../shared/BranchInvoiceNumberCard';
@@ -12,7 +14,7 @@ import BranchCashierList from './BranchCashierList';
 import axios from 'axios';
 import notify from '../../utils/Notify';
 import { API_URL } from '../../constants';
-import { fetchDailyStats } from '../api/BranchAPI';
+import { CURRENCY } from '../../constants';
 import Loader from '../../shared/Loader';
 
 const BranchDashboardPage = (props) => {
@@ -23,7 +25,7 @@ const BranchDashboardPage = (props) => {
 
   const getStats = () => {
     axios
-    .get(`${API_URL}/merchantBranch/todaysStatus`,{})
+    .post(`${API_URL}/merchantBranch/getDashStats`,{})
       .then(res => {
         if (res.status == 200) {
           if (res.data.status===0) {
@@ -63,12 +65,104 @@ const BranchDashboardPage = (props) => {
       <BranchHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
-          <Row textAlign="start" justify="start">
-            <BranchPaymentReceivedCard amount={stats.todays_payment} />
-            <OverDueInvoiceCard amountdue={stats.due} />
-            <BranchInvoiceNumberCard no={stats.bills_paid} />
-            <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
-          </Row>
+        <Row>
+              <Col>
+                <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>Opening Balance</h4>
+
+                  <div className="cardValue">{CURRENCY}: {stats.opening_balance}</div>
+                </Card>
+              </Col>
+              <Col>
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>Cash Received</h4>
+
+                  <div className="cardValue">{CURRENCY}: -</div>
+                </Card>
+              </Col>
+              <Col>
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>No. of Staff</h4>
+
+                  <div className="cardValue">{stats.total_staff}</div>
+                </Card>
+              </Col>
+              <Col>
+                <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>Cash in Hand</h4>
+
+                  <div className="cardValue">{CURRENCY}: {stats.cash_in_hand}</div>
+                </Card>
+              </Col>
+              <Col>
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>Number of Cashier</h4>
+                  <div className="cardValue">{stats.total_cashier}</div>
+                </Card>
+              </Col>
+            </Row>
+            <Row style={{marginTop:'5px',marginBottom:'35px'}}>
+              <Col cw="20%">
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>Penalty Collected</h4>
+                  <div className="cardValue">{CURRENCY}: -</div>
+                </Card>
+              </Col>
+              <Col cw="20%">
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>No. of invoice created</h4>
+                  <div className="cardValue"> -</div>
+                </Card>
+              </Col>
+              <Col cw="20%">
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                >
+                  <h4>Total Revenue</h4>
+                  <div className="cardValue">{CURRENCY}: -</div>
+                </Card>
+              </Col>
+              <Col cw="40%"></Col>
+            </Row>
+            
           <BranchCashierList type={type} />
         </Main>
       </Container>

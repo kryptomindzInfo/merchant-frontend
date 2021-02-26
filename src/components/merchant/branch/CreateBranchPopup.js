@@ -42,6 +42,7 @@ function CreateBranchPopup(props) {
           if (props.type === 'update') {
             await branchAPI(props, values, 'update');
           } else {
+            values.zone_id = props.zoneID;
             await branchAPI(props, values, 'create');
           }
         }}

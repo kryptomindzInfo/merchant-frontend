@@ -72,7 +72,22 @@ function MerchantSubzoneListPage(props) {
       return (
         <tr key={subzone._id}>
           <td className="tac">{subzone.name}</td>
-          <td className="tac">{subzone.code}</td>
+          <td
+            className="tac popMenuTrigger"
+            onClick={() => {
+              localStorage.setItem('selectedSubzone', subzone._id);
+              localStorage.setItem(
+                'currentSubzone',
+                JSON.stringify(subzone),
+              );
+              history.push(`/merchant/${subzone._id}/branches`);
+            }}
+          >{subzone.branch_count}</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
+          <td className="tac">-</td>
           <td className="tac bold">
             <div
               style={{
@@ -81,9 +96,7 @@ function MerchantSubzoneListPage(props) {
               }}
             >
               <td className="tac">
-                {subzone.branch_count
-                  ? subzone.branch_count
-                  : 'No branch found'}
+                -
               </td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
@@ -140,8 +153,10 @@ function MerchantSubzoneListPage(props) {
       <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
         <MerchantSideBar showClaimButton />
-        <Main>
-          <ActionBar
+        {/* <Main>
+         
+        </Main> */}
+        <ActionBar
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
@@ -164,8 +179,9 @@ function MerchantSubzoneListPage(props) {
               <span>Add {subzoneName}</span>
             </Button>
           </ActionBar>
+        
           <Card bigPadding>
-            <div className="cardHeader">
+            {/* <div className="cardHeader">
               <div className="cardHeaderLeft">
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
@@ -174,14 +190,19 @@ function MerchantSubzoneListPage(props) {
                   {subzoneName} List of {zoneName}
                 </h3>
               </div>
-            </div>
+            </div> */}
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>{subzoneName} Code</th>
-                    <th>Total Branches</th>
+                    <th>Subzones</th>
+                    <th>No. of branches</th>
+                    <th>No. of Bills</th>
+                    <th>Amount Billed</th>
+                    <th>No. of paid bills</th>
+                    <th>Amount of paid bills</th>
+                    <th>No. of pending bills</th>
+                    <th>Amount of pending bills</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -192,7 +213,7 @@ function MerchantSubzoneListPage(props) {
               </Table>
             </div>
           </Card>
-        </Main>
+       
       </Container>
       {addSubzonePopup ? (
         <CreateSubzonePopup

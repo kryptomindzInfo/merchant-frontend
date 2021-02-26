@@ -235,6 +235,7 @@ function MerchantBranchListPage(props) {
           subzonename={subzoneName}
           type={popupType}
           subzoneId={id}
+          zoneID={localStorage.getItem('selectedZone')}
           zone={localStorage.getItem('currentZone')}
           branch={editingBranch}
           refreshBranchList={(data) => refreshBranchList()}
