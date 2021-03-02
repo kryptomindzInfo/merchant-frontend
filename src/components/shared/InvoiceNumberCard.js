@@ -5,8 +5,8 @@ import Col from './Col';
 const InvoiceNumberCard = (props) => {
   return (
     <Col cW="100%">
-      <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-        <h4>No of counter invoices</h4>
+      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+        <h4>Invoices raised</h4>
         <div className="cardValue">{props.no}</div>
       </Card>
     </Col>

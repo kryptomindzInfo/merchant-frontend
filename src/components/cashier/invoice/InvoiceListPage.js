@@ -25,6 +25,7 @@ import Col from '../../shared/Col';
 import notify from '../../utils/Notify';
 import {
   fetchGroups,
+  fetchStats,
   fetchInvoices,
   invoiceApi,
   fetchTaxList,
@@ -39,6 +40,7 @@ function InvoiceListPage(props) {
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
+  const [counterClose, setCounterClose] = React.useState(false);
   const [toggleButton, setToggleButton] = React.useState('myinvoices');
   const [counterInvoice, SetCounterInvoice] = React.useState(false);
   const [offeringList, setOfferingList] = React.useState([]);
@@ -96,6 +98,17 @@ function InvoiceListPage(props) {
       }
       setLoading(data.loading);
     });
+  };
+  const getStats = () => {
+    setLoading(true);
+    fetchStats('staff')
+      .then((data) => {
+        setCounterClose(data.stats.is_closed);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
   const refreshInfo = async () => {
@@ -326,6 +339,7 @@ function InvoiceListPage(props) {
   };
 
   useEffect(() => {
+    getStats();
     refreshInvoiceList();
     refreshInfo();
     refreshGroupList();
@@ -363,7 +377,18 @@ function InvoiceListPage(props) {
             </div>
             <Row justify="space-between" mL="30px">
               <Col cW="100%">
-                <Button
+                {counterClose ? (
+                  <Button
+                  className="addBankButton"
+                  flex
+                  disabled
+                >
+                  <AddIcon className="material-icons" />
+                  <span>Create Invoice</span>
+                </Button>
+                  
+                ): (
+                  <Button
                   className="addBankButton"
                   flex
                   onClick={() =>
@@ -373,6 +398,8 @@ function InvoiceListPage(props) {
                   <AddIcon className="material-icons" />
                   <span>Create Invoice</span>
                 </Button>
+                )}
+                
               </Col>
               <Col cW="100%">
                 <Button

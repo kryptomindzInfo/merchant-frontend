@@ -98,10 +98,17 @@ const Welcome = (props) => {
           <NotificationIcon />
         </Icon>
         <div className="dropdown fl">
+          {type === 'cashier'?(
+            <Name>
+              <span>BRANCH:</span>{' '}
+              {JSON.parse(localStorage.getItem(`cashierLogged`)).branch.name}
+            </Name>
+          ):''}
           <Name>
             <span>{type === 'cashier' ? role.toUpperCase() : type.toUpperCase()}:</span>{' '}
             {name}
           </Name>
+          
           <SubNav className="bankSubNav">
             <A href={settingsUrl}>Settings</A>
             <span onClick={() => logoutUser()}>Logout</span>

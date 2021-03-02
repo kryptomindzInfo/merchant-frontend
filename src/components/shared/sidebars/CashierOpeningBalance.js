@@ -521,7 +521,7 @@ class CashierClosingBalance extends Component {
               </Button>
             ) : (
                 <Button dashBtn disabled>
-                  Open My Counter
+                  Counter is open
                 </Button>
               )}
           </Col>

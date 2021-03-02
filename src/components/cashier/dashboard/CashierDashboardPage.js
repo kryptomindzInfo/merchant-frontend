@@ -7,7 +7,7 @@ import TotalPenaltyCollectedCard from '../../shared/TotalPenaltyCollectedCard';
 import InvoiceListCard from './InvoiceListCard';
 import SidebarCashier from '../../shared/sidebars/SidebarCashier';
 
-
+import Footer from '../../Footer';
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Container from '../../shared/Container';
 import Card from '../../shared/Card';
@@ -62,7 +62,7 @@ const StaffDashboardPage = (props) => {
         <Main>
           <Row>
           <Col cW="100%">
-            <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
+          <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Opening Balance</h4>
               <div className="cardValue">XOF 100000</div>
               </Card>
@@ -75,6 +75,8 @@ const StaffDashboardPage = (props) => {
           <InvoiceListCard setLoading={(val) => {}} invoice={setInvoiceList} />
         </Main>
       </Container>
+      {/* <Footer /> */}
+      
     </Fragment>
   );
 };

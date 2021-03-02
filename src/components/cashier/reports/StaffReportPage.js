@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { CSVLink, CSVDownload } from "react-csv";
 import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
@@ -16,6 +17,7 @@ import DateFnsUtils from '@date-io/date-fns';
 
 import { fetchInvoicesBydate } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
+import { Height } from '@material-ui/icons';
 const today = new Date();
 const StaffReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
@@ -25,6 +27,17 @@ const StaffReportPage = (props) => {
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
   const [formdate, setFormdate] = useState(new Date());
+  const [csvData, setcsvData] = useState([
+    ["BillNo","Name","Amount","Mobile","DueDate"]
+  ]);
+
+  const fetchCSVData = async(list) => {
+    const csvlist = list.map(async (invoice) => {
+        return ([invoice.number,invoice.name,invoice.amount,invoice.mobile,invoice.due_date]);
+    });
+    const result= await Promise.all(csvlist);
+    return({res:result, loading:false});
+  };
 
   const getReport = async() => {
     setLoading(true);
@@ -34,12 +47,15 @@ const StaffReportPage = (props) => {
       : formdate.getMonth() + 1
     }/${formdate.getFullYear()}`;
     const res = await fetchInvoicesBydate(date);
+    const csvDATA = await fetchCSVData(res.list);
+    console.log(csvDATA);
     setAmount(
     res.list.reduce((a, b) => {
       return a + b.amount;
-    }, 0))
+    }, 0));
+    setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
     setInvoiceList(res.list);
-    setLoading(res.loading);
+    setLoading(csvDATA.loading);
   };
 
   const getInvoices = () => {
@@ -86,16 +102,20 @@ const StaffReportPage = (props) => {
       </Helmet>
       <StaffHeader active="reports" />
       <Container verticalMargin>
-      <ActionBar
+      {/* <ActionBar
               marginBottom="15px"
               marginTop="15px"
               inputWidth="calc(100% - 241px)"
               className="clr"
               style={{display:"block"}}
-            >
-              <h2 style={{color:"green"}}><b>Select Date for report</b></h2> 
-              <Row>
-                <Col cW='35%'>
+            > */}
+            <Row>
+              <Col cW='40%'>
+              <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
+                <Container>
+                <h2 style={{color:"green"}}><b>Date</b></h2> 
+                  <Row>
+                    <Col cW='60%'>
                   <FormGroup>
                     <MuiPickersUtilsProvider
                       utils={DateFnsUtils}
@@ -124,35 +144,45 @@ const StaffReportPage = (props) => {
                     </MuiPickersUtilsProvider>
                   </FormGroup>
                 </Col>
-                <Col cW='25%'> 
-                  <Button
-                    style={{padding:'9px'}}
-                    onClick={()=>getReport()}
-                  >
-                    Get Report
-                  </Button>
+                    <Col cW='40%'> 
+                      <Button
+                        style={{padding:'9px'}}
+                        onClick={()=>getReport()}
+                      >
+                        Get Report
+                      </Button>
                 </Col>
-                <Col cW='40%'></Col>
               </Row>
-      </ActionBar>
-      <Row>
-          <Col cW="50%">
-            <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-              <h4>No of bill Gererated</h4>
-              <div className="cardValue">{invoiceList.length}</div>
+              </Container>
               </Card>
-           </Col>
-           <Col cW="50%">
-            <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-              <h4>Amount of bill Gererated</h4>
-              <div className="cardValue">{amount}</div>
-              </Card>
-           </Col>
-      </Row>
-        <Main>
+              </Col>
+              <Col  cW='30%'>
+                <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px', textAlign:'center'}}>
+                  <h4 style={{marginTop:'30px'}}>No of bill Gererated</h4>
+                  <div className="cardValue">{invoiceList.length}</div>
+                </Card>
+              </Col>
+              <Col  cW='30%'>
+                <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  smallValue
+                  style={{
+                    height:'150px',
+                    textAlign:'center',
+                  }}>
+                  <h4 style={{marginTop:'30px'}}>Amount of bill Gererated</h4>
+                  <div className="cardValue">XOF: {amount}</div>
+                </Card>
+              </Col>
+            </Row>
+              
+      {/* </ActionBar> */}
+        <Card bigPadding style={{width:'100%'}}>
+        <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice List</b></h3>
         {invoiceList && invoiceList.length > 0 ? (
-                <Table marginTop="34px" smallTd>
+                <Table marginTop="34px">
                   <thead>
                     <tr>
                       <th>Bill No</th>
@@ -174,7 +204,7 @@ const StaffReportPage = (props) => {
                     No invoice found
                   </h3>
                 )}
-        </Main>
+        </Card>
       </Container>
     </Fragment>
   );

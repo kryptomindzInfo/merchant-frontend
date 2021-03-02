@@ -5,8 +5,8 @@ import Col from './Col';
 const PendingInvoiceCard = (props) => {
   return (
     <Col cW="100%">
-      <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-        <h4>Pending No of Invoices</h4>
+      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+        <h4>Due invoices</h4>
         <div className="cardValue">{props.no}</div>
       </Card>
     </Col>

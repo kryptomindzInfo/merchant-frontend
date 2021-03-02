@@ -5,7 +5,7 @@ import Col from './Col';
 const TotalPenaltyCollectedCard = (props) => {
   return (
     <Col cW="100%">
-      <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
+     <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
         <h4>Penalty Collected</h4>
         <div className="cardValue"> XOF {props.penalty}</div>
       </Card>

@@ -26,7 +26,7 @@ const MiddleTitle = styled.div`
 
 const StaffHeader = (props) => {
   const { page, goto, middleTitle, active } = props;
-  const { name } = JSON.parse(localStorage.getItem(`cashierLogged`)).staff;
+  const name  = JSON.parse(localStorage.getItem(`cashierLogged`)).merchant.name || '';
   const logo = JSON.parse(localStorage.getItem(`cashierLogged`)).merchant.logo || '';
 
   return (

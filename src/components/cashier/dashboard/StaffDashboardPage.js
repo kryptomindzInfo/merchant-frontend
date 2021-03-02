@@ -1,6 +1,7 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
+import CounterInvoiceCard from '../../shared/CounterInvoiceCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import GroupListCard from './GroupListCard';
 import Sidebar from '../../shared/sidebars/Sidebar';
@@ -169,7 +170,7 @@ const StaffDashboardPage = (props) => {
               </Button>
             ) : (
                 <Button dashBtn disabled>
-                  Open My Counter
+                  Counter is open
                 </Button>
               )}
           </Col>
@@ -198,8 +199,9 @@ const StaffDashboardPage = (props) => {
       </Sidebar>
         <Main>
           <Row>
-            <InvoiceNumberCard no={stats.counter_invoices} />
             <GroupNumberCard no={groupList.length} />
+            <InvoiceNumberCard no={stats.bills_raised} />
+            <CounterInvoiceCard no={stats.counter_invoices} />
             <PendingInvoiceCard no={stats.bills_raised - stats.bills_paid} />
           </Row>
           <GroupListCard setLoading={(val) => {}} group={setGroupList} />
