@@ -4,16 +4,18 @@ import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import GroupListCard from './GroupListCard';
 import Sidebar from '../../shared/sidebars/Sidebar';
-
+import FormGroup from '../../shared/FormGroup';
+import TextInput from '../../shared/TextInput';
 import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import Container from '../../shared/Container';
 import Card from '../../shared/Card';
+import Popup from '../../shared/Popup';
 import Col from '../../shared/Col';
 import Row from '../../shared/Row';
 import Button from '../../shared/Button';
 import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
-import { fetchGroups, fetchStats, openStaff, closeStaff} from '../api/CashierAPI';
+import { generateStaffOTP, fetchStats, openStaff, closeStaff} from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 
 const StaffDashboardPage = (props) => {
@@ -23,6 +25,22 @@ const StaffDashboardPage = (props) => {
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
   const [stats, setStats] = useState({});
+  const [resend, setResend] = useState(false);
+  const [Popupopen, setPopupopen] = useState(false);
+  const [Popupclose, setPopupclose] = useState(false);
+  
+  const [timer, setTimer] = useState(0);
+  const [otpTxt, setOtpTxt] = useState('Your OTP is');
+  const [otpOpt, setOtpOpt] = useState('openingBalance');
+  const [otpId, setOtpId] = useState('');
+  const [OTPLoading, setOTPLoading] = useState(false);
+  const email = JSON.parse(localStorage.getItem('cashierLogged')).staff.email;
+  const mobile = JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile;
+
+  const closePopup = () => {
+    setPopupopen(false);
+    setPopupclose(false)
+  };
 
   const getStats = () => {
     setLoading(true);
@@ -37,10 +55,13 @@ const StaffDashboardPage = (props) => {
   };
 
   const open = () => {
+    setOTPLoading(true);
     setLoading(true);
     openStaff()
       .then((data) => {
         getStats();
+        setOTPLoading(false);
+        closePopup();
         setLoading(false);
       })
       .catch((err) => {
@@ -49,16 +70,75 @@ const StaffDashboardPage = (props) => {
   };
 
   const close = () => {
+    setOTPLoading(true);
     setLoading(true);
     closeStaff()
       .then((data) => {
         getStats();
+        setOTPLoading(false);
+        closePopup();
         setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
       });
   };
+
+  const startTimer = () => {
+    console.log(timer);
+    var timeron = setInterval(function() {
+      if (timer <= 0) {
+        clearInterval(timeron);
+        setResend(true);
+      } else {
+        var time = Number(timer) - 1;
+        setTimer(time);
+      }
+    }, 1000);
+  };
+
+  
+  const inputFocus = (e) => {
+    const { target } = e;
+    target.parentElement.querySelector('label').classList.add('focused');
+  };
+
+  const inputBlur = (e) => {
+    const { target } = e;
+    if (target.value == '') {
+      target.parentElement.querySelector('label').classList.remove('focused');
+    }
+  };
+
+  const generateOTP = () => {
+    setTimer(30);
+    setResend(false);
+    generateStaffOTP(email,mobile,otpOpt,otpTxt)
+      .then(res => {
+        setOtpId(res.data.id);
+        setPopupopen(true);
+        startTimer();
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
+
+  const generatecloseOTP = () => {
+    setTimer(30);
+    setResend(false);
+    generateStaffOTP(email,mobile,otpOpt,otpTxt)
+      .then(res => {
+        setOtpId(res.data.id);
+        setPopupclose(true);
+        startTimer();
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
+
+
   useEffect(() => {
     getStats();
   }, []); // Or [] if effect doesn't need props or state
@@ -83,7 +163,7 @@ const StaffDashboardPage = (props) => {
           stats.is_closed? (
               <Button
                 dashBtn
-                onClick={()=>open()}
+                onClick={()=>generateOTP()}
               >
                   Open My Counter
               </Button>
@@ -97,15 +177,18 @@ const StaffDashboardPage = (props) => {
         <Row style={{ marginTop: '75%' }}>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
-          !stats.is_closed? (
+          stats.is_closed? (
               <Button
                 dashBtn
-                onClick={()=>close()}
+                disabled
               >
                   Close my day
               </Button>
             ) : (
-                <Button dashBtn disabled>
+                <Button
+                  dashBtn
+                  onClick={()=>generatecloseOTP()}
+                >
                   Close my day
                 </Button>
               )}
@@ -122,6 +205,90 @@ const StaffDashboardPage = (props) => {
           <GroupListCard setLoading={(val) => {}} group={setGroupList} />
         </Main>
       </Container>
+      {Popupopen ? (
+          <Popup close={closePopup} accentedH1>
+
+              <div>
+                <h1>Verify OTP</h1>
+                <form action="" method="post" onSubmit={open}>
+                  <FormGroup>
+                    <label>OTP*</label>
+                    <TextInput
+                      type="text"
+                      name="otp"
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
+                      required
+                    />
+                  </FormGroup>
+                  {OTPLoading ? (
+                    <Button filledBtn marginTop="50px" disabled>
+                      <Loader />
+                    </Button>
+                  ) : (
+                    <Button filledBtn marginTop="50px">
+                      <span>Verify</span>
+                    </Button>
+                  )}
+
+                  <p className="resend">
+                    Wait for <span className="timer">{timer}</span>{' '}
+                    to{' '}
+                    {resend ? (
+                      <span className="go" onClick={()=>{generateOTP()}}>
+                        Resend
+                      </span>
+                    ) : (
+                      <span>Resend</span>
+                    )}
+                  </p>
+                </form>
+              </div>
+           
+          </Popup>
+        ) : null}
+      {Popupclose ? (
+          <Popup close={closePopup} accentedH1>
+
+              <div>
+                <h1>Verify OTP</h1>
+                <form action="" method="post" onSubmit={close}>
+                  <FormGroup>
+                    <label>OTP*</label>
+                    <TextInput
+                      type="text"
+                      name="otp"
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
+                      required
+                    />
+                  </FormGroup>
+                  {OTPLoading ? (
+                    <Button filledBtn marginTop="50px" disabled>
+                      <Loader />
+                    </Button>
+                  ) : (
+                    <Button filledBtn marginTop="50px">
+                      <span>Verify</span>
+                    </Button>
+                  )}
+
+                  <p className="resend">
+                    Wait for <span className="timer">{timer}</span>{' '}
+                    to{' '}
+                    {resend ? (
+                      <span className="go" onClick={()=>{generatecloseOTP()}}>
+                        Resend
+                      </span>
+                    ) : (
+                      <span>Resend</span>
+                    )}
+                  </p>
+                </form>
+              </div>
+           
+          </Popup>
+        ) : null}
     </Fragment>
   );
 };

@@ -91,22 +91,20 @@ const StaffReportPage = (props) => {
               marginTop="15px"
               inputWidth="calc(100% - 241px)"
               className="clr"
+              style={{display:"block"}}
             >
+              <h2 style={{color:"green"}}><b>Select Date for report</b></h2> 
               <Row>
-              <h4 style={{color:"green"}}><b>Select Date for report</b></h4>
-              </Row>
-              
-              <Row>
-                    <Col>
-                      <FormGroup>
-                      <MuiPickersUtilsProvider
-                       utils={DateFnsUtils}
-                                                >
-                        <KeyboardDatePicker
+                <Col cW='35%'>
+                  <FormGroup>
+                    <MuiPickersUtilsProvider
+                      utils={DateFnsUtils}
+                    >
+                      <KeyboardDatePicker
                         id="date-picker-dialog"
-                        label="Date"
                         size="small"
                         fullWidth
+                        maxDate={new Date()}
                         inputVariant="outlined"
                         format="dd/MM/yyyy"
                         required
@@ -122,19 +120,19 @@ const StaffReportPage = (props) => {
                          KeyboardButtonProps={{
                         'aria-label': 'change date',
                                                     }}
-                        />
-                      </MuiPickersUtilsProvider>
-                      </FormGroup>
-                    </Col>
-                    <Col>
-                      <Button
-                        style={{padding:'9px'}}
-                        onClick={()=>getReport()}
-                      >Get Report</Button>
-                   
-                      
+                      />
+                    </MuiPickersUtilsProvider>
+                  </FormGroup>
                 </Col>
-
+                <Col cW='25%'> 
+                  <Button
+                    style={{padding:'9px'}}
+                    onClick={()=>getReport()}
+                  >
+                    Get Report
+                  </Button>
+                </Col>
+                <Col cW='40%'></Col>
               </Row>
       </ActionBar>
       <Row>

@@ -5,7 +5,7 @@ import Button from '../../Button';
 
 const NavTag = styled.nav`
   float: left;
-  margin: 8px 27px;
+  margin: 8px 12px;
 `;
 
 const Link = styled.span`

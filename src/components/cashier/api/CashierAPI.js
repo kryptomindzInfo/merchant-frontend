@@ -163,6 +163,28 @@ const fetchStats = async (type) => {
   }
 };
 
+const generateStaffOTP = async (email,mobile,otpOpt,otpTxt) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/sendOTP`,{
+      email: email,
+      mobile: mobile,
+      page: otpOpt,
+      type: 'cashier',
+      txt: otpTxt,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      }else{
+        notify(res.data.message, 'success');
+        return res;
+      }
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const openStaff = async () => {
   try {
     const res = await axios.post(`${API_URL}/merchantStaff/openstaff`);
@@ -538,6 +560,7 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  generateStaffOTP,
   getCashierReport,
   fetchInvoicesBydate,
   openStaff,
