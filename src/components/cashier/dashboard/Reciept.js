@@ -60,7 +60,7 @@ export class Reciept extends Component {
               <Row>
                 <Col className="popInfoLeft">Transaction ID :</Col>
                   <Col className="popInfoRight">
-                    67648821974200954
+                    {localStorage.getItem(`txcode`)}
                 </Col>
               </Row>
               <Row>

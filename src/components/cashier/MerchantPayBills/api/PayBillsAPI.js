@@ -75,6 +75,7 @@ const payInvoice = async (values,fun,fun2) => {
         toast.error(res.data.message);
         fun2();
       } else {
+        localStorage.setItem('txcode',res.data.transactionCode);
         fun2();
         fun();
         toast.success(res.data.message);

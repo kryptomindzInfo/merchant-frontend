@@ -27,6 +27,7 @@ const CashierReportPage = (props) => {
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
+  const [totalAmountCredited, setTotalAmountCredited] = useState(0);
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([]);
 
@@ -66,7 +67,10 @@ const CashierReportPage = (props) => {
     const cashierstats = await getCashierStats();
     const res = await getCashierReport(yesterday,formdate);
     const csvDATA = await fetchCSVData(res.data.transactions);
-
+    setTotalAmountCredited(
+      res.data.transactions.reduce((a, b) => {
+        return a + b.amount;
+      }, 0));
     setcsvData([["Time","TransactionID","Description","Type","Status","CashInHand","Credit"],...csvDATA.res])
     setInvoiceList(res.data.transactions);
     setLoading(csvDATA.loading);
@@ -77,7 +81,7 @@ const CashierReportPage = (props) => {
       return (
         <tr key={invoice._id}>
           <td>{`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`}</td>
-          <td>{invoice._id}</td>
+          <td>{invoice.childTx[0].transaction.master_code}</td>
           <td>
           {invoice.description}
           </td>
@@ -195,7 +199,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Cash Credit</h4>
                 <div className="cardValue">
-                  {CURRENCY} {cashierstats.closingBalance-cashierstats.openingBalance}
+                  {CURRENCY} {totalAmountCredited}
                 </div>
               </Card>
             </Col>
@@ -235,7 +239,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Cash Counted</h4>
                 <div className="cardValue">
-                {CURRENCY} {cashierstats.closingBalance-cashierstats.openingBalance}
+                {CURRENCY} {cashierstats.closingBalance}
                 </div>
               </Card>
             </Col>
@@ -255,7 +259,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Descripency</h4>
                 <div className="cardValue">
-                {CURRENCY} {(cashierstats.closingBalance-cashierstats.openingBalance)-(cashierstats.closingBalance-cashierstats.openingBalance)}
+                {CURRENCY} 0
                 </div>
               </Card>
             </Col>
