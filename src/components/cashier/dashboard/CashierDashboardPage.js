@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import InvoiceNumberCard from '../../shared/InvoiceNumberCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
+import PaidInvoiceCard from '../../shared/PaidInvoiceCard';
 import TotalAmountCollectedCard from '../../shared/TotalAmountCollectedCard';
 import TotalPenaltyCollectedCard from '../../shared/TotalPenaltyCollectedCard';
 import InvoiceListCard from './InvoiceListCard';
@@ -70,7 +71,7 @@ const StaffDashboardPage = (props) => {
             
             <TotalAmountCollectedCard amount={stats.amount_collected} />
             <TotalPenaltyCollectedCard penalty={stats.penalty_collected} />
-            <InvoiceNumberCard no={stats.bills_paid} />
+            <PaidInvoiceCard no={stats.bills_paid} />
           </Row>
           <InvoiceListCard setLoading={(val) => {}} invoice={setInvoiceList} />
         </Main>

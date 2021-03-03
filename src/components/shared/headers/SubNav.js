@@ -4,6 +4,7 @@ import styled from 'styled-components';
 const NavTag = styled.div`
   position: absolute;
   top: 35px;
+  right: 0px;
   z-index: 99;
   width: 151px;
   border-radius: 7px;

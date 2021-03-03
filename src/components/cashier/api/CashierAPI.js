@@ -163,6 +163,25 @@ const fetchStats = async (type) => {
   }
 };
 
+const fetchCashierStats = async (type) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/getCashierDashStats`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { stats: {}, loading: false };
+      }
+      return { stats: res.data, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { stats: {}, loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { stats: {}, loading: false };
+  }
+};
+
+
 const generateStaffOTP = async (email,mobile,otpOpt,otpTxt) => {
   try {
     const res = await axios.post(`${API_URL}/merchantStaff/sendOTP`,{
@@ -560,6 +579,7 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  fetchCashierStats,
   generateStaffOTP,
   getCashierReport,
   fetchInvoicesBydate,

@@ -1,5 +1,6 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import { CSVLink, CSVDownload } from "react-csv";
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
@@ -15,23 +16,60 @@ import { CURRENCY } from '../../constants';
 import DateFnsUtils from '@date-io/date-fns';
 import Footer from '../../Footer';
 
-import { getCashierReport } from '../api/CashierAPI';
+import { getCashierReport, fetchStats, fetchCashierStats } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 const today = new Date();
 const CashierReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
+  const [stats, setStats] = useState({});
+  const [cashierstats, setCashierStats] = useState({});
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
   const [formdate, setFormdate] = useState(new Date());
+  const [csvData, setcsvData] = useState([]);
+
+  const getStats = () => {
+    fetchStats('cashier')
+      .then((data) => {
+        setStats(data.stats);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+  const getCashierStats = () => {
+    fetchCashierStats()
+      .then((data) => {
+        console.log(data);
+        setCashierStats(data.stats);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+
+  const fetchCSVData = async(list) => {
+    const csvlist = list.map(async (invoice) => {
+        return ([`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`,invoice._id,"-",invoice.txType,"Completed","-","-"]);
+    });
+    const result= await Promise.all(csvlist);
+    return({res:result, loading:false});
+  };
 
   const getReport = async() => {
+    setLoading(true);
     const yesterday = new Date(formdate)
     yesterday.setDate(yesterday.getDate() - 1)
+    const stats = await getStats();
+    const cashierstats = await getCashierStats();
     const res = await getCashierReport(yesterday,formdate);
-    console.log(res);
+    const csvDATA = await fetchCSVData(res.data.transactions);
+
+    setcsvData([["Time","TransactionID","Description","Type","Status","CashInHand","Credit"],...csvDATA.res])
     setInvoiceList(res.data.transactions);
+    setLoading(csvDATA.loading);
   };
 
   const getInvoices = () => {
@@ -70,7 +108,7 @@ const CashierReportPage = (props) => {
       </Helmet>
       <CashierHeader active="reports" />
       <Container verticalMargin>
-           <Row>
+           <Row style={{marginBottom:"0px"}}>
               <Col cW='40%'>
               <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
                 <Container>
@@ -122,8 +160,109 @@ const CashierReportPage = (props) => {
               <Col  cW='30%'>
               </Col>
             </Row>
+            <Row style={{backgroundColor:"lightgray", marginBottom:"20px",marginTop:"0px"}}>
+            <Col >
+            <Card
+                horizontalMargin="7px"
+                cardWidth="-webkit-fill-available"
+                h4FontSize="16px"
+                smallValue
+                textAlign="center"
+                col
+                style={{backgroundColor:"lightgray"}}
+              >
+                <h4>Opening Balance</h4>
+                <div className="cardValue">
+                  {
+                    <span> {CURRENCY} {cashierstats.openingBalance}</span>
+                  }
+                </div>
+              </Card>
+            </Col>
+            <Col>
+            <Card
+                horizontalMargin="7px"
+                cardWidth="-webkit-fill-available"
+                h4FontSize="16px"
+                smallValue
+                textAlign="center"
+                col
+                style={{
+                  backgroundColor:"lightgray",
+                  borderStyle:"hidden hidden hidden solid",
+                  borderColor:"grey"
+                }}
+              >
+                <h4>Cash Credit</h4>
+                <div className="cardValue">
+                  {CURRENCY} {stats.amount_collected}
+                </div>
+              </Card>
+            </Col>
+            <Col>
+            <Card
+                horizontalMargin="7px"
+                cardWidth="-webkit-fill-available"
+                h4FontSize="16px"
+                smallValue
+                textAlign="center"
+                col
+                style={{
+                  backgroundColor:"lightgray",
+                  borderStyle:"hidden hidden hidden solid",
+                  borderColor:"grey"
+                }}
+              >
+                <h4>Closing Balance</h4>
+                <div className="cardValue">
+                {CURRENCY} {cashierstats.closingBalance}
+                </div>
+              </Card>
+            </Col>
+            <Col>
+            <Card
+                horizontalMargin="7px"
+                cardWidth="-webkit-fill-available"
+                smallValue
+                h4FontSize="16px"
+                textAlign="center"
+                col
+                style={{
+                  backgroundColor:"lightgray",
+                  borderStyle:"hidden hidden hidden solid",
+                  borderColor:"grey"
+                }}
+              >
+                <h4>Cash Counted</h4>
+                <div className="cardValue">
+                  {CURRENCY} -
+                </div>
+              </Card>
+            </Col>
+            <Col>
+            <Card
+                horizontalMargin="7px"
+                cardWidth="-webkit-fill-available"
+                smallValue
+                h4FontSize="16px"
+                textAlign="center"
+                col
+                style={{
+                  backgroundColor:"lightgray",
+                  borderStyle:"hidden hidden hidden solid",
+                  borderColor:"grey"
+                }}
+              >
+                <h4>Descripency</h4>
+                <div className="cardValue">
+                {CURRENCY} -
+                </div>
+              </Card>
+            </Col>
+          </Row>
+          
             <Card bigPadding style={{width:'100%'}}>
-        {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
+        <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice Paid (cash to cash)</b></h3>
         {invoiceList && invoiceList.length > 0 ? (
                 <Table marginTop="34px">

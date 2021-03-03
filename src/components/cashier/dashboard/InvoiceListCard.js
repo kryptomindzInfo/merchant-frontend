@@ -151,10 +151,11 @@ const InvoiceListCard = (props) => {
   const refreshInvoiceList = () => {
     fetchPaidInvoices()
       .then((data) => {
-        setInvoiceList(data.list);
-        setcopyInvoiceList(data.list)
+        const invoice = data.list.reverse();
+        setInvoiceList(invoice);
+        setcopyInvoiceList(invoice)
         props.setLoading(false);
-        props.invoice(data.list);
+        props.invoice(invoice);
       })
       .catch((err) => {
         props.setLoading(false);
