@@ -249,7 +249,7 @@ class CashierClosingBalance extends Component {
       .then(res => {
         if (res.status == 200) {
           let dd = res.data.lastdate == null ? null : this.formatDate(res.data.lastdate);
-
+          console.log(res);
           this.setState({
             openingBalance: res.data.openingBalance,
             lastdate: dd,
@@ -259,7 +259,7 @@ class CashierClosingBalance extends Component {
           }, () => {
             var dis = this;
             setTimeout(function () {
-              dis.getStats();
+              dis.getDashStats();
             }, 3000);
 
           });
@@ -629,7 +629,7 @@ class CashierClosingBalance extends Component {
                     </Col>
                     <Col cW="35%">
                       {
-                        this.state.openingBalance
+                        this.state.cashInHand
                       }
                     </Col>
                   </Row>

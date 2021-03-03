@@ -16,7 +16,7 @@ import Col from '../../shared/Col';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
-import { fetchGroups, fetchStats } from '../api/CashierAPI';
+import { fetchGroups, fetchStats, fetchCashierStats } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 
 const StaffDashboardPage = (props) => {
@@ -26,6 +26,7 @@ const StaffDashboardPage = (props) => {
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
   const [stats, setStats] = useState({});
+  const [cashierstats, setCashierStats] = useState({});
 
   const getStats = () => {
     fetchStats('cashier')
@@ -37,9 +38,21 @@ const StaffDashboardPage = (props) => {
       });
   };
 
+  const getCashierStats = () => {
+    fetchCashierStats()
+      .then((data) => {
+        console.log(data);
+        setCashierStats(data.stats);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+
   const status = () => {
     setInterval(function(){
       getStats();
+      getCashierStats();
      }, 3000);
   };
 
@@ -65,7 +78,7 @@ const StaffDashboardPage = (props) => {
           <Col cW="100%">
           <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Opening Balance</h4>
-              <div className="cardValue">XOF 100000</div>
+              <div className="cardValue">{cashierstats.openingBalance}</div>
               </Card>
            </Col>
             

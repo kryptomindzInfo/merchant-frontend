@@ -255,7 +255,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Descripency</h4>
                 <div className="cardValue">
-                0
+                {CURRENCY} {(cashierstats.closingBalance-cashierstats.openingBalance)-(cashierstats.closingBalance-cashierstats.openingBalance)}
                 </div>
               </Card>
             </Col>

@@ -250,6 +250,7 @@ class CashierClosingBalance extends Component {
       })
       .then(res => {
         if (res.status == 200) {
+          console.log(res);
           let b1 = res.data.balance1 == null ? 0 : res.data.balance1;
           let b2 = res.data.balance2 == null ? 0 : res.data.balance2;
           let dd =
@@ -263,7 +264,7 @@ class CashierClosingBalance extends Component {
               balance2: b2,
               lastdate: dd,
               transactionStarted: res.data.transactionStarted,
-              isClosed: res.data.isClosed
+              isClosed: res.data.isClosed,
             },
             () => {
               var dis = this;
@@ -490,7 +491,7 @@ class CashierClosingBalance extends Component {
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
-          this.state.isClosed ? (
+          !this.state.isClosed ? (
             <Button 
             dashBtn
             onClick={this.showOpeningPopup}
