@@ -71,7 +71,8 @@ const PayBillsInvoiceDetails = (props) => {
               invoices : [{
                 id: invoice._id,
                 penalty: props.penalty,
-              }]
+              }],
+              description: `bill paid against 1 invoice for ${invoice.name}`,
             }
             const payinvoice = [{
               invoice: invoice,

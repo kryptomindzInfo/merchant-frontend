@@ -52,7 +52,7 @@ const CashierReportPage = (props) => {
 
   const fetchCSVData = async(list) => {
     const csvlist = list.map(async (invoice) => {
-        return ([`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`,invoice._id,"-",invoice.txType,"Completed","-","-"]);
+        return ([`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`,invoice._id,invoice.description,invoice.txType,"Completed",invoice.cash_in_hand,invoice.amount]);
     });
     const result= await Promise.all(csvlist);
     return({res:result, loading:false});
@@ -65,10 +65,10 @@ const CashierReportPage = (props) => {
     const stats = await getStats();
     const cashierstats = await getCashierStats();
     const res = await getCashierReport(yesterday,formdate);
-    const csvDATA = await fetchCSVData(res.data.transactions);
+    const csvDATA = await fetchCSVData(res.data.transactions.reverse());
 
     setcsvData([["Time","TransactionID","Description","Type","Status","CashInHand","Credit"],...csvDATA.res])
-    setInvoiceList(res.data.transactions);
+    setInvoiceList(res.data.transactions.reverse());
     setLoading(csvDATA.loading);
   };
 
@@ -79,11 +79,11 @@ const CashierReportPage = (props) => {
           <td>{`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`}</td>
           <td>{invoice._id}</td>
           <td>
-            -
+          {invoice.description}
           </td>
           <td>{invoice.txType}</td>
           <td>Completed</td>
-          <td>-</td>
+          <td>{CURRENCY} {invoice.cash_in_hand}</td>
           <td>{CURRENCY} {invoice.amount}</td>
         </tr>
       );
@@ -195,7 +195,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Cash Credit</h4>
                 <div className="cardValue">
-                  {CURRENCY} {stats.amount_collected}
+                  {CURRENCY} {cashierstats.closingBalance-cashierstats.openingBalance}
                 </div>
               </Card>
             </Col>
@@ -235,7 +235,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Cash Counted</h4>
                 <div className="cardValue">
-                  {CURRENCY} -
+                {CURRENCY} {cashierstats.closingBalance-cashierstats.openingBalance}
                 </div>
               </Card>
             </Col>
@@ -255,7 +255,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Descripency</h4>
                 <div className="cardValue">
-                {CURRENCY} -
+                0
                 </div>
               </Card>
             </Col>

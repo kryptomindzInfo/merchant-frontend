@@ -86,14 +86,14 @@ const StaffDashboardPage = (props) => {
   };
 
   const startTimer = () => {
-    console.log(timer);
+    let couyntdown = 30;
     var timeron = setInterval(function() {
-      if (timer <= 0) {
+      if (couyntdown <= 0) {
         clearInterval(timeron);
         setResend(true);
       } else {
-        var time = Number(timer) - 1;
-        setTimer(time);
+        couyntdown = Number(couyntdown) - 1;
+        setTimer(couyntdown);
       }
     }, 1000);
   };

@@ -130,6 +130,7 @@ const PayBillsInvoiceList = (props) => {
   const handleMultipleInvoiceSubmit = () => {
     const obj = {
       invoices: selectedInvoiceList,
+      description: `bill paid against ${selectedInvoiceList.length} invoice for ${payingInvoiceList[0].invoice.name}`,
     }
     props.showOTPPopup(obj,payingInvoiceList);
   };
