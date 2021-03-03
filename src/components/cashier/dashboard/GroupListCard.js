@@ -212,9 +212,9 @@ const GroupListCard = (props) => {
                 <thead>
                   <tr>
                     <th>Name</th>
-                    <th>No. of Invoices</th>
-                    <th>No. of Paid Invoices</th>
-                    <th>No. of Due Invoices</th>
+                    <th>Total Invoices</th>
+                    <th>Paid Invoices</th>
+                    <th>Due Invoices</th>
                     <th></th>
                   </tr>
                 </thead>

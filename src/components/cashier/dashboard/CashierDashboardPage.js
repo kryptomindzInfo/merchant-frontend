@@ -76,7 +76,7 @@ const StaffDashboardPage = (props) => {
           <InvoiceListCard setLoading={(val) => {}} invoice={setInvoiceList} />
         </Main>
       </Container>
-      {/* <Footer /> */}
+      <Footer />
       
     </Fragment>
   );

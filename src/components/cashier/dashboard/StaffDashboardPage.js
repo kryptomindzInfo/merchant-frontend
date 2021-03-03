@@ -18,7 +18,7 @@ import Main from '../../shared/Main';
 import GroupNumberCard from '../../shared/GroupNumberCard';
 import { generateStaffOTP, fetchStats, openStaff, closeStaff} from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
-
+import Footer from '../../Footer';
 const StaffDashboardPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [groupList, setGroupList] = useState([]);
@@ -291,6 +291,7 @@ const StaffDashboardPage = (props) => {
            
           </Popup>
         ) : null}
+        <Footer />
     </Fragment>
   );
 };

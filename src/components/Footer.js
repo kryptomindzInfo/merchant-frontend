@@ -7,7 +7,8 @@ import PropTypes from 'prop-types';
 import locale from 'yup/lib/locale';
 import styled from 'styled-components';
 
-  
+
+
 const FrontLeftWrap = styled.section`
     background-image: ${(props) => props.theme.vGradient};
     position: fixed,
@@ -23,6 +24,7 @@ const FrontLeftWrap = styled.section`
   `;
 
 const Footer = () => {
+  const name  = JSON.parse(localStorage.getItem(`cashierLogged`)).bank ? JSON.parse(localStorage.getItem(`cashierLogged`)).bank.name : '';
     return (
           <FrontLeftWrap>
         <Grid
@@ -32,13 +34,8 @@ const Footer = () => {
         alignContent="center"
         alignItems="center"
       >
-        <Typography >
-          E-WALLET
-        </Typography>
-        <Typography>
-          Welcome to E-wallet <br />
-          Create your wallet for easy transferring <br />
-          of money to your friends and family
+        <Typography style={{ fontWeight: '400', fontSize: '15px' }}>
+        Powered by Digital business ecosystem. Associated with {name}.
         </Typography>
       </Grid>
     </FrontLeftWrap>

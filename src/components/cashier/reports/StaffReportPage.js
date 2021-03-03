@@ -14,7 +14,7 @@ import FormGroup from '../../shared/FormGroup';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { CURRENCY } from '../../constants';
 import DateFnsUtils from '@date-io/date-fns';
-
+import Footer from '../../Footer';
 import { fetchInvoicesBydate } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 import { Height } from '@material-ui/icons';
@@ -158,7 +158,7 @@ const StaffReportPage = (props) => {
               </Col>
               <Col  cW='30%'>
                 <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px', textAlign:'center'}}>
-                  <h4 style={{marginTop:'30px'}}>No of bill Gererated</h4>
+                  <h4 style={{marginTop:'30px'}}>Bill Gererated</h4>
                   <div className="cardValue">{invoiceList.length}</div>
                 </Card>
               </Col>
@@ -171,7 +171,7 @@ const StaffReportPage = (props) => {
                     height:'150px',
                     textAlign:'center',
                   }}>
-                  <h4 style={{marginTop:'30px'}}>Amount of bill Gererated</h4>
+                  <h4 style={{marginTop:'30px'}}>Amount</h4>
                   <div className="cardValue">XOF: {amount}</div>
                 </Card>
               </Col>
@@ -199,6 +199,7 @@ const StaffReportPage = (props) => {
                     style={{
                       textAlign: 'center',
                       color: 'grey',
+                      height: '300px',
                     }}
                   >
                     No invoice found
@@ -206,6 +207,7 @@ const StaffReportPage = (props) => {
                 )}
         </Card>
       </Container>
+      <Footer />
     </Fragment>
   );
 };

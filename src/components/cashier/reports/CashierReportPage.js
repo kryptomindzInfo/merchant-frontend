@@ -65,15 +65,15 @@ const CashierReportPage = (props) => {
     const stats = await getStats();
     const cashierstats = await getCashierStats();
     const res = await getCashierReport(yesterday,formdate);
-    const csvDATA = await fetchCSVData(res.data.transactions.reverse());
+    const csvDATA = await fetchCSVData(res.data.transactions);
 
     setcsvData([["Time","TransactionID","Description","Type","Status","CashInHand","Credit"],...csvDATA.res])
-    setInvoiceList(res.data.transactions.reverse());
+    setInvoiceList(res.data.transactions);
     setLoading(csvDATA.loading);
   };
 
   const getInvoices = () => {
-    return invoiceList.map((invoice) => {
+    return invoiceList.reverse().map((invoice) => {
       return (
         <tr key={invoice._id}>
           <td>{`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`}</td>
@@ -284,6 +284,7 @@ const CashierReportPage = (props) => {
                     style={{
                       textAlign: 'center',
                       color: 'grey',
+                      height: '300px',
                     }}
                   >
                     No invoice found
@@ -291,7 +292,7 @@ const CashierReportPage = (props) => {
                 )}
         </Card>
       </Container>
-      {/* <Footer /> */}
+      <Footer />
     </Fragment>
   );
 };
