@@ -118,7 +118,7 @@ const BranchParticularStaffReport = (props) => {
                     <h2 style={{color:"green"}}><b>Assigned To: {name}</b></h2>
                 </Col >
                 <Col  cW='50%'>
-                        <h4 style={{color:"green",textAlign:"left"}}><b>Select Date for report</b></h4>
+                        <h2 style={{color:"green",textAlign:"left"}}><b>Date</b></h2>
                     <Row>
                         <Col>
                             <FormGroup>
@@ -164,18 +164,18 @@ const BranchParticularStaffReport = (props) => {
       <Row>
           <Col cW="50%">
             <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-              <h4>No of bill Gererated</h4>
+              <h4>Bill Gererated</h4>
               <div className="cardValue">{invoiceList.length}</div>
               </Card>
            </Col>
            <Col cW="50%">
             <Card marginBottom="54px" buttonMarginTop="32px" smallValue>
-              <h4>Amount of bill Gererated</h4>
-              <div className="cardValue">{amount}</div>
+              <h4>Total Amount</h4>
+              <div className="cardValue">XOF {amount}</div>
               </Card>
            </Col>
       </Row>
-        
+      <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px'}}> 
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice List</b></h3>
         {invoiceList && invoiceList.length > 0 ? (
                 <Table marginTop="34px" smallTd>
@@ -200,6 +200,7 @@ const BranchParticularStaffReport = (props) => {
                     No invoice found
                   </h3>
                 )}
+        </Card>
         </Main>
       </Container>
       {editCashierPopup ? (
