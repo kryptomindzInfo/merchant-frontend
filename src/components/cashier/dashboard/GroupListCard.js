@@ -174,7 +174,7 @@ const GroupListCard = (props) => {
     <Wrapper>
       <Container verticalMargin>
         <Main fullWidth>
-          <ActionBar
+          {/* <ActionBar
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
@@ -193,7 +193,7 @@ const GroupListCard = (props) => {
               <AddIcon className="material-icons" />
               <span>Add Category</span>
             </Button>
-          </ActionBar>
+          </ActionBar> */}
           <Card bigPadding>
             <div className="cardHeader">
               <div className="cardHeaderLeft">

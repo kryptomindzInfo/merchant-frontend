@@ -10,7 +10,7 @@ import { useTheme } from '@material-ui/core/styles';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import SearchIcon from '@material-ui/core/SvgIcon/SvgIcon';
 import AddIcon from '@material-ui/icons/Add';
-import ViewInvoicePopup from '../invoice/ViewInvoicePopup';
+import PaidInvoiceDetails from '../../shared/sidebars/PaidInvoiceDetails';
 import Card from '../../shared/Card';
 import Table from '../../shared/Table';
 import ActionBar from '../../shared/ActionBar';
@@ -20,7 +20,6 @@ import Container from '../../shared/Container';
 import CreateGroupPopup from './CreateGroupPopup';
 import SearchInvoicePopup from './SearchInvoicePopup';
 import Button from '../../shared/Button';
-import TransactionReceipt from './TransactionReciept';
 import history from '../../utils/history';
 import { fetchPaidInvoices } from '../api/CashierAPI';
 import { CURRENCY } from '../../constants';
@@ -122,31 +121,13 @@ TablePaginationActions.propTypes = {
 };
 
 const InvoiceListCard = (props) => {
-  const [receiptvalues, setReceiptvalues] = React.useState();
   const [addGroupPopup, setGroupPopup] = useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [viewingInvoice, setViewingInvoice] = React.useState({});
-  const [payBillsPopup, setPayBillsPopup] = useState(false);
-  const [receiptPopup, setReceiptPopup] = useState(false);
+
   const [invoiceList, setInvoiceList] = useState([]);
   const [copyInvoiceList, setcopyInvoiceList] = useState([])
 
-  const onPayBillsPopupClose = () => {
-    refreshInvoiceList();
-    setPayBillsPopup(false);
-  };
-
-  const onPayBillsPopupOpen = () => {
-    setPayBillsPopup(true);
-  };
-
-  const onReceiptPopupOpen = () => {
-    setReceiptPopup(true);
-  };
-
-  const onReceiptClose = () => {
-    setReceiptPopup(false);
-  };
 
   const refreshInvoiceList = () => {
     fetchPaidInvoices()
@@ -201,18 +182,6 @@ const InvoiceListCard = (props) => {
             <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
               View
             </Button>
-            <Button
-              style={{marginLeft:"5px", width:"40%"}}
-              onClick={() => {
-                setReceiptvalues([{
-                  invoice: invoice,
-                  penalty: invoice.penalty,
-                }]);
-                setReceiptPopup(true);
-              }}
-            >
-              Print Receipt
-            </Button>
           </td>
         </tr>
       );
@@ -237,27 +206,6 @@ const InvoiceListCard = (props) => {
     <Wrapper>
       <Container verticalMargin>
         <Main fullWidth>
-          <ActionBar
-            marginBottom="33px"
-            inputWidth="calc(100% - 241px)"
-            className="clr"
-          >
-            <div className="iconedInput fl">
-              <i className="material-icons">
-                <SearchIcon />
-              </i>
-              <input type="text" placeholder="Search Invoice Name" onChange={(e) => {
-                searchlistfunction(e.target.value)
-              }} />
-            </div>
-            <Button
-              className="addBankButton"
-              flex
-              onClick={() => { onPayBillsPopupOpen() }}
-            >
-              <span>Search Paid Invoice</span>
-            </Button>
-          </ActionBar>
           <Card bigPadding>
             <div className="cardHeader">
               <div className="cardHeaderLeft">
@@ -300,32 +248,14 @@ const InvoiceListCard = (props) => {
           </Card>
         </Main>
       </Container>
-      {payBillsPopup ? (
-        <SearchInvoicePopup
-          close={() => onPayBillsPopupClose()}
-          showReceiptPopup={(values) => {
-            console.log(values);
-            setReceiptvalues(values)
-          }}
-          show={onReceiptPopupOpen}
-        />
-      ) : (
-        ''
-      )}
-      {receiptPopup ? (
-        <TransactionReceipt
-        values={receiptvalues}
-        close={() => onReceiptClose()} 
-      />
+      {viewInvoicePopup ? (
+          <PaidInvoiceDetails
+            close={()=>onViewInvoicePopupClose()}
+            invoice={viewingInvoice}
+          />
       ) : (
           ''
-        )}
-      {viewInvoicePopup ? (
-        <ViewInvoicePopup
-          invoice={viewingInvoice}
-          onClose={() => onViewInvoicePopupClose()}
-        />
-      ) : null}
+      )}
     </Wrapper>
   );
 };

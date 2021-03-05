@@ -13,7 +13,7 @@ import TextInput from '../../shared/TextInput';
 import notify from '../../utils/Notify';
 import PayBillPopup from '../../../components/cashier/MerchantPayBills/PayBillPopup';
 import TransactionReceipt from '../../../components/cashier/dashboard/TransactionReciept';
-
+import SearchInvoicePopup from './SearchInvoicePopup';
 // import withStyles from '@material-ui/core/styles'
 import { withStyles } from '@material-ui/core';
 
@@ -40,6 +40,7 @@ class CashierClosingBalance extends Component {
       lastdate: null,
       tomorrow: false,
       payBillsPopup: false,
+      searchBillsPopup: false,
       receiptPopup:false,
       receiptvalues:{},
       otp: '',
@@ -80,6 +81,18 @@ class CashierClosingBalance extends Component {
   onPayBillsPopupOpen = () => {
     this.setState({
       payBillsPopup:true,
+    });
+  };
+
+  onSearchBillsPopupClose = () => {
+    this.setState({
+      searchBillsPopup:false,
+    });
+  };
+
+  onSearchBillsPopupOpen = () => {
+    this.setState({
+      searchBillsPopup:true,
     });
   };
 
@@ -531,6 +544,13 @@ class CashierClosingBalance extends Component {
             </Button>
           </Col>
         </Row>
+        <Row>
+          <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
+            <Button dashBtn onClick={() => { this.onSearchBillsPopupOpen() }}>
+              Search Paid Invoices
+            </Button>
+          </Col>
+        </Row>
         {this.state.payBillsPopup ? (
         <PayBillPopup
           close={() => this.onPayBillsPopupClose()}
@@ -545,6 +565,14 @@ class CashierClosingBalance extends Component {
       ) : (
         ''
       )}
+      {this.state.searchBillsPopup ? (
+        <SearchInvoicePopup
+          close={() => this.onSearchBillsPopupClose()}
+        />
+      ) : (
+        ''
+      )}
+
       {this.state.receiptPopup ? (
         <TransactionReceipt
         values={this.state.receiptvalues}

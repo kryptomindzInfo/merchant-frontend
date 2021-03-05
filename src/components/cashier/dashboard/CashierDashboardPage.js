@@ -77,7 +77,7 @@ const StaffDashboardPage = (props) => {
           <Col cW="100%">
           <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Opening Balance</h4>
-              <div className="cardValue">{cashierstats.openingBalance}</div>
+              <div className="cardValue">XOF {cashierstats.openingBalance}</div>
               </Card>
            </Col>
             
