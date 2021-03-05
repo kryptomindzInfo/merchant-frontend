@@ -14,6 +14,8 @@ import FormGroup from '../../shared/FormGroup';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { CURRENCY } from '../../constants';
 import DateFnsUtils from '@date-io/date-fns';
+import endOfDay from 'date-fns/endOfDay'
+import startOfDay from 'date-fns/startOfDay'
 import Footer from '../../Footer';
 
 import { getCashierReport, fetchStats, fetchCashierStats } from '../api/CashierAPI';
@@ -61,11 +63,11 @@ const CashierReportPage = (props) => {
 
   const getReport = async() => {
     setLoading(true);
-    const yesterday = new Date(formdate)
-    yesterday.setDate(yesterday.getDate() - 1)
+    const start = startOfDay(new Date(formdate));
+    const end = endOfDay(new Date(formdate));
     const stats = await getStats();
     const cashierstats = await getCashierStats();
-    const res = await getCashierReport(yesterday,formdate);
+    const res = await getCashierReport(start,end);
     const csvDATA = await fetchCSVData(res.data.transactions);
     setTotalAmountCredited(
       res.data.transactions.reduce((a, b) => {

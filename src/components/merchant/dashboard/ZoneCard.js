@@ -152,17 +152,17 @@ function ZoneCard(props) {
       </ActionBar>
       <Card bigPadding>
         <div className="cardBody">
-          <Table marginTop="34px" smallTd>
+          <Table marginTop="34px">
             <thead>
               <tr>
                 <th>Zones</th>
-                <th>No. of subzones</th>
-                <th>No. of branches</th>
-                <th>No. of Bills</th>
+                <th>Subzones</th>
+                <th>Branches</th>
+                <th>Bills</th>
                 <th>Amount Billed</th>
-                <th>No. of paid bills</th>
+                <th>Paid bills</th>
                 <th>Amount of paid bills</th>
-                <th>No. of pending bills</th>
+                <th>Pending bills</th>
                 <th>Amount of pending bills</th>
               </tr>
             </thead>

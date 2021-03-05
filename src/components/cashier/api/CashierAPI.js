@@ -2,6 +2,8 @@ import axios from 'axios';
 import Papa from 'papaparse';
 import { API_URL } from '../../constants';
 import notify from '../../utils/Notify';
+import endOfDay from 'date-fns/endOfDay'
+import startOfDay from 'date-fns/startOfDay'
 
 
 
@@ -303,8 +305,13 @@ const fetchInvoices = async (id) => {
 };
 
 const fetchPaidInvoices = async () => {
+  const start = startOfDay(new Date());
+  const end = endOfDay(new Date());
+
   try {
-    const res = await axios.post(`${API_URL}/merchantStaff/getPaidInvoiceList`, {
+    const res = await axios.post(`${API_URL}/merchantStaff/searchPaidInvoiceList`, {
+      from_date: start,
+      to_date: end,
     });
     if (res.status === 200) {
       if (res.data.status === 0) {

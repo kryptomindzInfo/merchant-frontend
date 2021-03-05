@@ -18,7 +18,7 @@ import Main from '../../shared/Main';
 import Wrapper from '../../shared/Wrapper';
 import Container from '../../shared/Container';
 import CreateGroupPopup from './CreateGroupPopup';
-import PayBillPopup from '../../cashier/MerchantPayBills/PayBillPopup';
+import SearchInvoicePopup from './SearchInvoicePopup';
 import Button from '../../shared/Button';
 import TransactionReceipt from './TransactionReciept';
 import history from '../../utils/history';
@@ -201,6 +201,18 @@ const InvoiceListCard = (props) => {
             <Button onClick={() => handleViewInvoicePopupClick(invoice)}>
               View
             </Button>
+            <Button
+              style={{marginLeft:"5px", width:"40%"}}
+              onClick={() => {
+                setReceiptvalues([{
+                  invoice: invoice,
+                  penalty: invoice.penalty,
+                }]);
+                setReceiptPopup(true);
+              }}
+            >
+              Print Receipt
+            </Button>
           </td>
         </tr>
       );
@@ -243,8 +255,7 @@ const InvoiceListCard = (props) => {
               flex
               onClick={() => { onPayBillsPopupOpen() }}
             >
-              <AddIcon className="material-icons" />
-              <span>Pay Invoices</span>
+              <span>Search Paid Invoice</span>
             </Button>
           </ActionBar>
           <Card bigPadding>
@@ -290,7 +301,7 @@ const InvoiceListCard = (props) => {
         </Main>
       </Container>
       {payBillsPopup ? (
-        <PayBillPopup
+        <SearchInvoicePopup
           close={() => onPayBillsPopupClose()}
           showReceiptPopup={(values) => {
             console.log(values);

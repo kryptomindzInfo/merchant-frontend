@@ -84,6 +84,7 @@ class CashierClosingBalance extends Component {
   };
 
   onReceiptPopupOpen = () => {
+    console.log('hi');
     this.setState({
       receiptPopup:true,
     });
@@ -103,7 +104,6 @@ class CashierClosingBalance extends Component {
   };
   handleCheckbox = event => {
     const { value, name } = event.target;
-    console.log(value);
     if (value == 'true') {
       var v = false;
     } else {
@@ -249,7 +249,6 @@ class CashierClosingBalance extends Component {
       .then(res => {
         if (res.status == 200) {
           let dd = res.data.lastdate == null ? null : this.formatDate(res.data.lastdate);
-          console.log(res);
           this.setState({
             openingBalance: res.data.openingBalance,
             lastdate: dd,
@@ -462,7 +461,6 @@ class CashierClosingBalance extends Component {
       });
   };
   componentDidMount() {
-    console.log(JSON.parse(localStorage.getItem('cashierLogged')));
     this.getStats();
     this.getDashStats();
     axios
@@ -537,6 +535,7 @@ class CashierClosingBalance extends Component {
         <PayBillPopup
           close={() => this.onPayBillsPopupClose()}
           showReceiptPopup={(values) => {
+            console.log(values);
             this.setState({
               receiptvalues:values,
             });
@@ -546,7 +545,7 @@ class CashierClosingBalance extends Component {
       ) : (
         ''
       )}
-      {this.statereceiptPopup ? (
+      {this.state.receiptPopup ? (
         <TransactionReceipt
         values={this.state.receiptvalues}
         close={() => this.onReceiptClose()} 

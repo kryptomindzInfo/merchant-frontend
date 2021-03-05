@@ -123,6 +123,7 @@ const BranchParticularStaffReport = (props) => {
                         <Col>
                             <FormGroup>
                                 <MuiPickersUtilsProvider
+                                style={{backgroundColor:'green'}}
                                 utils={DateFnsUtils}
                                                 >
                                     <KeyboardDatePicker
@@ -130,6 +131,7 @@ const BranchParticularStaffReport = (props) => {
                                         label="Date"
                                         size="small"
                                         fullWidth
+                                        maxDate={new Date()}
                                         inputVariant="outlined"
                                         format="dd/MM/yyyy"
                                         required

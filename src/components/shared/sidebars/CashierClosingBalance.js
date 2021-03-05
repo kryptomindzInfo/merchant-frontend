@@ -74,7 +74,6 @@ class CashierClosingBalance extends Component {
   };
   handleCheckbox = event => {
     const { value, name } = event.target;
-    console.log(value);
     if (value == 'true') {
       var v = false;
     } else {
@@ -86,7 +85,6 @@ class CashierClosingBalance extends Component {
   };
 
   showOpeningPopup = v => {
-    console.log(this.state.isClosed);
     this.setState({ openingPopup: true, cashier_id: v._id });
   };
   showHistoryPop = () => {
@@ -250,7 +248,6 @@ class CashierClosingBalance extends Component {
       })
       .then(res => {
         if (res.status == 200) {
-          console.log(res);
           let b1 = res.data.balance1 == null ? 0 : res.data.balance1;
           let b2 = res.data.balance2 == null ? 0 : res.data.balance2;
           let dd =
@@ -435,7 +432,6 @@ class CashierClosingBalance extends Component {
       });
   };
   componentDidMount() {
-    console.log(JSON.parse(localStorage.getItem('cashierLogged')));
     this.getStats();
     this.getDashStats();
     axios

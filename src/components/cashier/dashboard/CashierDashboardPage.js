@@ -41,7 +41,6 @@ const StaffDashboardPage = (props) => {
   const getCashierStats = () => {
     fetchCashierStats()
       .then((data) => {
-        console.log(data);
         setCashierStats(data.stats);
       })
       .catch((err) => {

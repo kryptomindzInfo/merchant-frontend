@@ -65,6 +65,69 @@ const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
   }
 };
 
+const getPaidUserInvoices = async (mobile) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/searchPaidInvoiceByMobile`, {
+      mobile,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        toast.error(res.data.message);
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    toast.error(res.data.message);
+    return { list: [], loading: false };
+  } catch (err) {
+    toast.error('Something went wrong');
+    return { list: [], loading: false };
+  }
+};
+
+const getPaidInvoiceDetails = async (number) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/searchPaidInvoiceByBillNumber`, {
+      number,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        toast.error(res.data.message);
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    toast.error(res.data.message);
+    return { list: [], loading: false };
+  } catch (err) {
+    toast.error('Something went wrong');
+    return { list: [], loading: false };
+  }
+};
+
+const getPaidInvoiceByCustomerCode = async (customerCode, merchantId) => {
+  try {
+    const res = await axios.post(
+      `${API_URL}/merchantStaff/searchPaidInvoiceByCustomerCode`,
+      {
+        customer_code: customerCode,
+      },
+    );
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        toast.error(res.data.message);
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    toast.error(res.data.message);
+    return { list: [], loading: false };
+  } catch (err) {
+    toast.error('Something went wrong');
+    return { list: [], loading: false };
+  }
+};
+
 const payInvoice = async (values,fun,fun2) => {
   try {
     const res = await axios.post(`${API_URL}/merchantStaff/payInvoice`, {
@@ -90,6 +153,9 @@ const payInvoice = async (values,fun,fun2) => {
 export {
   getUserInvoices,
   getInvoiceDetails,
+  getPaidUserInvoices,
+  getPaidInvoiceDetails,
   payInvoice,
   getInvoiceByCustomerCode,
+  getPaidInvoiceByCustomerCode,
 };
