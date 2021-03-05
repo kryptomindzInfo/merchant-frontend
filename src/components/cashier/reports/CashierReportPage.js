@@ -14,8 +14,9 @@ import FormGroup from '../../shared/FormGroup';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { CURRENCY } from '../../constants';
 import DateFnsUtils from '@date-io/date-fns';
-import endOfDay from 'date-fns/endOfDay'
-import startOfDay from 'date-fns/startOfDay'
+import endOfDay from 'date-fns/endOfDay';
+import startOfDay from 'date-fns/startOfDay';
+import format from 'date-fns/format';
 import Footer from '../../Footer';
 
 import { getCashierReport, fetchStats, fetchCashierStats } from '../api/CashierAPI';
@@ -55,7 +56,16 @@ const CashierReportPage = (props) => {
 
   const fetchCSVData = async(list) => {
     const csvlist = list.map(async (invoice) => {
-        return ([`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`,invoice._id,invoice.description,invoice.txType,"Completed",invoice.cash_in_hand,invoice.amount]);
+        return (
+          [
+            `${format(new Date(invoice.createdAt), 'dd-MM-yyyy')}`,
+            invoice.transaction ? invoice.transaction.invoiceDetails.customer_code : '',
+            invoice.transaction ? invoice.transaction.invoiceDetails.name : '',
+            invoice.transaction ? invoice.transaction.invoiceDetails.number : '',
+            invoice.transaction ? invoice.transaction.total_amount : '',
+            invoice.cash_in_hand.toFixed()
+          ]
+        );
     });
     const result= await Promise.all(csvlist);
     return({res:result, loading:false});
@@ -73,7 +83,7 @@ const CashierReportPage = (props) => {
       res.data.transactions.reduce((a, b) => {
         return a + b.amount;
       }, 0));
-    setcsvData([["Time","TransactionID","Description","Type","Status","CashInHand","Credit"],...csvDATA.res])
+    setcsvData([["Date","CustomerNumber","CustomerName","InvoiceAmount","CashInHand"],...csvDATA.res])
     setInvoiceList(res.data.transactions);
     setLoading(csvDATA.loading);
   };
@@ -82,15 +92,16 @@ const CashierReportPage = (props) => {
     return invoiceList.reverse().map((invoice) => {
       return (
         <tr key={invoice._id}>
-          <td>{`${new Date(invoice.createdAt).getHours()}:${new Date(invoice.createdAt).getMinutes()}`}</td>
-          <td>{invoice.childTx[0].transaction.master_code}</td>
           <td>
-          {invoice.description}
+            {`${format(new Date(invoice.createdAt), 'dd-MM-yyyy')}`}</td>
+          <td>
+            {invoice.transaction ? invoice.transaction.invoiceDetails.customer_code : ''}</td>
+          <td>
+          {invoice.transaction ? invoice.transaction.invoiceDetails.name : ''}
           </td>
-          <td>{invoice.txType}</td>
-          <td>Completed</td>
-          <td>{CURRENCY} {invoice.cash_in_hand}</td>
-          <td>{CURRENCY} {invoice.amount}</td>
+          <td>{ invoice.transaction ? invoice.transaction.invoiceDetails.number : ''}</td>
+          <td>{CURRENCY} {invoice.transaction ? invoice.transaction.total_amount : ''}</td>
+          <td>{CURRENCY} {invoice.cash_in_hand.toFixed()}</td>
         </tr>
       );
     });
@@ -199,7 +210,7 @@ const CashierReportPage = (props) => {
                   borderColor:"grey"
                 }}
               >
-                <h4>Cash Credit</h4>
+                <h4>Cash Collected</h4>
                 <div className="cardValue">
                   {CURRENCY} {totalAmountCredited}
                 </div>
@@ -274,13 +285,12 @@ const CashierReportPage = (props) => {
                 <Table marginTop="34px">
                   <thead>
                     <tr>
-                      <th>Time</th>
-                      <th>Transaction ID</th>
-                      <th>Description</th>
-                      <th>Transaction Type</th>
-                      <th>Transaction Status</th>
+                      <th>Date</th>
+                      <th>Customer Number</th>
+                      <th>Customer Name</th>
+                      <th>Invoice Number</th>
+                      <th>Invoice Amount</th>
                       <th>Cash In Hand</th>
-                      <th>Credit</th>
                     </tr>
                   </thead>
                   <tbody>{getInvoices()}</tbody>

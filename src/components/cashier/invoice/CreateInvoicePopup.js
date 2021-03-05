@@ -399,6 +399,7 @@ function CreateInvoicePopup(props) {
             if (props.type === 'create') {
               await createInvoice(props, values, 'invoice').then(
                 async (err, data) => {
+                  console.log(data);
                   if (err) {
                     notify(err, 'error');
                   } else if (props.mode === 'invoice') {
@@ -414,6 +415,7 @@ function CreateInvoicePopup(props) {
                   if (err) {
                     notify(err, 'error');
                   } else if (props.mode === 'invoice') {
+                    console.log(data);
                     await incCounter(props);
                   }
                 },
@@ -425,6 +427,7 @@ function CreateInvoicePopup(props) {
                 if (err) {
                   notify(err, 'error');
                 } else if (props.mode === 'invoice') {
+                  console.log(data);
                   await incCounter(props);
                 }
               },
