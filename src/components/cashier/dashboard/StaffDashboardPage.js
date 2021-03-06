@@ -168,11 +168,11 @@ const StaffDashboardPage = (props) => {
                 dashBtn
                 onClick={()=>generateOTP()}
               >
-                  Open My Counter
+                  Open My Day
               </Button>
             ) : (
                 <Button dashBtn disabled>
-                  Counter Opened At {new Date(stats.opening_time).getHours()}:{new Date(stats.opening_time).getMinutes()}
+                  Day Opened At {new Date(stats.opening_time).getHours()}:{new Date(stats.opening_time).getMinutes()}
                 </Button>
               )}
           </Col>
