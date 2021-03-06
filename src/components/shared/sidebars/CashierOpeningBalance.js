@@ -353,8 +353,8 @@ class CashierClosingBalance extends Component {
       <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
-          {/* {this.state.tomorrow ? (
-            <div> */}
+          {this.state.tomorrow ? (
+            <div>
               {this.state.isClosed ? (
               <Button
                 dashBtn
@@ -368,12 +368,12 @@ class CashierClosingBalance extends Component {
                 </Button>
               )}
 
-            {/* </div>
+            </div>
           ) : (
             <Button dashBtn disabled>
               Counter Closed for Today
           </Button>
-          )} */}
+          )}
           
           </Col>
         </Row>
