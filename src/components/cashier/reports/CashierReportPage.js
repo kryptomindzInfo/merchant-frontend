@@ -86,7 +86,7 @@ const CashierReportPage = (props) => {
       const csvDATA = await fetchCSVData(res.data.transactions);
       setTotalAmountCredited(
       res.data.transactions.reduce((a, b) => {
-        return a + invoice.transaction ? invoice.transaction.total_amount : 0;
+        return a + b.transaction ? b.transaction.total_amount : 0;
       }, 0));
       setcsvData([["Date","CustomerNumber","CustomerName","InvoiceAmount","CashInHand"],...csvDATA.res])
       setInvoiceList(res.data.transactions);
@@ -149,11 +149,26 @@ const CashierReportPage = (props) => {
           </Col>
           </Row>
       </Card>
+      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
+        <Row>
+          <Col>
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : '-'} </h3> 
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Opening Time : </b>{dailyreprots.opening_time ? `${new Date(dailyreprots.opening_time).getHours()}:${new Date(dailyreprots.opening_time).getMinutes()}` : '-'} </h3>      
+          </Col>
+          <Col>
+         
+             
+          </Col>
+          </Row>
+      </Card>
         
            <Row style={{marginBottom:"0px"}}>
               <Col cW='40%'>
               <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
                 <Container>
+                
                 <h2 style={{color:"green"}}><b>Date</b></h2> 
                   <Row>
                     <Col cW='60%'>
@@ -277,7 +292,8 @@ const CashierReportPage = (props) => {
               >
                 <h4>Cash Counted</h4>
                 <div className="cardValue">
-                {CURRENCY} {cashierstats.closingBalance}
+                {CURRENCY} {dailyreprots.opening_balance && dailyreprots.closing_balance ?
+                  dailyreprots.closing_balance-dailyreprots.opening_balance : "-"}
                 </div>
               </Card>
             </Col>
