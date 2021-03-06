@@ -211,9 +211,10 @@ const CashierReportPage = (props) => {
             style={{color:"green",marginBottom:"20px" }}>
               <b>Opening Date: </b>
               {dailyreprots.opening_time ?
-              `${format(new Date(dailyreprots.opening_time), 'dd-MM-yyyy')}` :
-              // `${format(new Date(cashierstats.openingTime), 'dd-MM-yyyy')}`
-              `${new Date(cashierstats.openingTime).getDay()}/${new Date(cashierstats.openingTime).getMonth()+1}/${new Date(cashierstats.openingTime).getFullYear()}`
+              `${new Date(dailyreprots.opening_time).getDay()}/${new Date(dailyreprots.opening_time).getMonth()+1}/${new Date(dailyreprots.opening_time).getFullYear()}`
+              :
+
+              `${new Date().getDay()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`
               }
             </h3> 
           </Col>
