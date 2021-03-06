@@ -31,7 +31,8 @@ const CashierReportPage = (props) => {
   const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
   const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
   const merchantName = JSON.parse(localStorage.getItem('cashierLogged')).merchant.name;
-  
+  const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
   const [totalAmountCredited, setTotalAmountCredited] = useState(0);
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([]);
@@ -135,38 +136,9 @@ const CashierReportPage = (props) => {
       </Helmet>
       <CashierHeader active="reports" />
       <Container verticalMargin>
-      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
-        <Row>
-          <Col>
-          <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
-          </Col>
-          <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Branch Name : </b>{branchName} </h3>      
-          </Col>
-          <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Cashier Name : </b>{cashierName} </h3> 
-             
-          </Col>
-          </Row>
-      </Card>
-      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
-        <Row>
-          <Col>
-          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : '-'} </h3> 
-          </Col>
-          <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Opening Time : </b>{dailyreprots.opening_time ? `${new Date(dailyreprots.opening_time).getHours()}:${new Date(dailyreprots.opening_time).getMinutes()}` : '-'} </h3>      
-          </Col>
-          <Col>
-         
-             
-          </Col>
-          </Row>
-      </Card>
-        
-           <Row style={{marginBottom:"0px"}}>
+      <Row style={{marginBottom:"0px"}}>
               <Col cW='40%'>
-              <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
+              <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
                 <Container>
                 
                 <h2 style={{color:"green"}}><b>Date</b></h2> 
@@ -217,6 +189,37 @@ const CashierReportPage = (props) => {
               <Col  cW='30%'>
               </Col>
             </Row>
+            
+      <Card marginBottom="20px" buttonMarginTop="5px" smallValue style={{height:'80px'}}>
+        <Row>
+          <Col>
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Branch Name : </b>{branchName} </h3>      
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Cashier Name : </b>{cashierName} </h3> 
+             
+          </Col>
+          </Row>
+      </Card>
+      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
+        <Row>
+          <Col>
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : '-'} </h3> 
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Opening Time : </b>{dailyreprots.opening_time ? `${new Date(dailyreprots.opening_time).getHours()}:${new Date(dailyreprots.opening_time).getMinutes()}` : '-'} </h3>      
+          </Col>
+          <Col>
+         
+             
+          </Col>
+          </Row>
+      </Card>
+        
+           
             <Row style={{backgroundColor:"lightgray", marginBottom:"20px",marginTop:"0px"}}>
             <Col >
             <Card
@@ -349,7 +352,7 @@ const CashierReportPage = (props) => {
                 )}
         </Card>
       </Container>
-      <Footer />
+      <Footer bankname={bankName} banklogo={bankLogo}/>
     </Fragment>
   );
 };

@@ -6,6 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import locale from 'yup/lib/locale';
 import styled from 'styled-components';
+import { STATIC_URL, CURRENCY } from '../components/constants';
 
 
 
@@ -15,7 +16,7 @@ const FrontLeftWrap = styled.section`
     left: 0,
     bottom: 0,
     width: 100%;
-    height: 200px;
+    height: 100px;
     display: flex;
     flex-direction: column;
     color: #fff;
@@ -23,20 +24,67 @@ const FrontLeftWrap = styled.section`
     justify-content: center;
   `;
 
-const Footer = () => {
-  const name  = JSON.parse(localStorage.getItem(`cashierLogged`)).bank ? JSON.parse(localStorage.getItem(`cashierLogged`)).bank.name : '';
+const Footer = (props) => {
+  const bankname  = props.bankname;
+  const banklogo = props.banklogo;
     return (
-          <FrontLeftWrap>
-        <Grid
+      <FrontLeftWrap>
+      <Grid
         container
-        direction="column"
-        justify="center"
+        direction="row"
+        justify="space-between"
         alignContent="center"
         alignItems="center"
       >
-        <Typography style={{ fontWeight: '400', fontSize: '15px' }}>
-        Powered by Digital business ecosystem. Associated with {name}.
+        <div style={{display:'inline-flex', marginLeft:'50px'}}>
+        <Typography>
+        <img
+          src={require('../assets/images/logo.png')}
+          alt=""
+          style={{
+            height: '50px',
+            width: '50px',
+            paddingRight: '10px',
+            marginRight: '10px',
+          }}
+        />
         </Typography>
+        <Typography
+          style={{
+            fontWeight: '400',
+            fontSize: '15px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+        Powered by Digital business ecosystem. 
+        </Typography>
+        </div>
+
+        <div style={{display:'inline-flex', marginRight:'50px'}}>
+        <Typography>
+        <img
+          src={`${STATIC_URL}${banklogo}`}
+          alt=""
+          style={{
+            height: '50px',
+            width: '50px',
+            paddingRight: '10px',
+            marginRight: '10px',
+          }}
+        />
+         </Typography>
+        <Typography
+          style={{
+            fontWeight: '400',
+            fontSize: '15px',
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+        Associated with {bankname}.
+        </Typography>
+        </div>
       </Grid>
     </FrontLeftWrap>
     );

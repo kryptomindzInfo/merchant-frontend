@@ -25,6 +25,8 @@ const StaffDashboardPage = (props) => {
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );
+  const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
   const [stats, setStats] = useState({});
   const [resend, setResend] = useState(false);
   const [Popupopen, setPopupopen] = useState(false);
@@ -291,7 +293,7 @@ const StaffDashboardPage = (props) => {
            
           </Popup>
         ) : null}
-        <Footer />
+         <Footer bankname={bankName} banklogo={bankLogo}/>
     </Fragment>
   );
 };

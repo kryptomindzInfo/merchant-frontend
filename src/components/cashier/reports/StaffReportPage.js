@@ -21,6 +21,8 @@ import { Height } from '@material-ui/icons';
 const today = new Date();
 const StaffReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
+  const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
   const [invoiceList, setInvoiceList] = useState([]);
   const [amount, setAmount] = useState(0);
   const [cashierInfo, setCashierInfo] = useState(
@@ -207,7 +209,7 @@ const StaffReportPage = (props) => {
                 )}
         </Card>
       </Container>
-      <Footer />
+      <Footer bankname={bankName} banklogo={bankLogo}/>
     </Fragment>
   );
 };
