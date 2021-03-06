@@ -207,10 +207,14 @@ const CashierReportPage = (props) => {
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
         <Row>
           <Col>
-          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : '-'} </h3> 
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : cashierstats.openingBalance} </h3> 
           </Col>
           <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Opening Time : </b>{dailyreprots.opening_time ? `${new Date(dailyreprots.opening_time).getHours()}:${new Date(dailyreprots.opening_time).getMinutes()}` : '-'} </h3>      
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Opening Time : </b>{dailyreprots.opening_time ?
+          `${new Date(dailyreprots.opening_time).getHours()}:${new Date(dailyreprots.opening_time).getMinutes()}`
+          : 
+          `${new Date(cashierstats.openingTime).getHours()}:${new Date(cashierstats.openingTime).getMinutes()}`} 
+          </h3>      
           </Col>
           <Col>
          
