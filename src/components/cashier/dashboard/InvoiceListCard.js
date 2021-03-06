@@ -8,19 +8,14 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import LastPageIcon from '@material-ui/icons/LastPage';
 import { useTheme } from '@material-ui/core/styles';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
-import SearchIcon from '@material-ui/core/SvgIcon/SvgIcon';
-import AddIcon from '@material-ui/icons/Add';
 import PaidInvoiceDetails from '../../shared/sidebars/PaidInvoiceDetails';
 import Card from '../../shared/Card';
 import Table from '../../shared/Table';
-import ActionBar from '../../shared/ActionBar';
+import ReactPaginate from 'react-paginate';
 import Main from '../../shared/Main';
 import Wrapper from '../../shared/Wrapper';
 import Container from '../../shared/Container';
-import CreateGroupPopup from './CreateGroupPopup';
-import SearchInvoicePopup from './SearchInvoicePopup';
 import Button from '../../shared/Button';
-import history from '../../utils/history';
 import { fetchPaidInvoices } from '../api/CashierAPI';
 import { CURRENCY } from '../../constants';
 
@@ -124,17 +119,18 @@ const InvoiceListCard = (props) => {
   const [addGroupPopup, setGroupPopup] = useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
   const [viewingInvoice, setViewingInvoice] = React.useState({});
-
+  const [pagecount, setPageCount ] = React.useState(0);
   const [invoiceList, setInvoiceList] = useState([]);
-  const [copyInvoiceList, setcopyInvoiceList] = useState([])
+  const [invoiceListCopy, setInvoiceListCopy] = useState([]);
 
 
   const refreshInvoiceList = () => {
     fetchPaidInvoices()
       .then((data) => {
         const invoice = data.list.reverse();
-        setInvoiceList(invoice);
-        setcopyInvoiceList(invoice)
+        setPageCount(Math.ceil(data.list.length / 10));
+        setInvoiceList(invoice.slice(0,10));
+        setInvoiceListCopy(invoice)
         props.setLoading(false);
         props.invoice(invoice);
       })
@@ -187,6 +183,10 @@ const InvoiceListCard = (props) => {
       );
     });
   };
+  const handlePageClick = (data) =>{
+    console.log(data);
+    setInvoiceList(invoiceListCopy.slice(data.selected*10, data.selected + 10));
+  };
 
   const searchlistfunction = (value) => {
     console.log(value)
@@ -221,6 +221,7 @@ const InvoiceListCard = (props) => {
             </div>
             <div className="cardBody">
               {invoiceList && invoiceList.length > 0 ? (
+              <div>
                 <Table marginTop="34px" smallTd>
                   <thead>
                     <tr>
@@ -234,6 +235,20 @@ const InvoiceListCard = (props) => {
                   </thead>
                   <tbody>{getInvoices()}</tbody>
                 </Table>
+               <ReactPaginate
+               previousLabel={'previous'}
+               nextLabel={'next'}
+               breakLabel={'...'}
+               breakClassName={'break-me'}
+               pageCount={pagecount}
+               marginPagesDisplayed={10}
+               pageRangeDisplayed={2}
+               onPageChange={handlePageClick}
+               containerClassName={'pagination'}
+               subContainerClassName={'pages pagination'}
+               activeClassName={'active'}
+             />
+             </div>
               ) : (
                   <h3
                     style={{
