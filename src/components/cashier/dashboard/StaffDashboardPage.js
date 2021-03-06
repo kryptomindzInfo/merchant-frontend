@@ -172,7 +172,7 @@ const StaffDashboardPage = (props) => {
               </Button>
             ) : (
                 <Button dashBtn disabled>
-                  Counter is open
+                  Counter Opened At {new Date(stats.opening_time).getHours()}:{new Date(stats.opening_time).getMinutes()}
                 </Button>
               )}
           </Col>
