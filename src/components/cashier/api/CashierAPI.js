@@ -32,6 +32,27 @@ const getCashierReport = async (after,before) => {
     }
   };
 
+  const getCashierDailyReport = async (after,before) => {
+    try {
+      const res = await axios.post(`${API_URL}/merchantStaff/getDailyReport`, {
+        start: after,
+        end: before,
+      });
+      if (res.status === 200) {
+        if (res.data.status === 0) {
+          notify(res.data.message, 'error');
+          return { data: {}, loading: false };
+        }
+        return { data: res.data, loading: false };
+      }
+      notify(res.data.message, 'error');
+      return { data: {}, loading: false };
+    } catch (err) {
+      notify('Something went wrong', 'error');
+      return { data: {}, loading: false };
+    }
+  };
+
 const getCountries = async () => {
   try {
     const res = await axios.get(`${API_URL}/get-country`);
@@ -586,6 +607,7 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  getCashierDailyReport,
   fetchCashierStats,
   generateStaffOTP,
   getCashierReport,

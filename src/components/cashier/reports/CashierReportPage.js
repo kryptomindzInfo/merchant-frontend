@@ -19,7 +19,7 @@ import startOfDay from 'date-fns/startOfDay';
 import format from 'date-fns/format';
 import Footer from '../../Footer';
 
-import { getCashierReport, fetchStats, fetchCashierStats } from '../api/CashierAPI';
+import { getCashierReport, fetchStats, fetchCashierStats, getCashierDailyReport } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 const today = new Date();
 const CashierReportPage = (props) => {
@@ -27,9 +27,11 @@ const CashierReportPage = (props) => {
   const [invoiceList, setInvoiceList] = useState([]);
   const [stats, setStats] = useState({});
   const [cashierstats, setCashierStats] = useState({});
-  const [cashierInfo, setCashierInfo] = useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).cashier,
-  );
+  const [dailyreprots, setDailyReports] = useState({});
+  const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
+  const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
+  const merchantName = JSON.parse(localStorage.getItem('cashierLogged')).merchant.name;
+  
   const [totalAmountCredited, setTotalAmountCredited] = useState(0);
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([]);
@@ -77,15 +79,23 @@ const CashierReportPage = (props) => {
     const end = endOfDay(new Date(formdate));
     const stats = await getStats();
     const cashierstats = await getCashierStats();
+    const dailyreport = await getCashierDailyReport(start,end);
+    console.log(dailyreport);
     const res = await getCashierReport(start,end);
-    const csvDATA = await fetchCSVData(res.data.transactions);
-    setTotalAmountCredited(
+    
+      const csvDATA = await fetchCSVData(res.data.transactions);
+      setTotalAmountCredited(
       res.data.transactions.reduce((a, b) => {
-        return a + b.amount;
+        return a + invoice.transaction ? invoice.transaction.total_amount : 0;
       }, 0));
-    setcsvData([["Date","CustomerNumber","CustomerName","InvoiceAmount","CashInHand"],...csvDATA.res])
-    setInvoiceList(res.data.transactions);
-    setLoading(csvDATA.loading);
+      setcsvData([["Date","CustomerNumber","CustomerName","InvoiceAmount","CashInHand"],...csvDATA.res])
+      setInvoiceList(res.data.transactions);
+      if(dailyreport.data.reports.length>0){
+        setDailyReports(dailyreport.data.reports[0]);
+      }
+      setLoading(csvDATA.loading);
+
+    
   };
 
   const getInvoices = () => {
@@ -125,6 +135,21 @@ const CashierReportPage = (props) => {
       </Helmet>
       <CashierHeader active="reports" />
       <Container verticalMargin>
+      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
+        <Row>
+          <Col>
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Branch Name : </b>{branchName} </h3>      
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Cashier Name : </b>{cashierName} </h3> 
+             
+          </Col>
+          </Row>
+      </Card>
+        
            <Row style={{marginBottom:"0px"}}>
               <Col cW='40%'>
               <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
@@ -188,10 +213,10 @@ const CashierReportPage = (props) => {
                 col
                 style={{backgroundColor:"lightgray"}}
               >
-                <h4>Opening Balance</h4>
+                <h4>Total Bills</h4>
                 <div className="cardValue">
                   {
-                    <span> {CURRENCY} {cashierstats.openingBalance}</span>
+                    <span> {invoiceList.length}</span>
                   }
                 </div>
               </Card>
@@ -210,9 +235,9 @@ const CashierReportPage = (props) => {
                   borderColor:"grey"
                 }}
               >
-                <h4>Cash Collected</h4>
+                <h4>Paid Date</h4>
                 <div className="cardValue">
-                  {CURRENCY} {totalAmountCredited}
+                {`${format(new Date(formdate), 'dd-MM-yyyy')}`}
                 </div>
               </Card>
             </Col>
@@ -230,9 +255,9 @@ const CashierReportPage = (props) => {
                   borderColor:"grey"
                 }}
               >
-                <h4>Closing Balance</h4>
+                <h4>Amount Collected</h4>
                 <div className="cardValue">
-                {CURRENCY} {cashierstats.closingBalance}
+                {CURRENCY} {totalAmountCredited}
                 </div>
               </Card>
             </Col>
@@ -272,7 +297,7 @@ const CashierReportPage = (props) => {
               >
                 <h4>Descripency</h4>
                 <div className="cardValue">
-                {CURRENCY} 0
+                {CURRENCY} {dailyreprots.descripency ? dailyreprots.descripency : "-"}
                 </div>
               </Card>
             </Col>

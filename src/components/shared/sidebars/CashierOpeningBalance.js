@@ -37,17 +37,17 @@ class CashierClosingBalance extends Component {
     super();
     this.state = {
       loading: true,
-      lastdate: null,
-      tomorrow: false,
       payBillsPopup: false,
       searchBillsPopup: false,
       receiptPopup:false,
+      isClosed:true,
       receiptvalues:{},
+      openingDate:'',
+      closingTime:'',
+      openingTime:'',
       otp: '',
-      balance1: 0,
-      balance2: 0,
-      total: 0,
-      cashInHand: 0,
+      tomorrow: false,
+      closingBalance:'',
       cid: JSON.parse(localStorage.getItem('cashierLogged')).position._id,
       popup: false,
       showOtp: false,
@@ -130,64 +130,15 @@ class CashierClosingBalance extends Component {
   showOpeningPopup = v => {
     this.setState({ openingPopup: true, cashier_id: v._id });
   };
-  showHistoryPop = () => {
-    this.setState({ historyPop: true, historyLoading: true });
-    this.getHistory();
-  };
-
-  getHistory = () => {
-    axios
-      .post(`${API_URL}/getAll`, {
-        page: 'cashierledger',
-        type: 'merchantPosition',
-        where: { trans_type: 'CB', cashier_id: this.state.cid },
-      })
-      .then(res => {
-        if (res.status == 200) {
-          const history =  res.data.rows.reverse()
-          this.setState(
-            {
-              history: history,
-            },
-            () => {
-              this.setState({ historyLoading: false });
-            },
-          );
-        }
-      })
-      .catch(err => {});
-  };
-
-  handleAmountChange = event => {
-    const { value, name } = event.target;
-    this.setState(
-      {
-        [name]: value,
-      },
-      () => {
-        // this.calculateTotal();
-      },
-    );
-  };
 
   closePopup = () => {
     this.setState({
-      note:'',
+      agree:false,
       popup: false,
       editPopup: false,
       agree:false,
       assignPop: false,
       openingPopup: false,
-      historyPop: false,
-      name: '',
-      bcode: '',
-      working_from: '',
-      working_to: '',
-      per_trans_amt: '',
-      max_trans_amt: '',
-      max_trans_count: '',
-      mobile: '',
-      credit_limit: '',
       otp: '',
       showOtp: false,
       showEditOtp: false,
@@ -196,27 +147,6 @@ class CashierClosingBalance extends Component {
     });
   };
 
-  addOpeningBalance = event => {
-    event.preventDefault();
-    if (this.state.agree) {
-      if (this.state.total == '' || this.state.total == 0) {
-        notify('You need to enter atleast one denomination', 'error');
-      } else {
-        this.setState(
-          {
-            showOpeningOTP: true,
-            otpOpt: 'closingBalance',
-            otpTxt: 'Your OTP to add closing balance is ',
-          },
-          () => {
-            this.generateOTP();
-          },
-        );
-      }
-    } else {
-      this.closePopup();
-    }
-  };
   startTimer = () => {
     var dis = this;
     var timer = setInterval(function() {
@@ -261,13 +191,20 @@ class CashierClosingBalance extends Component {
       })
       .then(res => {
         if (res.status == 200) {
-          let dd = res.data.lastdate == null ? null : this.formatDate(res.data.lastdate);
+          const today = new Date();
+          const closingDate = new Date(res.data.closingTime);
+          var Difference_In_Time = today.getTime() - closingDate.getTime();
+          // To calculate the no. of days between two dates 
+          var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
+          console.log(Difference_In_Days);
           this.setState({
-            openingBalance: res.data.openingBalance,
-            lastdate: dd,
+            openingDate: new Date(res.data.openingTime),
+            tomorrow: Difference_In_Days > 0,
+            closingBalance: res.data.closingBalance,
             loading: false,
-            branch_id: res.data.branchId,
-            balance: res.data.cashInHand,
+            closingTime: res.data.closingTime,
+            openingTime: res.data.openingTime,
+            isClosed: res.data.isClosed,
           }, () => {
             var dis = this;
             setTimeout(function () {
@@ -280,44 +217,7 @@ class CashierClosingBalance extends Component {
       .catch(err => {
         var dis = this;
         setTimeout(function () {
-          dis.getStats();
-        }, 3000);
-      });
-  };
-  getStats = () => {
-    axios
-      .post(`${API_URL}/merchantStaff/getClosingBalance`, {
-      })
-      .then(res => {
-        if (res.status == 200) {
-          let b1 = res.data.balance1 == null ? 0 : res.data.balance1;
-          let b2 = res.data.balance2 == null ? 0 : res.data.balance2;
-          let dd =
-            res.data.lastdate == null
-              ? null
-              : this.formatDate(res.data.lastdate);
-          this.setState(
-            {
-              cashInHand: res.data.cashInHand,
-              balance1: b1,
-              balance2: b2,
-              lastdate: dd,
-              transactionStarted: res.data.transactionStarted,
-              isClosed: res.data.isClosed
-            },
-            () => {
-              var dis = this;
-              setTimeout(function() {
-                dis.getStats();
-              }, 3000);
-            },
-          );
-        }
-      })
-      .catch(err => {
-        var dis = this;
-        setTimeout(function() {
-          dis.getStats();
+          dis.getDashStats();
         }, 3000);
       });
   };
@@ -382,7 +282,7 @@ class CashierClosingBalance extends Component {
               },
               function() {
                 this.closePopup();
-                this.getStats();
+                this.getDashStats();
               },
             );
           }
@@ -423,77 +323,8 @@ class CashierClosingBalance extends Component {
   }
   };
 
-  verifyOpeningOTP = event => {
-    event.preventDefault();
-
-    this.setState({
-      verifyEditOTPLoading: true,
-    });
-    axios
-      .post(`${API_URL}/merchantStaff/addClosingBalance`,
-        {
-          denomination: this.state.denomination,
-          total: this.state.total,
-          note: this.state.note,
-        })
-      .then(res => {
-        if (res.status == 200) {
-          if (res.data.error) {
-            throw res.data.error;
-          } else {
-            notify('Closing balance submitted successfully!', 'success');
-            this.setState(
-              {
-                notification: 'Closing balance submitted successfully!',
-              },
-              function() {
-                this.closePopup();
-                this.getStats();
-                var dis = this;
-                // setTimeout(function(){
-                //   localStorage.removeItem('cashierLogged');
-                //   history.push('/cashier/' + dis.props.branchName);
-                // }, 3000);
-              },
-            );
-          }
-        } else {
-          const error = new Error(res.data.error);
-          throw error;
-        }
-        this.setState({
-          verifyEditOTPLoading: false,
-        });
-      })
-      .catch(err => {
-        this.setState({
-          notification: err.response ? err.response.data.error : err.toString(),
-          verifyEditOTPLoading: false,
-        });
-        this.error();
-      });
-  };
   componentDidMount() {
-    this.getStats();
     this.getDashStats();
-    axios
-      .get(`${API_URL}/get-currency`)
-      .then(d => {
-        if (d.data.data.length != 0) {
-          this.setState(prevState => ({
-            ...prevState,
-            denomination: d.data.data[0].denomination.map(d => ({
-              val: d,
-              num: '',
-            })),
-            currency: d.data.data[0].value,
-            // notification: 'denomination added'
-          }));
-        }
-      })
-      .catch(err => {
-        console.log(err.messages);
-      });
   }
 
   render() {
@@ -522,8 +353,9 @@ class CashierClosingBalance extends Component {
       <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
-          {
-          this.state.isClosed? (
+          {this.state.tomorrow ? (
+            <div>
+              {this.state.isClosed ? (
               <Button
                 dashBtn
                 onClick={this.openCashier}
@@ -532,16 +364,30 @@ class CashierClosingBalance extends Component {
               </Button>
             ) : (
                 <Button dashBtn disabled>
-                  Counter is open
+                  Counter opened at {new Date(this.state.openingTime).getHours()} : {new Date(this.state.openingTime).getMinutes()}
                 </Button>
               )}
+
+            </div>
+          ) : (
+            <Button dashBtn disabled>
+              Counter Closed for Today
+          </Button>
+          )}
+          
           </Col>
         </Row>
         <Row style={{ marginTop: '75%' }}>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
+          {this.state.isClosed ? (
+            <Button dashBtn disabled>
+              Counter closed
+            </Button>
+          ) : (
             <Button dashBtn onClick={() => { this.onPayBillsPopupOpen() }}>
               Pay Invoices
             </Button>
+          )}
           </Col>
         </Row>
         <Row>
@@ -656,7 +502,7 @@ class CashierClosingBalance extends Component {
                     </Col>
                     <Col cW="35%">
                       {
-                        this.state.cashInHand
+                        this.state.closingBalance
                       }
                     </Col>
                   </Row>
@@ -687,7 +533,7 @@ class CashierClosingBalance extends Component {
                   </div>
 
 
-                    <Button filledBtn marginTop="50px">
+                    <Button onClick={()=>this.addOpeningBalance()} filledBtn marginTop="50px">
                       <span>Open</span>
                     </Button>
 

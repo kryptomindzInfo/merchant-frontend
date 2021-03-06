@@ -38,10 +38,11 @@ class CashierClosingBalance extends Component {
       lastdate: null,
       tomorrow: false,
       otp: '',
-      balance1: 0,
-      balance2: 0,
+      isClosed:false,
       total: 0,
+      closingBalance:0,
       cashInHand: 0,
+      cashCollected: 0,
       cid: JSON.parse(localStorage.getItem('cashierLogged')).position._id,
       popup: false,
       showOtp: false,
@@ -218,18 +219,18 @@ class CashierClosingBalance extends Component {
       })
       .then(res => {
         if (res.status == 200) {
-          let dd = res.data.lastdate == null ? null : this.formatDate(res.data.lastdate);
 
           this.setState({
             openingBalance: res.data.openingBalance,
-            lastdate: dd,
+            closingBalance: res.data.closingBalance,
+            isClosed:res.data.isClosed,
             loading: false,
-            branch_id: res.data.branchId,
             balance: res.data.cashInHand,
+            cashCollected: res.data.cashInHand-res.data.openingBalance,
           }, () => {
             var dis = this;
             setTimeout(function () {
-              dis.getStats();
+              dis.getDashStats();
             }, 3000);
 
           });
@@ -238,47 +239,11 @@ class CashierClosingBalance extends Component {
       .catch(err => {
         var dis = this;
         setTimeout(function () {
-          dis.getStats();
+          dis.getDashStats();
         }, 3000);
       });
   };
-  getStats = () => {
-    axios
-      .post(`${API_URL}/merchantStaff/getClosingBalance`, {
-      })
-      .then(res => {
-        if (res.status == 200) {
-          let b1 = res.data.balance1 == null ? 0 : res.data.balance1;
-          let b2 = res.data.balance2 == null ? 0 : res.data.balance2;
-          let dd =
-            res.data.lastdate == null
-              ? null
-              : this.formatDate(res.data.lastdate);
-          this.setState(
-            {
-              cashInHand: res.data.cashInHand,
-              balance1: b1,
-              balance2: b2,
-              lastdate: dd,
-              transactionStarted: res.data.transactionStarted,
-              isClosed: res.data.isClosed,
-            },
-            () => {
-              var dis = this;
-              setTimeout(function() {
-                dis.getStats();
-              }, 3000);
-            },
-          );
-        }
-      })
-      .catch(err => {
-        var dis = this;
-        setTimeout(function() {
-          dis.getStats();
-        }, 3000);
-      });
-  };
+
 
   generateOTP = () => {
     this.setState({ resend: false, timer: 30 });
@@ -387,6 +352,7 @@ class CashierClosingBalance extends Component {
     this.setState({
       verifyEditOTPLoading: true,
     });
+    console.log(this.state.denomination, this.state.total)
     axios
       .post(`${API_URL}/merchantStaff/addClosingBalance`,
         {
@@ -406,7 +372,7 @@ class CashierClosingBalance extends Component {
               },
               function() {
                 this.closePopup();
-                this.getStats();
+                this.getDashStats();
                 var dis = this;
                 // setTimeout(function(){
                 //   localStorage.removeItem('cashierLogged');
@@ -432,7 +398,6 @@ class CashierClosingBalance extends Component {
       });
   };
   componentDidMount() {
-    this.getStats();
     this.getDashStats();
     axios
       .get(`${API_URL}/get-currency`)
@@ -482,7 +447,7 @@ class CashierClosingBalance extends Component {
           Closing Balance
         </h3>
         <div style ={{textAlign:'center', fontSize:'20px'}} className="cardValue">
-          {CURRENCY} {this.state.balance1.toFixed(2)}
+          {CURRENCY} {this.state.closingBalance.toFixed(2)}
         </div>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
@@ -638,12 +603,12 @@ class CashierClosingBalance extends Component {
                     </Row>
                     <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
                       <Col cW="20%" textAlign="right">
-                        <strong>Cash in Hand</strong>
+                        <strong>Cash Collected</strong>
                       </Col>
                       <Col cW="20%" textAlign="center">
                         =
                       </Col>
-                      <Col cW="35%">{this.state.cashInHand}</Col>
+                      <Col cW="35%">{this.state.cashCollected}</Col>
                     </Row>
                     <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
                       <Col cW="20%" textAlign="right">
@@ -653,7 +618,7 @@ class CashierClosingBalance extends Component {
                         =
                       </Col>
                       <Col cW="35%">
-                        {this.state.total - this.state.cashInHand}
+                        {this.state.total - this.state.cashCollected}
                       </Col>
                     </Row>
                   </FormGroup>
@@ -746,120 +711,6 @@ class CashierClosingBalance extends Component {
           </Popup>
         ) : null}
 
-        {this.state.openCashierPopup ? (
-          <Popup close={this.closePopup.bind(this)} accentedH1>
-            {this.state.showOpeningOTP ? (
-              <div>
-                <h1>Verify OTP</h1>
-                <form action="" method="post" onSubmit={this.verifyOpening}>
-                  <FormGroup>
-                    <label>OTP*</label>
-                    <TextInput
-                      type="text"
-                      name="otp"
-                      onFocus={inputFocus}
-                      onBlur={inputBlur}
-                      value={this.state.otp}
-                      onChange={this.handleInputChange}
-                      required
-                    />
-                  </FormGroup>
-                  {this.verifyEditOTPLoading ? (
-                    <Button filledBtn marginTop="50px" disabled>
-                      <Loader />
-                    </Button>
-                  ) : (
-                    <Button filledBtn marginTop="50px">
-                      <span>Verify</span>
-                    </Button>
-                  )}
-
-                  <p className="resend">
-                    Wait for <span className="timer">{this.state.timer}</span>{' '}
-                    to{' '}
-                    {this.state.resend ? (
-                      <span className="go" onClick={this.generateOTP}>
-                        Resend
-                      </span>
-                    ) : (
-                      <span>Resend</span>
-                    )}
-                  </p>
-                </form>
-              </div>
-            ) : (
-              <div>
-                <h1>Open Cashier</h1>
-                <form action="" method="post" onSubmit={this.addOpeningBalance}>
-
-
-                <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
-
-                    <Col cW="20%" textAlign="right">
-                      <strong>Opening for the day</strong>
-                    </Col>
-                    <Col cW="20%" textAlign="center">
-                      :
-                    </Col>
-                    <Col cW="35%">
-                    {
-                      currDate
-                    }
-                        {/* {Date.now().toISOString()} */}
-
-                    </Col>
-                  </Row>
-
-                  <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
-
-                    <Col cW="20%" textAlign="right">
-                      <strong>Cash in Hand</strong>
-                    </Col>
-                    <Col cW="20%" textAlign="center">
-                      :
-                    </Col>
-                    <Col cW="35%">
-                      {
-                        this.state.openingBalance
-                      }
-                    </Col>
-                  </Row>
-                    <Row style={{ marginTop: '5%', marginLeft: '-5%' }}>
-                    <Col cW="20%" textAlign="right">
-                      <strong></strong>
-                    </Col>
-                    <Col cW="20%" textAlign="center">
-
-                    </Col>
-                    <Col cW="35%">
-
-                    </Col>
-                  </Row>
-
-
-                  <div style={{
-                    marginTop: '20px',
-                    fontSize: '18px',
-                    textAlign: 'center'
-                    }}>
-                  <input type="checkbox"
-                  name="agree"
-                  value={this.state.agree}
-                   checked={this.state.agree}
-                   required
-                              onClick={this.handleCheckbox} />  Agree to the opening balance?
-                  </div>
-
-
-                    <Button filledBtn marginTop="50px">
-                      <span>Open</span>
-                    </Button>
-
-                </form>
-              </div>
-            )}
-          </Popup>
-        ) : null}
       </Card>
     );
   }
