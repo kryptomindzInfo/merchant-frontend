@@ -196,18 +196,26 @@ const CashierReportPage = (props) => {
           <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
           </Col>
           <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Branch Name : </b>{branchName} </h3>      
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
           </Col>
           <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Merchant Cashier Name : </b>{cashierName} </h3> 
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Cashier Name : </b>{cashierName} </h3> 
              
           </Col>
           </Row>
       </Card>
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
         <Row>
-          <Col>
-          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : cashierstats.openingBalance} </h3> 
+        <Col>
+          <h3
+            style={{color:"green",marginBottom:"20px" }}>
+              <b>Opening Date: </b>
+              {dailyreprots.opening_time ?
+              `${format(new Date(dailyreprots.opening_time), 'dd-MM-yyyy')}` :
+              // `${format(new Date(cashierstats.openingTime), 'dd-MM-yyyy')}`
+              `${new Date(cashierstats.openingTime).getDay()}/${new Date(cashierstats.openingTime).getMonth()+1}/${new Date(cashierstats.openingTime).getFullYear()}`
+              }
+            </h3> 
           </Col>
           <Col>
           <h3 style={{color:"green", marginBottom:"20px"}}><b>Opening Time : </b>{dailyreprots.opening_time ?
@@ -217,8 +225,14 @@ const CashierReportPage = (props) => {
           </h3>      
           </Col>
           <Col>
-         
-             
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Opening Balance : </b>{CURRENCY} {dailyreprots.opening_balance ? dailyreprots.opening_balance : cashierstats.openingBalance} </h3> 
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Closing Time : </b>{dailyreprots.opening_time ?
+          `${new Date(dailyreprots.closing_time).getHours()}:${new Date(dailyreprots.closing_time).getMinutes()}`
+          : 
+          "Day is Open"}
+          </h3> 
           </Col>
           </Row>
       </Card>
