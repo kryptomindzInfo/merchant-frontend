@@ -82,10 +82,10 @@ const StaffDashboardPage = (props) => {
               <div className="cardValue">XOF {cashierstats.openingBalance}</div>
               </Card>
            </Col>
-            
+            <PaidInvoiceCard no={stats.bills_paid} />
             <TotalAmountCollectedCard amount={stats.amount_collected} />
             <TotalPenaltyCollectedCard penalty={stats.penalty_collected} />
-            <PaidInvoiceCard no={stats.bills_paid} />
+            
           </Row>
           <InvoiceListCard setLoading={(val) => {}} invoice={setInvoiceList} />
         </Main>
