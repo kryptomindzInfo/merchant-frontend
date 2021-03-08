@@ -150,9 +150,12 @@ const incCounter = async (props) => {
   }
 };
 
-const fetchGroups = async () => {
+const fetchGroups = async (id) => {
   try {
-    const res = await axios.get(`${API_URL}/merchantStaff/listInvoiceGroups`);
+    const res = await axios.post(`${API_URL}/merchantStaff/listInvoiceGroups`,
+    {
+      merchant_id: id
+    });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -171,6 +174,27 @@ const fetchGroups = async () => {
 const fetchStats = async (type) => {
   try {
     const res = await axios.get(`${API_URL}/merchantStaff/${type}DashStatus`);
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { stats: {}, loading: false };
+      }
+      return { stats: res.data, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { stats: {}, loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { stats: {}, loading: false };
+  }
+};
+
+const fetchstaffStats = async (id) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/staffDashStatus`,
+    {
+      group_id: id,
+    });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -652,6 +676,7 @@ const getMerchantSettings = async () => {
 };
 
 export {
+  fetchstaffStats,
   fetchInvoicesByDateRange,
   fetchInvoicesByPeriod,
   getCashierDailyReport,

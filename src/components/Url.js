@@ -20,6 +20,7 @@ const merchantZoneSettings = '/merchant/settings/zoneSettings';
 const merchantBillPeriodSettings = '/merchant/settings/billPeriodSettings';
 const merchantPenaltySettings = '/merchant/settings/penalty';
 const merchantBillTermSettings = '/merchant/settings/billTermSettings';
+const merchantCategorySettings = '/merchant/settings/categorySettings';
 const merchantOfferingsUrl = '/merchant/offerings';
 const merchantTaxesUrl = '/merchant/taxes';
 const merchantCustomersUrl = '/merchant/customers';
@@ -51,6 +52,7 @@ const cashierSettingsUrl = '/cashier/settings';
 const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
+  merchantCategorySettings,
   branchStaffReportUrl,
   staffReportsUrl,
   cashierReportsUrl,

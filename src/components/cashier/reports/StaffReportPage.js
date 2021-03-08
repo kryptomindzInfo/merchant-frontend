@@ -38,9 +38,9 @@ const StaffReportPage = (props) => {
   const [filter, setFilter] = useState('billdate');
   const [periodStart, setPeriodStart] = useState('');
   const [periodEnd, setPeriodEnd] = useState('');
-  const [cashierInfo, setCashierInfo] = useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).cashier,
-  );
+  const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
+  const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
+  const merchantName = JSON.parse(localStorage.getItem('cashierLogged')).merchant.name;
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([
     ["BillNo","Name","Amount","Mobile","DueDate"]
@@ -191,6 +191,7 @@ const StaffReportPage = (props) => {
               <Col cW='40%'>
               <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'180px'}}>
                 <Container>
+                
                 {filter === 'billdate' ? (
                   <div>
                     <h2 style={{color:"green"}}><b>Date</b></h2> 
@@ -393,7 +394,20 @@ const StaffReportPage = (props) => {
                 </Card>
               </Col>
             </Row>
-            
+            <Card marginBottom="20px" buttonMarginTop="5px" smallValue style={{height:'80px'}}>
+        <Row>
+          <Col>
+          <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
+          </Col>
+          <Col>
+          <h3 style={{color:"green", marginBottom:"20px"}}><b>Cashier Name : </b>{cashierName} </h3> 
+             
+          </Col>
+          </Row>
+      </Card>
       {/* </ActionBar> */}
         <Card bigPadding style={{width:'100%'}}>
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>

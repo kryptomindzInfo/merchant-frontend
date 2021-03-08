@@ -24,6 +24,7 @@ import BranchParticularStaffReport from './branch/Reports/BranchParticularStaffR
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
 import ZoneSettingPage from './merchant/settings/ZoneSettingPage';
 import BillPeriodSettingPage from './merchant/settings/BillPeriodSettingPage';
+import CategorySettingPage from './merchant/settings/CategorySettingPage';
 import PenaltySettingPage from './merchant/settings/PenaltySettingPage';
 import BillTermSettingPage from './merchant/settings/BillTermSettingPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
@@ -82,6 +83,7 @@ import {
   merchantBillPeriodSettings,
   merchantBillTermSettings,
   merchantPenaltySettings,
+  merchantCategorySettings,
   merchantInterBankFeeRules,
   merchantInterBankCommissionRules,
 } from './Url';
@@ -294,6 +296,13 @@ function App() {
               path={merchantPenaltySettings}
               component={(props) => <PenaltySettingPage {...props} />}
             />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={merchantCategorySettings}
+              component={(props) => <CategorySettingPage {...props} />}
+            />
+            
             {/* ====================== */}
             {/* Merchant Public Routes */}
             {/* ====================== */}
@@ -400,7 +409,7 @@ function App() {
               type="cashier"
               exact
               path={staffDashboardUrl}
-              component={(props) => <StaffDashboardPage {...props} />}
+              component={(props) => <InvoiceListPage {...props} />}
             />
             <ProtectedRoute
               type="cashier"

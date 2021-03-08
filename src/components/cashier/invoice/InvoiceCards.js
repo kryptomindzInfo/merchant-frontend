@@ -5,32 +5,36 @@ import Card from '../../shared/Card';
 import { CURRENCY } from '../../constants';
 
 const InvoiceCards = (props) => {
-  const limit = 1000;
-  const paidInvoives = props.paid;
-  const unpaidInvoices = props.unpaid;
-
+  const raised = props.raised;
+  const paid = props.paid;
+  const counter = props.counter;
   return (
     <Row>
-      {/* <Col>
-        <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
-          <h4>Total Payment Received </h4>
-          <div className="cardValue">
-            {CURRENCY} {limit.toFixed(2)}
-          </div>
-        </Card>
-      </Col> */}
       <Col>
         <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
-          <h4>No. of Invoice Paid</h4>
-          <div className="cardValue">{paidInvoives}</div>
+          <h4>Invoice Raised</h4>
+          <div className="cardValue">{raised}</div>
         </Card>
       </Col>
       <Col>
         <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
-          <h4>No. of Pending Invoice</h4>
-          <div className="cardValue">{unpaidInvoices}</div>
+          <h4>Invoice Paid</h4>
+          <div className="cardValue">{paid}</div>
         </Card>
       </Col>
+      <Col>
+        <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
+          <h4>Invoice Pending</h4>
+          <div className="cardValue">{raised - paid}</div>
+        </Card>
+      </Col>
+      <Col>
+        <Card marginBottom="54px" buttonMarginTop="32px" bordered smallValue>
+          <h4>Counter Invoices</h4>
+          <div className="cardValue">{counter}</div>
+        </Card>
+      </Col>
+      
     </Row>
   );
 };

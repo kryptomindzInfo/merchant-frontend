@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
+import Sidebar from '../../shared/sidebars/Sidebar';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
 import Wrapper from '../../shared/Wrapper';
+import FormGroup from '../../shared/FormGroup';
+import TextInput from '../../shared/TextInput';
 import Loader from '../../shared/Loader';
 import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
@@ -13,6 +16,7 @@ import Main from '../../shared/Main';
 import Card from '../../shared/Card';
 import { CURRENCY } from '../../constants';
 import Button from '../../shared/Button';
+import Popup from '../../shared/Popup';
 import CreateInvoicePopup from './CreateInvoicePopup';
 import UploadInvoicePopup from './UploadInvoicePopup';
 import ViewInvoicePopup from './ViewInvoicePopup';
@@ -24,8 +28,11 @@ import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import notify from '../../utils/Notify';
 import {
+  generateStaffOTP,
+  openStaff,
+  closeStaff,
   fetchGroups,
-  fetchStats,
+  fetchstaffStats,
   fetchInvoices,
   invoiceApi,
   fetchTaxList,
@@ -37,6 +44,8 @@ import {
 
 function InvoiceListPage(props) {
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
+  const [selectedGroupId, setSelectedGroupId] = React.useState();
+  const [stats, setStats] = useState({});
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(false);
   const [viewInvoicePopup, setViewInvoicePopup] = React.useState(false);
@@ -63,10 +72,19 @@ function InvoiceListPage(props) {
   const [draftRow, setDraftRow] = React.useState([]);
   const [counterRow, setCounterRow] = React.useState([]);
   const [groupList, setGroupList] = React.useState([]);
-  const { match } = props;
-  const { id } = match.params;
-  const groupName = localStorage.getItem('currentGroupName');
-  localStorage.setItem('currentGroupId', id);
+  const [resend, setResend] = useState(false);
+  const [Popupopen, setPopupopen] = useState(false);
+  const [Popupclose, setPopupclose] = useState(false);
+  const [timer, setTimer] = useState(0);
+  const [otpTxt, setOtpTxt] = useState('Your OTP is');
+  const [otpOpt, setOtpOpt] = useState('openingBalance');
+  const [otpId, setOtpId] = useState('');
+  const [OTPLoading, setOTPLoading] = useState(false);
+  const positionId =  JSON.parse(localStorage.getItem('cashierLogged')).position._id;
+  const email = JSON.parse(localStorage.getItem('cashierLogged')).staff.email;
+  const mobile = JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile;
+  const merchantId = JSON.parse(localStorage.getItem('cashierLogged')).merchant._id;
+  
 
   const onCreateInvoicePopupClose = () => {
     setCreateInvoicePopup(false);
@@ -79,31 +97,19 @@ function InvoiceListPage(props) {
       setLoading(data.loading);
     });
   };
-
-  const getCountryList = async () => {
-    setLoading(true);
-    getCountries().then((data) => {
-      setCountryList(data.list);
-      setLoading(false);
-    });
+  const closePopup = () => {
+    setPopupopen(false);
+    setPopupclose(false)
   };
 
-  const refreshMerchantSettings = async () => {
+  const open = () => {
+    setOTPLoading(true);
     setLoading(true);
-    getMerchantSettings().then((data) => {
-      setDefaultBillPeriod(data.default_bill_period);
-      setBillTermList(data.bill_term_list);
-      if (data.default_bill_term != undefined) {
-        setDefaultBillTerm(data.default_bill_term.name);
-      }
-      setLoading(data.loading);
-    });
-  };
-  const getStats = () => {
-    setLoading(true);
-    fetchStats('staff')
+    openStaff()
       .then((data) => {
-        setCounterClose(data.stats.is_closed);
+        getStats(selectedGroupId);
+        setOTPLoading(false);
+        closePopup();
         setLoading(false);
       })
       .catch((err) => {
@@ -111,20 +117,85 @@ function InvoiceListPage(props) {
       });
   };
 
-  const refreshInfo = async () => {
+  const close = () => {
+    setOTPLoading(true);
     setLoading(true);
-    getinfo().then((data) => {
-      setCounterInvoiceAccess(data.access);
-      setLoading(false);
-    });
+    closeStaff()
+      .then((data) => {
+        getStats(selectedGroupId);
+        setOTPLoading(false);
+        closePopup();
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
   };
 
-  const getTaxList = async () => {
+  const startTimer = () => {
+    let couyntdown = 30;
+    var timeron = setInterval(function() {
+      if (couyntdown <= 0) {
+        clearInterval(timeron);
+        setResend(true);
+      } else {
+        couyntdown = Number(couyntdown) - 1;
+        setTimer(couyntdown);
+      }
+    }, 1000);
+  };
+
+  const getStats = (id) => {
     setLoading(true);
-    fetchTaxList().then((data) => {
-      setTaxList(data.list);
-      setLoading(data.loading);
-    });
+    fetchstaffStats(id)
+      .then((data) => {
+        setStats(data.stats);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setLoading(false);
+      });
+  };
+
+  
+  const inputFocus = (e) => {
+    const { target } = e;
+    target.parentElement.querySelector('label').classList.add('focused');
+  };
+
+  const inputBlur = (e) => {
+    const { target } = e;
+    if (target.value == '') {
+      target.parentElement.querySelector('label').classList.remove('focused');
+    }
+  };
+
+  const generateOTP = () => {
+    setTimer(30);
+    setResend(false);
+    generateStaffOTP(email,mobile,otpOpt,otpTxt)
+      .then(res => {
+        setOtpId(res.data.id);
+        setPopupopen(true);
+        startTimer();
+      })
+      .catch(err => {
+        setLoading(false);
+      });
+  };
+
+  const generatecloseOTP = () => {
+    setTimer(30);
+    setResend(false);
+    generateStaffOTP(email,mobile,otpOpt,otpTxt)
+      .then(res => {
+        setOtpId(res.data.id);
+        setPopupclose(true);
+        startTimer();
+      })
+      .catch(err => {
+        setLoading(false);
+      });
   };
 
   const handleCreateInvoicePopupClick = (type, invoice, mod) => {
@@ -183,7 +254,7 @@ function InvoiceListPage(props) {
     setDraftRow(draftRows.reverse());
   };
 
-  const refreshInvoiceList = async () => {
+  const refreshInvoiceList = async (id) => {
     setLoading(true);
     fetchInvoices(id)
       .then((data) => {
@@ -203,19 +274,12 @@ function InvoiceListPage(props) {
       .catch((err) => setLoading(false));
   };
 
-  const refreshGroupList = () => {
-    setLoading(true);
-    fetchGroups()
-      .then((data) => {
-        setGroupList(
-          data.list.filter((group) => {
-            return group._id === id;
-          }),
-        );
-        setLoading(false);
-      })
-      .catch((err) => setLoading(false));
-  };
+  const changeGroup = (id) => {
+    console.log(id);
+    setSelectedGroupId(id);
+    refreshInvoiceList(id);
+    getStats(id);
+  }
 
   const toggleMyInvoice = async () => {
     if (toggleButton !== 'myinvoices') {
@@ -333,20 +397,60 @@ function InvoiceListPage(props) {
 
   const deleteInvoice = (invoiceid) => {
     invoiceApi({}, { invoice_id: invoiceid }, 'delete').then((data) => {
-      refreshInvoiceList();
+      refreshInvoiceList(selectedGroupId);
       setViewInvoicePopup(false);
     });
   };
 
   useEffect(() => {
-    getStats();
-    refreshInvoiceList();
-    refreshInfo();
-    refreshGroupList();
-    getOfferingList();
-    getTaxList();
-    refreshMerchantSettings();
-    getCountryList();
+    setLoading(true);
+    async function fetchData() {
+
+      const groups = await fetchGroups(merchantId);
+      setGroupList(groups.list);
+      setSelectedGroupId(groups.list[0]._id);
+
+      const stats = await fetchstaffStats(groups.list[0]._id);
+      setStats(stats.stats);
+
+      const access = await getinfo();
+      setCounterInvoiceAccess(access.access);
+
+      
+
+      const invoices = await fetchInvoices(groups.list[0]._id);
+      if (toggleButton === 'myinvoices') {
+        const mylist = invoices.list.filter((invoice) => {
+          return invoice.creator_id === positionId;
+        });
+        setInvoices(mylist);
+      } else {
+        const otherlist = invoices.list.filter((invoice) => {
+          return invoice.creator_id !== positionId;
+        });
+        setInvoices(otherlist);
+      }
+
+      const offering = await fetchOfferingList();
+      setOfferingList(offering.list);
+
+      const tax = await fetchTaxList();
+      setTaxList(tax.list);
+
+      const setting = await getMerchantSettings();
+      setDefaultBillPeriod(setting.default_bill_period);
+      setBillTermList(setting.bill_term_list);
+      if (setting.default_bill_term != undefined) {
+        setDefaultBillTerm(setting.default_bill_term.name);
+      }
+
+      const country = await getCountries();
+      setCountryList(country.list);
+
+    }
+    fetchData();
+    setLoading(false);
+    
   }, [toggleButton]);
 
   if (isLoading) {
@@ -361,8 +465,71 @@ function InvoiceListPage(props) {
       </Helmet>
       <StaffHeader active="invoice" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
-        <Main fullWidth>
-          <InvoiceCards paid={paidRow.length} unpaid={unpaidRow.length} />
+      <Sidebar marginRight>
+        <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
+        <Row>
+          <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
+          {
+          stats.is_closed? (
+              <Button
+                dashBtn
+                onClick={()=>generateOTP()}
+              >
+                  Open My Day
+              </Button>
+            ) : (
+                <Button dashBtn disabled>
+                  Day Opened At {new Date(stats.opening_time).getHours()}:{new Date(stats.opening_time).getMinutes()}
+                </Button>
+              )}
+          </Col>
+        </Row>
+        <Row style={{ marginTop: '75%' }}>
+          <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
+          {
+          stats.is_closed? (
+              <Button
+                dashBtn
+                disabled
+              >
+                  Close my day
+              </Button>
+            ) : (
+                <Button
+                  dashBtn
+                  onClick={()=>generatecloseOTP()}
+                >
+                  Close my day
+                </Button>
+              )}
+          </Col>
+        </Row>
+        </Card>
+        <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
+        <h3>Caterogies</h3>
+        {groupList.length > 0 ? (
+          <div>
+            {groupList.map((group)=>{
+              return(
+              <Button dashBtn
+                style={{
+                  marginTop:"5px",
+                  backgroundColor: selectedGroupId === group._id ? "#5d87f1" : "#97bfee",
+                }}
+                onClick={()=>{changeGroup(group._id)}}
+              >
+                {group.name}
+              </Button>
+              );
+            })}
+        </div>
+        ): " "}
+        </Card>
+      
+      </Sidebar>
+        
+        <Main>
+          <InvoiceCards raised={stats.bills_raised} paid={stats.bills_paid} counter={stats.counter_invoices} />
           <ActionBar
             style={{ display: 'flex', alignItems: 'center' }}
             marginBottom="33px"
@@ -414,7 +581,7 @@ function InvoiceListPage(props) {
             </Row>
           </ActionBar>
           <Card bigPadding>
-            <div className="cardHeader">
+            {/* <div className="cardHeader">
               <div className="cardHeaderLeft">
                 <SupervisedUserCircleIcon className="material-icons" />
               </div>
@@ -422,7 +589,7 @@ function InvoiceListPage(props) {
                 <h3>Invoice List</h3>
                 <h5>List of your invoices</h5>
               </div>
-            </div>
+            </div> */}
             {counterInvoiceAccess ? (
               <div
                 style={{
@@ -495,13 +662,97 @@ function InvoiceListPage(props) {
           </Card>
         </Main>
       </Container>
+      {Popupopen ? (
+          <Popup close={closePopup} accentedH1>
+
+              <div>
+                <h1>Verify OTP</h1>
+                <form action="" method="post" onSubmit={open}>
+                  <FormGroup>
+                    <label>OTP*</label>
+                    <TextInput
+                      type="text"
+                      name="otp"
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
+                      required
+                    />
+                  </FormGroup>
+                  {OTPLoading ? (
+                    <Button filledBtn marginTop="50px" disabled>
+                      <Loader />
+                    </Button>
+                  ) : (
+                    <Button filledBtn marginTop="50px">
+                      <span>Verify</span>
+                    </Button>
+                  )}
+
+                  <p className="resend">
+                    Wait for <span className="timer">{timer}</span>{' '}
+                    to{' '}
+                    {resend ? (
+                      <span className="go" onClick={()=>{generateOTP()}}>
+                        Resend
+                      </span>
+                    ) : (
+                      <span>Resend</span>
+                    )}
+                  </p>
+                </form>
+              </div>
+           
+          </Popup>
+        ) : null}
+      {Popupclose ? (
+          <Popup close={closePopup} accentedH1>
+
+              <div>
+                <h1>Verify OTP</h1>
+                <form action="" method="post" onSubmit={close}>
+                  <FormGroup>
+                    <label>OTP*</label>
+                    <TextInput
+                      type="text"
+                      name="otp"
+                      onFocus={inputFocus}
+                      onBlur={inputBlur}
+                      required
+                    />
+                  </FormGroup>
+                  {OTPLoading ? (
+                    <Button filledBtn marginTop="50px" disabled>
+                      <Loader />
+                    </Button>
+                  ) : (
+                    <Button filledBtn marginTop="50px">
+                      <span>Verify</span>
+                    </Button>
+                  )}
+
+                  <p className="resend">
+                    Wait for <span className="timer">{timer}</span>{' '}
+                    to{' '}
+                    {resend ? (
+                      <span className="go" onClick={()=>{generatecloseOTP()}}>
+                        Resend
+                      </span>
+                    ) : (
+                      <span>Resend</span>
+                    )}
+                  </p>
+                </form>
+              </div>
+           
+          </Popup>
+        ) : null}
       {createInvoicePopup ? (
         <CreateInvoicePopup
           onClose={() => onCreateInvoicePopupClose()}
           invoice={editingInvoice}
           taxlist={taxList}
           offeringlist={offeringList}
-          groupId={id}
+          groupId={selectedGroupId}
           mode={mode}
           termlist={billTermList}
           countrylist={countryList}
@@ -509,7 +760,7 @@ function InvoiceListPage(props) {
           defaultperiod={defaultPeriod}
           draftnumber={draftRow.length}
           refreshInvoiceList={() => {
-            refreshInvoiceList();
+            refreshInvoiceList(selectedGroupId);
           }}
           type={invoiceType}
         />
@@ -517,18 +768,18 @@ function InvoiceListPage(props) {
 
       {uploadInvoicePopup ? (
         <UploadInvoicePopup
-          groupId={id}
+          groupId={selectedGroupId}
           groups={groupList}
-          refreshInvoiceList={() => refreshInvoiceList()}
-          onClose={() => onUploadInvoicePopupClose()}
+          refreshInvoiceList={() => refreshInvoiceList(selectedGroupId)}
+          onClose={() => onUploadInvoicePopupClose(selectedGroupId)}
         />
       ) : null}
       {viewInvoicePopup ? (
         <ViewInvoicePopup
-          groupId={id}
+          groupId={selectedGroupId}
           invoice={viewingInvoice}
           onClose={() => onViewInvoicePopupClose()}
-          refreshInvoiceList={() => refreshInvoiceList()}
+          refreshInvoiceList={() => refreshInvoiceList(selectedGroupId)}
           edit={(type, i, m) => {
             handleCreateInvoicePopupClick(type, i, m);
           }}

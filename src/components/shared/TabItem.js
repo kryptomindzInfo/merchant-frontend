@@ -8,7 +8,7 @@ const TabItem = withStyles((theme) => ({
     textAlign: 'center',
     width: '23%',
     textTransform: 'none',
-    fontSize: 18,
+    fontSize: 15,
     outline: 0,
     fontWeight: theme.typography.fontWeightBold,
   },

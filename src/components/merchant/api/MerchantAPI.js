@@ -659,6 +659,27 @@ const getBillPeriods = async () => {
   }
 };
 
+const getCategories = async () => {
+  try {
+    const res = await axios.get(`${MERCHANT_API}/listInvoiceGroups`, {});
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return {
+        list: res.data.groups,
+        loading: false,
+      };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
 const addBillPeriod = async (props, values) => {
   try {
     const res = await axios.post(`${MERCHANT_API}/addBillPeriod`, {
@@ -670,6 +691,27 @@ const addBillPeriod = async (props, values) => {
       } else {
         notify(res.data.message, 'success');
         props.refreshbillperiodlist(values);
+        props.onClose();
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (e) {
+    notify('Something went wrong');
+  }
+};
+
+const addCategory = async (props, values) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/createInvoiceGroup`, {
+      ...values,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+        props.refreshcategorylist(values);
         props.onClose();
       }
     } else {
@@ -895,6 +937,8 @@ const getMerchantPositions = async (id) => {
 };
 
 export {
+  addCategory,
+  getCategories,
   getzone,
   branchAPI,
   fetchBranchList,

@@ -198,7 +198,12 @@ const StaffDashboardPage = (props) => {
           </Col>
         </Row>
         </Card>
+        <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
+        <h3>Caterogies</h3>
+        </Card>
+      
       </Sidebar>
+        
         <Main>
           <Row>
             <GroupNumberCard no={groupList.length} />
