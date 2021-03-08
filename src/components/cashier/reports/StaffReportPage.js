@@ -312,6 +312,7 @@ const StaffReportPage = (props) => {
                            inputVariant="outlined"
                            format="dd/MM/yyyy"
                            required
+                           maxDate={endDate}
                            InputLabelProps={{
                            shrink: true,
                            }}
@@ -338,6 +339,7 @@ const StaffReportPage = (props) => {
                            id="date-picker-dialog"
                            size="small"
                            fullWidth
+                           minDate={startDate}
                            inputVariant="outlined"
                            format="dd/MM/yyyy"
                            required
