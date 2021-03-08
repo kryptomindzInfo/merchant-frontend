@@ -304,6 +304,47 @@ const fetchInvoicesBydate = async (date) => {
     return { list: [], loading: false };
   }
 };
+const fetchInvoicesByPeriod = async (start,end) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/listInvoicesByPeriod`, {
+      start_date: start,
+      end_date:end,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
+
+const fetchInvoicesByDateRange = async (start,end) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantStaff/listInvoicesByDateRange`, {
+      start_date: start,
+      end_date:end,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { list: [], loading: false };
+      }
+      return { list: res.data.invoices, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { list: [], loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { list: [], loading: false };
+  }
+};
 
 const fetchInvoices = async (id) => {
   try {
@@ -569,6 +610,7 @@ const getMerchantSettings = async () => {
           default_bill_period: {},
           country_list: [],
           default_country: {},
+          bill_period: [],
           loading: false,
         };
       }
@@ -579,6 +621,7 @@ const getMerchantSettings = async () => {
         default_bill_period: res.data.setting.default_bill_period,
         country_list: res.data.setting.country_list,
         default_country: res.data.setting.default_country,
+        bill_period: res.data.setting.bill_period,
         loading: false,
       };
     }
@@ -590,6 +633,7 @@ const getMerchantSettings = async () => {
       default_bill_period: {},
       country_list: [],
       default_country: {},
+      bill_period:[],
       loading: false,
     };
   } catch (err) {
@@ -601,12 +645,15 @@ const getMerchantSettings = async () => {
       default_bill_period: {},
       country_list: [],
       default_country: {},
+      bill_period:[],
       loading: false,
     };
   }
 };
 
 export {
+  fetchInvoicesByDateRange,
+  fetchInvoicesByPeriod,
   getCashierDailyReport,
   fetchCashierStats,
   generateStaffOTP,

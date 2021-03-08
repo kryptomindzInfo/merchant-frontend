@@ -32,13 +32,13 @@ function CreateBillPeriodPopup(props) {
         }}
         onSubmit={async (values) => {
           if (props.startdate !== null) {
-            values.start_date = new Date(props.startdate);
+            const startdatelist = props.startdate.split("-");
+            values.start_date = new Date(`${startdatelist[1]}-${startdatelist[0]}-${startdatelist[2]}`)
           }
-          console.log(props.startdate);
-          console.log(values);
           if (props.type === 'update') {
             console.log('in process');
           } else {
+            console.log(new Date(props.startdate));
             await addBillPeriod(props, values);
           }
         }}

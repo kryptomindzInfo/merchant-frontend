@@ -54,8 +54,8 @@ const BillPeriodSettingPage = (props) => {
       if (data.list.length > 0) {
         const startdate = new Date(data.list[data.list.length - 1].end_date);
         startdate.setDate(startdate.getDate() + 1);
-        const nextStartDate = `${startdate.getDate()}/${startdate.getMonth() + 1
-          }/${startdate.getFullYear()}`;
+        const nextStartDate = `${startdate.getDate()}-${startdate.getMonth() + 1
+          }-${startdate.getFullYear()}`;
         setNextPeriodStartDate(nextStartDate);
       }
       setBillPeriodList(data.list);
