@@ -35,6 +35,7 @@ const StaffReportPage = (props) => {
   const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
   const [invoiceList, setInvoiceList] = useState([]);
   const [periodList, setPeriodList] = useState([]);
+  const [periodTableList, setPeriodTableList] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [periodStartDate, setPeriodStartDate] = useState("");
@@ -69,11 +70,75 @@ const StaffReportPage = (props) => {
   const refreshMerchantSettings = async () => {
     setLoading(true);
     getMerchantSettings().then((data) => {
-      console.log(data.bill_period_list);
       setPeriodList(data.bill_period_list);
       setStartDate(data.bill_period_list[0].start_date);
       setEndDate(new Date());
     });
+  };
+
+  const preProcessPeriodTableData = async(list) => {
+    const reducedperiodList = periodList.slice(periodStart, periodEnd+1);
+      const data = reducedperiodList.map(async (period) => {
+        const raised = await list.filter((invoice) => {
+          return (invoice.bill_period.period_name === period.period_name);
+        });
+        const pending = await list.filter((invoice) => {
+          return (
+            invoice.bill_period.period_name === period.period_name &&
+            invoice.paid === 0 &&
+            invoice.is_validated === 1 &&
+            invoice.is_counter === false
+        );
+        });
+        const paid = await list.filter((invoice) => {
+          return (
+            invoice.bill_period.period_name === period.period_name &&
+            invoice.paid === 1 
+          );
+        });
+        const counter = await list.filter((invoice) => {
+          return (
+            invoice.bill_period.period_name === period.period_name &&
+            invoice.is_counter === true
+          );
+        });
+        return ({
+          period_name: period.period_name,
+          raised: raised,
+          pending: pending,
+          paid: paid,
+          counter: counter,
+        });
+      });
+    const result= await Promise.all(data);
+    return({res:result});
+  };
+
+  const setPeriodTable = async(list) => {
+    const data = list.map(async (period) => {
+      return({
+        name: period.period_name,
+        raised: period.raised.length,
+        paid: period.paid.length,
+        pending: period.pending.length,
+        counter: period.counter.length,
+        amountRaised: period.raised.reduce((a, b) => {
+          return a + b.amount;
+        }, 0),
+        amountPaid:period.paid.reduce((a, b) => {
+          return a + b.amount;
+        }, 0),
+        amountPending: period.pending.reduce((a, b) => {
+        return a + b.amount;
+        }, 0),
+        counterAmount: period.counter.reduce((a, b) => {
+          return a + b.amount;
+        }, 0),
+    });
+    });
+  const result= await Promise.all(data);
+  return({res:result, loading:false});
+
   };
 
   const setData = async(list) => {
@@ -89,8 +154,6 @@ const StaffReportPage = (props) => {
     });
     const counterRows = await list.filter((invoice) => {
       return (
-        invoice.paid === 0 &&
-        invoice.is_validated === 1 &&
         invoice.is_counter === true
       );
     });
@@ -121,13 +184,8 @@ const StaffReportPage = (props) => {
     const start = startOfDay(new Date(periodStartDate));
     const end = endOfDay(new Date(periodEndDate));
     const res = await fetchInvoicesByPeriod(start,end);
-    const csvDATA = await fetchCSVData(res.list);
-    setAmount(
-    res.list.reduce((a, b) => {
-    return a + b.amount;
-    }, 0));
-    setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
-    setInvoiceList(res.list);
+    const predata = await preProcessPeriodTableData(res.list);
+    const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
     setBillRaised(data.raised);
     setBillPending(data.pending);
@@ -137,7 +195,8 @@ const StaffReportPage = (props) => {
     setAmountPaid(data.amountPaid);
     setAmountPending(data.amountPending);
     setCounterAmount(data.counterAmount);
-    setLoading(csvDATA.loading);
+    setPeriodTableList(tabledata.res);
+    setLoading(tabledata.loading);
   };
 
   const getReportByDateRange = async() => { 
@@ -195,6 +254,14 @@ const StaffReportPage = (props) => {
     if(type==='daterange'){
       setEndDate(new Date());
     }
+    setBillRaised(0);
+    setBillPending(0);
+    setBillPaid(0);
+    setCounterBill(0);
+    setAmountRaised(0);
+    setAmountPaid(0);
+    setAmountPending(0);
+    setCounterAmount(0);
     setFilter(type);
   };
 
@@ -209,6 +276,25 @@ const StaffReportPage = (props) => {
           </td>
           <td>{invoice.mobile}</td>
           <td>{invoice.due_date}</td>
+        </tr>
+      );
+    });
+  };
+
+  const getPeriods = () => {
+    return periodTableList.map((period) => {
+      return (
+        <tr key={period.name}>
+          <td>{period.name}</td>
+          <td>{period.raised}</td>
+          <td>{period.amountRaised}</td>
+          <td>{period.paid}</td>
+          <td>{period.amountPaid}</td>
+          <td>{period.pending}</td>
+          <td>{period.amountPending}</td>
+          <td>{period.counter}</td>
+          <td>{period.counterAmount}</td>
+          
         </tr>
       );
     });
@@ -471,14 +557,53 @@ const StaffReportPage = (props) => {
                 </Col>
               </Row>
             </Card>
-            <InvoiceCards raised={billRaised} paid={billPaid} pending={billPending} counter={counterBill} />
-            <AmountCards raised={amountRaised} paid={amountPaid} pending={amountPending} counter={counterAmount} />
-      
+            
+
+                <div>
+                <InvoiceCards raised={billRaised} paid={billPaid} pending={billPending} counter={counterBill} />
+                <AmountCards raised={amountRaised} paid={amountPaid} pending={amountPending} counter={counterAmount} />
+                </div>
+
+             {filter === 'period' ? (
+               <Card bigPadding style={{width:'100%'}}>
+               {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
+                     <h3 style={{color:"green" ,textAlign:"left"}}><b>Period List</b></h3>
+                     {periodTableList && periodTableList.length > 0 ? (
+                       <Table marginTop="34px">
+                         <thead>
+                           <tr>
+                             <th>Period Name</th>
+                             <th>Invoice Raised</th>
+                             <th>Amount Raised</th>
+                             <th>Invoice Paid</th>
+                             <th>Amount Paid</th>
+                             <th>Invoice Pending</th>
+                             <th>Amount Pending</th>
+                             <th>Counter Invoice</th>
+                             <th>Counter Amount</th>
+                           </tr>
+                         </thead>
+                         <tbody>{getPeriods()}</tbody>
+                       </Table>
+                     ) : (
+                         <h3
+                           style={{
+                             textAlign: 'center',
+                             color: 'grey',
+                             height: '300px',
+                           }}
+                         >
+                           No invoice found
+                         </h3>
+                       )}
+               </Card>
+             ):''}
       {/* </ActionBar> */}
+      {filter === 'billdate' ? (                                             
         <Card bigPadding style={{width:'100%'}}>
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice List</b></h3>
-        {invoiceList && invoiceList.length > 0 ? (
+              {invoiceList && invoiceList.length > 0 ? (
                 <Table marginTop="34px">
                   <thead>
                     <tr>
@@ -503,7 +628,9 @@ const StaffReportPage = (props) => {
                   </h3>
                 )}
         </Card>
-        <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
+      
+      ):""}  
+      <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
           <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDay()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
         </Card>
       </Container>
