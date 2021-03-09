@@ -5,6 +5,7 @@ const Button = styled.button`
   min-width: ${props => (props.noMin ? '0' : 'sdd')};
   padding: ${props => (props.accentedBtn ? '7px' : '5px')};
   padding: ${props => (props.padding ? props.padding : '5px')};
+  padding: ${props => (props.dashBtn ? '8px' : '5px')};
   text-align: center;
   border-radius: ${props => (props.dashBtn  ? '8px' : '5px')};
   float: ${props => (props.float ? props.float : 'none')};

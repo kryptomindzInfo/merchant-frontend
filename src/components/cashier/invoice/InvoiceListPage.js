@@ -488,9 +488,9 @@ function InvoiceListPage(props) {
       <StaffHeader active="dashboard" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
       <Sidebar marginRight>
-        <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
-          <h4><b>Current Period: {defaultPeriod.period_name}</b></h4>
-          <h4><b>Current Category: {selectedGroupName}</b></h4>
+        <Card marginBottom="10px" buttonMarginTop="32px" bigPadding smallValue>
+          <h4 style={{color:'grey'}}>Current Period: <b><span style={{color:'black'}}>{defaultPeriod.period_name}</span></b></h4>
+          <h4 style={{color:'grey'}}>Current Category: <b><span style={{color:'black'}}>{selectedGroupName}</span></b></h4>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
@@ -508,7 +508,7 @@ function InvoiceListPage(props) {
               )}
           </Col>
         </Row>
-        <Row style={{ marginTop: '75%' }}>
+        <Row style={{ marginTop: '5px' }}>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
           stats.is_closed? (
@@ -572,7 +572,7 @@ function InvoiceListPage(props) {
         </Row>
         
         </Card>
-        <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
+        <Card marginBottom="54px" buttonMarginTop="10px" bigPadding smallValue>
         <h3>Categories</h3>
         {groupList.length > 0 ? (
           <div>
