@@ -36,6 +36,7 @@ const StaffReportPage = (props) => {
   const [invoiceList, setInvoiceList] = useState([]);
   const [periodList, setPeriodList] = useState([]);
   const [periodTableList, setPeriodTableList] = useState([]);
+  const [dateTableList, setDateTableList] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [periodStartDate, setPeriodStartDate] = useState("");
@@ -114,6 +115,48 @@ const StaffReportPage = (props) => {
     return({res:result});
   };
 
+  const preProcessDateTableData = async(datelist, list) => {
+      const data = datelist.map(async (date) => {
+        const formateddate = `${date.getDate() + 1 < 10 ? `0${date.getDate()}` : date.getDate()
+          }/${date.getMonth() + 1 < 10
+          ? `0${date.getMonth() + 1}`
+          : date.getMonth() + 1
+          }/${date.getFullYear()}`;
+        const raised = await list.filter((invoice) => {
+          return (invoice.bill_date === formateddate);
+        });
+        const pending = await list.filter((invoice) => {
+          return (
+            invoice.bill_date === formateddate &&
+            invoice.paid === 0 &&
+            invoice.is_validated === 1 &&
+            invoice.is_counter === false
+        );
+        });
+        const paid = await list.filter((invoice) => {
+          return (
+            invoice.bill_date === formateddate &&
+            invoice.paid === 1 
+          );
+        });
+        const counter = await list.filter((invoice) => {
+          return (
+            invoice.bill_date === formateddate &&
+            invoice.is_counter === true
+          );
+        });
+        return ({
+          date: formateddate,
+          raised: raised,
+          pending: pending,
+          paid: paid,
+          counter: counter,
+        });
+      });
+    const result= await Promise.all(data);
+    return({res:result});
+  };
+
   const setPeriodTable = async(list) => {
     const data = list.map(async (period) => {
       return({
@@ -132,6 +175,33 @@ const StaffReportPage = (props) => {
         return a + b.amount;
         }, 0),
         counterAmount: period.counter.reduce((a, b) => {
+          return a + b.amount;
+        }, 0),
+    });
+    });
+  const result= await Promise.all(data);
+  return({res:result, loading:false});
+
+  };
+
+  const setDateTable = async(list) => {
+    const data = list.map(async (date) => {
+      return({
+        name: date.date,
+        raised: date.raised.length,
+        paid: date.paid.length,
+        pending: date.pending.length,
+        counter: date.counter.length,
+        amountRaised: date.raised.reduce((a, b) => {
+          return a + b.amount;
+        }, 0),
+        amountPaid:date.paid.reduce((a, b) => {
+          return a + b.amount;
+        }, 0),
+        amountPending: date.pending.reduce((a, b) => {
+        return a + b.amount;
+        }, 0),
+        counterAmount: date.counter.reduce((a, b) => {
           return a + b.amount;
         }, 0),
     });
@@ -175,9 +245,21 @@ const StaffReportPage = (props) => {
       counterAmount: counterRows.reduce((a, b) => {
         return a + b.amount;
         }, 0),
+      loading: false,
     });
 
   };
+
+  const getDatesBetweenDates = (startDate, endDate) => {
+    let dates = []
+    //to avoid modifying the original date
+    const theDate = new Date(startDate)
+    while (theDate < endDate) {
+      dates = [...dates, new Date(theDate)]
+      theDate.setDate(theDate.getDate() + 1)
+    }
+    return dates
+  }
 
   const getReportByPeriod = async() => {
     setLoading(true);
@@ -196,7 +278,7 @@ const StaffReportPage = (props) => {
     setAmountPending(data.amountPending);
     setCounterAmount(data.counterAmount);
     setPeriodTableList(tabledata.res);
-    setLoading(tabledata.loading);
+    setLoading(data.loading);
   };
 
   const getReportByDateRange = async() => { 
@@ -204,14 +286,11 @@ const StaffReportPage = (props) => {
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
   const res = await fetchInvoicesByDateRange(start,end);
-  const csvDATA = await fetchCSVData(res.list);
-  setAmount(
-  res.list.reduce((a, b) => {
-  return a + b.amount;
-  }, 0));
-  setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
-  setInvoiceList(res.list);
+  const datelist = await getDatesBetweenDates(start, end);
+  const predata = await preProcessDateTableData(datelist,res.list);
+  const tabledata = await setDateTable(predata.res);
   const data = await setData(res.list);
+  setDateTableList(tabledata.res);
   setBillRaised(data.raised);
   setBillPending(data.pending);
   setBillPaid(data.paid);
@@ -220,8 +299,8 @@ const StaffReportPage = (props) => {
   setAmountPaid(data.amountPaid);
   setAmountPending(data.amountPending);
   setCounterAmount(data.counterAmount);
-  setLoading(csvDATA.loading);
-  };
+  setLoading(data.loading);
+};
 
   const getReportByDate = async() => { 
       setLoading(true);
@@ -295,6 +374,24 @@ const StaffReportPage = (props) => {
           <td>{period.counter}</td>
           <td>{period.counterAmount}</td>
           
+        </tr>
+      );
+    });
+  };
+
+  const getDates = () => {
+    return dateTableList.map((date) => {
+      return (
+        <tr key={date.name}>
+          <td>{date.name}</td>
+          <td>{date.raised}</td>
+          <td>{date.amountRaised}</td>
+          <td>{date.paid}</td>
+          <td>{date.amountPaid}</td>
+          <td>{date.pending}</td>
+          <td>{date.amountPending}</td>
+          <td>{date.counter}</td>
+          <td>{date.counterAmount}</td>
         </tr>
       );
     });
@@ -598,7 +695,40 @@ const StaffReportPage = (props) => {
                        )}
                </Card>
              ):''}
-      {/* </ActionBar> */}
+             {filter === 'daterange' ? (
+               <Card bigPadding style={{width:'100%'}}>
+               {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
+                     <h3 style={{color:"green" ,textAlign:"left"}}><b>Date List</b></h3>
+                     {dateTableList && dateTableList.length > 0 ? (
+                       <Table marginTop="34px">
+                         <thead>
+                           <tr>
+                             <th>Period Name</th>
+                             <th>Invoice Raised</th>
+                             <th>Amount Raised</th>
+                             <th>Invoice Paid</th>
+                             <th>Amount Paid</th>
+                             <th>Invoice Pending</th>
+                             <th>Amount Pending</th>
+                             <th>Counter Invoice</th>
+                             <th>Counter Amount</th>
+                           </tr>
+                         </thead>
+                         <tbody>{getDates()}</tbody>
+                       </Table>
+                     ) : (
+                         <h3
+                           style={{
+                             textAlign: 'center',
+                             color: 'grey',
+                             height: '300px',
+                           }}
+                         >
+                           No invoice found
+                         </h3>
+                       )}
+               </Card>
+             ):''}
       {filter === 'billdate' ? (                                             
         <Card bigPadding style={{width:'100%'}}>
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
@@ -628,7 +758,6 @@ const StaffReportPage = (props) => {
                   </h3>
                 )}
         </Card>
-      
       ):""}  
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
           <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDay()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
