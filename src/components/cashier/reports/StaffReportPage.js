@@ -37,6 +37,8 @@ const StaffReportPage = (props) => {
   const [periodList, setPeriodList] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [periodStartDate, setPeriodStartDate] = useState("");
+  const [periodEndDate, setPeriodEndDate] = useState("");
   const [amount, setAmount] = useState(0);
   const [filter, setFilter] = useState('billdate');
   const [periodStart, setPeriodStart] = useState('');
@@ -44,7 +46,6 @@ const StaffReportPage = (props) => {
   const [billPending, setBillPending] = useState(0);
   const [counterBill, setCounterBill] = useState(0);
   const [billPaid, setBillPaid] = useState(0);
-
   const [amountRaised, setAmountRaised] = useState(0);
   const [amountPending, setAmountPending] = useState(0);
   const [counterAmount, setCounterAmount] = useState(0);
@@ -117,8 +118,8 @@ const StaffReportPage = (props) => {
 
   const getReportByPeriod = async() => {
     setLoading(true);
-    const start = startOfDay(new Date(startDate));
-    const end = endOfDay(new Date(endDate));
+    const start = startOfDay(new Date(periodStartDate));
+    const end = endOfDay(new Date(periodEndDate));
     const res = await fetchInvoicesByPeriod(start,end);
     const csvDATA = await fetchCSVData(res.list);
     setAmount(
@@ -325,7 +326,7 @@ const StaffReportPage = (props) => {
                         style={{marginTop:"10px"}}
                         value={periodStart}
                         onChange={(event)=>{
-                          setStartDate(periodList[event.target.value].start_date);
+                          setPeriodStartDate(periodList[event.target.value].start_date);
                           setPeriodStart(event.target.value);
                         }}
                         name="from"
@@ -348,7 +349,7 @@ const StaffReportPage = (props) => {
                         style={{marginTop:"10px"}}
                         value={periodEnd}
                         onChange={(event)=>{
-                          setEndDate(periodList[event.target.value].end_date);
+                          setPeriodEndDate(periodList[event.target.value].end_date);
                           setPeriodEnd(event.target.value);
                         }}
                         name="from"
