@@ -14,25 +14,25 @@ const AmountCards = (props) => {
       <Col>
         <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
           <h4>Amount Raised</h4>
-          <div className="cardValue">{raised}</div>
+          <div className="cardValue">XOF {raised}</div>
         </Card>
       </Col>
       <Col>
         <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
           <h4>Amount Paid</h4>
-          <div className="cardValue">{paid}</div>
+          <div className="cardValue">XOF {paid}</div>
         </Card>
       </Col>
       <Col>
         <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
           <h4>Amount Pending</h4>
-          <div className="cardValue">{pending}</div>
+          <div className="cardValue">XOF {pending}</div>
         </Card>
       </Col>
       <Col>
         <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
           <h4>Counter Amount</h4>
-          <div className="cardValue">{counter}</div>
+          <div className="cardValue">XOF {counter}</div>
         </Card>
       </Col>
       
