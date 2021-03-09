@@ -5,10 +5,10 @@ import Card from '../../shared/Card';
 import { CURRENCY } from '../../constants';
 
 const AmountCards = (props) => {
-  const raised = props.raised;
-  const paid = props.paid;
-  const pending =props.pending;
-  const counter = props.counter;
+  const raised = props.raised ? props.raised : 0;
+  const paid = props.paid ? props.paid : 0;
+  const pending = props.pending ? props.pending : 0;
+  const counter = props.counter ? props.counter : 0;
   return (
     <Row>
       <Col>
