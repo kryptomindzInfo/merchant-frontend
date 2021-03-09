@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
-import SupervisedUserCircleIcon from '@material-ui/icons/SupervisedUserCircle';
 import Sidebar from '../../shared/sidebars/Sidebar';
 import AddIcon from '@material-ui/icons/Add';
 import Grid from '@material-ui/core/Grid';
@@ -21,12 +20,14 @@ import CreateInvoicePopup from './CreateInvoicePopup';
 import UploadInvoicePopup from './UploadInvoicePopup';
 import ViewInvoicePopup from './ViewInvoicePopup';
 import InvoiceCards from './InvoiceCards';
+import AmountCards from './AmountCards';
 import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import Tabs from '../../shared/Tabs';
 import TabItem from '../../shared/TabItem';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import notify from '../../utils/Notify';
+import Footer from '../../Footer';
 import {
   generateStaffOTP,
   openStaff,
@@ -43,8 +44,11 @@ import {
 } from '../api/CashierAPI';
 
 function InvoiceListPage(props) {
+  const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [selectedGroupId, setSelectedGroupId] = React.useState();
+  const [selectedGroupName, setSelectedGroupName] = React.useState('');
   const [stats, setStats] = useState({});
   const [uploadInvoicePopup, setUploadInvoicePopup] = React.useState(false);
   const [counterInvoiceAccess, setCounterInvoiceAccess] = React.useState(false);
@@ -80,6 +84,10 @@ function InvoiceListPage(props) {
   const [otpOpt, setOtpOpt] = useState('openingBalance');
   const [otpId, setOtpId] = useState('');
   const [OTPLoading, setOTPLoading] = useState(false);
+  const [amountRaised ,setAmountRaised] = useState(0);
+  const [amountPaid ,setAmountPaid] = useState(0);
+  const [amountPending ,setAmountPending] = useState(0);
+  const [counterAmount ,setCounterAmount] = useState(0);
   const positionId =  JSON.parse(localStorage.getItem('cashierLogged')).position._id;
   const email = JSON.parse(localStorage.getItem('cashierLogged')).staff.email;
   const mobile = JSON.parse(localStorage.getItem('cashierLogged')).staff.mobile;
@@ -247,6 +255,22 @@ function InvoiceListPage(props) {
         invoice.is_counter === true
       );
     });
+    setAmountRaised(
+      list.reduce((a, b) => {
+      return a + b.amount;
+      }, 0));
+    setAmountPaid(
+      paidRows.reduce((a, b) => {
+      return a + b.amount;
+      }, 0));
+    setAmountPending(
+      unpaidRows.reduce((a, b) => {
+      return a + b.amount;
+      }, 0));
+    setCounterAmount(
+      counterRows.reduce((a, b) => {
+      return a + b.amount;
+      }, 0));
     setCounterRow(counterRows.reverse());
     setInvoiceList(paidRows.reverse());
     setPaidRow(paidRows.reverse());
@@ -274,8 +298,8 @@ function InvoiceListPage(props) {
       .catch((err) => setLoading(false));
   };
 
-  const changeGroup = (id) => {
-    console.log(id);
+  const changeGroup = (id,name) => {
+    setSelectedGroupName(name);
     setSelectedGroupId(id);
     refreshInvoiceList(id);
     getStats(id);
@@ -409,14 +433,12 @@ function InvoiceListPage(props) {
       const groups = await fetchGroups(merchantId);
       setGroupList(groups.list);
       setSelectedGroupId(groups.list[0]._id);
-
+      setSelectedGroupName(groups.list[0].name);
       const stats = await fetchstaffStats(groups.list[0]._id);
       setStats(stats.stats);
 
       const access = await getinfo();
       setCounterInvoiceAccess(access.access);
-
-      
 
       const invoices = await fetchInvoices(groups.list[0]._id);
       if (toggleButton === 'myinvoices') {
@@ -463,10 +485,12 @@ function InvoiceListPage(props) {
         <meta charSet="utf-8" />
         <title>Invoice | Staff Position | E-WALLET </title>
       </Helmet>
-      <StaffHeader active="invoice" />
+      <StaffHeader active="dashboard" />
       <Container style={{ maxWidth: '1070px' }} verticalMargin>
       <Sidebar marginRight>
         <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
+          <h4><b>Current Period: {defaultPeriod.period_name}</b></h4>
+          <h4><b>Current Category: {selectedGroupName}</b></h4>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
@@ -492,6 +516,48 @@ function InvoiceListPage(props) {
                 dashBtn
                 disabled
               >
+                  Day Closed
+              </Button>
+            ) : (
+                <Button
+                  dashBtn
+                  onClick={() =>
+                    handleCreateInvoicePopupClick('create', {}, 'invoice')
+                  }
+                >
+                  Create Invoice
+                </Button>
+              )}
+          </Col>
+        </Row>
+        <Row style={{ marginTop: '5px' }}>
+          <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
+          {
+          stats.is_closed? (
+              <Button
+                dashBtn
+                disabled
+              >
+                  Day Closed
+              </Button>
+            ) : (
+                <Button
+                  dashBtn
+                  onClick={() => handleUploadInvoicePopupClick()}
+                >
+                  Upload Invoice
+                </Button>
+              )}
+          </Col>
+        </Row>
+        <Row style={{ marginTop: '5px' }}>
+          <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
+          {
+          stats.is_closed? (
+              <Button
+                dashBtn
+                disabled
+              >
                   Close my day
               </Button>
             ) : (
@@ -504,19 +570,20 @@ function InvoiceListPage(props) {
               )}
           </Col>
         </Row>
+        
         </Card>
         <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
-        <h3>Caterogies</h3>
+        <h3>Categories</h3>
         {groupList.length > 0 ? (
           <div>
-            {groupList.map((group)=>{
+            {groupList.map((group,index)=>{
               return(
               <Button dashBtn
                 style={{
                   marginTop:"5px",
                   backgroundColor: selectedGroupId === group._id ? "#5d87f1" : "#97bfee",
                 }}
-                onClick={()=>{changeGroup(group._id)}}
+                onClick={()=>{changeGroup(group._id,group.name)}}
               >
                 {group.name}
               </Button>
@@ -530,66 +597,8 @@ function InvoiceListPage(props) {
         
         <Main>
           <InvoiceCards raised={stats.bills_raised} paid={stats.bills_paid} counter={stats.counter_invoices} />
-          <ActionBar
-            style={{ display: 'flex', alignItems: 'center' }}
-            marginBottom="33px"
-            inputWidth="100%"
-            className="clr"
-          >
-            <div className="iconedInput fl">
-              <i className="material-icons">
-                <SearchIcon />
-              </i>
-              <input type="text" placeholder="Search Invoices" />
-            </div>
-            <Row justify="space-between" mL="30px">
-              <Col cW="100%">
-                {counterClose ? (
-                  <Button
-                  className="addBankButton"
-                  flex
-                  disabled
-                >
-                  <AddIcon className="material-icons" />
-                  <span>Create Invoice</span>
-                </Button>
-                  
-                ): (
-                  <Button
-                  className="addBankButton"
-                  flex
-                  onClick={() =>
-                    handleCreateInvoicePopupClick('create', {}, 'invoice')
-                  }
-                >
-                  <AddIcon className="material-icons" />
-                  <span>Create Invoice</span>
-                </Button>
-                )}
-                
-              </Col>
-              <Col cW="100%">
-                <Button
-                  className="addBankButton"
-                  flex
-                  onClick={() => handleUploadInvoicePopupClick()}
-                >
-                  <AddIcon className="material-icons" />
-                  <span>Upload Invoice</span>
-                </Button>
-              </Col>
-            </Row>
-          </ActionBar>
+          <AmountCards raised={amountRaised} paid={amountPaid} pending={amountPending} counter={counterAmount} />
           <Card bigPadding>
-            {/* <div className="cardHeader">
-              <div className="cardHeaderLeft">
-                <SupervisedUserCircleIcon className="material-icons" />
-              </div>
-              <div className="cardHeaderRight">
-                <h3>Invoice List</h3>
-                <h5>List of your invoices</h5>
-              </div>
-            </div> */}
             {counterInvoiceAccess ? (
               <div
                 style={{
@@ -662,6 +671,7 @@ function InvoiceListPage(props) {
           </Card>
         </Main>
       </Container>
+      <Footer bankname={bankName} banklogo={bankLogo}/>
       {Popupopen ? (
           <Popup close={closePopup} accentedH1>
 
@@ -753,6 +763,7 @@ function InvoiceListPage(props) {
           taxlist={taxList}
           offeringlist={offeringList}
           groupId={selectedGroupId}
+          grouplist={groupList}
           mode={mode}
           termlist={billTermList}
           countrylist={countryList}
@@ -761,6 +772,8 @@ function InvoiceListPage(props) {
           draftnumber={draftRow.length}
           refreshInvoiceList={() => {
             refreshInvoiceList(selectedGroupId);
+            getStats(selectedGroupId);
+
           }}
           type={invoiceType}
         />

@@ -68,6 +68,8 @@ function CreateInvoicePopup(props) {
   const [defaultBillTerm, setDefaultBillTerm] = React.useState({});
   const [defaultselectterm, setdefaultselectterm] = React.useState("")
   const [countryList, setCountryList] = React.useState(props.countrylist);
+  const [groupList, setGroupList] = React.useState(props.grouplist);
+  const [groupId, setGroupId] = React.useState(props.groupId);
   const [defaultCountry, setDefaultCountry] = React.useState(
     props.defaultcountry,
   );
@@ -87,18 +89,6 @@ function CreateInvoicePopup(props) {
       setCurrentBillNumber(billnumber);
       // setLoading(data.loading);
     });
-  };
-
-
-
-
-
-  const dbillterm = () => {
-    return props.termlist.reduce((a, b) => {
-      if (b.name === props.defaultterm.name) {
-        return b;
-      }
-    }, 0);
   };
 
   const addNewItem = () => {
@@ -194,6 +184,15 @@ function CreateInvoicePopup(props) {
       );
     });
   };
+  const categorySelectInput = () => {
+    return groupList.map((val, index) => {
+      return (
+        <option key={val.name} value={val._id}>
+          {val.name}
+        </option>
+      );
+    });
+  };
 
   const handleSubmit2 = async (values) => {
     if (userName !== '') {
@@ -217,12 +216,12 @@ function CreateInvoicePopup(props) {
       }/${due.getMonth() + 1 < 10 ? `0${due.getMonth() + 1}` : due.getMonth() + 1
       }/${due.getFullYear()}`;
     values.bill_period = defaultBillPeriod;
-    values.group_id = props.groupId;
+    // values.group_id = props.groupId;
     if (props.type === 'create') {
       await createInvoice(props, values, 'draft');
     } else {
       values.invoice_id = props.invoice._id;
-      values.group_id = props.groupId;
+      // values.group_id = props.groupId;
       await invoiceApi(props, values, 'update');
     }
   };
@@ -342,11 +341,6 @@ function CreateInvoicePopup(props) {
     return <Loader />;
   }
 
-
-
-
-
-
   return (
     <Popup accentedH1 bigBody close={props.onClose.bind(this)}>
       <Formik
@@ -357,7 +351,7 @@ function CreateInvoicePopup(props) {
           address: props.invoice.address || '',
           amount: props.invoice.amount || '',
           bill_period: props.invoice.bill_period || '',
-          // term: props.invoice.term || Number,
+          group_id: props.invoice.group_id || groupId,
           term: props.invoice.term || defaultselectterm,
           bill_date: props.invoice.bill_date || date,
           description: props.invoice.description || '',
@@ -394,7 +388,7 @@ function CreateInvoicePopup(props) {
               : due.getMonth() + 1
             }/${due.getFullYear()}`;
           values.bill_period = defaultBillPeriod;
-          values.group_id = props.groupId;
+          // values.group_id = props.groupId;
           if (props.mode === 'invoice') {
             if (props.type === 'create') {
               await createInvoice(props, values, 'invoice').then(
@@ -409,7 +403,7 @@ function CreateInvoicePopup(props) {
               );
             } else {
               values.invoice_id = props.invoice._id;
-              values.group_id = props.groupId;
+              // values.group_id = props.groupId;
               await invoiceApi(props, values, 'update').then(
                 async (err, data) => {
                   if (err) {
@@ -1019,7 +1013,30 @@ function CreateInvoicePopup(props) {
                   items={descList}
                 ></InvoiceDescription>
                 <Row>
-                  <Col cW="33%" mR="2%">
+                <Col cW="25%" mR="2%">
+                    <FormGroup>
+                    <label className="focused">Category</label>
+                      <SelectInput
+                        name="group_id"
+                        onFocus={(e) => {
+                          handleChange(e);
+                          inputFocus(e);
+                        }}
+                        onBlur={(e) => {
+                          handleBlur(e);
+                          handleChange(e);
+                          inputBlur(e);
+                        }}
+                        onChange={handleChange}
+                        value={values.group_id}
+                        required
+                      >
+                        {categorySelectInput()}
+                      </SelectInput>
+                      <ErrorMessage name="term" component={ErrorText} />
+                    </FormGroup>
+                  </Col>
+                  <Col cW="25%" mR="2%">
                     <FormGroup>
                       <label className="focused">Bill Date</label>
                       <TextInput
@@ -1041,7 +1058,7 @@ function CreateInvoicePopup(props) {
                       />
                     </FormGroup>
                   </Col>
-                  <Col cW="33%" mR="2%">
+                  <Col cW="25%" mR="2%">
                     <FormGroup>
                       <label className="focused">Bill Period*</label>
                       <TextInput
@@ -1062,8 +1079,7 @@ function CreateInvoicePopup(props) {
                       />
                     </FormGroup>
                   </Col>
-
-                  <Col cW="33%" mR="2%">
+                  <Col cW="25%" mR="2%">
                     <FormGroup>
                       <SelectInput
                         name="term"

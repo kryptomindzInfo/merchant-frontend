@@ -10,6 +10,8 @@ import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
 import SelectInput from '../../shared/SelectInput';
+import InvoiceCards from '../invoice/InvoiceCards';
+import AmountCards from '../invoice/AmountCards';
 import FormGroup from '../../shared/FormGroup';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { CURRENCY } from '../../constants';
@@ -25,6 +27,7 @@ import {
 } from '../api/CashierAPI';
 import Loader from '../../shared/Loader';
 import { Height } from '@material-ui/icons';
+import { set } from 'date-fns';
 const today = new Date();
 const StaffReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
@@ -37,6 +40,15 @@ const StaffReportPage = (props) => {
   const [amount, setAmount] = useState(0);
   const [filter, setFilter] = useState('billdate');
   const [periodStart, setPeriodStart] = useState('');
+  const [billRaised, setBillRaised] = useState(0);
+  const [billPending, setBillPending] = useState(0);
+  const [counterBill, setCounterBill] = useState(0);
+  const [billPaid, setBillPaid] = useState(0);
+
+  const [amountRaised, setAmountRaised] = useState(0);
+  const [amountPending, setAmountPending] = useState(0);
+  const [counterAmount, setCounterAmount] = useState(0);
+  const [amountPaid, setAmountPaid] = useState(0);
   const [periodEnd, setPeriodEnd] = useState('');
   const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
   const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
@@ -63,6 +75,46 @@ const StaffReportPage = (props) => {
     });
   };
 
+  const setData = async(list) => {
+    const paidRows = await list.filter((invoice) => {
+      return invoice.paid === 1;
+    });
+    const unpaidRows = await list.filter((invoice) => {
+      return (
+        invoice.paid === 0 &&
+        invoice.is_validated === 1 &&
+        invoice.is_counter === false
+      );
+    });
+    const counterRows = await list.filter((invoice) => {
+      return (
+        invoice.paid === 0 &&
+        invoice.is_validated === 1 &&
+        invoice.is_counter === true
+      );
+    });
+
+    return({
+      raised: list.length,
+      paid: paidRows.length,
+      pending: unpaidRows.length,
+      counter: counterRows.length,
+      amountRaised: list.reduce((a, b) => {
+        return a + b.amount;
+        }, 0),
+      amountPaid: paidRows.reduce((a, b) => {
+        return a + b.amount;
+        }, 0),
+      amountPending: unpaidRows.reduce((a, b) => {
+        return a + b.amount;
+        }, 0),
+      counterAmount: counterRows.reduce((a, b) => {
+        return a + b.amount;
+        }, 0),
+    });
+
+  };
+
   const getReportByPeriod = async() => {
     setLoading(true);
     const start = startOfDay(new Date(startDate));
@@ -75,6 +127,15 @@ const StaffReportPage = (props) => {
     }, 0));
     setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
     setInvoiceList(res.list);
+    const data = await setData(res.list);
+    setBillRaised(data.raised);
+    setBillPending(data.pending);
+    setBillPaid(data.paid);
+    setCounterBill(data.counter);
+    setAmountRaised(data.amountRaised);
+    setAmountPaid(data.amountPaid);
+    setAmountPending(data.amountPending);
+    setCounterAmount(data.counterAmount);
     setLoading(csvDATA.loading);
   };
 
@@ -90,6 +151,15 @@ const StaffReportPage = (props) => {
   }, 0));
   setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
   setInvoiceList(res.list);
+  const data = await setData(res.list);
+  setBillRaised(data.raised);
+  setBillPending(data.pending);
+  setBillPaid(data.paid);
+  setCounterBill(data.counter);
+  setAmountRaised(data.amountRaised);
+  setAmountPaid(data.amountPaid);
+  setAmountPending(data.amountPending);
+  setCounterAmount(data.counterAmount);
   setLoading(csvDATA.loading);
   };
 
@@ -108,8 +178,16 @@ const StaffReportPage = (props) => {
       }, 0));
       setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
       setInvoiceList(res.list);
+      const data = await setData(res.list);
+      setBillRaised(data.raised);
+      setBillPending(data.pending);
+      setBillPaid(data.paid);
+      setCounterBill(data.counter);
+      setAmountRaised(data.amountRaised);
+      setAmountPaid(data.amountPaid);
+      setAmountPending(data.amountPending);
+      setCounterAmount(data.counterAmount);
       setLoading(csvDATA.loading);
-    
   };
 
   const toggle = (type) => {
@@ -375,39 +453,26 @@ const StaffReportPage = (props) => {
               </Card>
               </Col>
               <Col  cW='30%'>
-                <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'180px', textAlign:'center'}}>
-                  <h4 style={{marginTop:'50px'}}>Bill Gererated</h4>
-                  <div className="cardValue">{invoiceList.length}</div>
-                </Card>
               </Col>
               <Col  cW='30%'>
-                <Card
-                  marginBottom="54px"
-                  buttonMarginTop="32px"
-                  smallValue
-                  style={{
-                    height:'180px',
-                    textAlign:'center',
-                  }}>
-                  <h4 style={{marginTop:'50px'}}>Amount</h4>
-                  <div className="cardValue">XOF: {amount}</div>
-                </Card>
               </Col>
             </Row>
             <Card marginBottom="20px" buttonMarginTop="5px" smallValue style={{height:'80px'}}>
-        <Row>
-          <Col>
-          <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
-          </Col>
-          <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
-          </Col>
-          <Col>
-          <h3 style={{color:"green", marginBottom:"20px"}}><b>Cashier Name : </b>{cashierName} </h3> 
-             
-          </Col>
-          </Row>
-      </Card>
+              <Row>
+                <Col>
+                  <h3 style={{color:"green",marginBottom:"20px" }}><b>Merchant Name : </b>{merchantName} </h3> 
+                 </Col>
+                <Col>
+                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
+                </Col>
+                <Col>
+                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Cashier Name : </b>{cashierName} </h3>
+                </Col>
+              </Row>
+            </Card>
+            <InvoiceCards raised={billRaised} paid={billPaid} pending={billPending} counter={counterBill} />
+            <AmountCards raised={amountRaised} paid={amountPaid} pending={amountPending} counter={counterAmount} />
+      
       {/* </ActionBar> */}
         <Card bigPadding style={{width:'100%'}}>
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
@@ -436,6 +501,9 @@ const StaffReportPage = (props) => {
                     No invoice found
                   </h3>
                 )}
+        </Card>
+        <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
+          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDay()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
         </Card>
       </Container>
       <Footer bankname={bankName} banklogo={bankLogo}/>
