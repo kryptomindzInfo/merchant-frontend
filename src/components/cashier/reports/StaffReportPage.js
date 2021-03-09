@@ -703,7 +703,7 @@ const StaffReportPage = (props) => {
                        <Table marginTop="34px">
                          <thead>
                            <tr>
-                             <th>Period Name</th>
+                             <th>Date</th>
                              <th>Invoice Raised</th>
                              <th>Amount Raised</th>
                              <th>Invoice Paid</th>
