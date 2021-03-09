@@ -619,6 +619,7 @@ function InvoiceListPage(props) {
                   className={toggleButton === 'allinvoices' ? 'active' : ''}
                   onClick={toggleAllInvoice}
                   marginLeft="20px"
+                  style={{marginLeft:'10px'}}
                 >
                   Other Invoices
                 </Button>
