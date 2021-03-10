@@ -73,14 +73,6 @@ class BranchCashierInfoSidebar extends Component {
             <h3>Staff Position Info</h3>
           </Card>
         </A>
-        <A href={`/branch/staff/report/${id}`}>
-          <Card rounded selected={reports} className="sideNav">
-            <i className="material-icons">
-              <ChartIcon />
-            </i>
-            <h3>Reports</h3>
-          </Card>
-        </A>
 
         <Card
           rounded

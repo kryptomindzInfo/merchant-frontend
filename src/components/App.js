@@ -20,7 +20,6 @@ import MerchantCustomerListPage from './merchant/customers/MerchantCustomerListP
 import MerchantTaxListPage from './merchant/taxes/MerchantTaxListPage';
 import GlobalStyle from '../styles/global-styles';
 import BranchCashierInfoPage from './branch/dashboard/BranchCashierInfoPage';
-import BranchParticularStaffReport from './branch/Reports/BranchParticularStaffReport';
 import BranchSettingsPage from './branch/settings/BranchSettingsPage';
 import ZoneSettingPage from './merchant/settings/ZoneSettingPage';
 import BillPeriodSettingPage from './merchant/settings/BillPeriodSettingPage';
@@ -364,10 +363,11 @@ function App() {
             />
             <ProtectedRoute
               type="branch"
+              apitype="merchantBranch"
               exact
               path={branchStaffReportUrl}
               component={(props) => (
-                <BranchParticularStaffReport type="branch" {...props} />
+                <StaffReportPage type="branch" {...props} />
               )}
             />
             <ProtectedRoute
@@ -420,10 +420,11 @@ function App() {
               component={(props) => <InvoiceListPage {...props} />}
             />
             <ProtectedRoute
-              type="cashier"
+              type = "cashier"
+              apitype = "merchantStaff"
               exact
               path={staffReportsUrl}
-              component={(props) => <StaffReportPage {...props} />}
+              component={(props) => <StaffReportPage  {...props} />}
             />
             <ProtectedRoute
               type="cashier"

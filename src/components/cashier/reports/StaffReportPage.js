@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { CSVLink, CSVDownload } from "react-csv";
 import StaffHeader from '../../shared/headers/cashier/StaffHeader';
+import BranchHeader from '../../shared/headers/branch/BranchHeader';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
 import Card from '../../shared/Card';
@@ -24,15 +25,27 @@ import {
   getMerchantSettings,
   fetchInvoicesByPeriod,
   fetchInvoicesByDateRange,
-} from '../api/CashierAPI';
+} from '../../shared/api/Api';
 import Loader from '../../shared/Loader';
-import { Height } from '@material-ui/icons';
-import { set } from 'date-fns';
-const today = new Date();
+
 const StaffReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
-  const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
-  const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
+  const bankName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).bank.name :
+    JSON.parse(localStorage.getItem('branchLogged')).bank.name
+  const bankLogo = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).bank.logo :
+    JSON.parse(localStorage.getItem('branchLogged')).bank.logo
+  const cashierName =  props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
+    " "
+  const branchName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).branch.name:
+    JSON.parse(localStorage.getItem('branchLogged')).details.name
+  const merchantName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).merchant.name:
+    JSON.parse(localStorage.getItem('branchLogged')).merchant.name
+  const apiId = props.apitype === 'merchantStaff' ? " " : props.match.params.id
   const [invoiceList, setInvoiceList] = useState([]);
   const [periodList, setPeriodList] = useState([]);
   const [periodTableList, setPeriodTableList] = useState([]);
@@ -53,9 +66,6 @@ const StaffReportPage = (props) => {
   const [counterAmount, setCounterAmount] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const [periodEnd, setPeriodEnd] = useState('');
-  const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
-  const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
-  const merchantName = JSON.parse(localStorage.getItem('cashierLogged')).merchant.name;
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([
     ["BillNo","Name","Amount","Mobile","DueDate"]
@@ -70,7 +80,7 @@ const StaffReportPage = (props) => {
   };
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getMerchantSettings().then((data) => {
+    getMerchantSettings(props.apitype).then((data) => {
       setPeriodList(data.bill_period_list);
       setStartDate(data.bill_period_list[0].start_date);
       setEndDate(new Date());
@@ -265,7 +275,7 @@ const StaffReportPage = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(periodStartDate));
     const end = endOfDay(new Date(periodEndDate));
-    const res = await fetchInvoicesByPeriod(start,end);
+    const res = await fetchInvoicesByPeriod(start,end, props.apitype,apiId);
     const predata = await preProcessPeriodTableData(res.list);
     const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
@@ -285,7 +295,7 @@ const StaffReportPage = (props) => {
   setLoading(true);
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
-  const res = await fetchInvoicesByDateRange(start,end);
+  const res = await fetchInvoicesByDateRange(start,end,props.apitype,apiId);
   const datelist = await getDatesBetweenDates(start, end);
   const predata = await preProcessDateTableData(datelist,res.list);
   const tabledata = await setDateTable(predata.res);
@@ -309,7 +319,7 @@ const StaffReportPage = (props) => {
         ? `0${formdate.getMonth() + 1}`
         : formdate.getMonth() + 1
       }/${formdate.getFullYear()}`;
-      const res = await fetchInvoicesBydate(date);
+      const res = await fetchInvoicesBydate(date,props.apitype,apiId);
       const csvDATA = await fetchCSVData(res.list);
       setAmount(
       res.list.reduce((a, b) => {
@@ -416,7 +426,12 @@ const StaffReportPage = (props) => {
         <title>Merchant Dashboard | Cashier | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <StaffHeader active="reports" />
+      {props.apitype === 'merchantStaff' ? (
+        <StaffHeader active="reports" />
+      ) : (
+        <BranchHeader active="reports" />
+      )}
+      
       <Container verticalMargin>
             <div
                 style={{
