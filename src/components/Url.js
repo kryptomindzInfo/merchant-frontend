@@ -36,6 +36,7 @@ const branchForgotPasswordUrl = '/branch/:name/forgot-password';
 const branchOtpUrl = '/branch/:name/otp-forgot-password';
 const branchCashierInfoUrl = '/branch/cashier/info/:id';
 const branchStaffReportUrl = '/branch/staff/report/:id';
+const branchCashierReportUrl = '/branch/cashier/report/:id';
 const branchVerifyUrl = '/branch/:name/login-verify';
 
 // cashier URL's
@@ -53,6 +54,7 @@ const cashierSettingsUrl = '/cashier/settings';
 const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
+  branchCashierReportUrl,
   branchReportsUrl,
   merchantCategorySettings,
   branchStaffReportUrl,

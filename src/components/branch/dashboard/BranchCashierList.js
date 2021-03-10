@@ -85,8 +85,15 @@ function BranchCashierList(props) {
     return `/branch/staff/report/${cashierId}`;
   };
 
+  const getCashierReportURL = (cashierId) => {
+    return `/branch/cashier/report/${cashierId}`;
+  };
+
   function mappedCards() {
     return cashierList.map((cashier) => {
+      const assignedTo = userList.filter((u) => u._id === cashier.staff_id)[0]
+      ? userList.filter((u) => u._id === cashier.staff_id)[0].name
+      : '';
       return (
         <tr key={cashier._id}>
           <td style={{display:"inline-flex"}}>
@@ -95,9 +102,7 @@ function BranchCashierList(props) {
           </td>
           <td>{cashier.cash_in_hand}</td>
           <td>
-            {userList.filter((u) => u._id === cashier.staff_id)[0]
-              ? userList.filter((u) => u._id === cashier.staff_id)[0].name
-              : ''}
+            {assignedTo}
           </td>
           <td>
             -
@@ -113,12 +118,14 @@ function BranchCashierList(props) {
                 'selectedCashier',
                 JSON.stringify(cashier),
               );
-              history.push(getCashierInfoURL(cashier._id));
+              localStorage.setItem(
+                'assignedTo',
+                assignedTo,
+              );
+              history.push(getCashierReportURL(cashier._id));
             }}
-          >
-                                  
-            View
-                                  
+          >                            
+            View                       
         </Button>
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
@@ -200,12 +207,14 @@ function BranchCashierList(props) {
                 'selectedCashier',
                 JSON.stringify(cashier),
               );
-              history.push(getCashierInfoURL(cashier._id));
+              localStorage.setItem(
+                'assignedTo',
+                assignedTo,
+              );
+              history.push(getStaffReportURL(cashier._id));
             }}
-          >
-                                  
-            View
-                                  
+          >                    
+            View                    
         </Button>
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
@@ -224,21 +233,6 @@ function BranchCashierList(props) {
                   }}
                 >
                   Info
-                </span>
-                <span
-                  onClick={() => {
-                    localStorage.setItem(
-                      'selectedCashier',
-                      JSON.stringify(cashier),
-                    );
-                    localStorage.setItem(
-                      'assignedTo',
-                      assignedTo,
-                    );
-                    history.push(getStaffReportURL(cashier._id));
-                  }}
-                >
-                  Reports
                 </span>
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}

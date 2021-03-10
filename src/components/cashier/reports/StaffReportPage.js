@@ -38,7 +38,7 @@ const StaffReportPage = (props) => {
     JSON.parse(localStorage.getItem('branchLogged')).bank.logo
   const cashierName =  props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
-    " "
+    JSON.parse(localStorage.getItem('selectedCashier')).name
   const branchName = props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).branch.name:
     JSON.parse(localStorage.getItem('branchLogged')).details.name
@@ -665,7 +665,7 @@ const StaffReportPage = (props) => {
                   <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
                 </Col>
                 <Col>
-                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Cashier Name : </b>{cashierName} </h3>
+                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Staff Name : </b>{cashierName} </h3>
                 </Col>
               </Row>
             </Card>

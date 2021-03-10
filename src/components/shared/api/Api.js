@@ -2,9 +2,77 @@ import axios from 'axios';
 import notify from '../../utils/Notify';
 import { API_URL } from '../../constants';
 
+const fetchCashierStats = async (type,id) => {
+  try {
+    const res = await axios.post(`${API_URL}/${type}/getMerchantCashierDashStats`,{
+      staff_id:id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { stats: {}, loading: false };
+      }
+      return { stats: res.data, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { stats: {}, loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { stats: {}, loading: false };
+  }
+};
+
+const getCashierReport = async (after,before,type,id,bankId) => {
+  try {
+    const res = await axios.post(`${API_URL}/${type}/queryMerchantCashierTransactionStates`, {
+      bank_id: bankId,
+      status: "2",
+      staff_id:id,
+      date_after: after,
+      date_before: before,
+      page_start: 0,
+      limit: 100
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { data: {}, loading: false };
+      }
+      return { data: res.data, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { data: {}, loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { data: {}, loading: false };
+  }
+};
+
+const getCashierDailyReport = async (after,before,type,id) => {
+  try {
+    const res = await axios.post(`${API_URL}/${type}/getMerchantCashierDailyReport`, {
+      start: after,
+      end: before,
+      staff_id:id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { data: {}, loading: false };
+      }
+      return { data: res.data, loading: false };
+    }
+    notify(res.data.message, 'error');
+    return { data: {}, loading: false };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { data: {}, loading: false };
+  }
+};
+
 const fetchInvoicesBydate = async (date,type,id) => {
     try {
-      const res = await axios.post(`${API_URL}/${type}/listStaffInvoicesByDate`, {
+      const res = await axios.post(`${API_URL}/${type}/listMerchantStaffInvoicesByDate`, {
         date: date,
         staff_id:id,
       });
@@ -25,7 +93,7 @@ const fetchInvoicesBydate = async (date,type,id) => {
 
 const fetchInvoicesByPeriod = async (start, end, type, id) => {
     try {
-      const res = await axios.post(`${API_URL}/${type}/listStaffInvoicesByPeriod`, {
+      const res = await axios.post(`${API_URL}/${type}/listMerchantStaffInvoicesByPeriod`, {
         start_date: start,
         end_date:end,
         staff_id:id,
@@ -47,7 +115,7 @@ const fetchInvoicesByPeriod = async (start, end, type, id) => {
   
 const fetchInvoicesByDateRange = async (start, end, type, id) => {
     try {
-      const res = await axios.post(`${API_URL}/${type}/listStaffInvoicesByDateRange`, {
+      const res = await axios.post(`${API_URL}/${type}/listMerchantStaffInvoicesByDateRange`, {
         start_date: start,
         end_date:end,
         staff_id: id,
@@ -122,6 +190,9 @@ const getMerchantSettings = async (type) => {
 };
 
 export {
+getCashierDailyReport,
+fetchCashierStats,
+getCashierReport,
 fetchInvoicesBydate,
 fetchInvoicesByPeriod,
 fetchInvoicesByDateRange,

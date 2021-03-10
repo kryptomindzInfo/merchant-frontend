@@ -52,9 +52,8 @@ const BranchReport = (props) => {
   const [counterAmount, setCounterAmount] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const [periodEnd, setPeriodEnd] = useState('');
-  const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
-  const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
-  const merchantName = JSON.parse(localStorage.getItem('cashierLogged')).merchant.name;
+  const branchName = JSON.parse(localStorage.getItem('branchLogged')).details.name;
+  const merchantName = JSON.parse(localStorage.getItem('branchLogged')).merchant.name;
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([
     ["BillNo","Name","Amount","Mobile","DueDate"]
@@ -647,9 +646,6 @@ const BranchReport = (props) => {
                  </Col>
                 <Col>
                   <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
-                </Col>
-                <Col>
-                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Cashier Name : </b>{cashierName} </h3>
                 </Col>
               </Row>
             </Card>

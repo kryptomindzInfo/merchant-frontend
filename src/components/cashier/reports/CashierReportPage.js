@@ -2,14 +2,13 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { CSVLink, CSVDownload } from "react-csv";
 import CashierHeader from '../../shared/headers/cashier/CashierHeader';
+import BranchHeader from '../../shared/headers/branch/BranchHeader';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
 import Card from '../../shared/Card';
 import Col from '../../shared/Col';
 import Row from '../../shared/Row';
-import Main from '../../shared/Main';
 import Button from '../../shared/Button';
-import ActionBar from '../../shared/ActionBar';
 import FormGroup from '../../shared/FormGroup';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import { CURRENCY } from '../../constants';
@@ -18,36 +17,39 @@ import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import format from 'date-fns/format';
 import Footer from '../../Footer';
-
-import { getCashierReport, fetchStats, fetchCashierStats, getCashierDailyReport } from '../api/CashierAPI';
+import { getCashierReport, fetchCashierStats, getCashierDailyReport } from '../../shared/api/Api';
 import Loader from '../../shared/Loader';
-const today = new Date();
+
 const CashierReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
-  const [stats, setStats] = useState({});
   const [cashierstats, setCashierStats] = useState({});
   const [dailyreprots, setDailyReports] = useState({});
-  const cashierName = JSON.parse(localStorage.getItem('cashierLogged')).staff.name;
-  const branchName = JSON.parse(localStorage.getItem('cashierLogged')).branch.name;
-  const merchantName = JSON.parse(localStorage.getItem('cashierLogged')).merchant.name;
-  const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
-  const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
+  const cashierName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
+    JSON.parse(localStorage.getItem('selectedCashier')).name
+  const bankId = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).bank._id :
+    JSON.parse(localStorage.getItem('branchLogged')).bank._id 
+  const branchName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).branch.name :
+    JSON.parse(localStorage.getItem('branchLogged')).details.name
+  const merchantName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).merchant.name:
+    JSON.parse(localStorage.getItem('branchLogged')).merchant.name
+  const apiId = props.apitype === 'merchantStaff' ? " " : props.match.params.id
+  const bankName = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).bank.name :
+    JSON.parse(localStorage.getItem('branchLogged')).bank.name
+  const bankLogo = props.apitype === 'merchantStaff' ?
+    JSON.parse(localStorage.getItem('cashierLogged')).bank.logo :
+    JSON.parse(localStorage.getItem('branchLogged')).bank.logo
   const [totalAmountCredited, setTotalAmountCredited] = useState(0);
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([]);
 
-  const getStats = () => {
-    fetchStats('cashier')
-      .then((data) => {
-        setStats(data.stats);
-      })
-      .catch((err) => {
-        setLoading(false);
-      });
-  };
   const getCashierStats = () => {
-    fetchCashierStats()
+    fetchCashierStats(props.apitype,apiId)
       .then((data) => {
         console.log(data);
         setCashierStats(data.stats);
@@ -78,11 +80,10 @@ const CashierReportPage = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(formdate));
     const end = endOfDay(new Date(formdate));
-    const stats = await getStats();
     const cashierstats = await getCashierStats();
-    const dailyreport = await getCashierDailyReport(start,end);
+    const dailyreport = await getCashierDailyReport(start,end,props.apitype,apiId);
     console.log(dailyreport);
-    const res = await getCashierReport(start,end);
+    const res = await getCashierReport(start,end,props.apitype,apiId,bankId);
     
       const csvDATA = await fetchCSVData(res.data.transactions);
       setTotalAmountCredited(
@@ -134,7 +135,11 @@ const CashierReportPage = (props) => {
         <title>Merchant Dashboard | Cashier | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      <CashierHeader active="reports" />
+      {props.apitype === 'merchantStaff' ? (
+        <CashierHeader active="reports" />
+      ) : (
+        <BranchHeader active="reports" />
+      )}
       <Container verticalMargin>
       <Row style={{marginBottom:"0px"}}>
               <Col cW='40%'>

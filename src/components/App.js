@@ -38,6 +38,7 @@ import PrivateRoute from './PrivateRoute';
 import ProtectedRoute from './ProtectedRoute';
 import SharingRulesPage from './merchant/settings/SharingRulesPage';
 import {
+  branchCashierReportUrl,
   branchCashierInfoUrl,
   branchStaffReportUrl,
   branchDashboardUrl,
@@ -372,6 +373,15 @@ function App() {
             />
             <ProtectedRoute
               type="branch"
+              apitype="merchantBranch"
+              exact
+              path={branchCashierReportUrl}
+              component={(props) => (
+                <CashierReportPage type="branch" {...props} />
+              )}
+            />
+            <ProtectedRoute
+              type="branch"
               exact
               path={branchSettingsUrl}
               component={(props) => <BranchSettingsPage {...props} />}
@@ -428,6 +438,7 @@ function App() {
             />
             <ProtectedRoute
               type="cashier"
+              apitype = "merchantStaff"
               exact
               path={cashierReportsUrl}
               component={(props) => <CashierReportPage {...props} />}
