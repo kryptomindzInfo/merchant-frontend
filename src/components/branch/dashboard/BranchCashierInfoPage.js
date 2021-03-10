@@ -47,7 +47,7 @@ function BranchCashierInfoPage(props) {
           <Card bigPadding bordered>
             <div className="cardBody">
               <Row>
-                <Col className="infoLeft">Staff Name</Col>
+                <Col className="infoLeft">Position Name</Col>
                 <Col className="infoRight">{cashierInfo.name}</Col>
               </Row>
 

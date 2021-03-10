@@ -292,7 +292,7 @@ function BranchCashierList(props) {
                   <i className="material-icons">playlist_add_check</i>
                 </div>
                 <div className="cardHeaderRight">
-                  <h3>User Activity</h3>
+                  <h3>Daily Activity</h3>
                 </div>
               </div>
               <div

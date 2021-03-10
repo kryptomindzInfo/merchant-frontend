@@ -30,6 +30,7 @@ const merchantOperationalHistoryUrl = '/merchant/operationalHistory';
 const defaultBranchLoginUrl = '/merchant/branch/:name';
 const branchLoginUrl = '/merchant/branch/:name/login';
 const branchDashboardUrl = '/branch/dashboard';
+const branchReportsUrl = '/branch/reports';
 const branchSettingsUrl = '/branch/settings';
 const branchForgotPasswordUrl = '/branch/:name/forgot-password';
 const branchOtpUrl = '/branch/:name/otp-forgot-password';
@@ -52,6 +53,7 @@ const cashierSettingsUrl = '/cashier/settings';
 const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
+  branchReportsUrl,
   merchantCategorySettings,
   branchStaffReportUrl,
   staffReportsUrl,

@@ -28,6 +28,7 @@ import CategorySettingPage from './merchant/settings/CategorySettingPage';
 import PenaltySettingPage from './merchant/settings/PenaltySettingPage';
 import BillTermSettingPage from './merchant/settings/BillTermSettingPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
+import BranchReports from './branch/Reports/BranchReports';
 import StaffDashboardPage from './cashier/dashboard/StaffDashboardPage';
 import StaffReportPage from './cashier/reports/StaffReportPage';
 import CashierReportPage from './cashier/reports/CashierReportPage';
@@ -41,6 +42,7 @@ import {
   branchCashierInfoUrl,
   branchStaffReportUrl,
   branchDashboardUrl,
+  branchReportsUrl,
   branchForgotPasswordUrl,
   branchLoginUrl,
   branchOtpUrl,
@@ -345,6 +347,12 @@ function App() {
               exact
               path={branchDashboardUrl}
               component={(props) => <BranchDashboardPage {...props} />}
+            />
+            <ProtectedRoute
+              type="branch"
+              exact
+              path={branchReportsUrl}
+              component={(props) => <BranchReports {...props} />}
             />
             <ProtectedRoute
               type="branch"

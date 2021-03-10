@@ -71,15 +71,7 @@ const BranchParticularStaffReport = (props) => {
     getReport();
   }, []);
 
-  // const status = () => {
-  //   setInterval(function(){
-  //     getStats();
-  //    }, 3000);
-  // };
 
-  // useEffect(() => {
-  //   status();      
-  // }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
     return <Loader fullPage />;

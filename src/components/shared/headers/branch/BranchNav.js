@@ -20,12 +20,16 @@ const Link = styled.span`
 class BranchNav extends Component {
   render() {
     const dashboard = this.props.active === 'dashboard' ? 'true' : '';
+    const reports = this.props.active === 'reports' ? 'true' : '';
 
     return (
       <React.Fragment>
         <NavTag>
           <A href="/branch/dashboard">
             <Link active={dashboard}>Dashboard</Link>
+          </A>
+          <A href="/branch/reports">
+            <Link active={reports}>Reports</Link>
           </A>
         </NavTag>
       </React.Fragment>

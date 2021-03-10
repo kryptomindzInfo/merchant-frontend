@@ -66,6 +66,18 @@ const BranchDashboardPage = (props) => {
       <Container verticalMargin>
         <Main fullWidth>
         <Row>
+        <Col>
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                  style={{textAlign:'center'}}
+                >
+                  <h4>Number of Cashier</h4>
+                  <div className="cardValue">{stats.total_cashier}</div>
+                </Card>
+              </Col>
               <Col>
                 <Card
                   marginBottom="54px"
@@ -92,19 +104,6 @@ const BranchDashboardPage = (props) => {
                 </Card>
               </Col>
               <Col>
-              <Card
-                  marginBottom="54px"
-                  buttonMarginTop="32px"
-                  bigPadding
-                  smallValue
-                  style={{textAlign:'center'}}
-                >
-                  <h4>No. of Staff</h4>
-
-                  <div className="cardValue">{stats.total_staff}</div>
-                </Card>
-              </Col>
-              <Col>
                 <Card
                   marginBottom="54px"
                   buttonMarginTop="32px"
@@ -125,13 +124,11 @@ const BranchDashboardPage = (props) => {
                   smallValue
                   style={{textAlign:'center'}}
                 >
-                  <h4>Number of Cashier</h4>
-                  <div className="cardValue">{stats.total_cashier}</div>
+                  <h4>Penalty Collected</h4>
+                  <div className="cardValue">{CURRENCY}: {stats.penalty_collected}</div>
                 </Card>
               </Col>
-            </Row>
-            <Row style={{marginTop:'5px',marginBottom:'35px'}}>
-              <Col cw="20%">
+              <Col>
               <Card
                   marginBottom="54px"
                   buttonMarginTop="32px"
@@ -139,10 +136,27 @@ const BranchDashboardPage = (props) => {
                   smallValue
                   style={{textAlign:'center'}}
                 >
-                  <h4>Penalty Collected</h4>
-                  <div className="cardValue">{CURRENCY}: {stats.penalty_collected}</div>
+                  <h4>Total Revenue</h4>
+                  <div className="cardValue">{CURRENCY}: {stats.penalty_collected +stats.amount_collected}</div>
                 </Card>
               </Col>
+             
+            </Row>
+            <Row style={{marginTop:'5px',marginBottom:'35px'}}>
+            <Col>
+              <Card
+                  marginBottom="54px"
+                  buttonMarginTop="32px"
+                  bigPadding
+                  smallValue
+                  style={{textAlign:'center'}}
+                >
+                  <h4>No. of Staff</h4>
+
+                  <div className="cardValue">{stats.total_staff}</div>
+                </Card>
+              </Col>
+              
               <Col cw="20%">
               <Card
                   marginBottom="54px"
@@ -155,18 +169,7 @@ const BranchDashboardPage = (props) => {
                   <div className="cardValue"> {stats.invoice_raised}</div>
                 </Card>
               </Col>
-              <Col cw="20%">
-              <Card
-                  marginBottom="54px"
-                  buttonMarginTop="32px"
-                  bigPadding
-                  smallValue
-                  style={{textAlign:'center'}}
-                >
-                  <h4>Total Revenue</h4>
-                  <div className="cardValue">{CURRENCY}: {stats.penalty_collected +stats.amount_collected}</div>
-                </Card>
-              </Col>
+             
               <Col cw="40%"></Col>
             </Row>
             
