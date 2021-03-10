@@ -43,7 +43,7 @@ const BranchDashboardPage = (props) => {
       .catch(err => {
         setTimeout(function() {
           getStats();
-        }, 3000);
+        }, 5000);
       });
   }
 
@@ -86,8 +86,7 @@ const BranchDashboardPage = (props) => {
                   smallValue
                 >
                   <h4>Cash Received</h4>
-
-                  <div className="cardValue">{CURRENCY}: -</div>
+                  <div className="cardValue">{CURRENCY}: {stats.amount_collected}</div>
                 </Card>
               </Col>
               <Col>
@@ -135,7 +134,7 @@ const BranchDashboardPage = (props) => {
                   smallValue
                 >
                   <h4>Penalty Collected</h4>
-                  <div className="cardValue">{CURRENCY}: -</div>
+                  <div className="cardValue">{CURRENCY}: {stats.penalty_collected}</div>
                 </Card>
               </Col>
               <Col cw="20%">
@@ -146,7 +145,7 @@ const BranchDashboardPage = (props) => {
                   smallValue
                 >
                   <h4>No. of invoice created</h4>
-                  <div className="cardValue"> -</div>
+                  <div className="cardValue"> {stats.invoice_raised}</div>
                 </Card>
               </Col>
               <Col cw="20%">
@@ -157,7 +156,7 @@ const BranchDashboardPage = (props) => {
                   smallValue
                 >
                   <h4>Total Revenue</h4>
-                  <div className="cardValue">{CURRENCY}: -</div>
+                  <div className="cardValue">{CURRENCY}: {stats.penalty_collected +stats.amount_collected}</div>
                 </Card>
               </Col>
               <Col cw="40%"></Col>
