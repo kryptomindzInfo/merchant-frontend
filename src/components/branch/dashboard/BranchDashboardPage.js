@@ -72,6 +72,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>Opening Balance</h4>
 
@@ -84,6 +85,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>Cash Received</h4>
                   <div className="cardValue">{CURRENCY}: {stats.amount_collected}</div>
@@ -95,6 +97,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>No. of Staff</h4>
 
@@ -107,6 +110,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>Cash in Hand</h4>
 
@@ -119,6 +123,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>Number of Cashier</h4>
                   <div className="cardValue">{stats.total_cashier}</div>
@@ -132,6 +137,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>Penalty Collected</h4>
                   <div className="cardValue">{CURRENCY}: {stats.penalty_collected}</div>
@@ -143,6 +149,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>No. of invoice created</h4>
                   <div className="cardValue"> {stats.invoice_raised}</div>
@@ -154,6 +161,7 @@ const BranchDashboardPage = (props) => {
                   buttonMarginTop="32px"
                   bigPadding
                   smallValue
+                  style={{textAlign:'center'}}
                 >
                   <h4>Total Revenue</h4>
                   <div className="cardValue">{CURRENCY}: {stats.penalty_collected +stats.amount_collected}</div>
