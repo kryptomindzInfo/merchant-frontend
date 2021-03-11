@@ -216,6 +216,9 @@ const checkCashierStats = async (id) => {
 					cash_in_hand: 0,
 					opening_balance: 0,
           opening_time: new Date(),
+          closing_balance: 0,
+          closing_time: new Date(),
+          discrepancy: 0,
         };
       }
       return { 
@@ -225,6 +228,9 @@ const checkCashierStats = async (id) => {
         cash_in_hand: res.data.cash_in_hand,
         opening_balance: res.data.opening_balance,
         opening_time: res.data.opening_time,
+        closing_balance: res.data.closing_balance,
+        closing_time: res.data.closing_time,
+        discrepancy: res.data.discrepancy,
       };
     }
     notify(res.data.message, 'error');
@@ -235,6 +241,9 @@ const checkCashierStats = async (id) => {
       cash_in_hand: 0,
       opening_balance: 0,
       opening_time: new Date(),
+      closing_balance: 0,
+      closing_time: new Date(),
+      discrepancy: 0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -245,6 +254,9 @@ const checkCashierStats = async (id) => {
       cash_in_hand: 0,
       opening_balance: 0,
       opening_time: new Date(),
+      closing_balance: 0,
+      closing_time: new Date(),
+      discrepancy: 0,
     };
   }
 };
@@ -259,28 +271,40 @@ const checkStaffStats = async (id) => {
         notify(res.data.message, 'error');
         return { 
           bills_paid: 0,
-          bills_raised: 0,
+          bills_created:0,
           counter_invoices: 0,
+          opening_time: new Date(),
+          closing_time: new Date(),
+          bills_uploaded:0,
         };
       }
       return { 
         bills_paid: res.data.bills_paid,
-        bills_raised: res.data.bills_raised,
+        bills_created: res.data.bills_created,
         counter_invoices: res.data.counter_invoices,
+        bills_uploaded: res.data.bills_uploaded,
+        opening_time: res.data.opening_time,
+        closing_time:  res.data.closing_time,
       };
     }
     notify(res.data.message, 'error');
     return { 
       bills_paid: 0,
-      bills_raised: 0,
+      bills_created:0,
       counter_invoices: 0,
+      opening_time: new Date(),
+      closing_time: new Date(),
+      bills_uploaded:0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
     return { 
       bills_paid: 0,
-      bills_raised: 0,
+      bills_created:0,
       counter_invoices: 0,
+      opening_time: new Date(),
+      closing_time: new Date(),
+      bills_uploaded:0,
     };
   }
 };

@@ -157,7 +157,7 @@ const BranchDashboardPage = (props) => {
       : '';
       return (
         <tr key={cashier._id}>
-          <td style={{display:"inline-flex"}}>
+          <td style={{display:"inline-flex",marginTop:'10px'}}>
             <FiberManualRecordIcon  fontSize="small" color={cashier.status === 2 ? "secondary" : "primary"}/>
               {cashier.name}
           </td>
@@ -178,9 +178,19 @@ const BranchDashboardPage = (props) => {
           <td>
             {cashierStats[index].cash_in_hand}
           </td>
+          <td>{cashierStats[index].closing_balance}</td>
+          {cashierStats[index].closing_time !== null ? (
+            <td>{`${new Date(cashierStats[index].closing_time).getHours()}:${new Date(cashierStats[index].closing_time).getMinutes()}`}</td>
+          ) : (
+            <td>Counter is open</td>
+          )}
+           <td>
+            {cashierStats[index].discrepancy}
+          </td>
+         
           <td className="tac bold green">
           <Button
-            className="sendMoneyButton"
+            style={{minWidth:'90%', marginRight:'5px'}}
             onClick={() => {
               localStorage.setItem(
                 'selectedCashier',
@@ -195,7 +205,7 @@ const BranchDashboardPage = (props) => {
           >                            
             Reports                      
         </Button>
-            <span className="absoluteMiddleRight primary popMenuTrigger">
+            <span className="absoluteMiddleRight primary popMenuTrigger" style={{marginTop:'5px'}}>
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
                 {/* <span
@@ -254,28 +264,38 @@ const BranchDashboardPage = (props) => {
       : '';
       return (
         <tr key={cashier._id}>
-          <td style={{display:"inline-flex"}}>
+          <td style={{display:"inline-flex", marginTop:'10px'}}>
             <FiberManualRecordIcon  fontSize="small" color={cashier.status === 2 ? "secondary" : "primary"}/>
               {cashier.name}
           </td>
           <td>
             {assignedTo}
           </td>
+          <td>{`${new Date(staffStats[index].opening_time).getHours()}:${new Date(staffStats[index].opening_time).getMinutes()}`}</td>
+
           <td>
-            {staffStats[index].bills_raised}
+            {staffStats[index].bills_created}
+          </td>
+          <td>
+            {staffStats[index].bills_uploaded}
           </td>
           <td>
             {staffStats[index].bills_paid}
           </td>
           <td>
-            {staffStats[index].bills_raised-staffStats[index].bills_paid}
+            {staffStats[index].bills_created+staffStats[index].bills_uploaded-staffStats[index].bills_paid}
           </td>
           <td>
             {staffStats[index].counter_invoices}
           </td>
+          {staffStats[index].closing_time !== null ? (
+            <td>{`${new Date(staffStats[index].closing_time).getHours()}:${new Date(staffStats[index].closing_time).getMinutes()}`}</td>
+          ) : (
+            <td>Counter is open</td>
+          )}
           <td className="tac bold green">
           <Button
-            className="sendMoneyButton"
+            style={{minWidth:'90%', marginRight:'5px'}}
             onClick={() => {
               localStorage.setItem(
                 'selectedCashier',
@@ -290,7 +310,7 @@ const BranchDashboardPage = (props) => {
           >                    
             Reports                   
         </Button>
-            <span className="absoluteMiddleRight primary popMenuTrigger">
+            <span className="absoluteMiddleRight primary popMenuTrigger" style={{marginTop:'5px'}}>
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
                 {/* <span
@@ -380,12 +400,13 @@ const BranchDashboardPage = (props) => {
                 <div className="cardHeaderRight" style={{marginLeft:"5px"}}>
                   <h3>Daily Activity</h3>
                 </div>
-              </div>
-              <div className="cardHeader" style={{display:'flex'}}>
-                <div className="cardHeaderRight" style={{marginLeft:"5px"}}>
+                <div className="cardHeader" style={{display:'flex'}}>
+                <div className="cardHeaderRight" style={{marginLeft:"15px"}}>
                   <h3>Period : {period.period_name}</h3>
                 </div>
               </div>
+              </div>
+              
               
         <Row style={{marginTop:'20px',marginBottom:'10px'}}>
         <Col>
@@ -524,7 +545,10 @@ const BranchDashboardPage = (props) => {
                       <th>Invoices Paid</th>
                       <th>Amount Collected</th>
                       <th>Penalty Collected</th>
-                      <th>Cash in hand (XOF)</th>                   
+                      <th>Cash in hand (XOF)</th>
+                      <th>Closing Balance</th>
+                      <th>Closing Time</th>  
+                      <th>Discrepancy</th>                
                       <th></th>
                     </tr>
                   </thead>
@@ -541,10 +565,13 @@ const BranchDashboardPage = (props) => {
                   <tr>
                     <th>Staff Name</th>
                     <th>Assigned to</th>
-                    <th>Invoices Raised</th>
+                    <th>Opening Time</th>
+                    <th>Invoices Created</th>
+                    <th>Invoices Uploaded</th>
                     <th>Invoices Paid</th>
                     <th>Invoices Pending</th>
                     <th>Counter Invoices</th>
+                    <th>Closing Time</th>  
                     <th></th>
                   </tr>
                 </thead>
