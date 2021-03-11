@@ -173,9 +173,6 @@ const BranchDashboardPage = (props) => {
             {cashierStats[index].amount_collected}
           </td>
           <td>
-            {cashierStats[index].penalty_collected}
-          </td>
-          <td>
             {cashierStats[index].cash_in_hand}
           </td>
           <td>{cashierStats[index].closing_balance}</td>
@@ -544,7 +541,6 @@ const BranchDashboardPage = (props) => {
                       <th>Opening Time</th>
                       <th>Invoices Paid</th>
                       <th>Amount Collected</th>
-                      <th>Penalty Collected</th>
                       <th>Cash in hand (XOF)</th>
                       <th>Closing Balance</th>
                       <th>Closing Time</th>  
