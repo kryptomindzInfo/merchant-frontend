@@ -215,6 +215,7 @@ const checkCashierStats = async (id) => {
 					penalty_collected: 0,
 					cash_in_hand: 0,
 					opening_balance: 0,
+          opening_time: new Date(),
         };
       }
       return { 
@@ -223,6 +224,7 @@ const checkCashierStats = async (id) => {
         penalty_collected: res.data.penalty_collected,
         cash_in_hand: res.data.cash_in_hand,
         opening_balance: res.data.opening_balance,
+        opening_time: res.data.opening_time,
       };
     }
     notify(res.data.message, 'error');
@@ -232,6 +234,7 @@ const checkCashierStats = async (id) => {
       penalty_collected: 0,
       cash_in_hand: 0,
       opening_balance: 0,
+      opening_time: new Date(),
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -241,6 +244,7 @@ const checkCashierStats = async (id) => {
       penalty_collected: 0,
       cash_in_hand: 0,
       opening_balance: 0,
+      opening_time: new Date(),
     };
   }
 };

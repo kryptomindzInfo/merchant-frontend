@@ -162,8 +162,11 @@ const BranchDashboardPage = (props) => {
           <td>
             {assignedTo}
           </td>
-          <td>{cashierStats[index].bills_paid}</td>
+          <td>{cashierStats[index].opening_balance}</td>
+          <td>{`${new Date(cashierStats[index].opening_time).getHours()}:${new Date(cashierStats[index].opening_time).getMinutes()}`}</td>
          
+          <td>{cashierStats[index].bills_paid}</td>
+          
           <td>
             {cashierStats[index].amount_collected}
           </td>
@@ -471,14 +474,6 @@ const BranchDashboardPage = (props) => {
             </Row> 
             
         <Card bigPadding>
-          <div className="cardHeader">
-                <div className="cardHeaderLeft">
-                  <i className="material-icons">playlist_add_check</i>
-                </div>
-                <div className="cardHeaderRight">
-                  <h3>Daily Activity</h3>
-                </div>
-              </div>
               <div
                 style={{
                   display: 'flex',
@@ -508,6 +503,9 @@ const BranchDashboardPage = (props) => {
                   <thead>
                     <tr>
                       <th>Cashier Name</th>
+                      <th>Assigned to</th>
+                      <th>Opening Balance</th>
+                      <th>Opening Time</th>
                       <th>Assigned to</th>
                       <th>Invoices Paid</th>
                       <th>AmountCollected</th>
