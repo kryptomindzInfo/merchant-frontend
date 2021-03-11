@@ -8,6 +8,7 @@ import Main from '../../shared/Main';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
+import Footer from '../../Footer';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
 import BranchInvoiceNumberCard from '../../shared/BranchInvoiceNumberCard';
@@ -31,6 +32,8 @@ import {
 
 const BranchDashboardPage = (props) => {
   const [stats, setStats] = useState({});
+  const bankName = JSON.parse(localStorage.getItem('branchLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('branchLogged')).bank.logo;
   const { type } = props;
   const name = localStorage.getItem(`branch_name`);
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
@@ -383,7 +386,7 @@ const BranchDashboardPage = (props) => {
                 <Button
                   className={toggleButton === 'staff' ? 'active' : ''}
                   onClick={()=>toggle()}
-                  marginLeft="30px"
+                  style={{marginLeft:'10px'}}
                 >
                   Staff
                 </Button>
@@ -437,8 +440,6 @@ const BranchDashboardPage = (props) => {
         <Row style={{marginTop:'20px',marginBottom:'10px'}}>
         <Col>
               <Card
-                  marginBottom="54px"
-                  buttonMarginTop="32px"
                   bigPadding
                   smallValue
                   style={{textAlign:'center'}}
@@ -504,20 +505,41 @@ const BranchDashboardPage = (props) => {
                 </Card>
               </Col>
               
-              <Col cw="20%">
+              <Col>
               <Card
                   bigPadding
                   smallValue
                   style={{textAlign:'center'}}
                 >
-                  <h4>No. of invoice created</h4>
+                  <h4>Invoice Raised</h4>
                   <div className="cardValue"> {stats.invoice_raised}</div>
                 </Card>
               </Col>
              
-              <Col cw="40%"></Col>
+              <Col>
+              <Card
+                  bigPadding
+                  smallValue
+                  style={{textAlign:'center'}}
+                >
+                  <h4>Invoice Paid</h4>
+                  <div className="cardValue"> {stats.invoice_paid}</div>
+                </Card>
+              </Col>
+              <Col>
+              <Card
+                  bigPadding
+                  smallValue
+                  style={{textAlign:'center'}}
+                >
+                  <h4>Invoice Pending</h4>
+                  <div className="cardValue"> {stats.invoice_raised-stats.invoice_paid}</div>
+                </Card>
+              </Col>
             </Row> 
+            
         </Main>
+        
         {assignUserPopup ? (
         <AssignUserPopup
           onClose={() => onAssignUserPopupClose()}
@@ -536,6 +558,7 @@ const BranchDashboardPage = (props) => {
         />
       ) : null}
       </Container>
+      <Footer bankname={bankName} banklogo={bankLogo}/>
     </Fragment>
   );
 };
