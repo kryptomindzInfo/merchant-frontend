@@ -420,7 +420,7 @@ const BranchDashboardPage = (props) => {
                     <th>Assigned to</th>
                     <th>Invoices Raised</th>
                     <th>Invoices Paid</th>
-                    <th>Invoices Pendung</th>
+                    <th>Invoices Pending</th>
                     <th>Counter Invoices</th>
                     <th></th>
                   </tr>
