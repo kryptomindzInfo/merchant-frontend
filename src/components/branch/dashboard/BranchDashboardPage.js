@@ -28,6 +28,7 @@ import {
   getBranchCashier,
   checkCashierStats,
   checkStaffStats,
+  getMerchantSettings,
 } from '../api/BranchAPI';
 import history from '../../utils/history';
 
@@ -39,6 +40,7 @@ const BranchDashboardPage = (props) => {
   const name = localStorage.getItem(`branch_name`);
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
+  const [period, setperiod] = React.useState('');
   const [cashierPopupType, setCashierPopupType] = React.useState('new');
   const [staffList, setstaffList] = React.useState([]);
   const [cashierList, setCashierList] = React.useState([]);
@@ -344,9 +346,16 @@ const BranchDashboardPage = (props) => {
     });
   }
 
+  const refreshMerchantSettings = async () => {
+    getMerchantSettings().then((data) => {
+      setperiod(data.default_bill_period);
+    });
+  };
+
 
 
   useEffect(() => {
+    refreshMerchantSettings();
     refreshCashierList();
     getStats();
   }, []); // Or [] if effect doesn't need props or state
@@ -364,7 +373,7 @@ const BranchDashboardPage = (props) => {
       <BranchHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
-        <div className="cardHeader" style={{display:'flex'}}>
+            <div className="cardHeader" style={{display:'flex'}}>
                 <div className="cardHeaderLeft" style={{display:'flex',alignItems:'center'}}>
                   <i className="material-icons">playlist_add_check</i>
                 </div>
@@ -372,6 +381,12 @@ const BranchDashboardPage = (props) => {
                   <h3>Daily Activity</h3>
                 </div>
               </div>
+              {/* <div className="cardHeader" style={{display:'flex'}}>
+                <div className="cardHeaderRight" style={{marginLeft:"5px"}}>
+                  <h3>Period : {period}</h3>
+                </div>
+              </div> */}
+              
         <Row style={{marginTop:'20px',marginBottom:'10px'}}>
         <Col>
               <Card
@@ -506,9 +521,8 @@ const BranchDashboardPage = (props) => {
                       <th>Assigned to</th>
                       <th>Opening Balance</th>
                       <th>Opening Time</th>
-                      <th>Assigned to</th>
                       <th>Invoices Paid</th>
-                      <th>AmountCollected</th>
+                      <th>Amount Collected</th>
                       <th>Penalty Collected</th>
                       <th>Cash in hand (XOF)</th>                   
                       <th></th>
