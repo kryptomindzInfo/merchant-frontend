@@ -16,6 +16,8 @@ import {
   blockCashierApi,
   fetchBranchStaffList,
   getBranchCashier,
+  checkCashierStats,
+  checkStaffStats,
 } from '../api/BranchAPI';
 import history from '../../utils/history';
 
@@ -26,6 +28,8 @@ function BranchCashierList(props) {
   const [cashierPopupType, setCashierPopupType] = React.useState('new');
   const [staffList, setstaffList] = React.useState([]);
   const [cashierList, setCashierList] = React.useState([]);
+  const [cashierStats, setCashierStats] = React.useState([]);
+  const [staffStats, setStaffStats] = React.useState([]);
   const [userList, setUserList] = React.useState([]);
   const [editingUser, setEditingUser] = React.useState({});
   const [editingCashier, setEditingCashier] = React.useState({});
@@ -59,17 +63,39 @@ function BranchCashierList(props) {
     }
   }
 
+  const getCashierStats = async(list) => {
+    const statlist = list.map(async (cashier,index) => {
+        const data = await checkCashierStats(cashier._id);
+        return (data);
+    })
+    const result= await Promise.all(statlist);
+    return({res:result, loading:false});
+  }
+
+  const getStaffStats = async(list) => {
+    const statlist = list.map(async (staff,index) => {
+        const data = await checkStaffStats(staff._id);
+        return (data);
+    })
+    const result = await Promise.all(statlist);
+    return({res:result, loading:false});
+  }
+
   const refreshCashierList = async () => {
-    setLoading(true);
-    getBranchCashier().then((data) => {
-      setCashierList(data.list.filter((u) => u.type === 'cashier'));
-      setstaffList(data.list.filter((u) => u.type === 'staff'));
-    });
-    fetchBranchStaffList().then((data) => {
-      setUserList(data.list);
-    });
-    setLoading(false);
+    const positionlist = await getBranchCashier();
+    console.log(positionlist);
+    setCashierList(positionlist.cashiers);
+    setstaffList(positionlist.staffs);
+    const cashierstats = await getCashierStats(positionlist.cashiers);
+    setCashierStats(cashierstats.res);
+    const staffstats = await getStaffStats(positionlist.staffs);
+    setStaffStats(staffstats.res);
+    const userlist = await fetchBranchStaffList();
+    setUserList(userlist.list);
+
+    props.loading(userlist.loading);
   };
+
   useEffect(() => {
     refreshCashierList();
   }, []); // Or [] if effect doesn't need props or state
@@ -90,7 +116,7 @@ function BranchCashierList(props) {
   };
 
   function mappedCards() {
-    return cashierList.map((cashier) => {
+    return cashierList.map((cashier,index) => {
       const assignedTo = userList.filter((u) => u._id === cashier.staff_id)[0]
       ? userList.filter((u) => u._id === cashier.staff_id)[0].name
       : '';
@@ -100,15 +126,19 @@ function BranchCashierList(props) {
             <FiberManualRecordIcon  fontSize="small" color={cashier.status === 2 ? "secondary" : "primary"}/>
               {cashier.name}
           </td>
-          <td>{cashier.cash_in_hand}</td>
           <td>
             {assignedTo}
           </td>
+          <td>{cashierStats[index].bills_paid}</td>
+         
           <td>
-            -
+            {cashierStats[index].amount_collected}
           </td>
           <td>
-            -
+            {cashierStats[index].penalty_collected}
+          </td>
+          <td>
+            {cashierStats[index].cash_in_hand}
           </td>
           <td className="tac bold green">
           <Button
@@ -125,12 +155,12 @@ function BranchCashierList(props) {
               history.push(getCashierReportURL(cashier._id));
             }}
           >                            
-            View                       
+            Reports                      
         </Button>
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <span
+                {/* <span
                   onClick={() => {
                     localStorage.setItem(
                       'selectedCashier',
@@ -140,12 +170,12 @@ function BranchCashierList(props) {
                   }}
                 >
                   Info
-                </span>
-                <span
+                </span> */}
+                {/* <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
                 >
                   Edit
-                </span>
+                </span> */}
                 <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
                 </span>
@@ -180,7 +210,7 @@ function BranchCashierList(props) {
   }
 
   function mappedCardsstaff() {
-    return staffList.map((cashier) => {
+    return staffList.map((cashier,index) => {
       const assignedTo = userList.filter((u) => u._id === cashier.staff_id)[0]
       ? userList.filter((u) => u._id === cashier.staff_id)[0].name
       : '';
@@ -194,10 +224,16 @@ function BranchCashierList(props) {
             {assignedTo}
           </td>
           <td>
-            -
+            {staffStats[index].bills_raised}
           </td>
           <td>
-            -
+            {staffStats[index].bills_paid}
+          </td>
+          <td>
+            {staffStats[index].bills_raised-staffStats[index].bills_paid}
+          </td>
+          <td>
+            {staffStats[index].counter_invoices}
           </td>
           <td className="tac bold green">
           <Button
@@ -214,12 +250,12 @@ function BranchCashierList(props) {
               history.push(getStaffReportURL(cashier._id));
             }}
           >                    
-            View                    
+            Reports                   
         </Button>
             <span className="absoluteMiddleRight primary popMenuTrigger">
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
-                <span
+                {/* <span
                   onClick={() => {
                     localStorage.setItem(
                       'selectedCashier',
@@ -233,12 +269,12 @@ function BranchCashierList(props) {
                   }}
                 >
                   Info
-                </span>
-                <span
+                </span> */}
+                {/* <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
                 >
                   Edit
-                </span>
+                </span> */}
                 <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
                 </span>
@@ -272,14 +308,9 @@ function BranchCashierList(props) {
     });
   }
 
-
-  if (isLoading) {
-    return <Loader fullPage />;
-  }
   return (
     <Wrapper>
-      <Container verticalMargin>
-        <Main fullWidth>
+
           <Card bigPadding>
           <div className="cardHeader">
                 <div className="cardHeaderLeft">
@@ -318,10 +349,11 @@ function BranchCashierList(props) {
                   <thead>
                     <tr>
                       <th>Cashier Name</th>
-                      <th>Cash in hand (XOF)</th>
                       <th>Assigned to</th>
-                      <th>No of Invoices</th>
+                      <th>Invoices Paid</th>
+                      <th>AmountCollected</th>
                       <th>Penalty Collected</th>
+                      <th>Cash in hand (XOF)</th>                   
                       <th></th>
                     </tr>
                   </thead>
@@ -338,8 +370,10 @@ function BranchCashierList(props) {
                   <tr>
                     <th>Staff Name</th>
                     <th>Assigned to</th>
-                    <th>No of Invoices</th>
-                    <th>No of pending invoices</th>
+                    <th>Invoices Raised</th>
+                    <th>Invoices Paid</th>
+                    <th>Invoices Pendung</th>
+                    <th>Counter Invoices</th>
                     <th></th>
                   </tr>
                 </thead>
@@ -354,8 +388,6 @@ function BranchCashierList(props) {
               
             </div>
           </Card>
-        </Main>
-      </Container>
       {assignUserPopup ? (
         <AssignUserPopup
           onClose={() => onAssignUserPopupClose()}

@@ -188,13 +188,96 @@ const getBranchCashier = async () => {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.positions, loading: false };
+      return { 
+        cashiers: res.data.positions.filter((u) => u.type === 'cashier'),
+        staffs: res.data.positions.filter((u) => u.type === 'staff')
+      };
     }
     notify(res.data.message, 'error');
     return { list: [], loading: false };
   } catch (err) {
     notify('Something went wrong', 'error');
     return { list: [], loading: false };
+  }
+};
+
+const checkCashierStats = async (id) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantBranch/cashierStats`,{
+      cashier_id:id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { 
+          bills_paid: 0,
+					amount_collected: 0,
+					penalty_collected: 0,
+					cash_in_hand: 0,
+					opening_balance: 0,
+        };
+      }
+      return { 
+        bills_paid: res.data.bills_paid,
+        amount_collected: res.data.amount_collected,
+        penalty_collected: res.data.penalty_collected,
+        cash_in_hand: res.data.cash_in_hand,
+        opening_balance: res.data.opening_balance,
+      };
+    }
+    notify(res.data.message, 'error');
+    return { 
+      bills_paid: 0,
+      amount_collected: 0,
+      penalty_collected: 0,
+      cash_in_hand: 0,
+      opening_balance: 0,
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { 
+      bills_paid: 0,
+      amount_collected: 0,
+      penalty_collected: 0,
+      cash_in_hand: 0,
+      opening_balance: 0,
+    };
+  }
+};
+
+const checkStaffStats = async (id) => {
+  try {
+    const res = await axios.post(`${API_URL}/merchantBranch/staffStats`,{
+      staff_id:id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { 
+          bills_paid: 0,
+          bills_raised: 0,
+          counter_invoices: 0,
+        };
+      }
+      return { 
+        bills_paid: res.data.bills_paid,
+        bills_raised: res.data.bills_raised,
+        counter_invoices: res.data.counter_invoices,
+      };
+    }
+    notify(res.data.message, 'error');
+    return { 
+      bills_paid: 0,
+      bills_raised: 0,
+      counter_invoices: 0,
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { 
+      bills_paid: 0,
+      bills_raised: 0,
+      counter_invoices: 0,
+    };
   }
 };
 
@@ -306,4 +389,6 @@ export {
   fetchInvoicesByPeriod,
   fetchInvoicesByDateRange,
   getMerchantSettings,
+  checkCashierStats,
+  checkStaffStats,
 };
