@@ -29,6 +29,7 @@ import {
   checkCashierStats,
   checkStaffStats,
 } from '../api/BranchAPI';
+import history from '../../utils/history';
 
 const BranchDashboardPage = (props) => {
   const [stats, setStats] = useState({});
@@ -143,6 +144,7 @@ const BranchDashboardPage = (props) => {
   };
 
   const getCashierReportURL = (cashierId) => {
+    console.log('wff');
     return `/branch/cashier/report/${cashierId}`;
   };
 
@@ -301,11 +303,11 @@ const BranchDashboardPage = (props) => {
                 >
                   Info
                 </span> */}
-                {/* <span
+                <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
                 >
-                  Edit
-                </span> */}
+                  Assing Counter Invoice
+                </span>
                 <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
                 </span>
@@ -359,84 +361,14 @@ const BranchDashboardPage = (props) => {
       <BranchHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
-        <Card bigPadding>
-          <div className="cardHeader">
-                <div className="cardHeaderLeft">
+        <div className="cardHeader" style={{display:'flex'}}>
+                <div className="cardHeaderLeft" style={{display:'flex',alignItems:'center'}}>
                   <i className="material-icons">playlist_add_check</i>
                 </div>
-                <div className="cardHeaderRight">
+                <div className="cardHeaderRight" style={{marginLeft:"5px"}}>
                   <h3>Daily Activity</h3>
                 </div>
               </div>
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'left',
-                  marginTop: '10px',
-                }}
-              >
-                <Button
-                  className={toggleButton === 'cashier' ? 'active' : ''}
-                  onClick={()=>toggle()}
-                  marginRight="5px"
-                  padding="5px"
-                >
-                  Cashier
-                </Button>
-                <Button
-                  className={toggleButton === 'staff' ? 'active' : ''}
-                  onClick={()=>toggle()}
-                  style={{marginLeft:'10px'}}
-                >
-                  Staff
-                </Button>
-              </div>
-            <div className="cardBody">
-              {toggleButton === 'cashier'? (
-                  <Table marginTop="34px" smallTd>
-                  <thead>
-                    <tr>
-                      <th>Cashier Name</th>
-                      <th>Assigned to</th>
-                      <th>Invoices Paid</th>
-                      <th>AmountCollected</th>
-                      <th>Penalty Collected</th>
-                      <th>Cash in hand (XOF)</th>                   
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {cashierList && cashierList.length > 0 && userList
-                      ? mappedCards()
-                      : null}
-                  </tbody>
-                </Table>
-              
-              ): (
-                <Table marginTop="34px" smallTd>
-                <thead>
-                  <tr>
-                    <th>Staff Name</th>
-                    <th>Assigned to</th>
-                    <th>Invoices Raised</th>
-                    <th>Invoices Paid</th>
-                    <th>Invoices Pending</th>
-                    <th>Counter Invoices</th>
-                    <th></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {staffList && staffList.length > 0 && userList
-                    ? mappedCardsstaff()
-                    : null}
-                </tbody>
-              </Table>
-            
-              )}
-              
-            </div>
-          </Card>
-      
         <Row style={{marginTop:'20px',marginBottom:'10px'}}>
         <Col>
               <Card
@@ -538,6 +470,85 @@ const BranchDashboardPage = (props) => {
               </Col>
             </Row> 
             
+        <Card bigPadding>
+          <div className="cardHeader">
+                <div className="cardHeaderLeft">
+                  <i className="material-icons">playlist_add_check</i>
+                </div>
+                <div className="cardHeaderRight">
+                  <h3>Daily Activity</h3>
+                </div>
+              </div>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'left',
+                  marginTop: '10px',
+                }}
+              >
+                <Button
+                  className={toggleButton === 'cashier' ? 'active' : ''}
+                  onClick={()=>toggle()}
+                  marginRight="5px"
+                  padding="5px"
+                >
+                  Cashier
+                </Button>
+                <Button
+                  className={toggleButton === 'staff' ? 'active' : ''}
+                  onClick={()=>toggle()}
+                  style={{marginLeft:'10px'}}
+                >
+                  Staff
+                </Button>
+              </div>
+            <div className="cardBody">
+              {toggleButton === 'cashier'? (
+                  <Table marginTop="34px" smallTd>
+                  <thead>
+                    <tr>
+                      <th>Cashier Name</th>
+                      <th>Assigned to</th>
+                      <th>Invoices Paid</th>
+                      <th>AmountCollected</th>
+                      <th>Penalty Collected</th>
+                      <th>Cash in hand (XOF)</th>                   
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {cashierList && cashierList.length > 0 && userList
+                      ? mappedCards()
+                      : null}
+                  </tbody>
+                </Table>
+              
+              ): (
+                <Table marginTop="34px" smallTd>
+                <thead>
+                  <tr>
+                    <th>Staff Name</th>
+                    <th>Assigned to</th>
+                    <th>Invoices Raised</th>
+                    <th>Invoices Paid</th>
+                    <th>Invoices Pending</th>
+                    <th>Counter Invoices</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {staffList && staffList.length > 0 && userList
+                    ? mappedCardsstaff()
+                    : null}
+                </tbody>
+              </Table>
+            
+              )}
+              
+            </div>
+          </Card>
+      
+       
         </Main>
         
         {assignUserPopup ? (

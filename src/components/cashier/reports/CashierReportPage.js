@@ -25,6 +25,9 @@ const CashierReportPage = (props) => {
   const [invoiceList, setInvoiceList] = useState([]);
   const [cashierstats, setCashierStats] = useState({});
   const [dailyreprots, setDailyReports] = useState({});
+  const assigned = props.apitype === 'merchantStaff' ?
+  '':
+  localStorage.getItem('assignedTo')
   const cashierName = props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
     JSON.parse(localStorage.getItem('selectedCashier')).name
@@ -140,8 +143,14 @@ const CashierReportPage = (props) => {
       ) : (
         <BranchHeader active="reports" />
       )}
+       
       <Container verticalMargin>
-      <Row style={{marginBottom:"0px"}}>
+      {props.apitype === 'merchantBranch' ? (
+      <Card>
+      <h3 style={{color:"green", marginBottom:"20px", textAlign:'center' }}><b>Name : </b>{assigned} </h3> 
+      </Card>
+      ) : ""}
+      <Row style={{marginBottom:"0px", marginTop:'20px'}}>
               <Col cW='40%'>
               <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
                 <Container>

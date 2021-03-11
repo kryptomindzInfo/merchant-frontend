@@ -45,6 +45,9 @@ const StaffReportPage = (props) => {
   const merchantName = props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).merchant.name:
     JSON.parse(localStorage.getItem('branchLogged')).merchant.name
+    const assigned = props.apitype === 'merchantStaff' ?
+    '':
+    localStorage.getItem('assignedTo')
   const apiId = props.apitype === 'merchantStaff' ? " " : props.match.params.id
   const [invoiceList, setInvoiceList] = useState([]);
   const [periodList, setPeriodList] = useState([]);
@@ -432,12 +435,18 @@ const StaffReportPage = (props) => {
         <BranchHeader active="reports" />
       )}
       
+      
       <Container verticalMargin>
+      {props.apitype === 'merchantBranch' ? (
+      <Card>
+      <h3 style={{color:"green", textAlign:'center' }}><b>Name : </b>{assigned} </h3> 
+      </Card>
+      ) : ""}
             <div
                 style={{
                   display: 'flex',
                   justifyContent: 'left',
-                  marginTop: '10px',
+                  marginTop: '20px',
                   marginBottom: '10px',
                 }}
               >
