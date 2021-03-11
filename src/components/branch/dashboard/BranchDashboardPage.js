@@ -311,7 +311,7 @@ const BranchDashboardPage = (props) => {
                 <span
                   onClick={() => handleEditCashierPopupClick('update', cashier)}
                 >
-                  Assing Counter Invoice
+                  Allow Counter Invoice
                 </span>
                 <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
@@ -373,7 +373,7 @@ const BranchDashboardPage = (props) => {
       <BranchHeader active="dashboard" />
       <Container verticalMargin>
         <Main fullWidth>
-            <div className="cardHeader" style={{display:'flex'}}>
+              <div className="cardHeader" style={{display:'flex'}}>
                 <div className="cardHeaderLeft" style={{display:'flex',alignItems:'center'}}>
                   <i className="material-icons">playlist_add_check</i>
                 </div>
@@ -381,11 +381,11 @@ const BranchDashboardPage = (props) => {
                   <h3>Daily Activity</h3>
                 </div>
               </div>
-              {/* <div className="cardHeader" style={{display:'flex'}}>
+              <div className="cardHeader" style={{display:'flex'}}>
                 <div className="cardHeaderRight" style={{marginLeft:"5px"}}>
-                  <h3>Period : {period}</h3>
+                  <h3>Period : {period.period_name}</h3>
                 </div>
-              </div> */}
+              </div>
               
         <Row style={{marginTop:'20px',marginBottom:'10px'}}>
         <Col>
