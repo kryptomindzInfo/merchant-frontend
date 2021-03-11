@@ -349,6 +349,26 @@ const assignStaff = async (props, values) => {
   }
 };
 
+const disassignStaff = async (id) => {
+  const API = `${API_URL}/merchantBranch/disassignStaff`;
+  try {
+    const res = await axios.post(`${API}`, {
+      position_id:id,
+    });
+    if (res.status === 200) {
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+      } else {
+        notify(res.data.message, 'success');
+      }
+    } else {
+      notify(res.data.message, 'error');
+    }
+  } catch (err) {
+    notify('Something went wrong', 'error');
+  }
+};
+
 const blockCashierApi = async (apiType, id) => {
   let API = '';
   if (apiType === 'block') {
@@ -419,4 +439,5 @@ export {
   getMerchantSettings,
   checkCashierStats,
   checkStaffStats,
+  disassignStaff,
 };

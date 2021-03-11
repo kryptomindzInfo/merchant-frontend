@@ -29,6 +29,7 @@ import {
   checkCashierStats,
   checkStaffStats,
   getMerchantSettings,
+  disassignStaff,
 } from '../api/BranchAPI';
 import history from '../../utils/history';
 
@@ -136,6 +137,12 @@ const BranchDashboardPage = (props) => {
 
     setLoading(userlist.loading);
   };
+  const handleDisAssignUser = async (id) => {
+    setLoading(true);
+    await disassignStaff(id);
+    refreshCashierList();
+  };
+
 
   const getCashierInfoURL = (cashierId) => {
     return `/branch/cashier/info/${cashierId}`;
@@ -223,6 +230,9 @@ const BranchDashboardPage = (props) => {
                 </span> */}
                 <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
+                </span>
+                <span onClick={() => handleDisAssignUser(cashier._id)}>
+                  Disassign User
                 </span>
 
                 {cashier.status === 0 ? (
@@ -332,6 +342,9 @@ const BranchDashboardPage = (props) => {
                 </span>
                 <span onClick={() => handleAssignUserPopupClick(cashier)}>
                   Assign User
+                </span>
+                <span onClick={() => handleDisAssignUser(cashier._id)}>
+                  Disassign User
                 </span>
 
                 {cashier.status === 0 ? (
