@@ -14,7 +14,7 @@ import CreateSubzonePopup from './CreateSubzonePopup';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
-import { fetchSubzoneListByZone, getZoneDetails } from '../api/MerchantAPI';
+import { fetchSubzoneListByZone, getZoneDetails, checkSubZoneStats } from '../api/MerchantAPI';
 import history from '../../utils/history';
 
 function MerchantSubzoneListPage(props) {
@@ -24,6 +24,7 @@ function MerchantSubzoneListPage(props) {
   const [popupType, setPopupType] = React.useState('new');
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
+  const [subzonestats, setSubZoneStats] = React.useState([]);
   const [editingSubzone, setEditingSubzone] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
   const { match } = props;
@@ -40,27 +41,29 @@ function MerchantSubzoneListPage(props) {
     setAddSubzonePopup(false);
   };
 
-  const refreshSubzoneList = async () => {
-    setLoading(true);
-    fetchSubzoneListByZone(id).then((data) => {
-      setSubzoneList(data.list);
-      setCopySubzoneList(data.list)
-      setLoading(data.loading);
-    });
-  };
+  const getSubZoneStats = async(list) => {
+    const statlist = list.map(async (subzone) => {
+        const data = await checkSubZoneStats(subzone._id);
+        return (data);
+    })
+    const result= await Promise.all(statlist);
+    return({res:result, loading:false});
+  }
 
-  const refreshZoneDetails = async () => {
-    setLoading(true);
-    getZoneDetails().then((data) => {
-      setZoneName(data.zone_name);
-      setSubzoneName(data.subzone_name);
-      setLoading(data.loading);
-    });
+  const refreshSubZoneList = async () => {
+    setLoading(true)
+    const subzonedetails = await getZoneDetails();
+    setZoneName(subzonedetails.zone_name);
+    setSubzoneName(subzonedetails.subzone_name);
+    const subzonelist = await fetchSubzoneListByZone(id);
+    setSubzoneList(subzonelist.list);
+    const subzonestats = await getSubZoneStats(subzonelist.list);
+    setSubZoneStats(subzonestats.res);
+    setLoading(subzonestats.loading);
   };
 
   useEffect(() => {
-    refreshSubzoneList();
-    refreshZoneDetails();
+    refreshSubZoneList();
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
@@ -68,7 +71,7 @@ function MerchantSubzoneListPage(props) {
   }
 
   const getSubzoneList = () => {
-    return subzoneList.map((subzone) => {
+    return subzoneList.map((subzone,index) => {
       return (
         <tr key={subzone._id}>
           <td className="tac">{subzone.name}</td>
@@ -83,11 +86,11 @@ function MerchantSubzoneListPage(props) {
               history.push(`/merchant/${subzone._id}/branches`);
             }}
           >{subzone.branch_count}</td>
-          <td className="tac">-</td>
-          <td className="tac">-</td>
-          <td className="tac">-</td>
-          <td className="tac">-</td>
-          <td className="tac">-</td>
+           <td className="tac">{subzonestats[index].bill_generated}</td>
+          <td className="tac">{subzonestats[index].amount_generated}</td>
+          <td className="tac">{subzonestats[index].bill_paid}</td>
+          <td className="tac">{subzonestats[index].amount_paid}</td>
+          <td className="tac">{subzonestats[index].bill_generated-subzonestats[index].bill_paid}</td>
           <td className="tac bold">
             <div
               style={{
@@ -95,9 +98,7 @@ function MerchantSubzoneListPage(props) {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">
-                -
-              </td>
+               <td className="tac">{subzonestats[index].amount_generated-subzonestats[index].amount_paid}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
