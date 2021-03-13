@@ -3,6 +3,7 @@ import { Helmet } from 'react-helmet';
 import { CSVLink, CSVDownload } from "react-csv";
 import StaffHeader from '../../shared/headers/cashier/StaffHeader';
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
+import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
 import Card from '../../shared/Card';
@@ -32,19 +33,31 @@ const StaffReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const bankName = props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank.name :
-    JSON.parse(localStorage.getItem('branchLogged')).bank.name
+    props.apitype === 'merchant' ?
+      JSON.parse(localStorage.getItem('merchantLogged')).bank.name :
+      JSON.parse(localStorage.getItem('branchLogged')).bank.name
+
   const bankLogo = props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank.logo :
-    JSON.parse(localStorage.getItem('branchLogged')).bank.logo
+    props.apitype === 'merchant' ?
+      JSON.parse(localStorage.getItem('merchantLogged')).bank.logo :
+      JSON.parse(localStorage.getItem('branchLogged')).bank.logo
+    
   const cashierName =  props.apitype === 'merchantStaff' ?
     JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
     JSON.parse(localStorage.getItem('selectedCashier')).name
+
   const branchName = props.apitype === 'merchantStaff' ?
-    JSON.parse(localStorage.getItem('cashierLogged')).branch.name:
-    JSON.parse(localStorage.getItem('branchLogged')).details.name
+    JSON.parse(localStorage.getItem('cashierLogged')).branch.name :
+    props.apitype === 'merchant' ?
+      JSON.parse(localStorage.getItem('selectedBranch')).name :
+      JSON.parse(localStorage.getItem('branchLogged')).details.name
+    
   const merchantName = props.apitype === 'merchantStaff' ?
-    JSON.parse(localStorage.getItem('cashierLogged')).merchant.name:
-    JSON.parse(localStorage.getItem('branchLogged')).merchant.name
+    JSON.parse(localStorage.getItem('cashierLogged')).merchant.name :
+    props.apitype === 'merchant' ?
+      JSON.parse(localStorage.getItem('merchantLogged')).details.name :
+      JSON.parse(localStorage.getItem('branchLogged')).merchant.name
     const assigned = props.apitype === 'merchantStaff' ?
     '':
     localStorage.getItem('assignedTo')
@@ -432,6 +445,8 @@ const StaffReportPage = (props) => {
       {props.apitype === 'merchantStaff' ? (
         <StaffHeader active="reports" />
       ) : (
+        props.apitype === 'merchant' ?
+        <MerchantHeader active="reports" /> :
         <BranchHeader active="reports" />
       )}
       

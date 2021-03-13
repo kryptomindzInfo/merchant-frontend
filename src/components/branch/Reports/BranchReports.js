@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import { CSVLink, CSVDownload } from "react-csv";
 import BranchHeader from '../../shared/headers/branch/BranchHeader';
+import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
 import Table from '../../shared/Table';
 import Card from '../../shared/Card';
@@ -20,18 +21,29 @@ import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
 import {
-  fetchInvoicesBydate,
   getMerchantSettings,
-  fetchInvoicesByPeriod,
-  fetchInvoicesByDateRange,
-} from '../api/BranchAPI';
+  fetchBranchInvoicesBydate,
+  fetchBranchInvoicesByPeriod,
+  fetchBranchInvoicesByDateRange, 
+} from '../../shared/api/Api';
 import Loader from '../../shared/Loader';
 
 const today = new Date();
 const BranchReport = (props) => {
+  const apiId = props.apitype === 'merchantBranch' ? " " : props.match.params.id
   const [isLoading, setLoading] = useState(false);
-  const bankName = JSON.parse(localStorage.getItem('branchLogged')).bank.name;
-  const bankLogo = JSON.parse(localStorage.getItem('branchLogged')).bank.logo;
+  const bankName =  props.apitype === 'merchantBranch' ?
+    JSON.parse(localStorage.getItem('branchLogged')).bank.name :
+    JSON.parse(localStorage.getItem('merchantLogged')).bank.name
+  const bankLogo = props.apitype === 'merchantBranch' ?
+    JSON.parse(localStorage.getItem('branchLogged')).bank.logo:
+    JSON.parse(localStorage.getItem('merchantLogged')).bank.logo
+  const branchName = props.apitype === 'merchantBranch' ?
+    JSON.parse(localStorage.getItem('branchLogged')).details.name :
+    JSON.parse(localStorage.getItem('selectedBranch')).name
+  const merchantName = props.apitype === 'merchantBranch' ?
+    JSON.parse(localStorage.getItem('branchLogged')).merchant.name :
+    JSON.parse(localStorage.getItem('merchantLogged')).details.name
   const [invoiceList, setInvoiceList] = useState([]);
   const [periodList, setPeriodList] = useState([]);
   const [periodTableList, setPeriodTableList] = useState([]);
@@ -52,8 +64,7 @@ const BranchReport = (props) => {
   const [counterAmount, setCounterAmount] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const [periodEnd, setPeriodEnd] = useState('');
-  const branchName = JSON.parse(localStorage.getItem('branchLogged')).details.name;
-  const merchantName = JSON.parse(localStorage.getItem('branchLogged')).merchant.name;
+  
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([
     ["BillNo","Name","Amount","Mobile","DueDate"]
@@ -68,7 +79,7 @@ const BranchReport = (props) => {
   };
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getMerchantSettings().then((data) => {
+    getMerchantSettings(props.apitype).then((data) => {
       setPeriodList(data.bill_period_list);
       setStartDate(data.bill_period_list[0].start_date);
       setEndDate(new Date());
@@ -263,7 +274,7 @@ const BranchReport = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(periodStartDate));
     const end = endOfDay(new Date(periodEndDate));
-    const res = await fetchInvoicesByPeriod(start,end);
+    const res = await fetchBranchInvoicesByPeriod(start,end, props.apitype,apiId );
     const predata = await preProcessPeriodTableData(res.list);
     const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
@@ -283,7 +294,7 @@ const BranchReport = (props) => {
   setLoading(true);
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
-  const res = await fetchInvoicesByDateRange(start,end);
+  const res = await fetchBranchInvoicesByDateRange(start,end,props.apitype,apiId);
   const datelist = await getDatesBetweenDates(start, end);
   const predata = await preProcessDateTableData(datelist,res.list);
   const tabledata = await setDateTable(predata.res);
@@ -307,7 +318,7 @@ const BranchReport = (props) => {
         ? `0${formdate.getMonth() + 1}`
         : formdate.getMonth() + 1
       }/${formdate.getFullYear()}`;
-      const res = await fetchInvoicesBydate(date);
+      const res = await fetchBranchInvoicesBydate(date,props.apitype,apiId);
       const csvDATA = await fetchCSVData(res.list);
       setAmount(
       res.list.reduce((a, b) => {
@@ -414,7 +425,11 @@ const BranchReport = (props) => {
         <title>Merchant Dashboard | Cashier | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
+      {props.apitype === 'merchantBranch' ? (
       <BranchHeader active="reports" />
+      ) : (
+        <MerchantHeader active="reports" />
+      )}
       <Container verticalMargin>
             <div
                 style={{

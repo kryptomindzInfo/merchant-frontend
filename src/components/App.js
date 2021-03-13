@@ -38,6 +38,10 @@ import PrivateRoute from './PrivateRoute';
 import ProtectedRoute from './ProtectedRoute';
 import SharingRulesPage from './merchant/settings/SharingRulesPage';
 import {
+  merchantStaffReportUrl,
+  merchantCashierReportUrl,
+  merchantBranchDashboadUrl,
+  merchantBranchReportUrl,
   branchCashierReportUrl,
   branchCashierInfoUrl,
   branchStaffReportUrl,
@@ -199,6 +203,36 @@ function App() {
               component={(props) => <MerchantBranchInfoPage {...props} />}
             />
             <ProtectedRoute
+              apitype="merchant"
+              type="merchant"
+              exact
+              path={merchantBranchReportUrl}
+              component={(props) => <BranchReports {...props} />}
+            />
+            <ProtectedRoute
+              apitype="merchant"
+              type="merchant"
+              exact
+              path={merchantStaffReportUrl}
+              component={(props) => <StaffReportPage {...props} />}
+            />
+            <ProtectedRoute
+              apitype="merchant"
+              type="merchant"
+              exact
+              path={merchantCashierReportUrl}
+              component={(props) => <CashierReportPage {...props} />}
+            />
+            
+            <ProtectedRoute
+              apitype="merchant"
+              type="merchant"
+              exact
+              path={merchantBranchDashboadUrl}
+              component={(props) => <BranchDashboardPage {...props} />}
+            />
+            
+            <ProtectedRoute
               type="merchant"
               exact
               path={staffUrl}
@@ -344,6 +378,7 @@ function App() {
             {/* ============= */}
             <ProtectedRoute
               type="branch"
+              apitype='merchantBranch'
               exact
               path={branchDashboardUrl}
               component={(props) => <BranchDashboardPage {...props} />}
@@ -351,6 +386,7 @@ function App() {
             <ProtectedRoute
               type="branch"
               exact
+              apitype='merchantBranch'
               path={branchReportsUrl}
               component={(props) => <BranchReports {...props} />}
             />

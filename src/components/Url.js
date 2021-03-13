@@ -11,6 +11,10 @@ const staffUrl = '/merchant/staff';
 const merchantCashierUrl = '/merchant/:id/cashiers';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
 const merchantBranchInfoUrl = '/merchant/branch/info/:id';
+const merchantBranchReportUrl = '/merchant/branch/reports/:id';
+const merchantStaffReportUrl = '/merchant/staff/reports/:id';
+const merchantCashierReportUrl = '/merchant/cashier/reports/:id';
+const merchantBranchDashboadUrl = '/merchant/branch/dashboard/:id';
 const merchantSettingsUrl = '/merchant/settings';
 const merchantFeeRules = '/merchant/settings/fee-rules';
 const merchantInterBankCommissionRules = '/merchant/settings/inter-bank-commission-rules';
@@ -54,6 +58,10 @@ const cashierSettingsUrl = '/cashier/settings';
 const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
+  merchantStaffReportUrl,
+  merchantCashierReportUrl,
+  merchantBranchDashboadUrl,
+  merchantBranchReportUrl,
   branchCashierReportUrl,
   branchReportsUrl,
   merchantCategorySettings,

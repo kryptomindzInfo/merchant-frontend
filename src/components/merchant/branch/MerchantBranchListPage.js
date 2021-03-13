@@ -70,6 +70,9 @@ function MerchantBranchListPage(props) {
       setLoading(data.loading);
     });
   };
+  const getBranchReportURL = (cashierId) => {
+    return `merchant/branch/report/${cashierId}`;
+  };
 
   useEffect(() => {
     refreshBranchList();
@@ -86,21 +89,37 @@ function MerchantBranchListPage(props) {
         <tr key={branch._id}>
           <td className="tac">{branch.name}</td>
           <td className="tac">{branch.code}</td>
-          {/* <td className="tac">{branch.total_cashiers}</td> */}
           <td className="tac">{branch.total_positions}</td>
-          <td className="tac bold">
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
+          <td className="tac">{branch.username}</td>
+          <td className="tac bold green">
+            <Button
+              style={{minWidth:'90%', marginRight:'5px'}}
+              onClick={() => {
+                localStorage.setItem(
+                  'selectedBranch',
+                  JSON.stringify(branch),
+                );
+                history.push(`/merchant/branch/reports/${branch._id}`);
               }}
-            >
-              <td className="tac">{branch.username}</td>
+            >                    
+              Reports                   
+            </Button>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span onClick={() => handleBranchInfoClick(branch)}>
                     Info
+                  </span>
+                  <span 
+                    onClick={() => {
+                      localStorage.setItem(
+                        'selectedBranch',
+                        JSON.stringify(branch),
+                      );
+                    history.push(`/merchant/branch/dashboard/${branch._id}`);
+                    }}
+                  >
+                    Dashboard
                   </span>
                   <span
                     onClick={() => handleBranchPopupClick('update', branch)}
@@ -130,7 +149,6 @@ function MerchantBranchListPage(props) {
                     )}
                 </div>
               </span>
-            </div>
           </td>
         </tr>
       );
@@ -220,6 +238,7 @@ function MerchantBranchListPage(props) {
                     <th>Branch Code</th>
                     <th>Total Staff Position</th>
                     <th>Branch Admin</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
