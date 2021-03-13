@@ -47,7 +47,7 @@ function CreateInvoicePopup(props) {
     ),
   );
   const [cashierName, setCashierName] = React.useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).staff.code
+    JSON.parse(localStorage.getItem('cashierLogged')).position.name
   );
   const [offeringList, setOfferingList] = React.useState(props.offeringlist);
   const [taxList, setTaxList] = React.useState(props.taxlist);

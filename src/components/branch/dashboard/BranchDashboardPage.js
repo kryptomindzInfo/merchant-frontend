@@ -10,14 +10,8 @@ import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import Footer from '../../Footer';
-import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
-import OverDueInvoiceCard from '../../shared/OverDueInvoiceCard';
-import BranchInvoiceNumberCard from '../../shared/BranchInvoiceNumberCard';
-import BranchPaymentReceivedCard from '../../shared/BranchPaymentReceivedCard';
-import BranchCashierList from './BranchCashierList';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import axios from 'axios';
-import notify from '../../utils/Notify';
 import { API_URL } from '../../constants';
 import { CURRENCY } from '../../constants';
 import Loader from '../../shared/Loader';
@@ -44,6 +38,9 @@ const BranchDashboardPage = (props) => {
   const bankLogo = props.apitype === 'merchantBranch' ?
     JSON.parse(localStorage.getItem('branchLogged')).bank.logo:
     JSON.parse(localStorage.getItem('merchantLogged')).bank.logo
+  const branchName = props.apitype === 'merchantBranch' ?
+    JSON.parse(localStorage.getItem('branchLogged')).details.name:
+    JSON.parse(localStorage.getItem('selectedBranch')).name
   const apiId = props.apitype === 'merchantBranch' ? " " : props.match.params.id
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
@@ -408,6 +405,33 @@ const BranchDashboardPage = (props) => {
         <MerchantHeader/>
       )}
       <Container verticalMargin>
+      {props.apitype === 'merchant' ? (
+        <Card >
+          <div style={{display:'flex', justifyContent:'space-between'}}>
+           <Button
+            marginTop="10px"
+            marginBottom="10px"
+            padding="5px"
+             onClick={() => {
+              history.goBack();
+            }}
+          >
+            Back
+          </Button>
+          <h3 style={{color:"green", textAlign:'center' }}><b>{branchName} Dashboard</b> </h3> 
+          <Button
+            marginTop="10px"
+            marginBottom="10px"
+            padding="5px"
+             onClick={() => {
+              history.push(`/merchant/branch/reports/${apiId}`);
+            }}
+          >
+            Reports
+          </Button>
+          </div>
+        </Card>
+      ):''}
         <Main fullWidth>
               <div className="cardHeader" style={{display:'flex'}}>
                 <div className="cardHeaderLeft" style={{display:'flex',alignItems:'center'}}>

@@ -165,7 +165,7 @@ const CashierReportPage = (props) => {
       )}
        
       <Container verticalMargin>
-      {props.apitype === 'merchantBranch' ? (
+      {props.apitype !== 'merchantStaff' ? (
       <Card>
       <h3 style={{color:"green", marginBottom:"20px", textAlign:'center' }}><b>Name : </b>{assigned} </h3> 
       </Card>

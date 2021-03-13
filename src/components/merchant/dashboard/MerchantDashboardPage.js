@@ -1,31 +1,71 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
+import SearchIcon from '@material-ui/icons/Search';
+import AddIcon from '@material-ui/icons/Add';
 import PaymentReceivedCard from '../../shared/PaymentReceivedCard';
 import TotalInvoiceCard from '../../shared/TotalInvoiceCard';
 import PaidInvoiceCard from '../../shared/PaidInvoiceCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
-
+import CreateZonePopup from './CreateZonePopup';
+import { fetchZoneList, getZoneDetails, checkZoneStats } from '../api/MerchantAPI';
 import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
 import Row from '../../shared/Row';
+import Col from '../../shared/Col';
 import Main from '../../shared/Main';
+import ActionBar from '../../shared/ActionBar';
+import Table from '../../shared/Table';
+import Button from '../../shared/Button';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import ZoneCard from './ZoneCard';
 import Loader from '../../shared/Loader';
-import { getzone } from '../api/MerchantAPI';
 import axios from 'axios';
-import { MERCHANT_API } from '../../constants';
+import { MERCHANT_API, CURRENCY } from '../../constants';
+import Card from '../../shared/Card';
 import notify from '../../utils/Notify';
+import history from '../../utils/history';
 
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
-  const [invoicesPaid, setInvoicesPaid] = useState(0);
-  const [pendingInvoices,setPendingInvoices] = useState(0);
-  const [amountCollected,setAmpontCollected] = useState(0);
-  const [invoicesRaised,setInvoicesRaised] = useState(0);
+  const [stats, setStats] = useState({});
+  const [openZonePopup, setZonePopup] = React.useState(false);
+  const [zoneList, setZoneList] = React.useState([]);
+  const [zonestats, setZoneStats] = React.useState([]);
+  const [copyZoneList, setCopyZoneList] = React.useState([]);
+  const [popupType, setPopupType] = React.useState('new');
+  const [editingZone, setEditingZone] = React.useState({});
+  const [zoneName, setZoneName] = React.useState('');
+  const [subzoneName, setSubzoneName] = React.useState('');
 
-  const refreshPage = () => {
-    setLoading(false);
+  const getZoneStats = async(list) => {
+    const statlist = list.map(async (zone) => {
+        const data = await checkZoneStats(zone._id);
+        return (data);
+    })
+    const result= await Promise.all(statlist);
+    return({res:result, loading:false});
+  }
+
+  const refreshZoneList = async () => {
+    setLoading(true)
+    const zonedetails = await getZoneDetails();
+    setZoneName(zonedetails.zone_name);
+    setSubzoneName(zonedetails.subzone_name);
+    const zonelist = await fetchZoneList();
+    setZoneList(zonelist.list);
+    const zonestats = await getZoneStats(zonelist.list);
+    setZoneStats(zonestats.res);
+    setLoading(zonestats.loading);
+  };
+
+  const handleZonePopupClick = (type, subzone) => {
+    setEditingZone(subzone);
+    setPopupType(type);
+    setZonePopup(true);
+  };
+
+  const onPopupClose = () => {
+    setZonePopup(false);
   };
 
   const getStats = () => {
@@ -36,11 +76,7 @@ const MerchantDashboardPage = () => {
           if (res.data.status===0) {
             throw res.data.error;
           } else {
-            console.log(res);
-            setInvoicesPaid(res.data.bills_paid);
-            setPendingInvoices(res.data.bills_raised-res.data.bills_paid);
-            setAmpontCollected(res.data.amount_collected);
-            setInvoicesRaised(res.data.amount_due);
+            setStats(res.data);
           }
         }
       })
@@ -54,12 +90,64 @@ const MerchantDashboardPage = () => {
           getStats();
         }, 3000);
       });
-  }
+  };
+
+  const getZones = () => {
+    return zoneList.map((zone,index) => {
+      return (
+        <tr key={zone._id}>
+          <td className="tac">{zone.name}</td>
+          <td
+            className="tac popMenuTrigger"
+            onClick={() => {
+              localStorage.setItem('selectedZone', zone._id);
+              localStorage.setItem('currentZone', JSON.stringify(zone));
+              history.push(`/merchant/${zone._id}/subzones`);
+            }}
+          >
+            {zone.subzone_count}
+          </td>
+          <td className="tac">{zone.branch_count}</td>
+          <td className="tac">{zonestats[index].bill_generated}</td>
+          <td className="tac">{zonestats[index].amount_generated}</td>
+          <td className="tac">{zonestats[index].bill_paid}</td>
+          <td className="tac">{zonestats[index].amount_paid}</td>
+          <td className="tac">{zonestats[index].bill_generated-zonestats[index].bill_paid}</td>
+          <td className="tac">
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              <td className="tac">{zonestats[index].amount_generated-zonestats[index].amount_paid}</td>
+              <span className="absoluteMiddleRight primary popMenuTrigger">
+                <i className="material-icons ">more_vert</i>
+                <div className="popMenu">
+                  <span
+                    onClick={() => {
+                      localStorage.setItem('selectedZone', zone._id);
+                      localStorage.setItem('currentZone', JSON.stringify(zone));
+                      history.push(`/merchant/${zone._id}/subzones`);
+                    }}
+                  >
+                    <span>{subzoneName}</span>
+                  </span>
+                  <span onClick={() => handleZonePopupClick('update', zone)}>
+                    Edit
+                  </span>
+                </div>
+              </span>
+            </div>
+          </td>
+        </tr>
+      );
+    });
+  };
 
   useEffect(() => {
-    setLoading(true);
+    refreshZoneList();
     getStats();
-    refreshPage();
   }, []);
 
   if (isLoading) {
@@ -76,13 +164,94 @@ const MerchantDashboardPage = () => {
         <MerchantSideBar />
         <Main>
           <Row>
-            <PaymentReceivedCard amount={amountCollected} />
-            <TotalInvoiceCard no={invoicesRaised} />
-            <PaidInvoiceCard no={invoicesPaid} />
-            <PendingInvoiceCard no={pendingInvoices} />
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Invoice Paid by Bank</h4>
+              <div className="cardValue">
+                {stats.paid_by_bank}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Invoice Paid by Partner</h4>
+              <div className="cardValue">
+                {stats.paid_by_partner}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Invoice Paid by Merchant</h4>
+              <div className="cardValue">
+                {stats.paid_by_merchant}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Invoice Paid by User</h4>
+              <div className="cardValue">
+                {stats.paid_by_user}
+            </div>
+            </Card>
+          </Col>
           </Row>
         </Main>
-        <ZoneCard refreshZone={() => refreshPage()} />
+        <div style={{ marginBottom: '50px' }}>
+      <ActionBar
+        marginBottom="33px"
+        inputWidth="calc(100% - 241px)"
+        className="clr"
+      >
+        <div className="iconedInput fl">
+          <i className="material-icons">
+            <SearchIcon />
+          </i>
+          <input type="text" placeholder="Search Zones" onChange={(e) => {
+            searchlistfunction(e.target.value)
+          }} />
+        </div>
+
+        <Button
+          className="addBankButton"
+          flex
+          onClick={() => handleZonePopupClick('new', {})}
+        >
+          <AddIcon className="material-icons" />
+          <span>Add {zoneName}</span>
+        </Button>
+      </ActionBar>
+      <Card bigPadding>
+        <div className="cardBody">
+          <Table marginTop="34px">
+            <thead>
+              <tr>
+                <th>Zones</th>
+                <th>Subzones</th>
+                <th>Branches</th>
+                <th>Bills</th>
+                <th>Amount Billed</th>
+                <th>Paid bills</th>
+                <th>Amount of paid bills</th>
+                <th>Pending bills</th>
+                <th>Amount of pending bills</th>
+              </tr>
+            </thead>
+            <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>
+          </Table>
+        </div>
+      </Card>
+      {openZonePopup ? (
+        <CreateZonePopup
+          type={popupType}
+          zone={editingZone}
+          zonename={zoneName}
+          refreshZoneList={(data) => refreshZoneList(data)}
+          onClose={() => onPopupClose()}
+        />
+      ) : null}
+    </div>
       </Container>
     </Fragment>
   );

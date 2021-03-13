@@ -29,7 +29,7 @@ const CashierBillSettingsPage = (props) => {
     ),
   );
   const [cashierName, setCashierName] = React.useState(
-    JSON.parse(localStorage.getItem('cashierLogged')).staff.code
+    JSON.parse(localStorage.getItem('cashierLogged')).position.name
   );
   const [
     addBillNumberSettingPopup,

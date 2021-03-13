@@ -99,27 +99,16 @@ function MerchantBranchListPage(props) {
                   'selectedBranch',
                   JSON.stringify(branch),
                 );
-                history.push(`/merchant/branch/reports/${branch._id}`);
+              history.push(`/merchant/branch/dashboard/${branch._id}`);
               }}
             >                    
-              Reports                   
+              View                   
             </Button>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span onClick={() => handleBranchInfoClick(branch)}>
                     Info
-                  </span>
-                  <span 
-                    onClick={() => {
-                      localStorage.setItem(
-                        'selectedBranch',
-                        JSON.stringify(branch),
-                      );
-                    history.push(`/merchant/branch/dashboard/${branch._id}`);
-                    }}
-                  >
-                    Dashboard
                   </span>
                   <span
                     onClick={() => handleBranchPopupClick('update', branch)}
