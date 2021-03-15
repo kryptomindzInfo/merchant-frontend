@@ -84,15 +84,15 @@ const zoneAPI = async (props, values, apiType) => {
   }
 };
 
-const fetchZoneList = async () => {
+const fetchTypeList = async (type) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/getZoneList`);
+    const res = await axios.get(`${MERCHANT_API}/get${type}List`);
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
         return { list: [], loading: false };
       }
-      return { list: res.data.zones, loading: false };
+      return { list: res.data.list, loading: false };
     }
   } catch (e) {
     notify('Could not fetch zones!', 'error');
@@ -819,6 +819,8 @@ const checkZoneStats = async (id) => {
 					amount_generated: 0,
 					bill_generated: 0,
 					amount_paid: 0,
+          amount_pending: 0,
+          bill_pending: 0,
         };
       }
       return { 
@@ -826,6 +828,8 @@ const checkZoneStats = async (id) => {
         amount_generated: res.data.amount_generated,
         amount_paid: res.data.amount_paid,
         bill_paid: res.data.bill_paid,
+        amount_pending: res.data.amount_pending,
+        bill_pending: res.data.bill_pending,
       };
     }
     notify(res.data.message, 'error');
@@ -834,6 +838,8 @@ const checkZoneStats = async (id) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
+      amount_pending: 0,
+      bill_pending: 0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -842,6 +848,100 @@ const checkZoneStats = async (id) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
+      amount_pending: 0,
+      bill_pending: 0,
+    };
+  }
+};
+
+const checkStatsbydate = async (id,date,type) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/${type}/getStatsBydate`,{
+      id:id,
+      date:date,
+    });
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { 
+          bills_paid: 0,
+					amount_generated: 0,
+					bill_generated: 0,
+					amount_paid: 0,
+         
+        };
+      }
+      return { 
+        bill_generated: res.data.bill_generated,
+        amount_generated: res.data.amount_generated,
+        amount_paid: res.data.amount_paid,
+        bill_paid: res.data.bill_paid,
+        
+      };
+    }
+    notify(res.data.message, 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+      
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+     
+    };
+  }
+};
+
+const checkStatsbyperiod = async (id,period,type) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/${type}/getStatsByPeriod`,{
+      id:id,
+      period_name:period,
+    });
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { 
+          bills_paid: 0,
+					amount_generated: 0,
+					bill_generated: 0,
+					amount_paid: 0,
+         
+        };
+      }
+      return { 
+        bill_generated: res.data.bill_generated,
+        amount_generated: res.data.amount_generated,
+        amount_paid: res.data.amount_paid,
+        bill_paid: res.data.bill_paid,
+        
+      };
+    }
+    notify(res.data.message, 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+      
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+     
     };
   }
 };
@@ -1019,6 +1119,8 @@ const getMerchantPositions = async (id) => {
 };
 
 export {
+  checkStatsbyperiod,
+  checkStatsbydate,
   checkSubZoneStats,
   checkZoneStats,
   addCategory,
@@ -1030,7 +1132,7 @@ export {
   blockStaffAPI,
   getWalletBalance,
   zoneAPI,
-  fetchZoneList,
+  fetchTypeList,
   fetchStaffList,
   fetchDashboardHistory,
   editMerchant,

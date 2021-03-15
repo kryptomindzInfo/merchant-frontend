@@ -8,6 +8,7 @@ const otpUrl = '/merchant/:name/otp-forgot-password';
 const zoneBranchUrl = '/merchant/:id/branches';
 const zoneSubzoneUrl = '/merchant/:id/subzones';
 const staffUrl = '/merchant/staff';
+const reportUrl = '/merchant/report';
 const merchantCashierUrl = '/merchant/:id/cashiers';
 const merchantCashierInfoUrl = '/merchant/cashier/info/:id';
 const merchantBranchInfoUrl = '/merchant/branch/info/:id';
@@ -58,6 +59,7 @@ const cashierSettingsUrl = '/cashier/settings';
 const cashierBillSettingsUrl = '/cashier/billsettings';
 
 export {
+  reportUrl,
   merchantStaffReportUrl,
   merchantCashierReportUrl,
   merchantBranchDashboadUrl,

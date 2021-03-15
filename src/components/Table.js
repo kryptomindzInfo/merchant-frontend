@@ -19,6 +19,9 @@ const Table = styled.table`
       &.red {
         color: #FF0000;
       }
+      &.green {
+        color: green;
+      }
     > td {
       font-size: 16px;
       font-weight: 300;
@@ -28,6 +31,7 @@ const Table = styled.table`
       position: relative;
       &.green {
         color: ${(props) => props.theme.primary};
+        font-weight: 1000 !important;
       }
       > a {
         font-size: 12px;

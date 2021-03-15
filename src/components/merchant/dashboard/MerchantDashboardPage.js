@@ -7,7 +7,7 @@ import TotalInvoiceCard from '../../shared/TotalInvoiceCard';
 import PaidInvoiceCard from '../../shared/PaidInvoiceCard';
 import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
 import CreateZonePopup from './CreateZonePopup';
-import { fetchZoneList, getZoneDetails, checkZoneStats } from '../api/MerchantAPI';
+import { fetchTypeList, getZoneDetails, checkZoneStats } from '../api/MerchantAPI';
 import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
 import Container from '../../shared/Container';
 import Row from '../../shared/Row';
@@ -51,7 +51,7 @@ const MerchantDashboardPage = () => {
     const zonedetails = await getZoneDetails();
     setZoneName(zonedetails.zone_name);
     setSubzoneName(zonedetails.subzone_name);
-    const zonelist = await fetchZoneList();
+    const zonelist = await fetchTypeList("zone");
     setZoneList(zonelist.list);
     const zonestats = await getZoneStats(zonelist.list);
     setZoneStats(zonestats.res);
@@ -112,7 +112,7 @@ const MerchantDashboardPage = () => {
           <td className="tac">{zonestats[index].amount_generated}</td>
           <td className="tac">{zonestats[index].bill_paid}</td>
           <td className="tac">{zonestats[index].amount_paid}</td>
-          <td className="tac">{zonestats[index].bill_generated-zonestats[index].bill_paid}</td>
+          <td className="tac">{zonestats[index].bill_pending}</td>
           <td className="tac">
             <div
               style={{
@@ -120,7 +120,7 @@ const MerchantDashboardPage = () => {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{zonestats[index].amount_generated-zonestats[index].amount_paid}</td>
+              <td className="tac">{zonestats[index].amount_pending}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">

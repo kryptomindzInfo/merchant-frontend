@@ -29,6 +29,7 @@ import BillTermSettingPage from './merchant/settings/BillTermSettingPage';
 import BranchDashboardPage from './branch/dashboard/BranchDashboardPage';
 import BranchReports from './branch/Reports/BranchReports';
 import StaffDashboardPage from './cashier/dashboard/StaffDashboardPage';
+import ReportPage from './merchant/reports/ReportPage';
 import StaffReportPage from './cashier/reports/StaffReportPage';
 import CashierReportPage from './cashier/reports/CashierReportPage';
 import CashierDashboardPage from './cashier/dashboard/CashierDashboardPage';
@@ -38,6 +39,7 @@ import PrivateRoute from './PrivateRoute';
 import ProtectedRoute from './ProtectedRoute';
 import SharingRulesPage from './merchant/settings/SharingRulesPage';
 import {
+  reportUrl,
   merchantStaffReportUrl,
   merchantCashierReportUrl,
   merchantBranchDashboadUrl,
@@ -237,6 +239,12 @@ function App() {
               exact
               path={staffUrl}
               component={(props) => <MerchantStaffListPage {...props} />}
+            />
+            <ProtectedRoute
+              type="merchant"
+              exact
+              path={reportUrl}
+              component={(props) => <ReportPage {...props} />}
             />
             <ProtectedRoute
               type="merchant"
