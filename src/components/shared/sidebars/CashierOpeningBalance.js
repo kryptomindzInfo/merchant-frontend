@@ -16,6 +16,8 @@ import TransactionReceipt from '../../../components/cashier/dashboard/Transactio
 import SearchInvoicePopup from './SearchInvoicePopup';
 // import withStyles from '@material-ui/core/styles'
 import { withStyles } from '@material-ui/core';
+import endOfDay from 'date-fns/endOfDay';
+import startOfDay from 'date-fns/startOfDay';
 
 import { API_URL, STATIC_URL, CURRENCY } from '../../constants';
 
@@ -192,7 +194,7 @@ class CashierClosingBalance extends Component {
       .then(res => {
         if (res.status == 200) {
           const today = new Date();
-          const closingDate = new Date(res.data.closingTime);
+          const closingDate = startOfDay(new Date(res.data.closingTime));
           var Difference_In_Time = today.getTime() - closingDate.getTime();
           // To calculate the no. of days between two dates 
           var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
