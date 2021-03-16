@@ -453,16 +453,16 @@ const toggleType = (type) => {
                 </Col>
                 <Col>
                   <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills Paid</h4>
-                    <div className="cardValue">{billPaid}</div>
-                  </Card>
-                </Col>
-                <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
                     <h4>Amount Billed</h4>
                     <div className="cardValue">{amountGenerated}</div>
                   </Card>
                 </Col>
+                <Col>
+                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
+                    <h4>Bills Paid</h4>
+                    <div className="cardValue">{billPaid}</div>
+                  </Card>
+                </Col>       
                 <Col>
                   <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
                     <h4>Amount paid </h4>
@@ -472,7 +472,7 @@ const toggleType = (type) => {
                   <Col>
                   <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
                     <h4>Bill Pending</h4>
-                    <div className="cardValue">{amountPending}</div>
+                    <div className="cardValue">{billPending}</div>
                   </Card>
                 </Col>
                 <Col>
@@ -495,14 +495,14 @@ const toggleType = (type) => {
                 </Col>
                 <Col>
                   <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills Paid</h4>
-                    <div className="cardValue">{billPaid}</div>
+                    <h4>Amount Billed</h4>
+                    <div className="cardValue">{amountGenerated}</div>
                   </Card>
                 </Col>
                 <Col>
                   <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount Billed</h4>
-                    <div className="cardValue">{amountGenerated}</div>
+                    <h4>Bills Paid</h4>
+                    <div className="cardValue">{billPaid}</div>
                   </Card>
                 </Col>
                 <Col>
