@@ -443,7 +443,7 @@ const BranchReport = (props) => {
               </A>
           </button>
           <button style={{border:"none",width:"100px"}} onClick={() => {
-              history.goBack();
+             history.push(`/merchant/branch/dashboard/${apiId}`);
             }}>
               <A>
                 DashBoard
