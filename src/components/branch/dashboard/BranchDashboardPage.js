@@ -544,7 +544,7 @@ const BranchDashboardPage = (props) => {
                   style={{textAlign:'center'}}
                 >
                   <h4>Invoice Pending</h4>
-                  <div className="cardValue"> {stats.invoice_raised-stats.invoice_paid}</div>
+                  <div className="cardValue"> {stats.invoice_pending}</div>
                 </Card>
               </Col>
             </Row> 
