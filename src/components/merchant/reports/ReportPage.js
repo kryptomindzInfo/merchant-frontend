@@ -6,6 +6,7 @@ import Container from '../../shared/Container';
 import Table from '../../Table';
 import Card from '../../shared/Card';
 import Col from '../../shared/Col';
+import DashCard from '../dashboard/DashCards';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
@@ -242,7 +243,10 @@ const toggleType = (type) => {
       </Helmet>
         <MerchantHeader active="reports" />
       <Container verticalMargin>
-      <div
+      <Card style={{marginBottom:'10px'}}>
+          <div style={{display:'flex', justifyContent:'space-between',marginBottom:'10px'}}>
+          <h3 style={{color:"green", textAlign:'center' }}><b>{merchantName} Report</b> </h3> 
+          <div
                 style={{
                   display: 'flex',
                   justifyContent: 'left',
@@ -273,9 +277,12 @@ const toggleType = (type) => {
                 </Button>
               </div>
         
+          </div>
+        </Card>
+     
             <Row>
               <Col cW='40%'>
-              <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'220px'}}>
+              <Card marginBottom="10px" buttonMarginTop="10px" smallValue style={{height:'220px'}}>
               <div
                 style={{
                   display: 'flex',
@@ -446,40 +453,16 @@ const toggleType = (type) => {
             <div>
               <Row>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills</h4>
-                    <div className="cardValue">{billGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Created' no={billGenerated} amount={amountGenerated}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount Billed</h4>
-                    <div className="cardValue">{amountGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Uploaded' no={0} amount={0}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills Paid</h4>
-                    <div className="cardValue">{billPaid}</div>
-                  </Card>
+                  <DashCard title='Invoice Paid' no={billPaid} amount={amountPaid}/>
                 </Col>       
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount paid </h4>
-                    <div className="cardValue">{amountPaid}</div>
-                  </Card>
-                </Col>
-                  <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bill Pending</h4>
-                    <div className="cardValue">{billPending}</div>
-                  </Card>
-                </Col>
-                <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount pending </h4>
-                    <div className="cardValue">{amountPending}</div>
-                  </Card>
+                <DashCard title='Invoice Pending' no={billPending} amount={amountPending}/> 
                 </Col>
               </Row>
             </div>
@@ -488,29 +471,14 @@ const toggleType = (type) => {
               <div>
               <Row>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills</h4>
-                    <div className="cardValue">{billGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Created' no={billGenerated} amount={amountGenerated}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount Billed</h4>
-                    <div className="cardValue">{amountGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Uploaded' no={0} amount={0}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills Paid</h4>
-                    <div className="cardValue">{billPaid}</div>
-                  </Card>
-                </Col>
-                <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount paid </h4>
-                    <div className="cardValue">{amountPaid}</div>
-                  </Card>
-                </Col>
+                  <DashCard title='Invoice Paid' no={billPaid} amount={amountPaid}/>
+                </Col>       
               </Row>
             </div>
             )}

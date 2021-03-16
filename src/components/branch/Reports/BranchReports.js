@@ -20,6 +20,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
+import A from '../../shared/A';
 import {
   getMerchantSettings,
   fetchBranchInvoicesBydate,
@@ -27,6 +28,7 @@ import {
   fetchBranchInvoicesByDateRange, 
 } from '../../shared/api/Api';
 import Loader from '../../shared/Loader';
+import history from '../../utils/history';
 
 const today = new Date();
 const BranchReport = (props) => {
@@ -431,6 +433,27 @@ const BranchReport = (props) => {
         <MerchantHeader active="reports" />
       )}
       <Container verticalMargin>
+      {props.apitype === 'merchant' ? (
+        
+        <Card >
+        <div style={{display:'flex'}}>
+          <button style={{border:"none",width:"100px"}} >
+              <A>
+                <u>Reports</u>
+              </A>
+          </button>
+          <button style={{border:"none",width:"100px"}} onClick={() => {
+              history.goBack();
+            }}>
+              <A>
+                DashBoard
+            </A>
+          </button>
+        <h3 style={{color:"green",marginLeft:"280px" }}><b>{branchName}</b> </h3> 
+        
+        </div>
+      </Card>
+      ):''}
             <div
                 style={{
                   display: 'flex',

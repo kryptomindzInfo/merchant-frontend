@@ -17,6 +17,7 @@ import { CURRENCY } from '../../constants';
 import Loader from '../../shared/Loader';
 import AssignUserPopup from './AssignUserPopup';
 import BranchEditCashierPopup from './BranchEditCashierPopup';
+import A from '../../shared/A';
 import {
   blockCashierApi,
   disassignStaff,
@@ -29,6 +30,7 @@ import {
   getMerchantSettings,
 } from '../../shared/api/Api';
 import history from '../../utils/history';
+import styled from 'styled-components';
 
 const BranchDashboardPage = (props) => {
   const [stats, setStats] = useState({});
@@ -407,28 +409,30 @@ const BranchDashboardPage = (props) => {
       <Container verticalMargin>
       {props.apitype === 'merchant' ? (
         <Card >
-          <div style={{display:'flex', justifyContent:'space-between'}}>
-           <Button
-            marginTop="10px"
-            marginBottom="10px"
-            padding="5px"
-             onClick={() => {
-              history.goBack();
-            }}
-          >
-            Back
-          </Button>
-          <h3 style={{color:"green", textAlign:'center' }}><b>{branchName} Dashboard</b> </h3> 
-          <Button
-            marginTop="10px"
-            marginBottom="10px"
-            padding="5px"
-             onClick={() => {
+          <div style={{display:'flex'}}>
+            <button  style={{border:"none",width:"100px"}} onClick={() => {
+                history.goBack();
+              }}>
+                <A>
+                  Back
+              </A>
+            </button>
+            <button style={{border:"none",width:"100px"}} onClick={() => {
               history.push(`/merchant/branch/reports/${apiId}`);
-            }}
-          >
-            Reports
-          </Button>
+            }}>
+                <A>
+                  Reports
+                </A>
+            </button>
+            <button style={{border:"none",width:"100px"}} onClick={() => {
+                history.goBack();
+              }}>
+                <A>
+                  <u>DashBoard</u>
+              </A>
+            </button>
+          <h3 style={{color:"green",marginLeft:"280px" }}><b>{branchName}</b> </h3> 
+          
           </div>
         </Card>
       ):''}
