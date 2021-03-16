@@ -307,12 +307,12 @@ const MerchantDashboardPage = () => {
                 <th>Zones</th>
                 <th>Subzones</th>
                 <th>Branches</th>
-                <th>Bills</th>
-                <th>Amount Billed</th>
-                <th>Paid bills</th>
-                <th>Amount of paid bills</th>
-                <th>Pending bills</th>
-                <th>Amount of pending bills</th>
+                <th>Invoice Created</th>
+                <th>Amount Generated</th>
+                <th>Paid Invoices</th>
+                <th>Amount Paid</th>
+                <th>Pending Invoices</th>
+                <th>Amount Pending</th>
               </tr>
             </thead>
             <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>
