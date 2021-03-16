@@ -24,10 +24,13 @@ import { MERCHANT_API, CURRENCY } from '../../constants';
 import Card from '../../shared/Card';
 import notify from '../../utils/Notify';
 import history from '../../utils/history';
+import Footer from '../../Footer';
 
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [stats, setStats] = useState({});
+  const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
   const [openZonePopup, setZonePopup] = React.useState(false);
   const [zoneList, setZoneList] = React.useState([]);
   const [zonestats, setZoneStats] = React.useState([]);
@@ -330,6 +333,7 @@ const MerchantDashboardPage = () => {
       ) : null}
     </div>
       </Container>
+      <Footer bankname={bankName} banklogo={bankLogo}/>
     </Fragment>
   );
 };
