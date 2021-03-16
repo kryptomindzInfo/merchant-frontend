@@ -689,7 +689,7 @@ const StaffReportPage = (props) => {
                   <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
                 </Col>
                 <Col>
-                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Staff Name : </b>{cashierName} </h3>
+                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Position Name : </b>{cashierName} </h3>
                 </Col>
               </Row>
             </Card>
@@ -799,7 +799,7 @@ const StaffReportPage = (props) => {
         </Card>
       ):""}  
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
-          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDay()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
+          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDate()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
         </Card>
       </Container>
       <Footer bankname={bankName} banklogo={bankLogo}/>
