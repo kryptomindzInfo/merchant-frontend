@@ -134,6 +134,8 @@ const MerchantDashboardPage = () => {
           <td className="tac">{zone.branch_count}</td>
           <td className="tac">{zonestats[index].bill_generated}</td>
           <td className="tac">{zonestats[index].amount_generated}</td>
+          <td className="tac">0</td>
+          <td className="tac">0</td>
           <td className="tac">{zonestats[index].bill_paid}</td>
           <td className="tac">{zonestats[index].amount_paid}</td>
           <td className="tac">{zonestats[index].bill_pending}</td>
@@ -243,6 +245,8 @@ const MerchantDashboardPage = () => {
                 <th>Branches</th>
                 <th>Invoice Created</th>
                 <th>Amount Generated</th>
+                <th>Invoice Uploaded</th>
+                <th>Amount Uploaded</th>
                 <th>Paid Invoices</th>
                 <th>Amount Paid</th>
                 <th>Pending Invoices</th>
