@@ -34,6 +34,10 @@ const MerchantDashboardPage = () => {
   const [copyZoneList, setCopyZoneList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
   const [editingZone, setEditingZone] = React.useState({});
+  const [paidByMC, setPaidByMC] = React.useState({});
+  const [paidByPC, setPaidByPC] = React.useState({});
+  const [paidByBC, setPaidByBC] = React.useState({});
+  const [paidByUS, setPaidByUS] = React.useState({});
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
 
@@ -76,6 +80,10 @@ const MerchantDashboardPage = () => {
           if (res.data.status===0) {
             throw res.data.error;
           } else {
+            setPaidByMC(res.data.post6.filter((val)=>val._id==='MC')[0]);
+            setPaidByBC(res.data.post6.filter((val)=>val._id==='BC')[0]);
+            setPaidByPC(res.data.post6.filter((val)=>val._id==='PC')[0]);
+            setPaidByUS(res.data.post6.filter((val)=>val._id==='US')[0]);
             setStats(res.data);
           }
         }
@@ -168,7 +176,7 @@ const MerchantDashboardPage = () => {
             <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Invoice Paid by Bank</h4>
               <div className="cardValue">
-                {stats.paid_by_bank}
+                {paidByBC ? paidByBC.bills_paid : 0}
             </div>
             </Card>
           </Col>
@@ -176,7 +184,7 @@ const MerchantDashboardPage = () => {
             <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Invoice Paid by Partner</h4>
               <div className="cardValue">
-                {stats.paid_by_partner}
+              {paidByPC ? paidByPC.bills_paid : 0}
             </div>
             </Card>
           </Col>
@@ -184,7 +192,7 @@ const MerchantDashboardPage = () => {
             <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Invoice Paid by Merchant</h4>
               <div className="cardValue">
-                {stats.paid_by_merchant}
+                {paidByMC ? paidByMC.bills_paid : 0}
             </div>
             </Card>
           </Col>
@@ -192,11 +200,80 @@ const MerchantDashboardPage = () => {
             <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
               <h4>Invoice Paid by User</h4>
               <div className="cardValue">
-                {stats.paid_by_user}
+                {paidByUS ? paidByUS.bills_paid : 0}
             </div>
             </Card>
           </Col>
           </Row>
+          <Row>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Amount Collected by Bank</h4>
+              <div className="cardValue">
+                {paidByBC ? paidByBC.amount_paid : 0}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Amount Collected by Partner</h4>
+              <div className="cardValue">
+              {paidByPC ? paidByPC.amount_paid : 0}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Amount Collected by Merchant</h4>
+              <div className="cardValue">
+                {paidByMC ? paidByMC.amount_paid : 0}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Amount Collected by User</h4>
+              <div className="cardValue">
+                {paidByUS ? paidByUS.amount_paid : 0}
+            </div>
+            </Card>
+          </Col>
+          </Row>
+          <Row>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Invoice Created</h4>
+              <div className="cardValue">
+                {stats.bills_generated}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Amount Generated</h4>
+              <div className="cardValue">
+              {stats.amount_generated}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Invoice Pending</h4>
+              <div className="cardValue">
+              {stats.bills_pending}
+            </div>
+            </Card>
+          </Col>
+          <Col>
+            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
+              <h4>Amount Pending</h4>
+              <div className="cardValue">
+                {stats.amount_pending}
+            </div>
+            </Card>
+          </Col>
+          </Row>
+        
         </Main>
         <div style={{ marginBottom: '50px' }}>
       <ActionBar
