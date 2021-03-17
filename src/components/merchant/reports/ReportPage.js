@@ -116,7 +116,7 @@ const ReportPage = (props) => {
         const tomorrow = new Date(date)
         tomorrow.setDate(tomorrow.getDate() + 1)
         const data = await getStatsBydate(typelist,tomorrow);
-        // console.log(data.res);
+        console.log(data.res);
         return ({
             date:date,
             data:data.res,
@@ -237,6 +237,7 @@ const ReportPage = (props) => {
   }
   setTypeList(typelist.list);
   const typestats = await getTypeStatsBydate(dateslist,typelist.list);
+  console.log(typestats);
   const cardValues = await getCardValues(typestats.res);
   setAmountGenerated(cardValues.amount_generated);
   setAmountPaid(cardValues.amount_paid);
@@ -256,33 +257,41 @@ const ReportPage = (props) => {
 
 const getData = (i) => {
     return typeStats[i].data.map((date,index) => {
-      if(filter === 'period'){
         return (
           <tr>
             <td>{typeList[index].name}</td>
-            <td>{date.bill_generated}</td>
-            <td>{date.amount_generated}</td>
-            <td>0</td>
-            <td>0</td>
-            <td>{date.bill_paid}</td>
-            <td>{date.amount_paid}</td>
-            <td>{date.bill_generated-date.bill_paid}</td>
-            <td>{date.amount_generated-date.amount_paid}</td>
+            <td>
+              <Row>No. {date.bill_generated}</Row>
+              <Row>XOF {date.amount_generated}</Row>
+            </td>
+            <td>
+              <Row>No. 0</Row>
+              <Row>XOF 0</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_BC}</Row>
+              <Row>XOF {date.amount_paid_by_BC}</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_PC}</Row>
+              <Row>XOF {date.amount_paid_by_PC}</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_US}</Row>
+              <Row>XOF {date.amount_paid_by_US}</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_MC}</Row>
+              <Row>XOF {date.amount_paid_by_MC}</Row>
+            </td>
+            {/* <td>{date.bill_paid}</td>
+            <td>{date.amount_paid}</td> */}
+            <td>
+              <Row>No. {date.bill_generated-date.bill_paid}</Row>
+              <Row>XOF {date.amount_generated-date.amount_paid}</Row>
+            </td>
           </tr>
         );
-      }else{
-        return (
-          <tr>
-            <td>{typeList[index].name}</td>
-            <td>{date.bill_generated}</td>
-            <td>{date.amount_generated}</td>
-            <td>0</td>
-            <td>0</td>
-            <td>{date.bill_paid}</td>
-            <td>{date.amount_paid}</td>
-          </tr>
-        );
-      }
     });
 };
 
@@ -298,6 +307,11 @@ const toggle = (type) => {
 };
 
 const toggleType = (type) => {
+  if(type==='subzone'){
+    setSelectedZone(zoneList[0]._id)
+  } else if (type==='branch'){
+    setSelectedSubZone(subzoneList[0]._id)
+  }
   setAmountGenerated(0);
   setAmountPaid(0);
   setBillGenerated(0);
@@ -333,15 +347,13 @@ const toggleType = (type) => {
           <h3 style={{color:"green", textAlign:'center' }}><b>{merchantName} Report</b> </h3> 
           <div
                 style={{
-                  display: 'flex',
                   justifyContent: 'left',
                   marginTop: '10px',
                   marginBottom: '10px',
                 }}
               >
                 <Row>
-                  <Col>
-                    <Row>
+                  <Col cW="33%">
                       <Button
                         className={type === 'zone' ? 'active' : ''}
                         onClick={()=>{toggleType('zone')}}
@@ -349,11 +361,8 @@ const toggleType = (type) => {
                       >
                       Zone
                     </Button>
-                    </Row>
-                    <Row></Row>
                   </Col>
-                  <Col>
-                    <Row>
+                  <Col cW="33%">
                       <Button
                         className={type === 'subzone' ? 'active' : ''}
                         onClick={()=>{toggleType('subzone')}}
@@ -361,11 +370,28 @@ const toggleType = (type) => {
                       >
                         Subzone
                       </Button>
-                    </Row>
-                    <Row>
+                  </Col>
+                  <Col cW="33%">
+                    <Button
+                        className={type === 'branch' ? 'active' : ''}
+                        onClick={()=>{toggleType('branch')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                        Branch
+                      </Button>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col cW="33%"></Col>
+                  <Col cW="33%">
                       <FormGroup>
                         <SelectInput
-                          style={{marginTop:"10px"}}
+                          style={{
+                            marginTop:"10px",
+                            width:"110px",
+                            display: type!=="subzone" ? "none" : "",
+                          }}
                           value={selectedZone}
                           onChange={(event)=>{
                             setSelectedZone(event.target.value);
@@ -382,22 +408,15 @@ const toggleType = (type) => {
                         })}
                         </SelectInput>
                       </FormGroup>
-                    </Row>
                   </Col>
-                  <Col>
-                    <Row>
-                      <Button
-                        className={type === 'branch' ? 'active' : ''}
-                        onClick={()=>{toggleType('branch')}}
-                        style={{marginLeft:'5px'}}
-                      >
-                        Branch
-                      </Button>
-                    </Row>
-                    <Row>
+                  <Col cW="33%">
                       <FormGroup>
                         <SelectInput
-                          style={{marginTop:"10px"}}
+                          style={{
+                            marginTop:"10px" ,
+                            width:"110px",
+                            display: type!=="branch" ? "none" : "",
+                          }}
                           value={selectedSubZone}
                           onChange={(event)=>{
                             setSelectedSubZone(event.target.value);
@@ -414,15 +433,9 @@ const toggleType = (type) => {
                         })}
                         </SelectInput>
                       </FormGroup>
-                    </Row>
                   </Col>
-
                 </Row>
-                
-                
-               
               </div>
-        
           </div>
         </Card>
      
@@ -674,59 +687,53 @@ const toggleType = (type) => {
                   )} 
                  
                   <Table marginTop="34px">
-                  {filter === 'daterange' ? (
                       <thead>
                       <tr>
                         <th>{type}</th>
                           <th>Invoice Created</th>
-                          <th>Amount Generated</th>
                           <th>Invoice Uploaded</th>
-                          <th>Amount Uploaded</th>
-                          <th>Paid bills</th>
-                          <th>Amount paid </th>
+                          <th>Invoice Paid By Bank</th>
+                          <th>Invoice Paid By Partner</th>
+                          <th>Invoice Paid By User</th>
+                          <th>Invoice Paid By Merchant</th>
+                          <th>Invoice Pending</th>
                         </tr>
-                    </thead>
-                    ):(
-                      <thead>
-                      <tr>
-                        <th>{type}</th>
-                        <th>Invoice Created</th>
-                          <th>Amount Generated</th>
-                          <th>Invoice Uploaded</th>
-                          <th>Amount Uploaded</th>
-                          <th>Paid bills</th>
-                          <th>Amount paid </th>
-                          <th>Pending bills</th>
-                          <th>Pending Amount</th>
-                        </tr>
-                    </thead>
-                      
-                    )}
+                    </thead> 
                     <tbody>
                       {getData(index)}
-                      {filter === 'period'? (
                       <tr>
                         <td className="green">Total</td>
-                        <td className="green">{typeStats[index].bill_generated}</td>
-                        <td className="green">{typeStats[index].amount_generated}</td>
-                        <td>0</td>
-                        <td>0</td>
-                        <td className="green">{typeStats[index].bill_paid}</td>
-                        <td className="green">{typeStats[index].amount_paid}</td>
-                        <td className="green">{typeStats[index].bill_generated-typeStats[index].bill_paid}</td>
-                        <td className="green">{typeStats[index].amount_generated-typeStats[index].amount_paid}</td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_generated}</Row>
+                          <Row>XOF {typeStats[index].amount_generated}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. 0</Row>
+                          <Row>XOF 0</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_BC}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_BC}</Row>
+                        </td>
+                  
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_PC}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_PC}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_US}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_US}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_MC}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_MC}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_generated-typeStats[index].bill_paid}</Row>
+                          <Row>XOF {typeStats[index].amount_generated-typeStats[index].amount_paid}</Row>
+                        </td>
                       </tr>
-                      ):(
-                        <tr>
-                        <td className="green">Total</td>
-                        <td className="green">{typeStats[index].bill_generated}</td>
-                        <td className="green">{typeStats[index].amount_generated}</td>
-                        <td className="green">0</td>
-                        <td className="green">0</td>
-                        <td className="green">{typeStats[index].bill_paid}</td>
-                        <td className="green">{typeStats[index].amount_paid}</td>
-                      </tr>
-                      )}
+    
                     </tbody>
                   </Table>
                 </div>

@@ -869,7 +869,14 @@ const checkStatsbydate = async (id,date,type) => {
 					amount_generated: 0,
 					bill_generated: 0,
 					amount_paid: 0,
-         
+          bill_paid_by_MC:0,
+          amount_paid_by_MC:0,
+          bill_paid_by_BC:0,
+          amount_paid_by_BC:0,
+          bill_paid_by_PC:0,
+          amount_paid_by_PC:0,
+          bill_paid_by_US:0,
+          amount_paid_by_US:0,
         };
       }
       return { 
@@ -877,6 +884,14 @@ const checkStatsbydate = async (id,date,type) => {
         amount_generated: res.data.amount_generated,
         amount_paid: res.data.amount_paid,
         bill_paid: res.data.bill_paid,
+        bill_paid_by_MC:res.data.bill_paid_by_MC,
+        amount_paid_by_MC:res.data.amount_paid_by_MC,
+        bill_paid_by_BC:res.data.bill_paid_by_BC,
+        amount_paid_by_BC:res.data.amount_paid_by_BC,
+        bill_paid_by_PC:res.data.bill_paid_by_PC,
+        amount_paid_by_PC:res.data.amount_paid_by_PC,
+        bill_paid_by_US:res.data.bill_paid_by_US,
+        amount_paid_by_US:res.data.amount_paid_by_US,
         
       };
     }
@@ -886,7 +901,14 @@ const checkStatsbydate = async (id,date,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-      
+      bill_paid_by_MC:0,
+      amount_paid_by_MC:0,
+      bill_paid_by_BC:0,
+      amount_paid_by_BC:0,
+      bill_paid_by_PC:0,
+      amount_paid_by_PC:0,
+      bill_paid_by_US:0,
+      amount_paid_by_US:0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -895,7 +917,14 @@ const checkStatsbydate = async (id,date,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-     
+      bill_paid_by_MC:0,
+      amount_paid_by_MC:0,
+      bill_paid_by_BC:0,
+      amount_paid_by_BC:0,
+      bill_paid_by_PC:0,
+      amount_paid_by_PC:0,
+      bill_paid_by_US:0,
+      amount_paid_by_US:0,
     };
   }
 };
@@ -915,7 +944,14 @@ const checkStatsbyperiod = async (id,period,type) => {
 					amount_generated: 0,
 					bill_generated: 0,
 					amount_paid: 0,
-         
+          bill_paid_by_MC:0,
+          amount_paid_by_MC:0,
+          bill_paid_by_BC:0,
+          amount_paid_by_BC:0,
+          bill_paid_by_PC:0,
+          amount_paid_by_PC:0,
+          bill_paid_by_US:0,
+          amount_paid_by_US:0,
         };
       }
       return { 
@@ -923,6 +959,14 @@ const checkStatsbyperiod = async (id,period,type) => {
         amount_generated: res.data.amount_generated,
         amount_paid: res.data.amount_paid,
         bill_paid: res.data.bill_paid,
+        bill_paid_by_MC:res.data.bill_paid_by_MC,
+        amount_paid_by_MC:res.data.amount_paid_by_MC,
+        bill_paid_by_BC:res.data.bill_paid_by_BC,
+        amount_paid_by_BC:res.data.amount_paid_by_BC,
+        bill_paid_by_PC:res.data.bill_paid_by_PC,
+        amount_paid_by_PC:res.data.amount_paid_by_PC,
+        bill_paid_by_US:res.data.bill_paid_by_US,
+        amount_paid_by_US:res.data.amount_paid_by_US,
         
       };
     }
@@ -932,7 +976,14 @@ const checkStatsbyperiod = async (id,period,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-      
+      bill_paid_by_MC:0,
+          amount_paid_by_MC:0,
+          bill_paid_by_BC:0,
+          amount_paid_by_BC:0,
+          bill_paid_by_PC:0,
+          amount_paid_by_PC:0,
+          bill_paid_by_US:0,
+          amount_paid_by_US:0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -941,7 +992,14 @@ const checkStatsbyperiod = async (id,period,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-     
+      bill_paid_by_MC:0,
+      amount_paid_by_MC:0,
+      bill_paid_by_BC:0,
+      amount_paid_by_BC:0,
+      bill_paid_by_PC:0,
+      amount_paid_by_PC:0,
+      bill_paid_by_US:0,
+      amount_paid_by_US:0,
     };
   }
 };

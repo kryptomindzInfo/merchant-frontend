@@ -138,7 +138,7 @@ const MerchantDashboardPage = () => {
           <td className="tac">0</td>
           <td className="tac">{zonestats[index].bill_paid}</td>
           <td className="tac">{zonestats[index].amount_paid}</td>
-          <td className="tac">{zonestats[index].bill_pending}</td>
+          <td className="tac">{zonestats[index].bill_generated-zonestats[index].bill_paid}</td>
           <td className="tac">
             <div
               style={{
@@ -146,7 +146,7 @@ const MerchantDashboardPage = () => {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{zonestats[index].amount_paid}</td>
+              <td className="tac">{zonestats[index].amount_generated-zonestats[index].amount_paid}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
