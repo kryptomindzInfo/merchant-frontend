@@ -247,9 +247,9 @@ function MerchantBranchListPage(props) {
           <Col>
             <DashCard title='Invoice Paid' no={invoicePaid} amount={amountPaid}/>
           </Col>
-          <Col>
+          {/* <Col>
             <DashCard title='Invoice Pending' no={stats.bills_pending} amount={stats.amount_pending}/>
-          </Col>
+          </Col> */}
         </Row>
         <Row>
           <Col>

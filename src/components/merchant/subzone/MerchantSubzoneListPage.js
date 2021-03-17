@@ -150,8 +150,6 @@ function MerchantSubzoneListPage(props) {
           <td className="tac">0</td>
           <td className="tac">0</td>
           <td className="tac">{subzonestats[index].bill_paid}</td>
-          <td className="tac">{subzonestats[index].amount_paid}</td>
-          <td className="tac">{subzonestats[index].bill_generated}</td>
           <td className="tac bold">
             <div
               style={{
@@ -229,9 +227,6 @@ function MerchantSubzoneListPage(props) {
           <Col>
             <DashCard title='Invoice Paid' no={invoicePaid} amount={amountPaid}/>
           </Col>
-          <Col>
-            <DashCard title='Invoice Pending' no={stats.bills_pending} amount={stats.amount_pending}/>
-          </Col>
         </Row>
         <Row>
           <Col>
@@ -279,8 +274,6 @@ function MerchantSubzoneListPage(props) {
                     <th>Amount Uploaded</th>
                     <th>Invoice Paid</th>
                     <th>Amount Paid</th>
-                    <th>Invoice Pending</th>
-                    <th>Amount Pending</th>
                   </tr>
                 </thead>
                 <tbody>
