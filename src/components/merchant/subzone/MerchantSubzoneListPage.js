@@ -150,8 +150,8 @@ function MerchantSubzoneListPage(props) {
           <td className="tac">0</td>
           <td className="tac">0</td>
           <td className="tac">{subzonestats[index].bill_paid}</td>
-          <td className="tac">{subzonestats[index].bill_generated}</td>
-          <td className="tac">{subzonestats[index].amount_generated}</td>
+          <td className="tac">{subzonestats[index].amount_paid}</td>
+          <td className="tac">{subzonestats[index].bill_generated-subzonestats[index].bill_paid}</td>
           <td className="tac bold">
             <div
               style={{
@@ -159,7 +159,7 @@ function MerchantSubzoneListPage(props) {
                 justifyContent: 'center',
               }}
             >
-               <td className="tac">{subzonestats[index].amount_generated}</td>
+               <td className="tac">{subzonestats[index].amount_generated-subzonestats[index].amount_paid}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
@@ -230,7 +230,7 @@ function MerchantSubzoneListPage(props) {
             <DashCard title='Invoice Paid' no={invoicePaid} amount={amountPaid}/>
           </Col>
           <Col>
-            <DashCard title='Invoice Pending' no={stats.bills_pending} amount={stats.amount_pending}/>
+            <DashCard title='Invoice Pending' no={created ? created.bills_generated-invoicePaid : 0} amount={created ? created.amount_generated-amountPaid: 0 }/>
           </Col>
         </Row>
         <Row>

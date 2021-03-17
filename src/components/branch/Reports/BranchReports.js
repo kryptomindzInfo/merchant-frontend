@@ -540,7 +540,7 @@ const BranchReport = (props) => {
                 ):""}
                 {filter === 'period' ? (
                   <div>
-                  <h2 style={{color:"green"}}><b>Period</b></h2> 
+                  <h2 style={{color:"green"}}><b>Period Range</b></h2> 
                   <Row>
                    
                     <Col cW='48%'>

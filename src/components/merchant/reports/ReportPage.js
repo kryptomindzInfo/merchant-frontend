@@ -35,11 +35,21 @@ const ReportPage = (props) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [typeList, setTypeList] = useState([]);
+  const [zoneList, setZoneList] = useState([]);
+  const [subzoneList, setSubzoneList] = useState([]);
   const [typeStats, setTypeStats] = useState([]);
   const [amountGenerated, setAmountGenerated] = useState();
   const [amountPaid, setAmountPaid] = useState();
+  const [amountPaidBC, setAmountPaidBC] = useState();
+  const [amountPaidMC, setAmountPaidMC] = useState();
+  const [amountPaidPC, setAmountPaidPC] = useState();
+  const [amountPaidUS, setAmountPaidUS] = useState();
   const [billGenerated, setBillGenerated] = useState();
   const [billPaid, setBillPaid] = useState();
+  const [billPaidBC, setBillPaidBC] = useState();
+  const [billPaidMC, setBillPaidMC] = useState();
+  const [billPaidPC, setBillPaidPC] = useState();
+  const [billPaidUS, setBillPaidUS] = useState();
   const [billPending, setBillPending] = useState();
   const [amountPending, setAmountPending] = useState();
   const [filter, setFilter] = useState('daterange');
@@ -105,6 +115,14 @@ const ReportPage = (props) => {
             bill_generated: data.res.reduce((a, b) => a + b.bill_generated, 0),
             amount_paid: data.res.reduce((a, b) => a + b.amount_paid, 0),
             bill_paid: data.res.reduce((a, b) => a + b.bill_paid, 0),
+            amount_paid_BC: data.res.reduce((a, b) => a + b.amount_paid_by_BC, 0),
+            bill_paid_BC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_PC: data.res.reduce((a, b) => a + b.amount_paid_by_PC, 0),
+            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_US: data.res.reduce((a, b) => a + b.amount_paid_by_US, 0),
+            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_MC: data.res.reduce((a, b) => a + b.amount_paid_by_MC, 0),
+            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
         });
     })
     const result= await Promise.all(statlistbydate);
@@ -122,6 +140,14 @@ const ReportPage = (props) => {
             bill_generated: data.res.reduce((a, b) => a + b.bill_generated, 0),
             amount_paid: data.res.reduce((a, b) => a + b.amount_paid, 0),
             bill_paid: data.res.reduce((a, b) => a + b.bill_paid, 0),
+            amount_paid_BC: data.res.reduce((a, b) => a + b.amount_paid_by_BC, 0),
+            bill_paid_BC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_PC: data.res.reduce((a, b) => a + b.amount_paid_by_PC, 0),
+            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_US: data.res.reduce((a, b) => a + b.amount_paid_by_US, 0),
+            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_MC: data.res.reduce((a, b) => a + b.amount_paid_by_MC, 0),
+            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
         });
     })
     const result= await Promise.all(statlistbyperiod);
@@ -134,6 +160,14 @@ const ReportPage = (props) => {
         bill_generated: list.reduce((a, b) => a + b.bill_generated, 0),
         amount_paid: list.reduce((a, b) => a + b.amount_paid, 0),
         bill_paid: list.reduce((a, b) => a + b.bill_paid, 0),
+        amount_paid_BC: list.reduce((a, b) => a + b.amount_paid_by_BC, 0),
+        bill_paid_BC: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+        amount_paid_PC: list.reduce((a, b) => a + b.amount_paid_by_PC, 0),
+        bill_paid_PC: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+        amount_paid_US: list.reduce((a, b) => a + b.amount_paid_by_US, 0),
+        bill_paid_US: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+        amount_paid_MC: list.reduce((a, b) => a + b.amount_paid_by_MC, 0),
+        bill_paid_MC: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
       });
   }
 
@@ -142,6 +176,11 @@ const ReportPage = (props) => {
     const periodlist = await periodList.slice(periodStart,periodEnd+1);
     console.log(periodlist);
     const typelist = await fetchTypeList(type);
+    const zonelist = await fetchTypeList('zone');
+    console.log(zonelist);
+    setZoneList(zonelist);
+    const subzonelist = await fetchTypeList('subzone');
+    setSubzoneList(subzonelist);
     setTypeList(typelist.list);
     const typestats = await getTypeStatsByperiod(periodlist,typelist.list);
     const cardValues = await getCardValues(typestats.res);
@@ -149,6 +188,14 @@ const ReportPage = (props) => {
     setAmountPaid(cardValues.amount_paid);
     setBillGenerated(cardValues.bill_generated);
     setBillPaid(cardValues.bill_paid);
+    setBillPaidBC(cardValues.bill_paid_BC);
+    setBillPaidMC(cardValues.bill_paid_PC);
+    setBillPaidPC(cardValues.bill_paid_MC);
+    setBillPaidUS(cardValues.bill_paid_US);
+    setAmountPaidBC(cardValues.amount_paid_BC);
+    setAmountPaidPC(cardValues.amount_paid_PC);
+    setAmountPaidMC(cardValues.amount_paid_MC);
+    setAmountPaidUS(cardValues.amount_paid_US);
     setBillPending(cardValues.bill_generated-cardValues.bill_paid);
     setAmountPending(cardValues.amount_generated-cardValues.amount_paid);
     setTypeStats(typestats.res);
@@ -167,8 +214,16 @@ const ReportPage = (props) => {
   const cardValues = await getCardValues(typestats.res);
   setAmountGenerated(cardValues.amount_generated);
   setAmountPaid(cardValues.amount_paid);
+  setAmountPaidBC(cardValues.amount_paid_BC);
+  setAmountPaidPC(cardValues.amount_paid_PC);
+  setAmountPaidMC(cardValues.amount_paid_MC);
+  setAmountPaidUS(cardValues.amount_paid_US);
   setBillGenerated(cardValues.bill_generated);
   setBillPaid(cardValues.bill_paid);
+  setBillPaidBC(cardValues.bill_paid_BC);
+  setBillPaidMC(cardValues.bill_paid_PC);
+  setBillPaidPC(cardValues.bill_paid_MC);
+  setBillPaidUS(cardValues.bill_paid_US);
   setTypeStats(typestats.res);
   setLoading(typestats.loading);
 };
@@ -258,27 +313,88 @@ const toggleType = (type) => {
                   marginBottom: '10px',
                 }}
               >
-                <Button
-                  className={type === 'zone' ? 'active' : ''}
-                  onClick={()=>{toggleType('zone')}}
-                  style={{marginLeft:'5px'}}
-                >
-                  Zone
-                </Button>
-                <Button
-                  className={type === 'subzone' ? 'active' : ''}
-                  onClick={()=>{toggleType('subzone')}}
-                  style={{marginLeft:'5px'}}
-                >
-                  Subzone
-                </Button>
-                <Button
-                  className={type === 'branch' ? 'active' : ''}
-                  onClick={()=>{toggleType('branch')}}
-                  style={{marginLeft:'5px'}}
-                >
-                  Branch
-                </Button>
+                <Row>
+                  <Col>
+                    <Row>
+                      <Button
+                        className={type === 'zone' ? 'active' : ''}
+                        onClick={()=>{toggleType('zone')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                      Zone
+                    </Button>
+                    </Row>
+                    <Row></Row>
+                  </Col>
+                  <Col>
+                    <Row>
+                      <Button
+                        className={type === 'subzone' ? 'active' : ''}
+                        onClick={()=>{toggleType('subzone')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                        Subzone
+                      </Button>
+                    </Row>
+                    <Row>
+                      <FormGroup>
+                        <SelectInput
+                          style={{marginTop:"10px"}}
+                          // value={periodEnd}
+                          // onChange={(event)=>{
+                          //   setPeriodEnd(event.target.value);
+                          // }}
+                          // name="from"
+                          required
+                        >
+                          {zoneList.map((b,index) => {
+                            return (
+                              <option key={b._id} value={index}>
+                                {b.name}
+                              </option>
+                            );
+                        })}
+                        </SelectInput>
+                      </FormGroup>
+                    </Row>
+                  </Col>
+                  <Col>
+                    <Row>
+                      <Button
+                        className={type === 'branch' ? 'active' : ''}
+                        onClick={()=>{toggleType('branch')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                        Branch
+                      </Button>
+                    </Row>
+                    <Row>
+                      <FormGroup>
+                        <SelectInput
+                          style={{marginTop:"10px"}}
+                          // value={periodEnd}
+                          // onChange={(event)=>{
+                          //   setPeriodEnd(event.target.value);
+                          // }}
+                          // name="from"
+                          required
+                        >
+                          {subzoneList.map((b,index) => {
+                            return (
+                              <option key={b._id} value={index}>
+                                {b.name}
+                              </option>
+                            );
+                        })}
+                        </SelectInput>
+                      </FormGroup>
+                    </Row>
+                  </Col>
+
+                </Row>
+                
+                
+               
               </div>
         
           </div>
@@ -388,7 +504,7 @@ const toggleType = (type) => {
                 ):""}
                  {filter === 'period' ? (
                   <div>
-                  <h2 style={{color:"green"}}><b>Period</b></h2> 
+                  <h2 style={{color:"green"}}><b>Period Range</b></h2> 
                   <Row>
                    
                     <Col cW='48%'>
@@ -411,6 +527,7 @@ const toggleType = (type) => {
                       })}
                       </SelectInput>
                     </FormGroup>
+                    
                     </Col>
                     <Col cW='4%'>To</Col> 
                     <Col cW='48%'>
@@ -469,6 +586,20 @@ const toggleType = (type) => {
                 <DashCard title='Invoice Pending' no={billPending} amount={amountPending}/> 
                 </Col>
               </Row>
+              <Row>
+                <Col>
+                  <DashCard title='Invoice Paid By Bank' no={billPaidBC} amount={amountPaidBC}/>
+                </Col>
+                <Col>
+                <DashCard title='Invoice Paid By Partner' no={billPaidPC} amount={amountPaidPC}/>
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By Merchant' no={billPaidMC} amount={amountPaidMC}/>
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By User' no={billPaidUS} amount={amountPaidUS}/>
+                </Col>      
+              </Row>
             </div>
             
             ): (
@@ -482,8 +613,26 @@ const toggleType = (type) => {
                 </Col>
                 <Col>
                   <DashCard title='Invoice Paid' no={billPaid} amount={amountPaid}/>
-                </Col>       
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Pending' no={billGenerated-billPaid} amount={amountGenerated-amountPaid}/>
+                </Col>        
               </Row>
+              <Row>
+                <Col>
+                  <DashCard title='Invoice Paid By Bank' no={billPaidBC} amount={amountPaidBC}/>
+                </Col>
+                <Col>
+                <DashCard title='Invoice Paid By Partner' no={billPaidPC} amount={amountPaidPC}/>
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By Merchant' no={billPaidMC} amount={amountPaidMC}/>
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By User' no={billPaidUS} amount={amountPaidUS}/>
+                </Col>      
+              </Row>
+
             </div>
             )}
           

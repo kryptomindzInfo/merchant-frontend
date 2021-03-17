@@ -147,6 +147,7 @@ function CreateStaffPopup(props) {
                   {/* <option value="">Select Role*</option> */}
                   <option value="staff">Staff</option>
                   <option value="cashier">Cashier</option>
+                  <option value="admin">Admin</option>
                 </SelectInput>
               </FormGroup>
 
