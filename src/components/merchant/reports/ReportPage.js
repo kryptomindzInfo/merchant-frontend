@@ -181,6 +181,8 @@ const getData = (i) => {
             <td>{typeList[index].name}</td>
             <td>{date.bill_generated}</td>
             <td>{date.amount_generated}</td>
+            <td>0</td>
+            <td>0</td>
             <td>{date.bill_paid}</td>
             <td>{date.amount_paid}</td>
             <td>{date.bill_generated-date.bill_paid}</td>
@@ -193,6 +195,8 @@ const getData = (i) => {
             <td>{typeList[index].name}</td>
             <td>{date.bill_generated}</td>
             <td>{date.amount_generated}</td>
+            <td>0</td>
+            <td>0</td>
             <td>{date.bill_paid}</td>
             <td>{date.amount_paid}</td>
           </tr>
@@ -499,8 +503,10 @@ const toggleType = (type) => {
                       <thead>
                       <tr>
                         <th>{type}</th>
-                          <th>Bills</th>
-                          <th>Amount Billed</th>
+                          <th>Invoice Created</th>
+                          <th>Amount Generated</th>
+                          <th>Invoice Uploaded</th>
+                          <th>Amount Uploaded</th>
                           <th>Paid bills</th>
                           <th>Amount paid </th>
                         </tr>
@@ -509,8 +515,10 @@ const toggleType = (type) => {
                       <thead>
                       <tr>
                         <th>{type}</th>
-                          <th>Bills</th>
-                          <th>Amount Billed</th>
+                        <th>Invoice Created</th>
+                          <th>Amount Generated</th>
+                          <th>Invoice Uploaded</th>
+                          <th>Amount Uploaded</th>
                           <th>Paid bills</th>
                           <th>Amount paid </th>
                           <th>Pending bills</th>
@@ -526,6 +534,8 @@ const toggleType = (type) => {
                         <td className="green">Total</td>
                         <td className="green">{typeStats[index].bill_generated}</td>
                         <td className="green">{typeStats[index].amount_generated}</td>
+                        <td>0</td>
+                        <td>0</td>
                         <td className="green">{typeStats[index].bill_paid}</td>
                         <td className="green">{typeStats[index].amount_paid}</td>
                         <td className="green">{typeStats[index].bill_generated-typeStats[index].bill_paid}</td>
@@ -536,6 +546,8 @@ const toggleType = (type) => {
                         <td className="green">Total</td>
                         <td className="green">{typeStats[index].bill_generated}</td>
                         <td className="green">{typeStats[index].amount_generated}</td>
+                        <td className="green">0</td>
+                        <td className="green">0</td>
                         <td className="green">{typeStats[index].bill_paid}</td>
                         <td className="green">{typeStats[index].amount_paid}</td>
                       </tr>

@@ -137,8 +137,8 @@ const MerchantDashboardPage = () => {
           <td className="tac">0</td>
           <td className="tac">0</td>
           <td className="tac">{zonestats[index].bill_paid}</td>
-          <td className="tac">{zonestats[index].amount_paid}</td>
-          <td className="tac">{zonestats[index].bill_pending}</td>
+          {/* <td className="tac">{zonestats[index].amount_paid}</td> */}
+          {/* <td className="tac">{zonestats[index].bill_pending}</td> */}
           <td className="tac">
             <div
               style={{
@@ -146,7 +146,7 @@ const MerchantDashboardPage = () => {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{zonestats[index].amount_pending}</td>
+              <td className="tac">{zonestats[index].amount_paid}</td>
               <span className="absoluteMiddleRight primary popMenuTrigger">
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
@@ -199,9 +199,9 @@ const MerchantDashboardPage = () => {
           <Col>
             <DashCard title='Invoice Paid' no={invoicePaid} amount={amountPaid}/>
           </Col>
-          <Col>
+          {/* <Col>
             <DashCard title='Invoice Pending' no={stats.bills_pending} amount={stats.amount_pending}/>
-          </Col>
+          </Col> */}
         </Row>
         <Row>
           <Col>
@@ -249,8 +249,8 @@ const MerchantDashboardPage = () => {
                 <th>Amount Uploaded</th>
                 <th>Paid Invoices</th>
                 <th>Amount Paid</th>
-                <th>Pending Invoices</th>
-                <th>Amount Pending</th>
+                {/* <th>Pending Invoices</th>
+                <th>Amount Pending</th> */}
               </tr>
             </thead>
             <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>

@@ -43,6 +43,7 @@ const BranchDashboardPage = (props) => {
   const branchName = props.apitype === 'merchantBranch' ?
     JSON.parse(localStorage.getItem('branchLogged')).details.name:
     JSON.parse(localStorage.getItem('selectedBranch')).name
+  const subzoneId = localStorage.getItem('selectedSubzone');
   const apiId = props.apitype === 'merchantBranch' ? " " : props.match.params.id
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
@@ -57,7 +58,8 @@ const BranchDashboardPage = (props) => {
   const [editingCashier, setEditingCashier] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
   const [toggleButton, setToggleButton] = React.useState('cashier');
-
+  
+ 
   const getStats = () => {
     axios
     .post(`${API_URL}/${props.apitype}/getMerchantBranchDashStats`,{
@@ -411,7 +413,7 @@ const BranchDashboardPage = (props) => {
         <Card >
           <div style={{display:'flex'}}>
             <button  style={{border:"none",width:"100px"}} onClick={() => {
-                history.goBack();
+                history.push(`/merchant/${subzoneId}/branches`);
               }}>
                 <A>
                   Back
@@ -431,7 +433,7 @@ const BranchDashboardPage = (props) => {
                   <u>DashBoard</u>
               </A>
             </button>
-          <h3 style={{color:"green",marginLeft:"280px" }}><b>{branchName}</b> </h3> 
+          <h2 style={{color:"green",marginLeft:"280px" }}><b>{branchName}</b> </h2> 
           
           </div>
         </Card>

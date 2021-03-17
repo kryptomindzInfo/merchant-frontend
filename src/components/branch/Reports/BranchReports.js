@@ -378,6 +378,8 @@ const BranchReport = (props) => {
           <td>{period.name}</td>
           <td>{period.raised}</td>
           <td>{period.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{period.paid}</td>
           <td>{period.amountPaid}</td>
           <td>{period.pending}</td>
@@ -397,6 +399,8 @@ const BranchReport = (props) => {
           <td>{date.name}</td>
           <td>{date.raised}</td>
           <td>{date.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{date.paid}</td>
           <td>{date.amountPaid}</td>
           <td>{date.pending}</td>
@@ -449,7 +453,7 @@ const BranchReport = (props) => {
                 DashBoard
             </A>
           </button>
-        <h3 style={{color:"green",marginLeft:"280px" }}><b>{branchName}</b> </h3> 
+        <h2 style={{color:"green",marginLeft:"330px" }}><b>{branchName}</b> </h2> 
         
         </div>
       </Card>
@@ -703,8 +707,10 @@ const BranchReport = (props) => {
                          <thead>
                            <tr>
                              <th>Period Name</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -737,8 +743,10 @@ const BranchReport = (props) => {
                          <thead>
                            <tr>
                              <th>Date</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -793,7 +801,7 @@ const BranchReport = (props) => {
         </Card>
       ):""}  
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
-          <h4 style={{textAlign:'center'}}>Report wfwgenerated at {`${new Date(formdate).getDate()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
+          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDate()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
         </Card>
       </Container>
       <Footer bankname={bankName} banklogo={bankLogo}/>

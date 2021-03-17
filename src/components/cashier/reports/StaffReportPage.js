@@ -393,6 +393,8 @@ const StaffReportPage = (props) => {
           <td>{period.name}</td>
           <td>{period.raised}</td>
           <td>{period.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{period.paid}</td>
           <td>{period.amountPaid}</td>
           <td>{period.pending}</td>
@@ -412,6 +414,8 @@ const StaffReportPage = (props) => {
           <td>{date.name}</td>
           <td>{date.raised}</td>
           <td>{date.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{date.paid}</td>
           <td>{date.amountPaid}</td>
           <td>{date.pending}</td>
@@ -709,8 +713,10 @@ const StaffReportPage = (props) => {
                          <thead>
                            <tr>
                              <th>Period Name</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -743,8 +749,10 @@ const StaffReportPage = (props) => {
                          <thead>
                            <tr>
                              <th>Date</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
