@@ -184,7 +184,18 @@ const ReportPage = (props) => {
     setLoading(true);
     const periodlist = await periodList.slice(periodStart,periodEnd+1);
     console.log(periodlist);
-    const typelist = await fetchTypeList(type);
+    const zonelist = await fetchTypeList('zone');
+    setZoneList(zonelist.list);
+    const subzonelist = await fetchTypeList('subzone');
+    setSubzoneList(subzonelist.list);
+    let typelist = {};
+    if (type === 'zone') {
+      typelist = zonelist;
+    } else if (type === 'subzone') {
+      typelist = await fetchSubzoneListByZone(selectedZone);
+    } else {
+      typelist = await fetchBranchListBySubzone(selectedSubZone);
+    }
     setTypeList(typelist.list);
     const typestats = await getTypeStatsByperiod(periodlist,typelist.list);
     const cardValues = await getCardValues(typestats.res);
@@ -212,12 +223,18 @@ const ReportPage = (props) => {
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
   const dateslist = await getDatesBetweenDates(start, end);
-  const typelist = await fetchTypeList(type);
   const zonelist = await fetchTypeList('zone');
-  console.log(zonelist);
   setZoneList(zonelist.list);
   const subzonelist = await fetchTypeList('subzone');
   setSubzoneList(subzonelist.list);
+  let typelist = {};
+  if (type === 'zone') {
+    typelist = zonelist;
+  } else if (type === 'subzone') {
+    typelist = await fetchSubzoneListByZone(selectedZone);
+  } else {
+    typelist = await fetchBranchListBySubzone(selectedSubZone);
+  }
   setTypeList(typelist.list);
   const typestats = await getTypeStatsBydate(dateslist,typelist.list);
   const cardValues = await getCardValues(typestats.res);
@@ -349,16 +366,16 @@ const toggleType = (type) => {
                       <FormGroup>
                         <SelectInput
                           style={{marginTop:"10px"}}
-                          // value={periodEnd}
-                          // onChange={(event)=>{
-                          //   setPeriodEnd(event.target.value);
-                          // }}
+                          value={selectedZone}
+                          onChange={(event)=>{
+                            setSelectedZone(event.target.value);
+                          }}
                           // name="from"
                           required
                         >
                           {zoneList.map((b,index) => {
                             return (
-                              <option key={b._id} value={index}>
+                              <option key={b._id} value={b._id}>
                                 {b.name}
                               </option>
                             );
@@ -381,16 +398,16 @@ const toggleType = (type) => {
                       <FormGroup>
                         <SelectInput
                           style={{marginTop:"10px"}}
-                          // value={periodEnd}
-                          // onChange={(event)=>{
-                          //   setPeriodEnd(event.target.value);
-                          // }}
+                          value={selectedSubZone}
+                          onChange={(event)=>{
+                            setSelectedSubZone(event.target.value);
+                          }}
                           // name="from"
                           required
                         >
                           {subzoneList.map((b,index) => {
                             return (
-                              <option key={b._id} value={index}>
+                              <option key={b._id} value={b._id}>
                                 {b.name}
                               </option>
                             );
