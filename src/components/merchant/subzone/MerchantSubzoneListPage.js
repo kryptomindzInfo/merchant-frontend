@@ -275,7 +275,7 @@ function MerchantSubzoneListPage(props) {
                     <th>Branches</th>
                     <th>Invoice Created</th>
                     <th>Amount Generated</th>
-                    <th>Invoice Uploade</th>
+                    <th>Invoice Uploaded</th>
                     <th>Amount Uploaded</th>
                     <th>Invoice Paid</th>
                     <th>Amount Paid</th>
