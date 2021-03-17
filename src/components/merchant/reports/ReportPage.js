@@ -20,7 +20,14 @@ import DateFnsUtils from '@date-io/date-fns';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
-import { fetchTypeList, getBillPeriods, checkStatsbydate, checkStatsbyperiod } from '../api/MerchantAPI'
+import {
+  fetchTypeList,
+  getBillPeriods,
+  checkStatsbydate,
+  checkStatsbyperiod,
+  fetchSubzoneListByZone,
+  fetchBranchListBySubzone,
+} from '../api/MerchantAPI'
 import Loader from '../../shared/Loader';
 
 const today = new Date();
@@ -52,6 +59,8 @@ const ReportPage = (props) => {
   const [billPaidUS, setBillPaidUS] = useState();
   const [billPending, setBillPending] = useState();
   const [amountPending, setAmountPending] = useState();
+  const [selectedZone, setSelectedZone] = useState();
+  const [selectedSubZone, setSelectedSubZone] = useState();
   const [filter, setFilter] = useState('daterange');
   const [type, setType] = useState('zone');
   const [csvData, setcsvData] = useState([
@@ -176,11 +185,6 @@ const ReportPage = (props) => {
     const periodlist = await periodList.slice(periodStart,periodEnd+1);
     console.log(periodlist);
     const typelist = await fetchTypeList(type);
-    const zonelist = await fetchTypeList('zone');
-    console.log(zonelist);
-    setZoneList(zonelist);
-    const subzonelist = await fetchTypeList('subzone');
-    setSubzoneList(subzonelist);
     setTypeList(typelist.list);
     const typestats = await getTypeStatsByperiod(periodlist,typelist.list);
     const cardValues = await getCardValues(typestats.res);
@@ -209,6 +213,11 @@ const ReportPage = (props) => {
   const end = endOfDay(new Date(endDate));
   const dateslist = await getDatesBetweenDates(start, end);
   const typelist = await fetchTypeList(type);
+  const zonelist = await fetchTypeList('zone');
+  console.log(zonelist);
+  setZoneList(zonelist.list);
+  const subzonelist = await fetchTypeList('subzone');
+  setSubzoneList(subzonelist.list);
   setTypeList(typelist.list);
   const typestats = await getTypeStatsBydate(dateslist,typelist.list);
   const cardValues = await getCardValues(typestats.res);
