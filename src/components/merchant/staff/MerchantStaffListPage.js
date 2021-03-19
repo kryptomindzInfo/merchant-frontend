@@ -18,6 +18,8 @@ import Loader from '../../shared/Loader';
 
 const MerchantStaffListPage = () => {
   const [staff, setStaff] = useState([]);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [staffCopy, setStaffCopy] = useState([]);
   const [showStaffPopup, setStaffPopup] = useState(false);
   const [popupType, setPopupType] = React.useState('new');
@@ -32,7 +34,7 @@ const MerchantStaffListPage = () => {
 
   const refreshStaffList = async () => {
     setLoading(true);
-    const data = await fetchStaffList();
+    const data = await fetchStaffList(id);
     console.log(data);
     setStaff(data.list);
     setStaffCopy(data.list)
@@ -64,7 +66,7 @@ const MerchantStaffListPage = () => {
                 <h4 className="hh">{b.name}</h4>
               </Col>
               <Col cW="20%">
-                <span className="absoluteMiddleRight primary popMenuTrigger">
+                <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                   <i className="material-icons ">more_vert</i>
                   <div className="popMenu">
                     <span onClick={() => handleStaffPopupClick('update', b)}>
@@ -134,6 +136,7 @@ const MerchantStaffListPage = () => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">

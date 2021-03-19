@@ -26,6 +26,7 @@ import Footer from '../../Footer';
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [stats, setStats] = useState({});
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
@@ -148,7 +149,7 @@ const MerchantDashboardPage = () => {
               }}
             >
               <td className="tac">{zonestats[index].amount_generated-zonestats[index].amount_paid}</td>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
+              <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span
@@ -230,7 +231,11 @@ const MerchantDashboardPage = () => {
       <Card bigPadding>
       <Button
           className="dashBtn"
-          style={{float:"right", marginBottom:'10px'}}
+          style={{
+            float:"right",
+            marginBottom:'10px',
+            display: admin ? "none" : '',
+          }}
           flex
           onClick={() => handleZonePopupClick('new', {})}
         >

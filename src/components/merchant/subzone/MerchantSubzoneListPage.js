@@ -27,7 +27,8 @@ function MerchantSubzoneListPage(props) {
   const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
-  const zonename = JSON.parse(localStorage.getItem('currentZone')).name
+  const zonename = JSON.parse(localStorage.getItem('currentZone')).name;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [addSubzonePopup, setAddSubzonePopup] = React.useState(false);
   const [subzoneList, setSubzoneList] = React.useState([]);
   const [copySubzoneList, setCopySubzoneList] = React.useState([])
@@ -161,7 +162,7 @@ function MerchantSubzoneListPage(props) {
               }}
             >
                <td className="tac">{subzonestats[index].amount_generated-subzonestats[index].amount_paid}</td>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
+              <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span
@@ -261,7 +262,11 @@ function MerchantSubzoneListPage(props) {
           <Card bigPadding>
           <Button
           className="dashBtn"
-          style={{float:"right", marginBottom:'10px'}}
+          style={{
+            float:"right",
+            marginBottom:'10px',
+            display: admin ? "none" : '',
+          }}
           flex
           onClick={() => handleSubzonePopupClick('new', {})}
             >

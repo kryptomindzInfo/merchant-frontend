@@ -20,6 +20,7 @@ const MerchantTaxListPage = () => {
   const [addTaxPopup, setAddTaxPopup] = React.useState(false);
   const [taxList, setTaxList] = React.useState([]);
   const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [copyTaxList, setCopyTaxList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
   const [editingTax, setEditingTax] = React.useState({});
@@ -99,7 +100,7 @@ const MerchantTaxListPage = () => {
               }}
             >
               <td className="tac">{tax.value}</td>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
+              <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span onClick={() => handleTaxPopupClick('update', tax)}>
@@ -130,6 +131,7 @@ const MerchantTaxListPage = () => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">

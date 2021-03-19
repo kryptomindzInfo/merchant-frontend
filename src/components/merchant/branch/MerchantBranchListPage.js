@@ -33,8 +33,9 @@ function MerchantBranchListPage(props) {
   const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
   const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;;
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
-  const subzonename = JSON.parse(localStorage.getItem('currentSubzone')).name
+  const subzonename = JSON.parse(localStorage.getItem('currentSubzone')).name;
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
   const [branchList, setBranchList] = React.useState([]);
@@ -163,7 +164,7 @@ function MerchantBranchListPage(props) {
             >                    
               View                   
             </Button>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
+              <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span onClick={() => handleBranchInfoClick(branch)}>
@@ -307,7 +308,11 @@ function MerchantBranchListPage(props) {
           <Button
               className="addBankButton"
               flex
-              style={{float:"right", marginBottom:'10px'}}
+              style={{
+                float:"right",
+                marginBottom:'10px',
+                display: admin ? "none" : '',
+              }}
               onClick={() => handleBranchPopupClick('new', {})}
             >
               <AddIcon className="material-icons" />
