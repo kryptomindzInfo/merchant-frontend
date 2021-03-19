@@ -128,11 +128,11 @@ const ReportPage = (props) => {
             amount_paid_BC: data.res.reduce((a, b) => a + b.amount_paid_by_BC, 0),
             bill_paid_BC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
             amount_paid_PC: data.res.reduce((a, b) => a + b.amount_paid_by_PC, 0),
-            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_PC, 0),
             amount_paid_US: data.res.reduce((a, b) => a + b.amount_paid_by_US, 0),
-            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_US, 0),
             amount_paid_MC: data.res.reduce((a, b) => a + b.amount_paid_by_MC, 0),
-            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_MC, 0),
         });
     })
     const result= await Promise.all(statlistbydate);
@@ -153,11 +153,11 @@ const ReportPage = (props) => {
             amount_paid_BC: data.res.reduce((a, b) => a + b.amount_paid_by_BC, 0),
             bill_paid_BC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
             amount_paid_PC: data.res.reduce((a, b) => a + b.amount_paid_by_PC, 0),
-            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_PC, 0),
             amount_paid_US: data.res.reduce((a, b) => a + b.amount_paid_by_US, 0),
-            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_US, 0),
             amount_paid_MC: data.res.reduce((a, b) => a + b.amount_paid_by_MC, 0),
-            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_MC, 0),
         });
     })
     const result= await Promise.all(statlistbyperiod);
@@ -170,14 +170,14 @@ const ReportPage = (props) => {
         bill_generated: list.reduce((a, b) => a + b.bill_generated, 0),
         amount_paid: list.reduce((a, b) => a + b.amount_paid, 0),
         bill_paid: list.reduce((a, b) => a + b.bill_paid, 0),
-        amount_paid_BC: list.reduce((a, b) => a + b.amount_paid_by_BC, 0),
-        bill_paid_BC: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
-        amount_paid_PC: list.reduce((a, b) => a + b.amount_paid_by_PC, 0),
-        bill_paid_PC: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
-        amount_paid_US: list.reduce((a, b) => a + b.amount_paid_by_US, 0),
-        bill_paid_US: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
-        amount_paid_MC: list.reduce((a, b) => a + b.amount_paid_by_MC, 0),
-        bill_paid_MC: list.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+        amount_paid_BC: list.reduce((a, b) => a + b.amount_paid_BC, 0),
+        bill_paid_BC: list.reduce((a, b) => a + b.bill_paid_BC, 0),
+        amount_paid_PC: list.reduce((a, b) => a + b.amount_paid_PC, 0),
+        bill_paid_PC: list.reduce((a, b) => a + b.bill_paid_PC, 0),
+        amount_paid_US: list.reduce((a, b) => a + b.amount_paid_US, 0),
+        bill_paid_US: list.reduce((a, b) => a + b.bill_paid_US, 0),
+        amount_paid_MC: list.reduce((a, b) => a + b.amount_paid_MC, 0),
+        bill_paid_MC: list.reduce((a, b) => a + b.bill_paid_MC, 0),
       });
   }
 
@@ -205,8 +205,8 @@ const ReportPage = (props) => {
     setBillGenerated(cardValues.bill_generated);
     setBillPaid(cardValues.bill_paid);
     setBillPaidBC(cardValues.bill_paid_BC);
-    setBillPaidMC(cardValues.bill_paid_PC);
-    setBillPaidPC(cardValues.bill_paid_MC);
+    setBillPaidMC(cardValues.bill_paid_MC);
+    setBillPaidPC(cardValues.bill_paid_PC);
     setBillPaidUS(cardValues.bill_paid_US);
     setAmountPaidBC(cardValues.amount_paid_BC);
     setAmountPaidPC(cardValues.amount_paid_PC);
@@ -249,8 +249,8 @@ const ReportPage = (props) => {
   setBillGenerated(cardValues.bill_generated);
   setBillPaid(cardValues.bill_paid);
   setBillPaidBC(cardValues.bill_paid_BC);
-  setBillPaidMC(cardValues.bill_paid_PC);
-  setBillPaidPC(cardValues.bill_paid_MC);
+  setBillPaidMC(cardValues.bill_paid_MC);
+  setBillPaidPC(cardValues.bill_paid_PC);
   setBillPaidUS(cardValues.bill_paid_US);
   setTypeStats(typestats.res);
   setLoading(typestats.loading);

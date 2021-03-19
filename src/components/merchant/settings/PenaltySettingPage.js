@@ -20,7 +20,8 @@ const PenaltySettingPage = (props) => {
   const [penaltyRulePopup, setPenaltyRulePopup] = React.useState(false);
   const [penaltyRule, setPenaltyRule] = React.useState([]);
   const [isLoading, setLoading] = React.useState(false);
-
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const handlePenaltyRulePopupClick = () => {
     setPenaltyRulePopup(true);
   };
@@ -31,7 +32,7 @@ const PenaltySettingPage = (props) => {
 
   const refreshPenaltyRule = async () => {
     setLoading(true);
-    getPenaltyRule().then((data) => {
+    getPenaltyRule(id).then((data) => {
       console.log(data);
       setPenaltyRule(data.penalty_rule);
       setLoading(data.loading);
@@ -94,6 +95,7 @@ const PenaltySettingPage = (props) => {
                     style={{ padding: '5px' }}
                     type="submit"
                     onClick={() => handlePenaltyRulePopupClick()}
+                    style={{display: admin ? "none" : ''}}
                   >
                     {penaltyRule ? "Edit" : "Create"}
                     {/* Create */}

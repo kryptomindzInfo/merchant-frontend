@@ -555,9 +555,9 @@ const editMerchant = async (props, values) => {
   }
 };
 
-const getPenaltyRule = async () => {
+const getPenaltyRule = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         return { penalty_rule: {}, loading: false };
@@ -595,9 +595,9 @@ const PenaltyRule = async (props, values) => {
   }
 };
 
-const getBillTerms = async () => {
+const getBillTerms = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -660,9 +660,9 @@ const getBillPeriods = async (id) => {
   }
 };
 
-const getCategories = async () => {
+const getCategories = async (id) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listInvoiceGroups`, {});
+    const res = await axios.post(`${MERCHANT_API}/listInvoiceGroups`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

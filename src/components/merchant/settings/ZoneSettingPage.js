@@ -14,6 +14,8 @@ import { getZoneDetails } from '../api/MerchantAPI';
 import ZoneSettingPopup from './ZoneSettingPopup';
 
 const ZoneSettingPage = (props) => {
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [addZoneSettingPopup, setAddZoneSettingPopup] = React.useState(false);
   const [
     addBillNumberSettingPopup,
@@ -33,7 +35,7 @@ const ZoneSettingPage = (props) => {
 
   const refreshZoneDetails = async () => {
     setLoading(true);
-    getZoneDetails().then((data) => {
+    getZoneDetails(id).then((data) => {
       console.log(data);
       setZoneName(data.zone_name);
       setSubzoneName(data.subzone_name);
@@ -89,6 +91,7 @@ const ZoneSettingPage = (props) => {
                     style={{ padding: '5px' }}
                     type="submit"
                     onClick={() => handleZoneSettingPopupClick()}
+                    style={{display: admin ? "none" : ''}}
                   >
                     Edit
                   </Button>

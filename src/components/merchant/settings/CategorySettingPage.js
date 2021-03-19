@@ -18,9 +18,10 @@ import { getCategories } from '../api/MerchantAPI';
 
 const CategorySettingPage = (props) => {
   const [addCategoryPopup, setAddCategoryPopup] = React.useState(false);
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [categoryList, setCategoryList] = React.useState([]);
   const [isLoading, setLoading] = React.useState(false);
-
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const handleCategoryPopupClick = () => {
     setAddCategoryPopup(true);
   };
@@ -31,7 +32,7 @@ const CategorySettingPage = (props) => {
 
   const refreshCategoryList = async () => {
     setLoading(true);
-    const data = await getCategories();
+    const data = await getCategories(id);
       setCategoryList(data.list);
       setLoading(data.loading);
   };
@@ -67,6 +68,7 @@ const CategorySettingPage = (props) => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">
