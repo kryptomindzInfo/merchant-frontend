@@ -8,6 +8,7 @@ import ActionBar from '../../shared/ActionBar';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
+import Grid from '@material-ui/core/Grid';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
@@ -57,7 +58,9 @@ const MerchantStaffListPage = () => {
             ? STATIC_URL + b.logo
             : `${CONTRACT_URL}main/default-profile.png`;
         return (
-          <Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
+          
+          <Grid item md={3} sm={6} xs={12} style={{marginTop:"10px"}}>
+            <Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
             <div className="profile">
               <img style={{ height: '100px', width: '100px' }} src={pic} />
             </div>
@@ -98,6 +101,8 @@ const MerchantStaffListPage = () => {
               </Col>
             </Row>
           </Card>
+          </Grid>
+          
         );
       }
       return <div key={b._id}></div>;
@@ -155,10 +160,17 @@ const MerchantStaffListPage = () => {
               <i className="material-icons">add</i>
               <span>Add Staff</span>
             </Button>
-          </ActionBar>
-          <Row className="clr">
+            </ActionBar>
+          {/* <Row className="clr"> */}
+          <Grid
+          container
+          direction="row"
+          justify="center"
+          alignContent="center"
+          alignItems="center"
+          >
             {staff && staff.length > 0 ? mappedCards() : null}
-          </Row>
+            </Grid> 
         </Main>
       </Container>
       {showStaffPopup ? (
