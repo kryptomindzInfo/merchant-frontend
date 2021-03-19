@@ -34,7 +34,7 @@ class MerchantNav extends Component {
             <Link active={dashboard}>Dashboard</Link>
           </A>
           <A href="/merchant/staff">
-            <Link active={staff}>Staff</Link>
+            <Link active={staff}>Users</Link>
           </A>
           <A href="/merchant/report">
             <Link active={reports}>Reports</Link>

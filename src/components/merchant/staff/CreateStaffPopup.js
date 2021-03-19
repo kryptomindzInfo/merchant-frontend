@@ -91,7 +91,7 @@ function CreateStaffPopup(props) {
 
           return (
             <div>
-              <h1> {props.type === 'update' ? 'Update Staff' : 'Add Staff'}</h1>
+              <h1> {props.type === 'update' ? 'Update User' : 'Add User'}</h1>
               <FormGroup mR="10%" mL="10%">
                 <label>Name*</label>
                 <TextInput
@@ -336,7 +336,7 @@ function CreateStaffPopup(props) {
                     }}
                   >
                     <span>
-                      {props.type === 'update' ? 'Update Staff' : 'Add Staff'}
+                      {props.type === 'update' ? 'Update User' : 'Add User'}
                     </span>
                   </Button>
                 )}

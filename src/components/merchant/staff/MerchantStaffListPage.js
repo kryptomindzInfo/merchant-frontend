@@ -158,7 +158,7 @@ const MerchantStaffListPage = () => {
               onClick={() => handleStaffPopupClick('new', {})}
             >
               <i className="material-icons">add</i>
-              <span>Add Staff</span>
+              <span>Add User</span>
             </Button>
             </ActionBar>
           {/* <Row className="clr"> */}
