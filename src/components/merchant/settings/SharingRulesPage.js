@@ -18,6 +18,7 @@ import { getRules, ruleAPI } from '../api/MerchantAPI';
 
 const SharingRulesPage = (props) => {
   const [isLoading, setLoading] = useState(false);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const [ruleList, setRules] = useState([]);
   const [approvalLoading, setApprovalLoading] = useState(false);
   const [approvalPopup, setApprovalPopup] = useState(false);
@@ -27,7 +28,7 @@ const SharingRulesPage = (props) => {
     setLoading(true);
     setRuleForApproval({});
     setApprovalPopup(false);
-    getRules(props.ruleType.toLowerCase(), props.bank).then((rules) => {
+    getRules(id,props.ruleType.toLowerCase(), props.bank).then((rules) => {
       setRules(rules.list);
       setLoading(rules.loading);
     });

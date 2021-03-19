@@ -1081,7 +1081,7 @@ const BillDetails = async (props, values) => {
   }
 };
 
-const getRules = async (ruleType, type) => {
+const getRules = async (id, ruleType, type) => {
   try {
     let URL = '';
     if (type === 'interbank') {
@@ -1089,7 +1089,7 @@ const getRules = async (ruleType, type) => {
     } else {
       URL = `${MERCHANT_API}/getRules`;
     }
-    const res = await axios.post(URL, { page: ruleType });
+    const res = await axios.post(URL, { page: ruleType, merchant_id:id });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
