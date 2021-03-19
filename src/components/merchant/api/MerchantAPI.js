@@ -806,6 +806,47 @@ const checkSubZoneStats = async (id) => {
   }
 };
 
+const checkBranchStats = async (id) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/getBranchStats`,{
+      branch_id:id,
+    });
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { 
+          bills_paid: 0,
+					amount_generated: 0,
+					bill_generated: 0,
+					amount_paid: 0,
+        };
+      }
+      return { 
+        bill_generated: res.data.bill_generated,
+        amount_generated: res.data.amount_generated,
+        amount_paid: res.data.amount_paid,
+        bill_paid: res.data.bill_paid,
+      };
+    }
+    notify(res.data.message, 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+    };
+  }
+};
+
 const checkZoneStats = async (zoneid) => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getZoneStats`,{
@@ -1178,6 +1219,7 @@ const getMerchantPositions = async (id) => {
 };
 
 export {
+  checkBranchStats,
   checkStatsbyperiod,
   checkStatsbydate,
   checkSubZoneStats,

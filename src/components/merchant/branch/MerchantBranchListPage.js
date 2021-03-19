@@ -23,6 +23,7 @@ import {
   blockMerchantBranch,
   fetchBranchList,
   fetchBranchListBySubzone,
+  checkBranchStats,
   unblockMerchantBranch,
   getZoneDetails,
 } from '../api/MerchantAPI';
@@ -35,6 +36,7 @@ function MerchantBranchListPage(props) {
   const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;;
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
+  const [branchstats, setBranchStats] = React.useState([]);
   const subzonename = JSON.parse(localStorage.getItem('currentSubzone')).name;
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
@@ -71,24 +73,6 @@ function MerchantBranchListPage(props) {
     setAddBranchPopup(false);
   };
 
-  const refreshBranchList = async () => {
-    setLoading(true);
-    fetchBranchListBySubzone(id).then((data) => {
-      setBranchList(data.list);
-      setCopyBranchList(data.list)
-      setLoading(data.loading);
-    });
-  };
-
-  const refreshZoneDetails = async () => {
-    setLoading(true);
-    getZoneDetails(merchantid).then((data) => {
-      console.log(data);
-      setZoneName(data.zone_name);
-      setSubzoneName(data.subzone_name);
-      setLoading(data.loading);
-    });
-  };
   const getBranchReportURL = (cashierId) => {
     return `merchant/branch/report/${cashierId}`;
   };
@@ -133,10 +117,30 @@ function MerchantBranchListPage(props) {
       });
   };
 
+  const getBranchStats = async(list) => {
+    const statlist = list.map(async (branch) => {
+        const data = await checkBranchStats(branch._id);
+        return (data);
+    })
+    const result= await Promise.all(statlist);
+    return({res:result, loading:false});
+  }
+
+  const refreshBranchList = async () => {
+    setLoading(true)
+    const subzonedetails = await getZoneDetails(merchantid);
+    setZoneName(subzonedetails.zone_name);
+    setSubzoneName(subzonedetails.subzone_name);
+    const branchlist = await fetchBranchListBySubzone(id);
+    setBranchList(branchlist.list);
+    const branchstats = await getBranchStats(branchlist.list);
+    setBranchStats(branchstats.res);
+    setLoading(branchstats.loading);
+  };
+
   useEffect(() => {
     getStats();
     refreshBranchList();
-    refreshZoneDetails();
   }, []); // Or [] if effect doesn't need props or state
 
   if (isLoading) {
@@ -144,13 +148,18 @@ function MerchantBranchListPage(props) {
   }
 
   const getBranchList = () => {
-    return branchList.map((branch) => {
+    return branchList.map((branch,index) => {
       return (
         <tr key={branch._id}>
           <td className="tac">{branch.name}</td>
-          <td className="tac">{branch.code}</td>
-          <td className="tac">{branch.total_positions}</td>
-          <td className="tac">{branch.username}</td>
+          <td className="tac">{branchstats[index].bill_generated}</td>
+          <td className="tac">{branchstats[index].amount_generated}</td>
+          <td className="tac">0</td>
+          <td className="tac">0</td>
+          <td className="tac">{branchstats[index].bill_paid}</td>
+          <td className="tac">{branchstats[index].amount_paid}</td>
+          <td className="tac">{branchstats[index].bill_generated-branchstats[index].bill_paid}</td>
+          <td className="tac">{branchstats[index].amount_generated-branchstats[index].amount_paid}</td>
           <td className="tac bold green">
             <Button
               style={{minWidth:'90%', marginRight:'5px'}}
@@ -322,10 +331,15 @@ function MerchantBranchListPage(props) {
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
-                    <th>Name</th>
-                    <th>Branch Code</th>
-                    <th>Total Staff Position</th>
-                    <th>Branch Admin</th>
+                    <th>Branches</th>
+                    <th>Invoice Created</th>
+                    <th>Amount Generated</th>
+                    <th>Invoice Uploaded</th>
+                    <th>Amount Uploaded</th>
+                    <th>Invoice Paid</th>
+                    <th>Amount Paid</th>
+                    <th>Invoice Pending</th>
+                    <th>Amount Pending</th>
                     <th></th>
                   </tr>
                 </thead>

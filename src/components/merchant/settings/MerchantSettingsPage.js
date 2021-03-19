@@ -17,10 +17,14 @@ const MerchantSettingsPage = (props) => {
   const [editMerchantPopup, setEditMerchantPopup] = useState(false);
   const [isLoading, setLoading] = useState(false);
   const [merchantInfo, setMerchantInfo] = useState({});
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   useEffect(() => {
     setLoading(true);
-    const merchant = JSON.parse(localStorage.getItem('merchantLogged')).details;
-    setMerchantInfo(merchant);
+    if(admin){
+      setMerchantInfo(JSON.parse(localStorage.getItem('merchantLogged')).adminuser);
+    }else{
+      setMerchantInfo(JSON.parse(localStorage.getItem('merchantLogged')).details);
+    }
     setLoading(false);
   }, []);
   const handlePopupClick = () => {
@@ -72,12 +76,12 @@ const MerchantSettingsPage = (props) => {
           <Card bigPadding bordered>
             <div className="cardBody">
               <Row>
-                <Col className="infoLeft">Merchant Name</Col>
+                <Col className="infoLeft">Name</Col>
                 <Col className="infoRight">{merchantInfo.name}</Col>
               </Row>
 
               <Row>
-                <Col className="infoLeft">Merchant Code</Col>
+                <Col className="infoLeft">Code</Col>
                 <Col className="infoRight">{merchantInfo.username}</Col>
               </Row>
 
