@@ -255,16 +255,16 @@ function MerchantBranchListPage(props) {
         </Row>
         <Row>
           <Col>
-            <DashCard title='Paid by bank' no={paidByBC ? paidByBC.bills_paid : 0} amount={paidByBC ? paidByBC.bills_paid : 0}/>
+            <DashCard title='Paid by bank' no={paidByBC ? paidByBC.bills_paid : 0} amount={paidByBC ? paidByBC.amount_paid : 0}/>
           </Col>
           <Col>
-            <DashCard title='Paid by partner' no={paidByPC ? paidByPC.bills_paid : 0} amount={paidByPC ? paidByPC.bills_paid : 0}/>
+            <DashCard title='Paid by partner' no={paidByPC ? paidByPC.bills_paid : 0} amount={paidByPC ? paidByPC.amount_paid : 0}/>
           </Col>
           <Col>
-            <DashCard title='Paid by merchant' no={paidByMC ? paidByMC.bills_paid : 0} amount={paidByMC ? paidByMC.bills_paid : 0}/>
+            <DashCard title='Paid by merchant' no={paidByMC ? paidByMC.bills_paid : 0} amount={paidByMC ? paidByMC.amount_paid : 0}/>
           </Col>
           <Col>
-            <DashCard title='Paid by user' no={paidByUS ? paidByUS.bills_paid : 0} amount={paidByUS ? paidByUS.bills_paid : 0}/>
+            <DashCard title='Paid by user' no={paidByUS ? paidByUS.bills_paid : 0} amount={paidByUS ? paidByUS.amount_paid : 0}/>
           </Col>
         </Row>
           
