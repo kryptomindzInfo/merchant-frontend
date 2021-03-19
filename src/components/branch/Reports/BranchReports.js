@@ -365,6 +365,7 @@ const BranchReport = (props) => {
 
   const toggle = (type) => {
     if(type==='daterange'){
+      setStartDate(new Date());
       setEndDate(new Date());
     }
     setBillRaised(0);
