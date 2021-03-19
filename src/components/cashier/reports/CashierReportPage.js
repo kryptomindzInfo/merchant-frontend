@@ -69,8 +69,21 @@ const CashierReportPage = (props) => {
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([]);
 
-  const getCashierStats = () => {
-    fetchCashierStats(props.apitype,apiId)
+  const getApiType = () => {
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        return 'merchantStaff';
+      }else{
+        return 'merchant';
+      }
+    }else{
+      return props.apitype;
+    }
+
+  };
+
+  const getCashierStats = (type) => {
+    fetchCashierStats(type,apiId)
       .then((data) => {
         console.log(data);
         setCashierStats(data.stats);
@@ -101,10 +114,11 @@ const CashierReportPage = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(formdate));
     const end = endOfDay(new Date(formdate));
-    const cashierstats = await getCashierStats();
-    const dailyreport = await getCashierDailyReport(start,end,props.apitype,apiId);
+    const type= await getApiType();
+    const cashierstats = await getCashierStats(type);
+    const dailyreport = await getCashierDailyReport(start,end,type,apiId);
     console.log(dailyreport);
-    const res = await getCashierReport(start,end,props.apitype,apiId,bankId);
+    const res = await getCashierReport(start,end,type,apiId,bankId);
     
       const csvDATA = await fetchCSVData(res.data.transactions);
       setTotalAmountCredited(

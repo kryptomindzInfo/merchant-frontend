@@ -24,6 +24,7 @@ import history from '../../utils/history';
 import Footer from '../../Footer';
 
 function MerchantSubzoneListPage(props) {
+  const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
   const zonename = JSON.parse(localStorage.getItem('currentZone')).name
@@ -70,7 +71,7 @@ function MerchantSubzoneListPage(props) {
 
   const refreshSubZoneList = async () => {
     setLoading(true)
-    const subzonedetails = await getZoneDetails();
+    const subzonedetails = await getZoneDetails(merchantid);
     setZoneName(subzonedetails.zone_name);
     setSubzoneName(subzonedetails.subzone_name);
     const subzonelist = await fetchSubzoneListByZone(id);

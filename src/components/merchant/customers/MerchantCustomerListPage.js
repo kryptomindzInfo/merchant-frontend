@@ -19,6 +19,7 @@ import { uploadCustomer, fetchCustomerList } from '../api/MerchantAPI';
 
 const MerchantCustomerListPage = () => {
   const [addCustomerPopup, setAddCustomerPopup] = React.useState(false);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const [customerList, setCustomerList] = React.useState([]);
   const [copyCustomerList, setCopyCustomerList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
@@ -39,7 +40,7 @@ const MerchantCustomerListPage = () => {
 
   const refreshCustomerList = async () => {
     setLoading(true);
-    fetchCustomerList().then((data) => {
+    fetchCustomerList(id).then((data) => {
       setCustomerList(data.list);
       setCopyCustomerList(data.list)
       setLoading(data.loading);

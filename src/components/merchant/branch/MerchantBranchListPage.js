@@ -32,6 +32,7 @@ import Footer from '../../Footer';
 function MerchantBranchListPage(props) {
   const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
+  const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const [addBranchPopup, setAddBranchPopup] = React.useState(false);
   const subzonename = JSON.parse(localStorage.getItem('currentSubzone')).name
   const [zoneName, setZoneName] = React.useState('');
@@ -80,7 +81,7 @@ function MerchantBranchListPage(props) {
 
   const refreshZoneDetails = async () => {
     setLoading(true);
-    getZoneDetails().then((data) => {
+    getZoneDetails(merchantid).then((data) => {
       console.log(data);
       setZoneName(data.zone_name);
       setSubzoneName(data.subzone_name);

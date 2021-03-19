@@ -33,9 +33,10 @@ import Loader from '../../shared/Loader';
 const today = new Date();
 const ReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
-  const bankName =  JSON.parse(localStorage.getItem('merchantLogged')).bank.name
-  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo
-  const merchantName = JSON.parse(localStorage.getItem('merchantLogged')).details.name
+  const bankName =  JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
+  const merchantName = JSON.parse(localStorage.getItem('merchantLogged')).details.name;
+  const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const [periodList, setPeriodList] = useState([]);
   const [periodStart, setPeriodStart] = useState('');
   const [periodEnd, setPeriodEnd] = useState('');
@@ -77,7 +78,7 @@ const ReportPage = (props) => {
 
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getBillPeriods().then((data) => {
+    getBillPeriods(merchantid).then((data) => {
       setPeriodList(data.list);
     });
   };
@@ -184,9 +185,9 @@ const ReportPage = (props) => {
     setLoading(true);
     const periodlist = await periodList.slice(periodStart,periodEnd+1);
     console.log(periodlist);
-    const zonelist = await fetchTypeList('zone');
+    const zonelist = await fetchTypeList(merchantid,'zone');
     setZoneList(zonelist.list);
-    const subzonelist = await fetchTypeList('subzone');
+    const subzonelist = await fetchTypeList(merchantid,'subzone');
     setSubzoneList(subzonelist.list);
     let typelist = {};
     if (type === 'zone') {
@@ -223,9 +224,9 @@ const ReportPage = (props) => {
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
   const dateslist = await getDatesBetweenDates(start, end);
-  const zonelist = await fetchTypeList('zone');
+  const zonelist = await fetchTypeList(merchantid,'zone');
   setZoneList(zonelist.list);
-  const subzonelist = await fetchTypeList('subzone');
+  const subzonelist = await fetchTypeList(merchantid,'subzone');
   setSubzoneList(subzonelist.list);
   let typelist = {};
   if (type === 'zone') {

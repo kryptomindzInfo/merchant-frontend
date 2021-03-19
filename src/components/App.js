@@ -475,14 +475,14 @@ function App() {
             />
             <ProtectedRoute
               type = "cashier"
-              apitype = "merchantStaff"
+              apitype = "merchantPosition"
               exact
               path={staffReportsUrl}
               component={(props) => <StaffReportPage  {...props} />}
             />
             <ProtectedRoute
               type="cashier"
-              apitype = "merchantStaff"
+              apitype = "merchantPosition"
               exact
               path={cashierReportsUrl}
               component={(props) => <CashierReportPage {...props} />}

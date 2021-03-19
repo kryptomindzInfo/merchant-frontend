@@ -4,6 +4,7 @@ import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
 
+
 const getzone = async () => {
   try {
     const res = await axios.get(`${MERCHANT_API}/getZone`);
@@ -84,9 +85,9 @@ const zoneAPI = async (props, values, apiType) => {
   }
 };
 
-const fetchTypeList = async (type) => {
+const fetchTypeList = async (id,type) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/get${type}List`);
+    const res = await axios.post(`${MERCHANT_API}/get${type}List`,{ merchant_id: id });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -307,9 +308,9 @@ const blockStaffAPI = async (apiType, id) => {
   }
 };
 
-const fetchStaffList = async () => {
+const fetchStaffList = async (id) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listStaff`);
+    const res = await axios.post(`${MERCHANT_API}/listStaff`,{merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -351,9 +352,9 @@ const uploadOffering = async (props, offeringList) => {
   }
 };
 
-const fetchOfferingList = async () => {
+const fetchOfferingList = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listOfferings`, {});
+    const res = await axios.post(`${MERCHANT_API}/listOfferings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -410,9 +411,9 @@ const editOffering = async (props, values) => {
 };
 
 // API's for Merchant Taxes
-const fetchTaxList = async () => {
+const fetchTaxList = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listTaxes`, {});
+    const res = await axios.post(`${MERCHANT_API}/listTaxes`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -490,9 +491,9 @@ const deleteTax = async (taxId) => {
 };
 
 // API's for Merchant Customers
-const fetchCustomerList = async () => {
+const fetchCustomerList = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listCustomers`, {});
+    const res = await axios.post(`${MERCHANT_API}/listCustomers`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -637,9 +638,9 @@ const addBillTerm = async (props, values) => {
   }
 };
 
-const getBillPeriods = async () => {
+const getBillPeriods = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -805,10 +806,10 @@ const checkSubZoneStats = async (id) => {
   }
 };
 
-const checkZoneStats = async (id) => {
+const checkZoneStats = async (zoneid) => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getZoneStats`,{
-      zone_id:id,
+      zone_id:zoneid,
     });
     if (res.status === 200) {
       console.log(res);
@@ -1004,9 +1005,9 @@ const checkStatsbyperiod = async (id,period,type) => {
   }
 };
 
-const getZoneDetails = async () => {
+const getZoneDetails = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, { merchant_id: id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');

@@ -87,6 +87,19 @@ const StaffReportPage = (props) => {
     ["BillNo","Name","Amount","Mobile","DueDate"]
   ]);
 
+  const getApiType = () => {
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        return 'merchantStaff';
+      }else{
+        return 'merchant';
+      }
+    }else{
+      return props.apitype;
+    }
+
+  };
+
   const fetchCSVData = async(list) => {
     const csvlist = list.map(async (invoice) => {
         return ([invoice.number,invoice.name,invoice.amount,invoice.mobile,invoice.due_date]);
@@ -96,7 +109,13 @@ const StaffReportPage = (props) => {
   };
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getMerchantSettings(props.apitype).then((data) => {
+    let id = "";
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+      }
+    }
+    getMerchantSettings(id, props.apitype).then((data) => {
       setPeriodList(data.bill_period_list);
       setStartDate(data.bill_period_list[0].start_date);
       setEndDate(new Date());
@@ -291,7 +310,8 @@ const StaffReportPage = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(periodStartDate));
     const end = endOfDay(new Date(periodEndDate));
-    const res = await fetchInvoicesByPeriod(start,end, props.apitype,apiId);
+    const type= await getApiType();
+    const res = await fetchInvoicesByPeriod(start, end, type, apiId);
     const predata = await preProcessPeriodTableData(res.list);
     const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
@@ -311,7 +331,8 @@ const StaffReportPage = (props) => {
   setLoading(true);
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
-  const res = await fetchInvoicesByDateRange(start,end,props.apitype,apiId);
+  const type= await getApiType();
+  const res = await fetchInvoicesByDateRange(start,end,type,apiId);
   const datelist = await getDatesBetweenDates(start, end);
   const predata = await preProcessDateTableData(datelist,res.list);
   const tabledata = await setDateTable(predata.res);
@@ -335,7 +356,8 @@ const StaffReportPage = (props) => {
         ? `0${formdate.getMonth() + 1}`
         : formdate.getMonth() + 1
       }/${formdate.getFullYear()}`;
-      const res = await fetchInvoicesBydate(date,props.apitype,apiId);
+      const type= await getApiType();
+      const res = await fetchInvoicesBydate(date,type,apiId);
       const csvDATA = await fetchCSVData(res.list);
       setAmount(
       res.list.reduce((a, b) => {

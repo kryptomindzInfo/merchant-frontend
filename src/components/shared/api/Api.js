@@ -135,9 +135,9 @@ const fetchInvoicesByDateRange = async (start, end, type, id) => {
     }
 };
 
-const getMerchantSettings = async (type) => {
+const getMerchantSettings = async (id,type) => {
     try {
-      const res = await axios.post(`${API_URL}/${type}/getSettings`, {});
+      const res = await axios.post(`${API_URL}/${type}/getSettings`, {merchant_id:id});
       if (res.status === 200) {
         if (res.data.status === 0) {
           notify(res.data.message, 'error');

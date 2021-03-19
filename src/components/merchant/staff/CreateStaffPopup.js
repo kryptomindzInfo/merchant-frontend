@@ -262,7 +262,7 @@ function CreateStaffPopup(props) {
                 />
               </FormGroup>
 
-              <FormGroup mR="10%" mL="10%">
+              <FormGroup mR="10%" mL="10%" style={{display: values.role==='admin' ? "none" : ""}}>
                 <SelectInput
                   type="text"
                   name="branch_id"

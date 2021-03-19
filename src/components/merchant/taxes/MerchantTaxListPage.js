@@ -19,6 +19,7 @@ import { fetchTaxList, deleteTax } from '../api/MerchantAPI';
 const MerchantTaxListPage = () => {
   const [addTaxPopup, setAddTaxPopup] = React.useState(false);
   const [taxList, setTaxList] = React.useState([]);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const [copyTaxList, setCopyTaxList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
   const [editingTax, setEditingTax] = React.useState({});
@@ -38,7 +39,7 @@ const MerchantTaxListPage = () => {
 
   const refreshTaxList = async () => {
     setLoading(true);
-    fetchTaxList().then((data) => {
+    fetchTaxList(id).then((data) => {
       setTaxList(data.list);
       setCopyTaxList(data.list)
       setLoading(data.loading);

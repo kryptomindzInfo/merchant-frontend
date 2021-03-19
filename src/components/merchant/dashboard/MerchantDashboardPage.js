@@ -26,6 +26,7 @@ import Footer from '../../Footer';
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [stats, setStats] = useState({});
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
   const [openZonePopup, setZonePopup] = React.useState(false);
@@ -56,10 +57,10 @@ const MerchantDashboardPage = () => {
 
   const refreshZoneList = async () => {
     setLoading(true)
-    const zonedetails = await getZoneDetails();
+    const zonedetails = await getZoneDetails(id);
     setZoneName(zonedetails.zone_name);
     setSubzoneName(zonedetails.subzone_name);
-    const zonelist = await fetchTypeList("zone");
+    const zonelist = await fetchTypeList(id,"zone");
     setZoneList(zonelist.list);
     const zonestats = await getZoneStats(zonelist.list);
     setZoneStats(zonestats.res);
@@ -78,7 +79,7 @@ const MerchantDashboardPage = () => {
 
   const getStats = () => {
     axios
-    .post(`${MERCHANT_API}/getDashStats`,{})
+    .post(`${MERCHANT_API}/getDashStats`,{ merchant_id : id})
       .then(res => {
         if (res.status == 200) {
           if (res.data.status===0) {
