@@ -96,9 +96,7 @@ const BranchReport = (props) => {
     setLoading(true);
     let id = "";
     if (props.apitype === 'merchant'){
-      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
         id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
-      }
     }
     
     getMerchantSettings(id ,props.apitype).then((data) => {
