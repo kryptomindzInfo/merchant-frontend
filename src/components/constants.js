@@ -21,9 +21,9 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 // for server
 export const currency = 'XOF';
 export const MERCHANT_API =
-  'http://91d90ac373dc.sn.mynetname.net:30301/api/merchant';
-export const API_URL = ' http://91d90ac373dc.sn.mynetname.net:30301/api';
+  'http://91d90ac373dc.sn.mynetname.net:40301/api/merchant';
+export const API_URL = ' http://91d90ac373dc.sn.mynetname.net:40301/api';
 export const STATIC_URL =
-  'http://91d90ac373dc.sn.mynetname.net:30301/api/uploads/';
+  'http://91d90ac373dc.sn.mynetname.net:40301/api/uploads/';
 export const CONTRACT_URL = 'http://91d90ac373dc.sn.mynetname.net:2020/ipfs/';
 export const CURRENCY = 'XOF';
