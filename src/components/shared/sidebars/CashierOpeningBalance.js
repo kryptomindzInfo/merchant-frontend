@@ -39,6 +39,7 @@ class CashierClosingBalance extends Component {
     super();
     this.state = {
       loading: true,
+      readOnly: JSON.parse(localStorage.getItem('cashierLogged')).staff.read_only,
       payBillsPopup: false,
       searchBillsPopup: false,
       receiptPopup:false,
@@ -353,7 +354,9 @@ class CashierClosingBalance extends Component {
     const dis = this;
     return (
       <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
-        <Row>
+        {!this.state.readOnly ? (
+          <div>
+             <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {this.state.tomorrow ? (
             <div>
@@ -392,6 +395,9 @@ class CashierClosingBalance extends Component {
           )}
           </Col>
         </Row>
+          </div>
+        ):""}
+       
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
             <Button dashBtn onClick={() => { this.onSearchBillsPopupOpen() }}>

@@ -44,6 +44,7 @@ const BranchDashboardPage = (props) => {
     JSON.parse(localStorage.getItem('branchLogged')).details.name:
     JSON.parse(localStorage.getItem('selectedBranch')).name
   const subzoneId = localStorage.getItem('selectedSubzone');
+  const readOnly = JSON.parse(localStorage.getItem('branchLogged')).details.read_only;
   const apiId = props.apitype === 'merchantBranch' ? " " : props.match.params.id
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
@@ -249,7 +250,7 @@ const BranchDashboardPage = (props) => {
           >                            
             Reports                      
         </Button>
-        {props.apitype === 'merchantBranch' ? (
+        {props.apitype === 'merchantBranch' && !readOnly ? (
             <span className="absoluteMiddleRight primary popMenuTrigger" style={{marginTop:'5px'}}>
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
@@ -345,8 +346,12 @@ const BranchDashboardPage = (props) => {
           >                    
             Reports                   
         </Button>
-        {props.apitype === 'merchantBranch' ? ( 
-            <span className="absoluteMiddleRight primary popMenuTrigger" style={{marginTop:'5px'}}>
+        {props.apitype === 'merchantBranch' && !readOnly ? ( 
+            <span className="absoluteMiddleRight primary popMenuTrigger"
+              style={{
+                marginTop:'5px',
+              }}
+            >
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
                 {/* <span

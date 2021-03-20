@@ -46,6 +46,7 @@ import {
 function InvoiceListPage(props) {
   const bankName = JSON.parse(localStorage.getItem('cashierLogged')).bank.name;
   const bankLogo = JSON.parse(localStorage.getItem('cashierLogged')).bank.logo;
+  const readOnly = JSON.parse(localStorage.getItem('cashierLogged')).staff.read_only;
   const [createInvoicePopup, setCreateInvoicePopup] = React.useState(false);
   const [selectedGroupId, setSelectedGroupId] = React.useState();
   const [selectedGroupName, setSelectedGroupName] = React.useState('');
@@ -491,6 +492,8 @@ function InvoiceListPage(props) {
         <Card marginBottom="10px" buttonMarginTop="32px" bigPadding smallValue>
           <h4 style={{color:'grey'}}>Current Period: <b><span style={{color:'black'}}>{defaultPeriod.period_name}</span></b></h4>
           <h4 style={{color:'grey'}}>Current Category: <b><span style={{color:'black'}}>{selectedGroupName}</span></b></h4>
+        {!readOnly ? (
+        <div>  
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
@@ -570,7 +573,8 @@ function InvoiceListPage(props) {
               )}
           </Col>
         </Row>
-        
+        </div>
+        ):''}
         </Card>
         <Card marginBottom="54px" buttonMarginTop="10px" bigPadding smallValue>
         <h3>Categories</h3>
@@ -663,6 +667,7 @@ function InvoiceListPage(props) {
                     style={{
                       textAlign: 'center',
                       color: 'grey',
+                      height:'300px',
                     }}
                   >
                     No invoice found

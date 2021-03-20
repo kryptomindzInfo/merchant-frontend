@@ -30,6 +30,7 @@ function CreateBranchPopup(props) {
           address1: props.branch.address1 || '',
           state: props.branch.state || '',
           zip: props.branch.zip || '',
+          read_only: props.branch.read_only,
           country: props.branch.country || 'Senegal',
           ccode: props.branch.ccode || '+221',
           mobile: props.branch.mobile || '',
@@ -38,8 +39,10 @@ function CreateBranchPopup(props) {
           working_to: props.branch.working_to || '',
         }}
         onSubmit={async (values) => {
+          console.log(values);
           values.subzone_id = props.subzoneId || props.branch.subzone_id;
           if (props.type === 'update') {
+            values.branch_id =  props.branch._id;
             await branchAPI(props, values, 'update');
           } else {
             values.zone_id = props.zoneID;
@@ -325,6 +328,22 @@ function CreateBranchPopup(props) {
                     </FormGroup>
                   </Col>
                 </Row>
+                <FormGroup>
+                <Row>
+                      <Col cW="4%">
+                          <TextInput
+                            type="checkbox"
+                            value={values.read_only}
+                            checked={values.read_only}
+                            name="read_only"
+                            style={{ margin: 'revert', height:"20px", width:"20px" }}
+                            onChange={handleChange}
+                          />
+                      </Col>
+                      <Col cW="1%"></Col>
+                      <Col cW="95%">Read Only</Col>
+                </Row>
+              </FormGroup>
                 <Button
                   type="submit"
                   filledBtn

@@ -34,6 +34,7 @@ class CashierClosingBalance extends Component {
   constructor() {
     super();
     this.state = {
+      readOnly: JSON.parse(localStorage.getItem('cashierLogged')).staff.read_only,
       loading: true,
       lastdate: null,
       tomorrow: false,
@@ -449,6 +450,8 @@ class CashierClosingBalance extends Component {
         <div style ={{textAlign:'center', fontSize:'20px'}} className="cardValue">
           {CURRENCY} {this.state.closingBalance.toFixed(2)}
         </div>
+        {!this.state.readOnly ? (
+          <div>
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {
@@ -469,6 +472,8 @@ class CashierClosingBalance extends Component {
             )}
           </Col>
         </Row>
+        </div>
+        ):""}
         {/* <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           <Button

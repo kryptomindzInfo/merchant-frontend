@@ -21,6 +21,7 @@ class CashierCashInHand extends Component {
     super();
     this.state = {
       balance: 0,
+      readOnly: JSON.parse(localStorage.getItem('cashierLogged')).staff.read_only,
       cid: JSON.parse(localStorage.getItem('cashierLogged')).position._id,
       branchID: JSON.parse(localStorage.getItem('cashierLogged')).branch._id,
       cashierName: JSON.parse(localStorage.getItem('cashierLogged')).position.name,
@@ -467,7 +468,8 @@ class CashierCashInHand extends Component {
         <div style ={{textAlign:'center' ,fontSize:'20px'}} className="cardValue">
           {CURRENCY} {this.state.balance.toFixed(2)}
         </div>
-        
+        {!this.state.readOnly ? (
+          <div>
          <Row  style={{marginTop:'10px'}}>
           <Col cW="100%">
           {
@@ -486,7 +488,7 @@ class CashierCashInHand extends Component {
             >
               Cashier to Cashier Transfer
             </Button>
-        }
+          }
           </Col>
          </Row>
          <Row style={{marginTop:'10px'}}>
@@ -517,7 +519,8 @@ class CashierCashInHand extends Component {
             </Button>
           </Col>
         </Row>
-        
+        </div>
+        ):""}
         
         
         {this.state.popupSendMoney ? (
