@@ -39,7 +39,7 @@ const StaffHeader = (props) => {
           </A>
         ) : null}
 
-        <A href={goto} float="left" >
+        <A href="/staff/dashboard" float="left" >
         <div className="bankLogo">
             <img src={STATIC_URL + logo} alt="Merchant Logo" />
           </div>
