@@ -20,46 +20,49 @@ import format from 'date-fns/format';
 import Footer from '../../Footer';
 import { getCashierReport, fetchCashierStats, getCashierDailyReport } from '../../shared/api/Api';
 import Loader from '../../shared/Loader';
+import ReactPaginate from 'react-paginate';
 
 const CashierReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
+  const [invoiceListCopy, setInvoiceListCopy] = useState([]);
   const [cashierstats, setCashierStats] = useState({});
+  const [pageCount, setPageCount ] = React.useState(0);
   const [dailyreprots, setDailyReports] = useState({});
-  const assigned = props.apitype === 'merchantStaff' ?
+  const assigned = props.apitype === 'merchantPosition' ?
   '':
   localStorage.getItem('assignedTo')
-  const cashierName = props.apitype === 'merchantStaff' ?
+  const cashierName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
     JSON.parse(localStorage.getItem('selectedCashier')).name
 
-  const bankId = props.apitype === 'merchantStaff' ?
+  const bankId = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank._id :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).bank._id :
       JSON.parse(localStorage.getItem('branchLogged')).bank._id 
 
-  const branchName = props.apitype === 'merchantStaff' ?
+  const branchName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).branch.name :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('selectedBranch')).name :
       JSON.parse(localStorage.getItem('branchLogged')).details.name
 
-  const merchantName = props.apitype === 'merchantStaff' ?
+  const merchantName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).merchant.name :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).details.name :
       JSON.parse(localStorage.getItem('branchLogged')).merchant.name
 
-  const apiId = props.apitype === 'merchantStaff' ? " " : props.match.params.id
+  const apiId = props.apitype === 'merchantPosition' ? " " : props.match.params.id
 
-  const bankName = props.apitype === 'merchantStaff' ?
+  const bankName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank.name :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).bank.name :
       JSON.parse(localStorage.getItem('branchLogged')).bank.name
 
-  const bankLogo = props.apitype === 'merchantStaff' ?
+  const bankLogo = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank.logo :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).bank.logo :
@@ -68,6 +71,11 @@ const CashierReportPage = (props) => {
   const [totalAmountCredited, setTotalAmountCredited] = useState(0);
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([]);
+
+  const handlePageClick = (data) =>{
+    console.log(data);
+    setInvoiceList(invoiceListCopy.slice(data.selected*10, data.selected + 10));
+  };
 
   const getApiType = () => {
     if (props.apitype === 'merchant'){
@@ -125,7 +133,9 @@ const CashierReportPage = (props) => {
       res.data.transactions.reduce((a, b) => {
         return a + b.transaction ? b.transaction.total_amount : 0;
       }, 0));
-      setcsvData([["Date","CustomerNumber","CustomerName","InvoiceAmount","CashInHand"],...csvDATA.res])
+      setcsvData([["Date","CustomerNumber","CustomerName","InvoiceAmount","CashInHand"],...csvDATA.res]);
+      setInvoiceListCopy(res.data.transactions);
+      setPageCount(Math.ceil(res.data.transactions / 10));
       setInvoiceList(res.data.transactions);
       if(dailyreport.data.reports.length>0){
         setDailyReports(dailyreport.data.reports[0]);
@@ -170,7 +180,7 @@ const CashierReportPage = (props) => {
         <title>Merchant Dashboard | Cashier | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      {props.apitype === 'merchantStaff' ? (
+      {props.apitype === 'merchantPosition' ? (
         <CashierHeader active="reports" />
       ) : (
         props.apitype === 'merchant' ?
@@ -179,7 +189,7 @@ const CashierReportPage = (props) => {
       )}
        
       <Container verticalMargin>
-      {props.apitype !== 'merchantStaff' ? (
+      {props.apitype !== 'merchantPosition' ? (
       <Card>
       <h3 style={{color:"green", marginBottom:"20px", textAlign:'center' }}><b>Name : </b>{assigned} </h3> 
       </Card>
@@ -320,26 +330,6 @@ const CashierReportPage = (props) => {
                   borderColor:"grey"
                 }}
               >
-                <h4>Paid Date</h4>
-                <div className="cardValue">
-                {`${format(new Date(formdate), 'dd-MM-yyyy')}`}
-                </div>
-              </Card>
-            </Col>
-            <Col>
-            <Card
-                horizontalMargin="7px"
-                cardWidth="-webkit-fill-available"
-                h4FontSize="16px"
-                smallValue
-                textAlign="center"
-                col
-                style={{
-                  backgroundColor:"lightgray",
-                  borderStyle:"hidden hidden hidden solid",
-                  borderColor:"grey"
-                }}
-              >
                 <h4>Amount Collected</h4>
                 <div className="cardValue">
                 {CURRENCY} {totalAmountCredited}
@@ -393,6 +383,7 @@ const CashierReportPage = (props) => {
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice Paid (cash to cash)</b></h3>
         {invoiceList && invoiceList.length > 0 ? (
+          <div>
                 <Table marginTop="34px">
                   <thead>
                     <tr>
@@ -406,6 +397,20 @@ const CashierReportPage = (props) => {
                   </thead>
                   <tbody>{getInvoices()}</tbody>
                 </Table>
+                <ReactPaginate
+                previousLabel={'previous'}
+                nextLabel={'next'}
+                breakLabel={'...'}
+                breakClassName={'break-me'}
+                pageCount={pageCount}
+                marginPagesDisplayed={10}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageClick}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+              </div>
               ) : (
                   <h3
                     style={{

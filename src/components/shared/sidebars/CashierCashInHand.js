@@ -473,7 +473,7 @@ class CashierCashInHand extends Component {
          <Row  style={{marginTop:'10px'}}>
           <Col cW="100%">
           {
-          this.state.transactionStarted && !this.state.isClosed ?
+          !this.state.isClosed ?
             <Button
               dashBtn
               onClick={this.showPopupSendMoney}
