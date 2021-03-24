@@ -10,14 +10,25 @@ import Container from '../../shared/Container';
 import ActionBar from '../../shared/ActionBar';
 import Table from '../../shared/Table';
 import Main from '../../shared/Main';
+import Row from '../../shared/Row';
+import Col from '../../shared/Col';
+import DashCard from '../dashboard/DashCards';
+import axios from 'axios';
+import { MERCHANT_API, CURRENCY } from '../../constants';
 import CreateSubzonePopup from './CreateSubzonePopup';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
 import MerchantSideBar from '../../shared/sidebars/MerchantSideBar';
 import { fetchSubzoneListByZone, getZoneDetails, checkSubZoneStats } from '../api/MerchantAPI';
 import history from '../../utils/history';
+import Footer from '../../Footer';
 
 function MerchantSubzoneListPage(props) {
+  const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
+  const zonename = JSON.parse(localStorage.getItem('currentZone')).name;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [addSubzonePopup, setAddSubzonePopup] = React.useState(false);
   const [subzoneList, setSubzoneList] = React.useState([]);
   const [copySubzoneList, setCopySubzoneList] = React.useState([])
@@ -27,6 +38,15 @@ function MerchantSubzoneListPage(props) {
   const [subzonestats, setSubZoneStats] = React.useState([]);
   const [editingSubzone, setEditingSubzone] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
+  const [stats, setStats] = React.useState({});
+  const [paidByMC, setPaidByMC] = React.useState({});
+  const [paidByPC, setPaidByPC] = React.useState({});
+  const [paidByBC, setPaidByBC] = React.useState({});
+  const [paidByUS, setPaidByUS] = React.useState({});
+  const [invoicePaid, setInvoicePaid] = React.useState();
+  const [amountPaid, setAmountPaid] = React.useState();
+  const [created, setCreated] = React.useState({});
+  const [uploaded, setUploaded] = React.useState({});
   const { match } = props;
   const { id } = match.params;
   console.log(id)
@@ -52,7 +72,7 @@ function MerchantSubzoneListPage(props) {
 
   const refreshSubZoneList = async () => {
     setLoading(true)
-    const subzonedetails = await getZoneDetails();
+    const subzonedetails = await getZoneDetails(merchantid);
     setZoneName(subzonedetails.zone_name);
     setSubzoneName(subzonedetails.subzone_name);
     const subzonelist = await fetchSubzoneListByZone(id);
@@ -62,7 +82,48 @@ function MerchantSubzoneListPage(props) {
     setLoading(subzonestats.loading);
   };
 
+  const getStats = () => {
+    axios
+    .post(`${MERCHANT_API}/getMerchantSubzoneListDashStats`,{ zone_id:id})
+      .then(res => {
+        if (res.status == 200) {
+          if (res.data.status===0) {
+            throw res.data.error;
+          } else {
+            setPaidByMC(res.data.post6.filter((val)=>val._id==='MC')[0]);
+            setPaidByBC(res.data.post6.filter((val)=>val._id==='BC')[0]);
+            setPaidByPC(res.data.post6.filter((val)=>val._id==='PC')[0]);
+            setPaidByUS(res.data.post6.filter((val)=>val._id==='US')[0]);
+            setInvoicePaid(
+              res.data.post6.reduce((a, b) => {
+                return a + b.bills_paid;
+              }, 0)
+            );
+            setAmountPaid(
+              res.data.post6.reduce((a, b) => {
+                return a + b.amount_paid;
+              }, 0)
+            );
+            setCreated(res.data.post7.filter((val)=>val._id===1)[0]);
+            setUploaded(res.data.post7.filter((val)=>val._id===0)[0]);
+            setStats(res.data);
+          }
+        }
+      })
+      .then(res => {
+        setTimeout(function() {
+          getStats();
+        }, 3000);
+      })
+      .catch(err => {
+        setTimeout(function() {
+          getStats();
+        }, 3000);
+      });
+  };
+
   useEffect(() => {
+    getStats();
     refreshSubZoneList();
   }, []); // Or [] if effect doesn't need props or state
 
@@ -88,6 +149,8 @@ function MerchantSubzoneListPage(props) {
           >{subzone.branch_count}</td>
            <td className="tac">{subzonestats[index].bill_generated}</td>
           <td className="tac">{subzonestats[index].amount_generated}</td>
+          <td className="tac">0</td>
+          <td className="tac">0</td>
           <td className="tac">{subzonestats[index].bill_paid}</td>
           <td className="tac">{subzonestats[index].amount_paid}</td>
           <td className="tac">{subzonestats[index].bill_generated-subzonestats[index].bill_paid}</td>
@@ -99,7 +162,7 @@ function MerchantSubzoneListPage(props) {
               }}
             >
                <td className="tac">{subzonestats[index].amount_generated-subzonestats[index].amount_paid}</td>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
+              <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span
@@ -153,57 +216,77 @@ function MerchantSubzoneListPage(props) {
       </Helmet>
       <MerchantHeader page="info" goto="/merchant/dashboard" />
       <Container verticalMargin>
+      <Card style={{marginBottom:'10px' }}>
+      <h3 style={{color:"green", textAlign:'center',marginBottom:'10px' }}>{zonename} </h3> 
+      </Card>
         <MerchantSideBar showClaimButton />
-        {/* <Main>
+        <Main>
+        <Row>
+          <Col>
+            <DashCard title='Invoice Created' no={created ? created.bills_generated : 0} amount={created ? created.amount_generated : 0}/>
+          </Col>
+          <Col>
+            <DashCard title='Invoice Uploaded' no={uploaded ? uploaded.bills_generated : 0} amount={uploaded ? uploaded.amount_generated : 0}/>
+          </Col>
+          <Col>
+            <DashCard title='Invoice Paid' no={invoicePaid} amount={amountPaid}/>
+          </Col>
+          <Col>
+            <DashCard title='Invoice Pending' no={created ? created.bills_generated-invoicePaid : 0} amount={created ? created.amount_generated-amountPaid: 0 }/>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <DashCard title='Paid by bank' no={paidByBC ? paidByBC.bills_paid : 0} amount={paidByBC ? paidByBC.amount_paid : 0}/>
+          </Col>
+          <Col>
+            <DashCard title='Paid by partner' no={paidByPC ? paidByPC.bills_paid : 0} amount={paidByPC ? paidByPC.amount_paid : 0}/>
+          </Col>
+          <Col>
+            <DashCard title='Paid by merchant' no={paidByMC ? paidByMC.bills_paid : 0} amount={paidByMC ? paidByMC.amount_paid : 0}/>
+          </Col>
+          <Col>
+            <DashCard title='Paid by user' no={paidByUS ? paidByUS.bills_paid : 0} amount={paidByUS ? paidByUS.amount_paid : 0}/>
+          </Col>
+        </Row>
+          
          
-        </Main> */}
+        </Main>
         <ActionBar
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
           >
-            <div className="iconedInput fl">
-              <i className="material-icons">
-                <SearchIcon />
-              </i>
-              <input type="text" placeholder="Search Subzone" onChange={(e) => {
-                searchlistfunction(e.target.value)
-              }} />
-            </div>
-
-            <Button
-              className="addBankButton"
-              flex
-              onClick={() => handleSubzonePopupClick('new', {})}
-            >
-              <AddIcon className="material-icons" />
-              <span>Add {subzoneName}</span>
-            </Button>
           </ActionBar>
         
           <Card bigPadding>
-            {/* <div className="cardHeader">
-              <div className="cardHeaderLeft">
-                <SupervisedUserCircleIcon className="material-icons" />
-              </div>
-              <div className="cardHeaderRight">
-                <h3>
-                  {subzoneName} List of {zoneName}
-                </h3>
-              </div>
-            </div> */}
+          <Button
+          className="dashBtn"
+          style={{
+            float:"right",
+            marginBottom:'10px',
+            display: admin ? "none" : '',
+          }}
+          flex
+          onClick={() => handleSubzonePopupClick('new', {})}
+            >
+              <AddIcon className="material-icons" />
+              <span>Add {subzoneName}</span>
+        </Button>
             <div className="cardBody">
               <Table marginTop="34px" smallTd>
                 <thead>
                   <tr>
                     <th>Subzones</th>
-                    <th>No. of branches</th>
-                    <th>No. of Bills</th>
-                    <th>Amount Billed</th>
-                    <th>No. of paid bills</th>
-                    <th>Amount of paid bills</th>
-                    <th>No. of pending bills</th>
-                    <th>Amount of pending bills</th>
+                    <th>Branches</th>
+                    <th>Invoice Created</th>
+                    <th>Amount Generated</th>
+                    <th>Invoice Uploaded</th>
+                    <th>Amount Uploaded</th>
+                    <th>Invoice Paid</th>
+                    <th>Amount Paid</th>
+                    <th>Invoice Pending</th>
+                    <th>Amount Pending</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -216,6 +299,7 @@ function MerchantSubzoneListPage(props) {
           </Card>
        
       </Container>
+      <Footer bankname={bankName} banklogo={bankLogo}/>
       {addSubzonePopup ? (
         <CreateSubzonePopup
           type={popupType}

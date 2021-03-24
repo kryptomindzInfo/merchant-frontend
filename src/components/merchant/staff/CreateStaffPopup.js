@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Formik } from 'formik';
 import FingerprintIcon from '@material-ui/icons/Fingerprint';
+import Checkbox from '@material-ui/core/Checkbox';
 import Popup from '../../shared/Popup';
 import FormGroup from '../../shared/FormGroup';
 import { STATIC_URL } from '../../constants';
@@ -45,7 +46,7 @@ function CreateStaffPopup(props) {
     });
   };
 
-  console.log(props.staff.role)
+  console.log(props.staff.read_only)
 
   return (
     <Popup accentedH1 close={props.onClose.bind(this)}>
@@ -57,6 +58,7 @@ function CreateStaffPopup(props) {
           logo: props.staff.logo || '',
           email: props.staff.email || '',
           mobile: props.staff.mobile || '',
+          read_only: props.staff.read_only,
           // ccode: props.staff.ccode || '+221',
           ccode: props.staff.ccode || '+91',
           username: props.staff.username || '',
@@ -64,6 +66,7 @@ function CreateStaffPopup(props) {
           branch_id: props.staff.branch_id || '',
         }}
         onSubmit={async (values) => {
+          console.log(values);
           if (props.type === 'update') {
             setLoading(true);
             values.staff_id = props.staff._id;
@@ -91,7 +94,7 @@ function CreateStaffPopup(props) {
 
           return (
             <div>
-              <h1> {props.type === 'update' ? 'Update Staff' : 'Add Staff'}</h1>
+              <h1> {props.type === 'update' ? 'Update User' : 'Add User'}</h1>
               <FormGroup mR="10%" mL="10%">
                 <label>Name*</label>
                 <TextInput
@@ -147,6 +150,7 @@ function CreateStaffPopup(props) {
                   {/* <option value="">Select Role*</option> */}
                   <option value="staff">Staff</option>
                   <option value="cashier">Cashier</option>
+                  <option value="admin">Admin</option>
                 </SelectInput>
               </FormGroup>
 
@@ -261,7 +265,7 @@ function CreateStaffPopup(props) {
                 />
               </FormGroup>
 
-              <FormGroup mR="10%" mL="10%">
+              <FormGroup mR="10%" mL="10%" style={{display: values.role==='admin' ? "none" : ""}}>
                 <SelectInput
                   type="text"
                   name="branch_id"
@@ -273,6 +277,8 @@ function CreateStaffPopup(props) {
                   {branchList && branchList.length > 0 ? getBranches() : null}
                 </SelectInput>
               </FormGroup>
+              
+              
 
               <FormGroup mR="10%" mL="10%">
                 <UploadArea bgImg={STATIC_URL + values.logo}>
@@ -314,10 +320,27 @@ function CreateStaffPopup(props) {
                     </label>
                   </div>
                 </UploadArea>
-              </FormGroup>
-              <Icon className="material-icons">
+             <Icon className="material-icons">
                 <FingerprintIcon style={{ fontSize: '45px' }} />
               </Icon>
+              </FormGroup>
+              <FormGroup mR="10%" mL="10%">
+                <Row>
+                      <Col cW="4%">
+                          <TextInput
+                            type="checkbox"
+                            value={values.read_only}
+                            checked={values.read_only}
+                            name="read_only"
+                            required
+                            style={{ margin: 'revert', height:"20px", width:"20px" }}
+                            onChange={handleChange}
+                          />
+                      </Col>
+                      <Col cW="1%"></Col>
+                      <Col cW="95%">Read Only</Col>
+                </Row>
+              </FormGroup>
               {isLoading ? (
                 <Button filledBtn marginTop="20px" disabled>
                   <Loader />
@@ -335,13 +358,16 @@ function CreateStaffPopup(props) {
                     }}
                   >
                     <span>
-                      {props.type === 'update' ? 'Update Staff' : 'Add Staff'}
+                      {props.type === 'update' ? 'Update User' : 'Add User'}
                     </span>
                   </Button>
                 )}
+              
+            
+              
             </div>
           );
-        }}
+      }}
       </Formik>
     </Popup>
   );

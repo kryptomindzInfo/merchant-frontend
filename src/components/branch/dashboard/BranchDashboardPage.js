@@ -17,6 +17,7 @@ import { CURRENCY } from '../../constants';
 import Loader from '../../shared/Loader';
 import AssignUserPopup from './AssignUserPopup';
 import BranchEditCashierPopup from './BranchEditCashierPopup';
+import A from '../../shared/A';
 import {
   blockCashierApi,
   disassignStaff,
@@ -29,6 +30,7 @@ import {
   getMerchantSettings,
 } from '../../shared/api/Api';
 import history from '../../utils/history';
+import styled from 'styled-components';
 
 const BranchDashboardPage = (props) => {
   const [stats, setStats] = useState({});
@@ -41,6 +43,8 @@ const BranchDashboardPage = (props) => {
   const branchName = props.apitype === 'merchantBranch' ?
     JSON.parse(localStorage.getItem('branchLogged')).details.name:
     JSON.parse(localStorage.getItem('selectedBranch')).name
+  const subzoneId = localStorage.getItem('selectedSubzone');
+  const readOnly = JSON.parse(localStorage.getItem('branchLogged')).details.read_only;
   const apiId = props.apitype === 'merchantBranch' ? " " : props.match.params.id
   const [assignUserPopup, setAssignUserPopup] = React.useState(false);
   const [editCashierPopup, setEditCashierPopup] = React.useState(false);
@@ -55,10 +59,33 @@ const BranchDashboardPage = (props) => {
   const [editingCashier, setEditingCashier] = React.useState({});
   const [isLoading, setLoading] = React.useState(false);
   const [toggleButton, setToggleButton] = React.useState('cashier');
+  
+  const getApiType = () => {
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        return 'merchantStaff';
+      }else{
+        return 'merchant';
+      }
+    }else{
+      return props.apitype;
+    }
+
+  };
 
   const getStats = () => {
+    let apiType = "";
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        apiType = 'merchantStaff';
+      }else{
+        apiType = 'merchant';
+      }
+    }else{
+      apiType = props.apitype;
+    }
     axios
-    .post(`${API_URL}/${props.apitype}/getMerchantBranchDashStats`,{
+    .post(`${API_URL}/${apiType}/getMerchantBranchDashStats`,{
       branch_id:apiId,
     })
       .then(res => {
@@ -111,7 +138,8 @@ const BranchDashboardPage = (props) => {
 
   const getCashierStats = async(list) => {
     const statlist = list.map(async (cashier,index) => {
-        const data = await checkCashierStats(props.apitype,cashier._id);
+        const type= await getApiType();
+        const data = await checkCashierStats(type,cashier._id);
         return (data);
     })
     const result= await Promise.all(statlist);
@@ -120,16 +148,20 @@ const BranchDashboardPage = (props) => {
 
   const getStaffStats = async(list) => {
     const statlist = list.map(async (staff,index) => {
-        const data = await checkStaffStats(props.apitype,staff._id);
+      const type= await getApiType();
+        const data = await checkStaffStats(type,staff._id);
         return (data);
     })
     const result = await Promise.all(statlist);
     return({res:result, loading:false});
   }
 
+  
+
   const refreshCashierList = async () => {
-    setLoading(true)
-    const positionlist = await getBranchCashier(props.apitype,apiId);
+    setLoading(true);
+    const type= await getApiType();
+    const positionlist = await getBranchCashier(type,apiId);
     console.log(positionlist);
     setCashierList(positionlist.cashiers);
     setstaffList(positionlist.staffs);
@@ -137,7 +169,7 @@ const BranchDashboardPage = (props) => {
     setCashierStats(cashierstats.res);
     const staffstats = await getStaffStats(positionlist.staffs);
     setStaffStats(staffstats.res);
-    const userlist = await fetchBranchStaffList(props.apitype,apiId);
+    const userlist = await fetchBranchStaffList(type,apiId);
     console.log(userlist);
     setUserList(userlist.list);
 
@@ -218,7 +250,7 @@ const BranchDashboardPage = (props) => {
           >                            
             Reports                      
         </Button>
-        {props.apitype === 'merchantBranch' ? (
+        {props.apitype === 'merchantBranch' && !readOnly ? (
             <span className="absoluteMiddleRight primary popMenuTrigger" style={{marginTop:'5px'}}>
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
@@ -314,8 +346,12 @@ const BranchDashboardPage = (props) => {
           >                    
             Reports                   
         </Button>
-        {props.apitype === 'merchantBranch' ? ( 
-            <span className="absoluteMiddleRight primary popMenuTrigger" style={{marginTop:'5px'}}>
+        {props.apitype === 'merchantBranch' && !readOnly ? ( 
+            <span className="absoluteMiddleRight primary popMenuTrigger"
+              style={{
+                marginTop:'5px',
+              }}
+            >
               <i className="material-icons ">more_vert</i>
               <div className="popMenu">
                 {/* <span
@@ -376,7 +412,11 @@ const BranchDashboardPage = (props) => {
   }
 
   const refreshMerchantSettings = async () => {
-    getMerchantSettings(props.apitype).then((data) => {
+    let id = "";
+    if (props.apitype === 'merchant'){
+        id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+    }
+    getMerchantSettings( id,props.apitype).then((data) => {
       setperiod(data.default_bill_period);
     });
   };
@@ -407,28 +447,30 @@ const BranchDashboardPage = (props) => {
       <Container verticalMargin>
       {props.apitype === 'merchant' ? (
         <Card >
-          <div style={{display:'flex', justifyContent:'space-between'}}>
-           <Button
-            marginTop="10px"
-            marginBottom="10px"
-            padding="5px"
-             onClick={() => {
-              history.goBack();
-            }}
-          >
-            Back
-          </Button>
-          <h3 style={{color:"green", textAlign:'center' }}><b>{branchName} Dashboard</b> </h3> 
-          <Button
-            marginTop="10px"
-            marginBottom="10px"
-            padding="5px"
-             onClick={() => {
+          <div style={{display:'flex'}}>
+            <button  style={{border:"none",width:"100px"}} onClick={() => {
+                history.push(`/merchant/${subzoneId}/branches`);
+              }}>
+                <A>
+                  Back
+              </A>
+            </button>
+            <button style={{border:"none",width:"100px"}} onClick={() => {
               history.push(`/merchant/branch/reports/${apiId}`);
-            }}
-          >
-            Reports
-          </Button>
+            }}>
+                <A>
+                  Reports
+                </A>
+            </button>
+            <button style={{border:"none",width:"100px"}} onClick={() => {
+                history.goBack();
+              }}>
+                <A>
+                  <u>DashBoard</u>
+              </A>
+            </button>
+          <h2 style={{color:"green",marginLeft:"280px" }}><b>{branchName}</b> </h2> 
+          
           </div>
         </Card>
       ):''}
@@ -544,7 +586,7 @@ const BranchDashboardPage = (props) => {
                   style={{textAlign:'center'}}
                 >
                   <h4>Invoice Pending</h4>
-                  <div className="cardValue"> {stats.invoice_raised-stats.invoice_paid}</div>
+                  <div className="cardValue"> {stats.invoice_pending}</div>
                 </Card>
               </Col>
             </Row> 

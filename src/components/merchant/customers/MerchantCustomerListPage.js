@@ -19,6 +19,8 @@ import { uploadCustomer, fetchCustomerList } from '../api/MerchantAPI';
 
 const MerchantCustomerListPage = () => {
   const [addCustomerPopup, setAddCustomerPopup] = React.useState(false);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [customerList, setCustomerList] = React.useState([]);
   const [copyCustomerList, setCopyCustomerList] = React.useState([]);
   const [popupType, setPopupType] = React.useState('new');
@@ -39,7 +41,7 @@ const MerchantCustomerListPage = () => {
 
   const refreshCustomerList = async () => {
     setLoading(true);
-    fetchCustomerList().then((data) => {
+    fetchCustomerList(id).then((data) => {
       setCustomerList(data.list);
       setCopyCustomerList(data.list)
       setLoading(data.loading);
@@ -110,6 +112,7 @@ const MerchantCustomerListPage = () => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">

@@ -55,6 +55,7 @@ function AssignUserPopup(props) {
                   />
                 </FormGroup>
                 <FormGroup>
+                <label className="focused">User Name*</label>
                   <SelectInput
                     onChange={handleChange}
                     onBlur={handleBlur}

@@ -15,7 +15,8 @@ import { NextWeekRounded } from '@material-ui/icons';
 function OfferingCard(props) {
   const [offeringList, setOfferingList] = React.useState([]);
   const [copyofferingList, setcopyOffering] = React.useState([]);
-
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [productList, setProductList] = React.useState([]);
   const [serviceList, setServiceList] = React.useState([]);
   const [toggleButton, setToggleButton] = React.useState('product');
@@ -80,7 +81,7 @@ function OfferingCard(props) {
 
   const refreshOfferingList = async () => {
     setLoading(true);
-    fetchOfferingList().then((data) => {
+    fetchOfferingList(id).then((data) => {
       setOffering(data.list);
       setcopyOffering(data.list)
       setLoading(data.loading);
@@ -145,7 +146,7 @@ function OfferingCard(props) {
                 }}
               >
                 <td className="tac">{offering.unit_price}</td>
-                <span className="absoluteMiddleRight primary popMenuTrigger">
+                <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                   <i className="material-icons ">more_vert</i>
                   <div className="popMenu">
                     <span
@@ -179,6 +180,7 @@ function OfferingCard(props) {
         marginBottom="33px"
         inputWidth="calc(100% - 241px)"
         className="clr"
+        style={{display: admin ? "none" : ''}}
       >
         <div className="iconedInput fl">
           <i className="material-icons">

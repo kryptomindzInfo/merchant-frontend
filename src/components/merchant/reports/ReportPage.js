@@ -6,6 +6,7 @@ import Container from '../../shared/Container';
 import Table from '../../Table';
 import Card from '../../shared/Card';
 import Col from '../../shared/Col';
+import DashCard from '../dashboard/DashCards';
 import Row from '../../shared/Row';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
@@ -19,28 +20,48 @@ import DateFnsUtils from '@date-io/date-fns';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
-import { fetchTypeList, getBillPeriods, checkStatsbydate, checkStatsbyperiod } from '../api/MerchantAPI'
+import {
+  fetchTypeList,
+  getBillPeriods,
+  checkStatsbydate,
+  checkStatsbyperiod,
+  fetchSubzoneListByZone,
+  fetchBranchListBySubzone,
+} from '../api/MerchantAPI'
 import Loader from '../../shared/Loader';
 
 const today = new Date();
 const ReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
-  const bankName =  JSON.parse(localStorage.getItem('merchantLogged')).bank.name
-  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo
-  const merchantName = JSON.parse(localStorage.getItem('merchantLogged')).details.name
+  const bankName =  JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
+  const merchantName = JSON.parse(localStorage.getItem('merchantLogged')).details.name;
+  const merchantid = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
   const [periodList, setPeriodList] = useState([]);
   const [periodStart, setPeriodStart] = useState('');
   const [periodEnd, setPeriodEnd] = useState('');
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [typeList, setTypeList] = useState([]);
+  const [zoneList, setZoneList] = useState([]);
+  const [subzoneList, setSubzoneList] = useState([]);
   const [typeStats, setTypeStats] = useState([]);
   const [amountGenerated, setAmountGenerated] = useState();
   const [amountPaid, setAmountPaid] = useState();
+  const [amountPaidBC, setAmountPaidBC] = useState();
+  const [amountPaidMC, setAmountPaidMC] = useState();
+  const [amountPaidPC, setAmountPaidPC] = useState();
+  const [amountPaidUS, setAmountPaidUS] = useState();
   const [billGenerated, setBillGenerated] = useState();
   const [billPaid, setBillPaid] = useState();
+  const [billPaidBC, setBillPaidBC] = useState();
+  const [billPaidMC, setBillPaidMC] = useState();
+  const [billPaidPC, setBillPaidPC] = useState();
+  const [billPaidUS, setBillPaidUS] = useState();
   const [billPending, setBillPending] = useState();
   const [amountPending, setAmountPending] = useState();
+  const [selectedZone, setSelectedZone] = useState();
+  const [selectedSubZone, setSelectedSubZone] = useState();
   const [filter, setFilter] = useState('daterange');
   const [type, setType] = useState('zone');
   const [csvData, setcsvData] = useState([
@@ -57,7 +78,7 @@ const ReportPage = (props) => {
 
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getBillPeriods().then((data) => {
+    getBillPeriods(merchantid).then((data) => {
       setPeriodList(data.list);
     });
   };
@@ -96,7 +117,7 @@ const ReportPage = (props) => {
         const tomorrow = new Date(date)
         tomorrow.setDate(tomorrow.getDate() + 1)
         const data = await getStatsBydate(typelist,tomorrow);
-        // console.log(data.res);
+        console.log(data.res);
         return ({
             date:date,
             data:data.res,
@@ -104,6 +125,14 @@ const ReportPage = (props) => {
             bill_generated: data.res.reduce((a, b) => a + b.bill_generated, 0),
             amount_paid: data.res.reduce((a, b) => a + b.amount_paid, 0),
             bill_paid: data.res.reduce((a, b) => a + b.bill_paid, 0),
+            amount_paid_BC: data.res.reduce((a, b) => a + b.amount_paid_by_BC, 0),
+            bill_paid_BC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_PC: data.res.reduce((a, b) => a + b.amount_paid_by_PC, 0),
+            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_PC, 0),
+            amount_paid_US: data.res.reduce((a, b) => a + b.amount_paid_by_US, 0),
+            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_US, 0),
+            amount_paid_MC: data.res.reduce((a, b) => a + b.amount_paid_by_MC, 0),
+            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_MC, 0),
         });
     })
     const result= await Promise.all(statlistbydate);
@@ -121,6 +150,14 @@ const ReportPage = (props) => {
             bill_generated: data.res.reduce((a, b) => a + b.bill_generated, 0),
             amount_paid: data.res.reduce((a, b) => a + b.amount_paid, 0),
             bill_paid: data.res.reduce((a, b) => a + b.bill_paid, 0),
+            amount_paid_BC: data.res.reduce((a, b) => a + b.amount_paid_by_BC, 0),
+            bill_paid_BC: data.res.reduce((a, b) => a + b.bill_paid_by_BC, 0),
+            amount_paid_PC: data.res.reduce((a, b) => a + b.amount_paid_by_PC, 0),
+            bill_paid_PC: data.res.reduce((a, b) => a + b.bill_paid_by_PC, 0),
+            amount_paid_US: data.res.reduce((a, b) => a + b.amount_paid_by_US, 0),
+            bill_paid_US: data.res.reduce((a, b) => a + b.bill_paid_by_US, 0),
+            amount_paid_MC: data.res.reduce((a, b) => a + b.amount_paid_by_MC, 0),
+            bill_paid_MC: data.res.reduce((a, b) => a + b.bill_paid_by_MC, 0),
         });
     })
     const result= await Promise.all(statlistbyperiod);
@@ -133,6 +170,14 @@ const ReportPage = (props) => {
         bill_generated: list.reduce((a, b) => a + b.bill_generated, 0),
         amount_paid: list.reduce((a, b) => a + b.amount_paid, 0),
         bill_paid: list.reduce((a, b) => a + b.bill_paid, 0),
+        amount_paid_BC: list.reduce((a, b) => a + b.amount_paid_BC, 0),
+        bill_paid_BC: list.reduce((a, b) => a + b.bill_paid_BC, 0),
+        amount_paid_PC: list.reduce((a, b) => a + b.amount_paid_PC, 0),
+        bill_paid_PC: list.reduce((a, b) => a + b.bill_paid_PC, 0),
+        amount_paid_US: list.reduce((a, b) => a + b.amount_paid_US, 0),
+        bill_paid_US: list.reduce((a, b) => a + b.bill_paid_US, 0),
+        amount_paid_MC: list.reduce((a, b) => a + b.amount_paid_MC, 0),
+        bill_paid_MC: list.reduce((a, b) => a + b.bill_paid_MC, 0),
       });
   }
 
@@ -140,7 +185,18 @@ const ReportPage = (props) => {
     setLoading(true);
     const periodlist = await periodList.slice(periodStart,periodEnd+1);
     console.log(periodlist);
-    const typelist = await fetchTypeList(type);
+    const zonelist = await fetchTypeList(merchantid,'zone');
+    setZoneList(zonelist.list);
+    const subzonelist = await fetchTypeList(merchantid,'subzone');
+    setSubzoneList(subzonelist.list);
+    let typelist = {};
+    if (type === 'zone') {
+      typelist = zonelist;
+    } else if (type === 'subzone') {
+      typelist = await fetchSubzoneListByZone(selectedZone);
+    } else {
+      typelist = await fetchBranchListBySubzone(selectedSubZone);
+    }
     setTypeList(typelist.list);
     const typestats = await getTypeStatsByperiod(periodlist,typelist.list);
     const cardValues = await getCardValues(typestats.res);
@@ -148,6 +204,14 @@ const ReportPage = (props) => {
     setAmountPaid(cardValues.amount_paid);
     setBillGenerated(cardValues.bill_generated);
     setBillPaid(cardValues.bill_paid);
+    setBillPaidBC(cardValues.bill_paid_BC);
+    setBillPaidMC(cardValues.bill_paid_MC);
+    setBillPaidPC(cardValues.bill_paid_PC);
+    setBillPaidUS(cardValues.bill_paid_US);
+    setAmountPaidBC(cardValues.amount_paid_BC);
+    setAmountPaidPC(cardValues.amount_paid_PC);
+    setAmountPaidMC(cardValues.amount_paid_MC);
+    setAmountPaidUS(cardValues.amount_paid_US);
     setBillPending(cardValues.bill_generated-cardValues.bill_paid);
     setAmountPending(cardValues.amount_generated-cardValues.amount_paid);
     setTypeStats(typestats.res);
@@ -160,43 +224,75 @@ const ReportPage = (props) => {
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
   const dateslist = await getDatesBetweenDates(start, end);
-  const typelist = await fetchTypeList(type);
+  const zonelist = await fetchTypeList(merchantid,'zone');
+  setZoneList(zonelist.list);
+  const subzonelist = await fetchTypeList(merchantid,'subzone');
+  setSubzoneList(subzonelist.list);
+  let typelist = {};
+  if (type === 'zone') {
+    typelist = zonelist;
+  } else if (type === 'subzone') {
+    typelist = await fetchSubzoneListByZone(selectedZone);
+  } else {
+    typelist = await fetchBranchListBySubzone(selectedSubZone);
+  }
   setTypeList(typelist.list);
   const typestats = await getTypeStatsBydate(dateslist,typelist.list);
+  console.log(typestats);
   const cardValues = await getCardValues(typestats.res);
   setAmountGenerated(cardValues.amount_generated);
   setAmountPaid(cardValues.amount_paid);
+  setAmountPaidBC(cardValues.amount_paid_BC);
+  setAmountPaidPC(cardValues.amount_paid_PC);
+  setAmountPaidMC(cardValues.amount_paid_MC);
+  setAmountPaidUS(cardValues.amount_paid_US);
   setBillGenerated(cardValues.bill_generated);
   setBillPaid(cardValues.bill_paid);
+  setBillPaidBC(cardValues.bill_paid_BC);
+  setBillPaidMC(cardValues.bill_paid_MC);
+  setBillPaidPC(cardValues.bill_paid_PC);
+  setBillPaidUS(cardValues.bill_paid_US);
   setTypeStats(typestats.res);
   setLoading(typestats.loading);
 };
 
 const getData = (i) => {
     return typeStats[i].data.map((date,index) => {
-      if(filter === 'period'){
         return (
           <tr>
             <td>{typeList[index].name}</td>
-            <td>{date.bill_generated}</td>
-            <td>{date.amount_generated}</td>
-            <td>{date.bill_paid}</td>
-            <td>{date.amount_paid}</td>
-            <td>{date.bill_generated-date.bill_paid}</td>
-            <td>{date.amount_generated-date.amount_paid}</td>
+            <td>
+              <Row>No. {date.bill_generated}</Row>
+              <Row>XOF {date.amount_generated}</Row>
+            </td>
+            <td>
+              <Row>No. 0</Row>
+              <Row>XOF 0</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_BC}</Row>
+              <Row>XOF {date.amount_paid_by_BC}</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_PC}</Row>
+              <Row>XOF {date.amount_paid_by_PC}</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_US}</Row>
+              <Row>XOF {date.amount_paid_by_US}</Row>
+            </td>
+            <td>
+              <Row>No. {date.bill_paid_by_MC}</Row>
+              <Row>XOF {date.amount_paid_by_MC}</Row>
+            </td>
+            {/* <td>{date.bill_paid}</td>
+            <td>{date.amount_paid}</td> */}
+            <td>
+              <Row>No. {date.bill_generated-date.bill_paid}</Row>
+              <Row>XOF {date.amount_generated-date.amount_paid}</Row>
+            </td>
           </tr>
         );
-      }else{
-        return (
-          <tr>
-            <td>{typeList[index].name}</td>
-            <td>{date.bill_generated}</td>
-            <td>{date.amount_generated}</td>
-            <td>{date.bill_paid}</td>
-            <td>{date.amount_paid}</td>
-          </tr>
-        );
-      }
     });
 };
 
@@ -212,6 +308,11 @@ const toggle = (type) => {
 };
 
 const toggleType = (type) => {
+  if(type==='subzone'){
+    setSelectedZone(zoneList[0]._id)
+  } else if (type==='branch'){
+    setSelectedSubZone(subzoneList[0]._id)
+  }
   setAmountGenerated(0);
   setAmountPaid(0);
   setBillGenerated(0);
@@ -242,40 +343,106 @@ const toggleType = (type) => {
       </Helmet>
         <MerchantHeader active="reports" />
       <Container verticalMargin>
-      <div
+      <Card style={{marginBottom:'10px'}}>
+          <div style={{display:'flex', justifyContent:'space-between',marginBottom:'10px'}}>
+          <h3 style={{color:"green", textAlign:'center' }}><b>{merchantName} Report</b> </h3> 
+          <div
                 style={{
-                  display: 'flex',
                   justifyContent: 'left',
                   marginTop: '10px',
                   marginBottom: '10px',
                 }}
               >
-                <Button
-                  className={type === 'zone' ? 'active' : ''}
-                  onClick={()=>{toggleType('zone')}}
-                  style={{marginLeft:'5px'}}
-                >
-                  Zone
-                </Button>
-                <Button
-                  className={type === 'subzone' ? 'active' : ''}
-                  onClick={()=>{toggleType('subzone')}}
-                  style={{marginLeft:'5px'}}
-                >
-                  Subzone
-                </Button>
-                <Button
-                  className={type === 'branch' ? 'active' : ''}
-                  onClick={()=>{toggleType('branch')}}
-                  style={{marginLeft:'5px'}}
-                >
-                  Branch
-                </Button>
+                <Row>
+                  <Col cW="33%">
+                      <Button
+                        className={type === 'zone' ? 'active' : ''}
+                        onClick={()=>{toggleType('zone')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                      Zone
+                    </Button>
+                  </Col>
+                  <Col cW="33%">
+                      <Button
+                        className={type === 'subzone' ? 'active' : ''}
+                        onClick={()=>{toggleType('subzone')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                        Subzone
+                      </Button>
+                  </Col>
+                  <Col cW="33%">
+                    <Button
+                        className={type === 'branch' ? 'active' : ''}
+                        onClick={()=>{toggleType('branch')}}
+                        style={{marginLeft:'5px'}}
+                      >
+                        Branch
+                      </Button>
+                  </Col>
+                </Row>
+
+                <Row>
+                  <Col cW="33%"></Col>
+                  <Col cW="33%">
+                      <FormGroup>
+                        <SelectInput
+                          style={{
+                            marginTop:"10px",
+                            width:"110px",
+                            display: type!=="subzone" ? "none" : "",
+                          }}
+                          value={selectedZone}
+                          onChange={(event)=>{
+                            setSelectedZone(event.target.value);
+                          }}
+                          // name="from"
+                          required
+                        >
+                          {zoneList.map((b,index) => {
+                            return (
+                              <option key={b._id} value={b._id}>
+                                {b.name}
+                              </option>
+                            );
+                        })}
+                        </SelectInput>
+                      </FormGroup>
+                  </Col>
+                  <Col cW="33%">
+                      <FormGroup>
+                        <SelectInput
+                          style={{
+                            marginTop:"10px" ,
+                            width:"110px",
+                            display: type!=="branch" ? "none" : "",
+                          }}
+                          value={selectedSubZone}
+                          onChange={(event)=>{
+                            setSelectedSubZone(event.target.value);
+                          }}
+                          // name="from"
+                          required
+                        >
+                          {subzoneList.map((b,index) => {
+                            return (
+                              <option key={b._id} value={b._id}>
+                                {b.name}
+                              </option>
+                            );
+                        })}
+                        </SelectInput>
+                      </FormGroup>
+                  </Col>
+                </Row>
               </div>
-        
+          </div>
+        </Card>
+     
             <Row>
               <Col cW='40%'>
-              <Card marginBottom="54px" buttonMarginTop="32px" smallValue style={{height:'220px'}}>
+              <Card marginBottom="10px" buttonMarginTop="10px" smallValue style={{height:'220px'}}>
               <div
                 style={{
                   display: 'flex',
@@ -377,7 +544,7 @@ const toggleType = (type) => {
                 ):""}
                  {filter === 'period' ? (
                   <div>
-                  <h2 style={{color:"green"}}><b>Period</b></h2> 
+                  <h2 style={{color:"green"}}><b>Period Range</b></h2> 
                   <Row>
                    
                     <Col cW='48%'>
@@ -400,6 +567,7 @@ const toggleType = (type) => {
                       })}
                       </SelectInput>
                     </FormGroup>
+                    
                     </Col>
                     <Col cW='4%'>To</Col> 
                     <Col cW='48%'>
@@ -446,41 +614,31 @@ const toggleType = (type) => {
             <div>
               <Row>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills</h4>
-                    <div className="cardValue">{billGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Created' no={billGenerated} amount={amountGenerated}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills Paid</h4>
-                    <div className="cardValue">{billPaid}</div>
-                  </Card>
+                  <DashCard title='Invoice Uploaded' no={0} amount={0}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount Billed</h4>
-                    <div className="cardValue">{amountGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Paid' no={billPaid} amount={amountPaid}/>
+                </Col>       
+                <Col>
+                <DashCard title='Invoice Pending' no={billPending} amount={amountPending}/> 
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <DashCard title='Invoice Paid By Bank' no={billPaidBC} amount={amountPaidBC}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount paid </h4>
-                    <div className="cardValue">{amountPaid}</div>
-                  </Card>
-                </Col>
-                  <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bill Pending</h4>
-                    <div className="cardValue">{amountPending}</div>
-                  </Card>
+                <DashCard title='Invoice Paid By Partner' no={billPaidPC} amount={amountPaidPC}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount pending </h4>
-                    <div className="cardValue">{amountPending}</div>
-                  </Card>
+                  <DashCard title='Invoice Paid By Merchant' no={billPaidMC} amount={amountPaidMC}/>
                 </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By User' no={billPaidUS} amount={amountPaidUS}/>
+                </Col>      
               </Row>
             </div>
             
@@ -488,30 +646,33 @@ const toggleType = (type) => {
               <div>
               <Row>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills</h4>
-                    <div className="cardValue">{billGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Created' no={billGenerated} amount={amountGenerated}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Bills Paid</h4>
-                    <div className="cardValue">{billPaid}</div>
-                  </Card>
+                  <DashCard title='Invoice Uploaded' no={0} amount={0}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount Billed</h4>
-                    <div className="cardValue">{amountGenerated}</div>
-                  </Card>
+                  <DashCard title='Invoice Paid' no={billPaid} amount={amountPaid}/>
                 </Col>
                 <Col>
-                  <Card marginBottom="10px" buttonMarginTop="10px" style={{textAlign:'center'}} bordered smallValue>
-                    <h4>Amount paid </h4>
-                    <div className="cardValue">{amountPaid}</div>
-                  </Card>
-                </Col>
+                  <DashCard title='Invoice Pending' no={billGenerated-billPaid} amount={amountGenerated-amountPaid}/>
+                </Col>        
               </Row>
+              <Row>
+                <Col>
+                  <DashCard title='Invoice Paid By Bank' no={billPaidBC} amount={amountPaidBC}/>
+                </Col>
+                <Col>
+                <DashCard title='Invoice Paid By Partner' no={billPaidPC} amount={amountPaidPC}/>
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By Merchant' no={billPaidMC} amount={amountPaidMC}/>
+                </Col>
+                <Col>
+                  <DashCard title='Invoice Paid By User' no={billPaidUS} amount={amountPaidUS}/>
+                </Col>      
+              </Row>
+
             </div>
             )}
           
@@ -527,51 +688,53 @@ const toggleType = (type) => {
                   )} 
                  
                   <Table marginTop="34px">
-                  {filter === 'daterange' ? (
                       <thead>
                       <tr>
                         <th>{type}</th>
-                          <th>Bills</th>
-                          <th>Amount Billed</th>
-                          <th>Paid bills</th>
-                          <th>Amount paid </th>
+                          <th>Invoice Created</th>
+                          <th>Invoice Uploaded</th>
+                          <th>Invoice Paid By Bank</th>
+                          <th>Invoice Paid By Partner</th>
+                          <th>Invoice Paid By User</th>
+                          <th>Invoice Paid By Merchant</th>
+                          <th>Invoice Pending</th>
                         </tr>
-                    </thead>
-                    ):(
-                      <thead>
-                      <tr>
-                        <th>{type}</th>
-                          <th>Bills</th>
-                          <th>Amount Billed</th>
-                          <th>Paid bills</th>
-                          <th>Amount paid </th>
-                          <th>Pending bills</th>
-                          <th>Pending Amount</th>
-                        </tr>
-                    </thead>
-                      
-                    )}
+                    </thead> 
                     <tbody>
                       {getData(index)}
-                      {filter === 'period'? (
                       <tr>
                         <td className="green">Total</td>
-                        <td className="green">{typeStats[index].bill_generated}</td>
-                        <td className="green">{typeStats[index].amount_generated}</td>
-                        <td className="green">{typeStats[index].bill_paid}</td>
-                        <td className="green">{typeStats[index].amount_paid}</td>
-                        <td className="green">{typeStats[index].bill_generated-typeStats[index].bill_paid}</td>
-                        <td className="green">{typeStats[index].amount_generated-typeStats[index].amount_paid}</td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_generated}</Row>
+                          <Row>XOF {typeStats[index].amount_generated}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. 0</Row>
+                          <Row>XOF 0</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_BC}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_BC}</Row>
+                        </td>
+                  
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_PC}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_PC}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_US}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_US}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_paid_MC}</Row>
+                          <Row>XOF {typeStats[index].amount_paid_MC}</Row>
+                        </td>
+                        <td className="green">
+                          <Row>No. {typeStats[index].bill_generated-typeStats[index].bill_paid}</Row>
+                          <Row>XOF {typeStats[index].amount_generated-typeStats[index].amount_paid}</Row>
+                        </td>
                       </tr>
-                      ):(
-                        <tr>
-                        <td className="green">Total</td>
-                        <td className="green">{typeStats[index].bill_generated}</td>
-                        <td className="green">{typeStats[index].amount_generated}</td>
-                        <td className="green">{typeStats[index].bill_paid}</td>
-                        <td className="green">{typeStats[index].amount_paid}</td>
-                      </tr>
-                      )}
+    
                     </tbody>
                   </Table>
                 </div>

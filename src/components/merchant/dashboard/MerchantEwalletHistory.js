@@ -24,6 +24,7 @@ export default class MerchantEwalletHistory extends Component {
   constructor() {
     super();
     this.state = {
+      id: JSON.parse(localStorage.getItem('merchantLogged')).details._id,
       perPage: 5,
       totalCount: 100,
       allhistory: [],
@@ -65,9 +66,10 @@ export default class MerchantEwalletHistory extends Component {
 
   getHistory = () => {
     axios
-      .get(`${MERCHANT_API}/getTransHistory`, {
+      .post(`${MERCHANT_API}/getTransHistory`, {
         page: this.state.activePage,
         offset: this.state.perPage,
+        merchant_id: this.state.id,
       })
       .then((res) => {
         if (res.status === 200) {
@@ -129,7 +131,7 @@ export default class MerchantEwalletHistory extends Component {
 
   getHistoryTotal = () => {
     axios
-      .get(`${MERCHANT_API}/getTransHistory`, {})
+      .post(`${MERCHANT_API}/getTransHistory`, {merchant_id:this.state.id})
       .then((res) => {
         if (res.status === 200) {
           this.setState({ totalCount: res.data.total }, () => {

@@ -78,7 +78,7 @@ class SettingSidebar extends Component {
             <i className="material-icons">
               <PersonIcon />
             </i>
-            <h3>Personal Info</h3>
+            <h3>Merchant Info</h3>
           </Card>
         </A>
         <A>

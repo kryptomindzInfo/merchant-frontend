@@ -20,6 +20,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
+import A from '../../shared/A';
 import {
   getMerchantSettings,
   fetchBranchInvoicesBydate,
@@ -27,6 +28,7 @@ import {
   fetchBranchInvoicesByDateRange, 
 } from '../../shared/api/Api';
 import Loader from '../../shared/Loader';
+import history from '../../utils/history';
 
 const today = new Date();
 const BranchReport = (props) => {
@@ -70,6 +72,19 @@ const BranchReport = (props) => {
     ["BillNo","Name","Amount","Mobile","DueDate"]
   ]);
 
+  const getApiType = () => {
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        return 'merchantStaff';
+      }else{
+        return 'merchant';
+      }
+    }else{
+      return props.apitype;
+    }
+
+  };
+
   const fetchCSVData = async(list) => {
     const csvlist = list.map(async (invoice) => {
         return ([invoice.number,invoice.name,invoice.amount,invoice.mobile,invoice.due_date]);
@@ -79,7 +94,12 @@ const BranchReport = (props) => {
   };
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getMerchantSettings(props.apitype).then((data) => {
+    let id = "";
+    if (props.apitype === 'merchant'){
+        id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+    }
+    
+    getMerchantSettings(id ,props.apitype).then((data) => {
       setPeriodList(data.bill_period_list);
       setStartDate(data.bill_period_list[0].start_date);
       setEndDate(new Date());
@@ -274,7 +294,8 @@ const BranchReport = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(periodStartDate));
     const end = endOfDay(new Date(periodEndDate));
-    const res = await fetchBranchInvoicesByPeriod(start,end, props.apitype,apiId );
+    const type= await getApiType();
+    const res = await fetchBranchInvoicesByPeriod(start,end, type,apiId );
     const predata = await preProcessPeriodTableData(res.list);
     const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
@@ -294,7 +315,8 @@ const BranchReport = (props) => {
   setLoading(true);
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
-  const res = await fetchBranchInvoicesByDateRange(start,end,props.apitype,apiId);
+  const type= await getApiType();
+  const res = await fetchBranchInvoicesByDateRange(start,end,type,apiId);
   const datelist = await getDatesBetweenDates(start, end);
   const predata = await preProcessDateTableData(datelist,res.list);
   const tabledata = await setDateTable(predata.res);
@@ -318,7 +340,8 @@ const BranchReport = (props) => {
         ? `0${formdate.getMonth() + 1}`
         : formdate.getMonth() + 1
       }/${formdate.getFullYear()}`;
-      const res = await fetchBranchInvoicesBydate(date,props.apitype,apiId);
+      const type= await getApiType();
+      const res = await fetchBranchInvoicesBydate(date,type,apiId);
       const csvDATA = await fetchCSVData(res.list);
       setAmount(
       res.list.reduce((a, b) => {
@@ -340,6 +363,7 @@ const BranchReport = (props) => {
 
   const toggle = (type) => {
     if(type==='daterange'){
+      setStartDate(new Date());
       setEndDate(new Date());
     }
     setBillRaised(0);
@@ -376,6 +400,8 @@ const BranchReport = (props) => {
           <td>{period.name}</td>
           <td>{period.raised}</td>
           <td>{period.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{period.paid}</td>
           <td>{period.amountPaid}</td>
           <td>{period.pending}</td>
@@ -395,6 +421,8 @@ const BranchReport = (props) => {
           <td>{date.name}</td>
           <td>{date.raised}</td>
           <td>{date.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{date.paid}</td>
           <td>{date.amountPaid}</td>
           <td>{date.pending}</td>
@@ -431,6 +459,27 @@ const BranchReport = (props) => {
         <MerchantHeader active="reports" />
       )}
       <Container verticalMargin>
+      {props.apitype === 'merchant' ? (
+        
+        <Card >
+        <div style={{display:'flex'}}>
+          <button style={{border:"none",width:"100px"}} >
+              <A>
+                <u>Reports</u>
+              </A>
+          </button>
+          <button style={{border:"none",width:"100px"}} onClick={() => {
+             history.push(`/merchant/branch/dashboard/${apiId}`);
+            }}>
+              <A>
+                DashBoard
+            </A>
+          </button>
+        <h2 style={{color:"green",marginLeft:"330px" }}><b>{branchName}</b> </h2> 
+        
+        </div>
+      </Card>
+      ):''}
             <div
                 style={{
                   display: 'flex',
@@ -513,7 +562,7 @@ const BranchReport = (props) => {
                 ):""}
                 {filter === 'period' ? (
                   <div>
-                  <h2 style={{color:"green"}}><b>Period</b></h2> 
+                  <h2 style={{color:"green"}}><b>Period Range</b></h2> 
                   <Row>
                    
                     <Col cW='48%'>
@@ -680,8 +729,10 @@ const BranchReport = (props) => {
                          <thead>
                            <tr>
                              <th>Period Name</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -714,8 +765,10 @@ const BranchReport = (props) => {
                          <thead>
                            <tr>
                              <th>Date</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -770,7 +823,7 @@ const BranchReport = (props) => {
         </Card>
       ):""}  
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
-          <h4 style={{textAlign:'center'}}>Report wfwgenerated at {`${new Date(formdate).getDate()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
+          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDate()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
         </Card>
       </Container>
       <Footer bankname={bankName} banklogo={bankLogo}/>

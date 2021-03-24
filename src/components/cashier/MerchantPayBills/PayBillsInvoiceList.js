@@ -76,7 +76,7 @@ const PayBillsInvoiceList = (props) => {
       if (invoice.has_counter_invoice === true) {
         const counterInvoice = invoiceList.filter((val) => val.number === `${invoice.number}C`);
         const list = selectedInvoiceList.filter((val) => val.id !== invoice._id &&  val.id !== counterInvoice[0]._id);
-        const paylist = payingInvoiceList.filter((val) => val.invoice.id !== invoice._id &&  val.invoive.id !== counterInvoice[0]._id);
+        const paylist = payingInvoiceList.filter((val) => val.invoice.id !== invoice._id &&  val.invoice.id !== counterInvoice[0]._id);
         setPayingInvoiceList(paylist);
         setSelectedInvoiceList(list);
         setTotalAmount(totalAmount - invoice.amount - counterInvoice[0].amount - penaltyList[index]);

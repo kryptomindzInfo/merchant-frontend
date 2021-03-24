@@ -22,6 +22,7 @@ import Loader from '../../shared/Loader';
 const StaffDashboardPage = (props) => {
   const [isLoading, setLoading] = useState(false);
   const [invoiceList, setInvoiceList] = useState([]);
+
   const [cashierInfo, setCashierInfo] = useState(
     JSON.parse(localStorage.getItem('cashierLogged')).cashier,
   );

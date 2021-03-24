@@ -16,6 +16,8 @@ import DefaultBillTermPopup from './DefaultTermPopup';
 import { getBillTerms } from '../api/MerchantAPI';
 
 const BillTermSettingPage = (props) => {
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [addBillTermPopup, setAddBillTermPopup] = React.useState(false);
   const [billTermList, setBillTermList] = React.useState([]);
   const [copyBillTermList, setCopyBillTermList] = React.useState([])
@@ -45,7 +47,7 @@ const BillTermSettingPage = (props) => {
 
   const refreshBillTermList = async () => {
     setLoading(true);
-    getBillTerms().then((data) => {
+    getBillTerms(id).then((data) => {
       console.log(data);
       setBillTermList(data.list);
       setCopyBillTermList(data.list)
@@ -99,6 +101,7 @@ const BillTermSettingPage = (props) => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">
@@ -136,6 +139,7 @@ const BillTermSettingPage = (props) => {
               className="addBankButton"
               style={{ float: 'right' }}
               onClick={() => handleDefaultBillTermPopupClick()}
+              style={{display: admin ? "none" : ''}}
             >
               <span>Set Default Term</span>
             </Button>

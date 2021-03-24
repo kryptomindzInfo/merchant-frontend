@@ -8,6 +8,7 @@ import ActionBar from '../../shared/ActionBar';
 import Main from '../../shared/Main';
 import Button from '../../shared/Button';
 import Card from '../../shared/Card';
+import Grid from '@material-ui/core/Grid';
 import Row from '../../shared/Row';
 import Col from '../../shared/Col';
 import CreateStaffPopup from './CreateStaffPopup';
@@ -18,6 +19,8 @@ import Loader from '../../shared/Loader';
 
 const MerchantStaffListPage = () => {
   const [staff, setStaff] = useState([]);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [staffCopy, setStaffCopy] = useState([]);
   const [showStaffPopup, setStaffPopup] = useState(false);
   const [popupType, setPopupType] = React.useState('new');
@@ -32,7 +35,7 @@ const MerchantStaffListPage = () => {
 
   const refreshStaffList = async () => {
     setLoading(true);
-    const data = await fetchStaffList();
+    const data = await fetchStaffList(id);
     console.log(data);
     setStaff(data.list);
     setStaffCopy(data.list)
@@ -55,7 +58,9 @@ const MerchantStaffListPage = () => {
             ? STATIC_URL + b.logo
             : `${CONTRACT_URL}main/default-profile.png`;
         return (
-          <Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
+          
+          <Grid item md={3} sm={6} xs={12} style={{marginTop:"10px"}}>
+            <Card key={b._id} col horizontalMargin="10px" cardWidth="192px">
             <div className="profile">
               <img style={{ height: '100px', width: '100px' }} src={pic} />
             </div>
@@ -64,7 +69,7 @@ const MerchantStaffListPage = () => {
                 <h4 className="hh">{b.name}</h4>
               </Col>
               <Col cW="20%">
-                <span className="absoluteMiddleRight primary popMenuTrigger">
+                <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                   <i className="material-icons ">more_vert</i>
                   <div className="popMenu">
                     <span onClick={() => handleStaffPopupClick('update', b)}>
@@ -96,6 +101,8 @@ const MerchantStaffListPage = () => {
               </Col>
             </Row>
           </Card>
+          </Grid>
+          
         );
       }
       return <div key={b._id}></div>;
@@ -134,6 +141,7 @@ const MerchantStaffListPage = () => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">
@@ -150,12 +158,19 @@ const MerchantStaffListPage = () => {
               onClick={() => handleStaffPopupClick('new', {})}
             >
               <i className="material-icons">add</i>
-              <span>Add Staff</span>
+              <span>Add User</span>
             </Button>
-          </ActionBar>
-          <Row className="clr">
+            </ActionBar>
+          {/* <Row className="clr"> */}
+          <Grid
+          container
+          direction="row"
+          justify="center"
+          alignContent="center"
+          alignItems="center"
+          >
             {staff && staff.length > 0 ? mappedCards() : null}
-          </Row>
+            </Grid> 
         </Main>
       </Container>
       {showStaffPopup ? (

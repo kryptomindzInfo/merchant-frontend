@@ -2,10 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet';
 import SearchIcon from '@material-ui/icons/Search';
 import AddIcon from '@material-ui/icons/Add';
-import PaymentReceivedCard from '../../shared/PaymentReceivedCard';
-import TotalInvoiceCard from '../../shared/TotalInvoiceCard';
-import PaidInvoiceCard from '../../shared/PaidInvoiceCard';
-import PendingInvoiceCard from '../../shared/PendingInvoiceCard';
+import DashCard from './DashCards';
 import CreateZonePopup from './CreateZonePopup';
 import { fetchTypeList, getZoneDetails, checkZoneStats } from '../api/MerchantAPI';
 import MerchantHeader from '../../shared/headers/merchant/MerchantHeader';
@@ -24,10 +21,15 @@ import { MERCHANT_API, CURRENCY } from '../../constants';
 import Card from '../../shared/Card';
 import notify from '../../utils/Notify';
 import history from '../../utils/history';
+import Footer from '../../Footer';
 
 const MerchantDashboardPage = () => {
   const [isLoading, setLoading] = useState(false);
   const [stats, setStats] = useState({});
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const bankName = JSON.parse(localStorage.getItem('merchantLogged')).bank.name;
+  const bankLogo = JSON.parse(localStorage.getItem('merchantLogged')).bank.logo;
   const [openZonePopup, setZonePopup] = React.useState(false);
   const [zoneList, setZoneList] = React.useState([]);
   const [zonestats, setZoneStats] = React.useState([]);
@@ -38,6 +40,10 @@ const MerchantDashboardPage = () => {
   const [paidByPC, setPaidByPC] = React.useState({});
   const [paidByBC, setPaidByBC] = React.useState({});
   const [paidByUS, setPaidByUS] = React.useState({});
+  const [invoicePaid, setInvoicePaid] = React.useState();
+  const [amountPaid, setAmountPaid] = React.useState();
+  const [created, setCreated] = React.useState({});
+  const [uploaded, setUploaded] = React.useState({});
   const [zoneName, setZoneName] = React.useState('');
   const [subzoneName, setSubzoneName] = React.useState('');
 
@@ -52,10 +58,10 @@ const MerchantDashboardPage = () => {
 
   const refreshZoneList = async () => {
     setLoading(true)
-    const zonedetails = await getZoneDetails();
+    const zonedetails = await getZoneDetails(id);
     setZoneName(zonedetails.zone_name);
     setSubzoneName(zonedetails.subzone_name);
-    const zonelist = await fetchTypeList("zone");
+    const zonelist = await fetchTypeList(id,"zone");
     setZoneList(zonelist.list);
     const zonestats = await getZoneStats(zonelist.list);
     setZoneStats(zonestats.res);
@@ -74,7 +80,7 @@ const MerchantDashboardPage = () => {
 
   const getStats = () => {
     axios
-    .post(`${MERCHANT_API}/getDashStats`,{})
+    .post(`${MERCHANT_API}/getDashStats`,{ merchant_id : id})
       .then(res => {
         if (res.status == 200) {
           if (res.data.status===0) {
@@ -84,6 +90,18 @@ const MerchantDashboardPage = () => {
             setPaidByBC(res.data.post6.filter((val)=>val._id==='BC')[0]);
             setPaidByPC(res.data.post6.filter((val)=>val._id==='PC')[0]);
             setPaidByUS(res.data.post6.filter((val)=>val._id==='US')[0]);
+            setInvoicePaid(
+              res.data.post6.reduce((a, b) => {
+                return a + b.bills_paid;
+              }, 0)
+            );
+            setAmountPaid(
+              res.data.post6.reduce((a, b) => {
+                return a + b.amount_paid;
+              }, 0)
+            );
+            setCreated(res.data.post7.filter((val)=>val._id===1)[0]);
+            setUploaded(res.data.post7.filter((val)=>val._id===0)[0]);
             setStats(res.data);
           }
         }
@@ -118,9 +136,11 @@ const MerchantDashboardPage = () => {
           <td className="tac">{zone.branch_count}</td>
           <td className="tac">{zonestats[index].bill_generated}</td>
           <td className="tac">{zonestats[index].amount_generated}</td>
+          <td className="tac">0</td>
+          <td className="tac">0</td>
           <td className="tac">{zonestats[index].bill_paid}</td>
           <td className="tac">{zonestats[index].amount_paid}</td>
-          <td className="tac">{zonestats[index].bill_pending}</td>
+          <td className="tac">{zonestats[index].bill_generated-zonestats[index].bill_paid}</td>
           <td className="tac">
             <div
               style={{
@@ -128,8 +148,8 @@ const MerchantDashboardPage = () => {
                 justifyContent: 'center',
               }}
             >
-              <td className="tac">{zonestats[index].amount_pending}</td>
-              <span className="absoluteMiddleRight primary popMenuTrigger">
+              <td className="tac">{zonestats[index].amount_generated-zonestats[index].amount_paid}</td>
+              <span className="absoluteMiddleRight primary popMenuTrigger" style={{display: admin ? "none" : ''}}>
                 <i className="material-icons ">more_vert</i>
                 <div className="popMenu">
                   <span
@@ -171,109 +191,35 @@ const MerchantDashboardPage = () => {
       <Container verticalMargin>
         <MerchantSideBar />
         <Main>
-          <Row>
+        <Row>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Invoice Paid by Bank</h4>
-              <div className="cardValue">
-                {paidByBC ? paidByBC.bills_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Invoice Created' no={created ? created.bills_generated : 0} amount={created ? created.amount_generated : 0}/>
           </Col>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Invoice Paid by Partner</h4>
-              <div className="cardValue">
-              {paidByPC ? paidByPC.bills_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Invoice Uploaded' no={uploaded ? uploaded.bills_generated : 0} amount={uploaded ? uploaded.amount_generated : 0}/>
           </Col>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Invoice Paid by Merchant</h4>
-              <div className="cardValue">
-                {paidByMC ? paidByMC.bills_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Invoice Paid' no={invoicePaid} amount={amountPaid}/>
           </Col>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Invoice Paid by User</h4>
-              <div className="cardValue">
-                {paidByUS ? paidByUS.bills_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Invoice Pending' no={created ? created.bills_generated-invoicePaid : 0} amount={created ? created.amount_generated-amountPaid : 0}/>
           </Col>
-          </Row>
-          <Row>
+        </Row>
+        <Row>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Amount Collected by Bank</h4>
-              <div className="cardValue">
-                {paidByBC ? paidByBC.amount_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Paid by bank' no={paidByBC ? paidByBC.bills_paid : 0} amount={paidByBC ? paidByBC.amount_paid : 0}/>
           </Col>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Amount Collected by Partner</h4>
-              <div className="cardValue">
-              {paidByPC ? paidByPC.amount_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Paid by partner' no={paidByPC ? paidByPC.bills_paid : 0} amount={paidByPC ? paidByPC.amount_paid : 0}/>
           </Col>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Amount Collected by Merchant</h4>
-              <div className="cardValue">
-                {paidByMC ? paidByMC.amount_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Paid by merchant' no={paidByMC ? paidByMC.bills_paid : 0} amount={paidByMC ? paidByMC.amount_paid : 0}/>
           </Col>
           <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Amount Collected by User</h4>
-              <div className="cardValue">
-                {paidByUS ? paidByUS.amount_paid : 0}
-            </div>
-            </Card>
+            <DashCard title='Paid by user' no={paidByUS ? paidByUS.bills_paid : 0} amount={paidByUS ? paidByUS.amount_paid : 0}/>
           </Col>
-          </Row>
-          <Row>
-          <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Invoice Created</h4>
-              <div className="cardValue">
-                {stats.bills_generated}
-            </div>
-            </Card>
-          </Col>
-          <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Amount Generated</h4>
-              <div className="cardValue">
-              {stats.amount_generated}
-            </div>
-            </Card>
-          </Col>
-          <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Invoice Pending</h4>
-              <div className="cardValue">
-              {stats.bills_pending}
-            </div>
-            </Card>
-          </Col>
-          <Col>
-            <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{textAlign:'center'}}>
-              <h4>Amount Pending</h4>
-              <div className="cardValue">
-                {stats.amount_pending}
-            </div>
-            </Card>
-          </Col>
-          </Row>
-        
+        </Row>
+          
         </Main>
         <div style={{ marginBottom: '50px' }}>
       <ActionBar
@@ -281,25 +227,21 @@ const MerchantDashboardPage = () => {
         inputWidth="calc(100% - 241px)"
         className="clr"
       >
-        <div className="iconedInput fl">
-          <i className="material-icons">
-            <SearchIcon />
-          </i>
-          <input type="text" placeholder="Search Zones" onChange={(e) => {
-            searchlistfunction(e.target.value)
-          }} />
-        </div>
-
-        <Button
-          className="addBankButton"
+      </ActionBar>
+      <Card bigPadding>
+      <Button
+          className="dashBtn"
+          style={{
+            float:"right",
+            marginBottom:'10px',
+            display: admin ? "none" : '',
+          }}
           flex
           onClick={() => handleZonePopupClick('new', {})}
         >
           <AddIcon className="material-icons" />
           <span>Add {zoneName}</span>
         </Button>
-      </ActionBar>
-      <Card bigPadding>
         <div className="cardBody">
           <Table marginTop="34px">
             <thead>
@@ -307,12 +249,14 @@ const MerchantDashboardPage = () => {
                 <th>Zones</th>
                 <th>Subzones</th>
                 <th>Branches</th>
-                <th>Bills</th>
-                <th>Amount Billed</th>
-                <th>Paid bills</th>
-                <th>Amount of paid bills</th>
-                <th>Pending bills</th>
-                <th>Amount of pending bills</th>
+                <th>Invoice Created</th>
+                <th>Amount Generated</th>
+                <th>Invoice Uploaded</th>
+                <th>Amount Uploaded</th>
+                <th>Paid Invoices</th>
+                <th>Amount Paid</th>
+                <th>Pending Invoices</th>
+                <th>Amount Pending</th>
               </tr>
             </thead>
             <tbody>{zoneList && zoneList.length > 0 ? getZones() : null}</tbody>
@@ -330,6 +274,7 @@ const MerchantDashboardPage = () => {
       ) : null}
     </div>
       </Container>
+      <Footer bankname={bankName} banklogo={bankLogo}/>
     </Fragment>
   );
 };

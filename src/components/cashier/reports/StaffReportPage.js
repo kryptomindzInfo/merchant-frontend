@@ -21,6 +21,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
+import ReactPaginate from 'react-paginate';
 import {
   fetchInvoicesBydate,
   getMerchantSettings,
@@ -31,46 +32,52 @@ import Loader from '../../shared/Loader';
 
 const StaffReportPage = (props) => {
   const [isLoading, setLoading] = useState(false);
-  const bankName = props.apitype === 'merchantStaff' ?
+  const bankName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank.name :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).bank.name :
       JSON.parse(localStorage.getItem('branchLogged')).bank.name
 
-  const bankLogo = props.apitype === 'merchantStaff' ?
+  const bankLogo = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).bank.logo :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).bank.logo :
       JSON.parse(localStorage.getItem('branchLogged')).bank.logo
     
-  const cashierName =  props.apitype === 'merchantStaff' ?
+  const cashierName =  props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).staff.name :
     JSON.parse(localStorage.getItem('selectedCashier')).name
 
-  const branchName = props.apitype === 'merchantStaff' ?
+  const branchName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).branch.name :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('selectedBranch')).name :
       JSON.parse(localStorage.getItem('branchLogged')).details.name
     
-  const merchantName = props.apitype === 'merchantStaff' ?
+  const merchantName = props.apitype === 'merchantPosition' ?
     JSON.parse(localStorage.getItem('cashierLogged')).merchant.name :
     props.apitype === 'merchant' ?
       JSON.parse(localStorage.getItem('merchantLogged')).details.name :
       JSON.parse(localStorage.getItem('branchLogged')).merchant.name
-    const assigned = props.apitype === 'merchantStaff' ?
+    const assigned = props.apitype === 'merchantPosition' ?
     '':
     localStorage.getItem('assignedTo')
-  const apiId = props.apitype === 'merchantStaff' ? " " : props.match.params.id
+  const apiId = props.apitype === 'merchantPosition' ? " " : props.match.params.id
   const [invoiceList, setInvoiceList] = useState([]);
+  const [invoiceListCopy, setInvoiceListCopy] = useState([]);
   const [periodList, setPeriodList] = useState([]);
   const [periodTableList, setPeriodTableList] = useState([]);
   const [dateTableList, setDateTableList] = useState([]);
+  const [periodTableListCopy, setPeriodTableListCopy] = useState([]);
+  const [dateTableListCopy, setDateTableListCopy] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [periodStartDate, setPeriodStartDate] = useState("");
   const [periodEndDate, setPeriodEndDate] = useState("");
   const [amount, setAmount] = useState(0);
+  const [pageCountPeriod, setPageCountPeriod ] = React.useState(0);
+  const [pageCountDateRange, setPageCountDateRange ] = React.useState(0);
+  const [pageCountBillDate, setPageCountBillDate ] = React.useState(0);
   const [filter, setFilter] = useState('billdate');
   const [periodStart, setPeriodStart] = useState('');
   const [billRaised, setBillRaised] = useState(0);
@@ -87,6 +94,32 @@ const StaffReportPage = (props) => {
     ["BillNo","Name","Amount","Mobile","DueDate"]
   ]);
 
+  const handlePageClickBillDate = (data) =>{
+    console.log(data);
+    setInvoiceList(invoiceListCopy.slice(data.selected*10, data.selected + 10));
+  };
+  const handlePageClickPeriod = (data) =>{
+    console.log(data);
+    setPeriodTableList(periodTableListCopy.slice(data.selected*10, data.selected + 10));
+  };
+  const handlePageClickDateRange = (data) =>{
+    console.log(data);
+    setDateTableList(dateTableListCopy.slice(data.selected*10, data.selected + 10));
+  };
+
+  const getApiType = () => {
+    if (props.apitype === 'merchant'){
+      if( JSON.parse(localStorage.getItem('merchantLogged')).admin){
+        return 'merchantStaff';
+      }else{
+        return 'merchant';
+      }
+    }else{
+      return props.apitype;
+    }
+
+  };
+
   const fetchCSVData = async(list) => {
     const csvlist = list.map(async (invoice) => {
         return ([invoice.number,invoice.name,invoice.amount,invoice.mobile,invoice.due_date]);
@@ -96,7 +129,16 @@ const StaffReportPage = (props) => {
   };
   const refreshMerchantSettings = async () => {
     setLoading(true);
-    getMerchantSettings(props.apitype).then((data) => {
+    let type= "";
+    let id = "";
+    if (props.apitype === 'merchant'){
+        id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+    }else if (props.apitype === 'merchantPosition'){
+      type = 'merchantStaff';
+    }else {
+      type = props.apitype;
+    }
+    getMerchantSettings(id, type).then((data) => {
       setPeriodList(data.bill_period_list);
       setStartDate(data.bill_period_list[0].start_date);
       setEndDate(new Date());
@@ -291,7 +333,8 @@ const StaffReportPage = (props) => {
     setLoading(true);
     const start = startOfDay(new Date(periodStartDate));
     const end = endOfDay(new Date(periodEndDate));
-    const res = await fetchInvoicesByPeriod(start,end, props.apitype,apiId);
+    const type= await getApiType();
+    const res = await fetchInvoicesByPeriod(start, end, type, apiId);
     const predata = await preProcessPeriodTableData(res.list);
     const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
@@ -303,7 +346,9 @@ const StaffReportPage = (props) => {
     setAmountPaid(data.amountPaid);
     setAmountPending(data.amountPending);
     setCounterAmount(data.counterAmount);
+    setPageCountPeriod(Math.ceil(tabledata.res.length / 10));
     setPeriodTableList(tabledata.res);
+    setPeriodTableListCopy(tabledata.res);
     setLoading(data.loading);
   };
 
@@ -311,12 +356,15 @@ const StaffReportPage = (props) => {
   setLoading(true);
   const start = startOfDay(new Date(startDate));
   const end = endOfDay(new Date(endDate));
-  const res = await fetchInvoicesByDateRange(start,end,props.apitype,apiId);
+  const type= await getApiType();
+  const res = await fetchInvoicesByDateRange(start,end,type,apiId);
   const datelist = await getDatesBetweenDates(start, end);
   const predata = await preProcessDateTableData(datelist,res.list);
   const tabledata = await setDateTable(predata.res);
   const data = await setData(res.list);
+  setPageCountDateRange(Math.ceil(tabledata.res.length / 10));
   setDateTableList(tabledata.res);
+  setDateTableListCopy(tabledata.res);
   setBillRaised(data.raised);
   setBillPending(data.pending);
   setBillPaid(data.paid);
@@ -335,7 +383,8 @@ const StaffReportPage = (props) => {
         ? `0${formdate.getMonth() + 1}`
         : formdate.getMonth() + 1
       }/${formdate.getFullYear()}`;
-      const res = await fetchInvoicesBydate(date,props.apitype,apiId);
+      const type= await getApiType();
+      const res = await fetchInvoicesBydate(date,type,apiId);
       const csvDATA = await fetchCSVData(res.list);
       setAmount(
       res.list.reduce((a, b) => {
@@ -343,6 +392,8 @@ const StaffReportPage = (props) => {
       }, 0));
       setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
       setInvoiceList(res.list);
+      setInvoiceListCopy(res.list);
+      setPageCountBillDate(Math.ceil(res.list.length / 10));
       const data = await setData(res.list);
       setBillRaised(data.raised);
       setBillPending(data.pending);
@@ -393,6 +444,8 @@ const StaffReportPage = (props) => {
           <td>{period.name}</td>
           <td>{period.raised}</td>
           <td>{period.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{period.paid}</td>
           <td>{period.amountPaid}</td>
           <td>{period.pending}</td>
@@ -412,6 +465,8 @@ const StaffReportPage = (props) => {
           <td>{date.name}</td>
           <td>{date.raised}</td>
           <td>{date.amountRaised}</td>
+          <td>0</td>
+          <td>0</td>
           <td>{date.paid}</td>
           <td>{date.amountPaid}</td>
           <td>{date.pending}</td>
@@ -442,7 +497,7 @@ const StaffReportPage = (props) => {
         <title>Merchant Dashboard | Cashier | E-WALLET </title>
         <meta name="description" content="Description of Dashboard" />
       </Helmet>
-      {props.apitype === 'merchantStaff' ? (
+      {props.apitype === 'merchantPosition' ? (
         <StaffHeader active="reports" />
       ) : (
         props.apitype === 'merchant' ?
@@ -452,7 +507,7 @@ const StaffReportPage = (props) => {
       
       
       <Container verticalMargin>
-      {props.apitype !== 'merchantStaff' ? (
+      {props.apitype !== 'merchantPosition' ? (
       <Card>
       <h3 style={{color:"green", textAlign:'center' }}><b>Name : </b>{assigned} </h3> 
       </Card>
@@ -689,7 +744,7 @@ const StaffReportPage = (props) => {
                   <h3 style={{color:"green", marginBottom:"20px"}}><b>Branch Name : </b>{branchName} </h3>      
                 </Col>
                 <Col>
-                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Staff Name : </b>{cashierName} </h3>
+                  <h3 style={{color:"green", marginBottom:"20px"}}><b>Position Name : </b>{cashierName} </h3>
                 </Col>
               </Row>
             </Card>
@@ -705,12 +760,15 @@ const StaffReportPage = (props) => {
                {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
                      <h3 style={{color:"green" ,textAlign:"left"}}><b>Period List</b></h3>
                      {periodTableList && periodTableList.length > 0 ? (
+                       <div>
                        <Table marginTop="34px">
                          <thead>
                            <tr>
                              <th>Period Name</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -721,6 +779,20 @@ const StaffReportPage = (props) => {
                          </thead>
                          <tbody>{getPeriods()}</tbody>
                        </Table>
+                       <ReactPaginate
+                       previousLabel={'previous'}
+                       nextLabel={'next'}
+                       breakLabel={'...'}
+                       breakClassName={'break-me'}
+                       pageCount={pageCountPeriod}
+                       marginPagesDisplayed={10}
+                       pageRangeDisplayed={2}
+                       onPageChange={handlePageClickPeriod}
+                       containerClassName={'pagination'}
+                       subContainerClassName={'pages pagination'}
+                       activeClassName={'active'}
+                     />
+                     </div>
                      ) : (
                          <h3
                            style={{
@@ -739,12 +811,15 @@ const StaffReportPage = (props) => {
                {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
                      <h3 style={{color:"green" ,textAlign:"left"}}><b>Date List</b></h3>
                      {dateTableList && dateTableList.length > 0 ? (
+                       <div>
                        <Table marginTop="34px">
                          <thead>
                            <tr>
                              <th>Date</th>
-                             <th>Invoice Raised</th>
-                             <th>Amount Raised</th>
+                             <th>Invoice Created</th>
+                              <th>Amount Generated</th>
+                              <th>Invoice Uploaded</th>
+                              <th>Amount Uploaded</th>
                              <th>Invoice Paid</th>
                              <th>Amount Paid</th>
                              <th>Invoice Pending</th>
@@ -755,6 +830,20 @@ const StaffReportPage = (props) => {
                          </thead>
                          <tbody>{getDates()}</tbody>
                        </Table>
+                       <ReactPaginate
+                       previousLabel={'previous'}
+                       nextLabel={'next'}
+                       breakLabel={'...'}
+                       breakClassName={'break-me'}
+                       pageCount={pageCountDateRange}
+                       marginPagesDisplayed={10}
+                       pageRangeDisplayed={2}
+                       onPageChange={handlePageClickDateRange}
+                       containerClassName={'pagination'}
+                       subContainerClassName={'pages pagination'}
+                       activeClassName={'active'}
+                     />
+                     </div>
                      ) : (
                          <h3
                            style={{
@@ -773,6 +862,7 @@ const StaffReportPage = (props) => {
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice List</b></h3>
               {invoiceList && invoiceList.length > 0 ? (
+                <div>
                 <Table marginTop="34px">
                   <thead>
                     <tr>
@@ -785,6 +875,20 @@ const StaffReportPage = (props) => {
                   </thead>
                   <tbody>{getInvoices()}</tbody>
                 </Table>
+                <ReactPaginate
+                previousLabel={'previous'}
+                nextLabel={'next'}
+                breakLabel={'...'}
+                breakClassName={'break-me'}
+                pageCount={pageCountBillDate}
+                marginPagesDisplayed={10}
+                pageRangeDisplayed={2}
+                onPageChange={handlePageClickBillDate}
+                containerClassName={'pagination'}
+                subContainerClassName={'pages pagination'}
+                activeClassName={'active'}
+              />
+              </div>
               ) : (
                   <h3
                     style={{
@@ -799,7 +903,7 @@ const StaffReportPage = (props) => {
         </Card>
       ):""}  
       <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'80px'}}>
-          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDay()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
+          <h4 style={{textAlign:'center'}}>Report generated at {`${new Date(formdate).getDate()}/${new Date(formdate).getMonth()+1}/${new Date(formdate).getFullYear()} ${new Date(formdate).getHours()}:${new Date(formdate).getMinutes()}`} </h4>
         </Card>
       </Container>
       <Footer bankname={bankName} banklogo={bankLogo}/>

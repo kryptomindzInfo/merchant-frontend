@@ -4,6 +4,7 @@ import notify from '../../utils/Notify';
 
 // API's for Merchant Dashboard
 
+
 const getzone = async () => {
   try {
     const res = await axios.get(`${MERCHANT_API}/getZone`);
@@ -84,9 +85,9 @@ const zoneAPI = async (props, values, apiType) => {
   }
 };
 
-const fetchTypeList = async (type) => {
+const fetchTypeList = async (id,type) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/get${type}List`);
+    const res = await axios.post(`${MERCHANT_API}/get${type}List`,{ merchant_id: id });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -307,9 +308,9 @@ const blockStaffAPI = async (apiType, id) => {
   }
 };
 
-const fetchStaffList = async () => {
+const fetchStaffList = async (id) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listStaff`);
+    const res = await axios.post(`${MERCHANT_API}/listStaff`,{merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -351,9 +352,9 @@ const uploadOffering = async (props, offeringList) => {
   }
 };
 
-const fetchOfferingList = async () => {
+const fetchOfferingList = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listOfferings`, {});
+    const res = await axios.post(`${MERCHANT_API}/listOfferings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -410,9 +411,9 @@ const editOffering = async (props, values) => {
 };
 
 // API's for Merchant Taxes
-const fetchTaxList = async () => {
+const fetchTaxList = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listTaxes`, {});
+    const res = await axios.post(`${MERCHANT_API}/listTaxes`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -490,9 +491,9 @@ const deleteTax = async (taxId) => {
 };
 
 // API's for Merchant Customers
-const fetchCustomerList = async () => {
+const fetchCustomerList = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/listCustomers`, {});
+    const res = await axios.post(`${MERCHANT_API}/listCustomers`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -554,9 +555,9 @@ const editMerchant = async (props, values) => {
   }
 };
 
-const getPenaltyRule = async () => {
+const getPenaltyRule = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         return { penalty_rule: {}, loading: false };
@@ -594,9 +595,9 @@ const PenaltyRule = async (props, values) => {
   }
 };
 
-const getBillTerms = async () => {
+const getBillTerms = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -637,9 +638,9 @@ const addBillTerm = async (props, values) => {
   }
 };
 
-const getBillPeriods = async () => {
+const getBillPeriods = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -659,9 +660,9 @@ const getBillPeriods = async () => {
   }
 };
 
-const getCategories = async () => {
+const getCategories = async (id) => {
   try {
-    const res = await axios.get(`${MERCHANT_API}/listInvoiceGroups`, {});
+    const res = await axios.post(`${MERCHANT_API}/listInvoiceGroups`, {merchant_id:id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -805,10 +806,51 @@ const checkSubZoneStats = async (id) => {
   }
 };
 
-const checkZoneStats = async (id) => {
+const checkBranchStats = async (id) => {
+  try {
+    const res = await axios.post(`${MERCHANT_API}/getBranchStats`,{
+      branch_id:id,
+    });
+    if (res.status === 200) {
+      console.log(res);
+      if (res.data.status === 0) {
+        notify(res.data.message, 'error');
+        return { 
+          bills_paid: 0,
+					amount_generated: 0,
+					bill_generated: 0,
+					amount_paid: 0,
+        };
+      }
+      return { 
+        bill_generated: res.data.bill_generated,
+        amount_generated: res.data.amount_generated,
+        amount_paid: res.data.amount_paid,
+        bill_paid: res.data.bill_paid,
+      };
+    }
+    notify(res.data.message, 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+    };
+  } catch (err) {
+    notify('Something went wrong', 'error');
+    return { 
+      bills_paid: 0,
+			amount_generated: 0,
+			bill_generated: 0,
+			amount_paid: 0,
+    };
+  }
+};
+
+const checkZoneStats = async (zoneid) => {
   try {
     const res = await axios.post(`${MERCHANT_API}/getZoneStats`,{
-      zone_id:id,
+      zone_id:zoneid,
     });
     if (res.status === 200) {
       console.log(res);
@@ -869,7 +911,14 @@ const checkStatsbydate = async (id,date,type) => {
 					amount_generated: 0,
 					bill_generated: 0,
 					amount_paid: 0,
-         
+          bill_paid_by_MC:0,
+          amount_paid_by_MC:0,
+          bill_paid_by_BC:0,
+          amount_paid_by_BC:0,
+          bill_paid_by_PC:0,
+          amount_paid_by_PC:0,
+          bill_paid_by_US:0,
+          amount_paid_by_US:0,
         };
       }
       return { 
@@ -877,6 +926,14 @@ const checkStatsbydate = async (id,date,type) => {
         amount_generated: res.data.amount_generated,
         amount_paid: res.data.amount_paid,
         bill_paid: res.data.bill_paid,
+        bill_paid_by_MC:res.data.bill_paid_by_MC,
+        amount_paid_by_MC:res.data.amount_paid_by_MC,
+        bill_paid_by_BC:res.data.bill_paid_by_BC,
+        amount_paid_by_BC:res.data.amount_paid_by_BC,
+        bill_paid_by_PC:res.data.bill_paid_by_PC,
+        amount_paid_by_PC:res.data.amount_paid_by_PC,
+        bill_paid_by_US:res.data.bill_paid_by_US,
+        amount_paid_by_US:res.data.amount_paid_by_US,
         
       };
     }
@@ -886,7 +943,14 @@ const checkStatsbydate = async (id,date,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-      
+      bill_paid_by_MC:0,
+      amount_paid_by_MC:0,
+      bill_paid_by_BC:0,
+      amount_paid_by_BC:0,
+      bill_paid_by_PC:0,
+      amount_paid_by_PC:0,
+      bill_paid_by_US:0,
+      amount_paid_by_US:0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -895,7 +959,14 @@ const checkStatsbydate = async (id,date,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-     
+      bill_paid_by_MC:0,
+      amount_paid_by_MC:0,
+      bill_paid_by_BC:0,
+      amount_paid_by_BC:0,
+      bill_paid_by_PC:0,
+      amount_paid_by_PC:0,
+      bill_paid_by_US:0,
+      amount_paid_by_US:0,
     };
   }
 };
@@ -915,7 +986,14 @@ const checkStatsbyperiod = async (id,period,type) => {
 					amount_generated: 0,
 					bill_generated: 0,
 					amount_paid: 0,
-         
+          bill_paid_by_MC:0,
+          amount_paid_by_MC:0,
+          bill_paid_by_BC:0,
+          amount_paid_by_BC:0,
+          bill_paid_by_PC:0,
+          amount_paid_by_PC:0,
+          bill_paid_by_US:0,
+          amount_paid_by_US:0,
         };
       }
       return { 
@@ -923,6 +1001,14 @@ const checkStatsbyperiod = async (id,period,type) => {
         amount_generated: res.data.amount_generated,
         amount_paid: res.data.amount_paid,
         bill_paid: res.data.bill_paid,
+        bill_paid_by_MC:res.data.bill_paid_by_MC,
+        amount_paid_by_MC:res.data.amount_paid_by_MC,
+        bill_paid_by_BC:res.data.bill_paid_by_BC,
+        amount_paid_by_BC:res.data.amount_paid_by_BC,
+        bill_paid_by_PC:res.data.bill_paid_by_PC,
+        amount_paid_by_PC:res.data.amount_paid_by_PC,
+        bill_paid_by_US:res.data.bill_paid_by_US,
+        amount_paid_by_US:res.data.amount_paid_by_US,
         
       };
     }
@@ -932,7 +1018,14 @@ const checkStatsbyperiod = async (id,period,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-      
+      bill_paid_by_MC:0,
+          amount_paid_by_MC:0,
+          bill_paid_by_BC:0,
+          amount_paid_by_BC:0,
+          bill_paid_by_PC:0,
+          amount_paid_by_PC:0,
+          bill_paid_by_US:0,
+          amount_paid_by_US:0,
     };
   } catch (err) {
     notify('Something went wrong', 'error');
@@ -941,14 +1034,21 @@ const checkStatsbyperiod = async (id,period,type) => {
 			amount_generated: 0,
 			bill_generated: 0,
 			amount_paid: 0,
-     
+      bill_paid_by_MC:0,
+      amount_paid_by_MC:0,
+      bill_paid_by_BC:0,
+      amount_paid_by_BC:0,
+      bill_paid_by_PC:0,
+      amount_paid_by_PC:0,
+      bill_paid_by_US:0,
+      amount_paid_by_US:0,
     };
   }
 };
 
-const getZoneDetails = async () => {
+const getZoneDetails = async (id) => {
   try {
-    const res = await axios.post(`${MERCHANT_API}/getSettings`, {});
+    const res = await axios.post(`${MERCHANT_API}/getSettings`, { merchant_id: id});
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -1022,7 +1122,7 @@ const BillDetails = async (props, values) => {
   }
 };
 
-const getRules = async (ruleType, type) => {
+const getRules = async (id, ruleType, type) => {
   try {
     let URL = '';
     if (type === 'interbank') {
@@ -1030,7 +1130,7 @@ const getRules = async (ruleType, type) => {
     } else {
       URL = `${MERCHANT_API}/getRules`;
     }
-    const res = await axios.post(URL, { page: ruleType });
+    const res = await axios.post(URL, { page: ruleType, merchant_id:id });
     if (res.status === 200) {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
@@ -1119,6 +1219,7 @@ const getMerchantPositions = async (id) => {
 };
 
 export {
+  checkBranchStats,
   checkStatsbyperiod,
   checkStatsbydate,
   checkSubZoneStats,

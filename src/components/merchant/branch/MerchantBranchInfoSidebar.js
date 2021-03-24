@@ -87,14 +87,6 @@ class MerchantBranchInfoSidebar extends Component {
             <h3>Branch Info</h3>
           </Card>
         </A>
-        <A href="/reports/">
-          <Card rounded selected={reports} className="sideNav">
-            <i className="material-icons">
-              <ChartIcon />
-            </i>
-            <h3>Reports</h3>
-          </Card>
-        </A>
         <A href={`/merchant/${selectedBranch._id}/cashiers`}>
           <Card rounded selected={cashier} className="sideNav">
             <i className="material-icons">

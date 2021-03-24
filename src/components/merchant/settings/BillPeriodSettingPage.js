@@ -18,6 +18,8 @@ import { getBillPeriods } from '../api/MerchantAPI';
 
 const BillPeriodSettingPage = (props) => {
   const [addBillPeriodPopup, setAddBillPeriodPopup] = React.useState(false);
+  const id = JSON.parse(localStorage.getItem('merchantLogged')).details._id;
+  const admin = JSON.parse(localStorage.getItem('merchantLogged')).admin;
   const [billPeriodList, setBillPeriodList] = React.useState([]);
   const [copyBillPeriodList, setCopyBillPeriodList] = React.useState([])
   const [popupType, setPopupType] = React.useState('new');
@@ -49,7 +51,7 @@ const BillPeriodSettingPage = (props) => {
 
   const refreshBillPeriodList = async () => {
     setLoading(true);
-    getBillPeriods().then((data) => {
+    getBillPeriods(id).then((data) => {
       console.log(data);
       if (data.list.length > 0) {
         const startdate = new Date(data.list[data.list.length - 1].end_date);
@@ -116,6 +118,7 @@ const BillPeriodSettingPage = (props) => {
             marginBottom="33px"
             inputWidth="calc(100% - 241px)"
             className="clr"
+            style={{display: admin ? "none" : ''}}
           >
             <div className="iconedInput fl">
               <i className="material-icons">
@@ -153,6 +156,7 @@ const BillPeriodSettingPage = (props) => {
               className="addBankButton"
               style={{ float: 'right' }}
               onClick={() => handleDefaultBillPeriodPopupClick()}
+              style={{display: admin ? "none" : ''}}
             >
               <span>Set Default Period</span>
             </Button>

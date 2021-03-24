@@ -16,6 +16,8 @@ import TransactionReceipt from '../../../components/cashier/dashboard/Transactio
 import SearchInvoicePopup from './SearchInvoicePopup';
 // import withStyles from '@material-ui/core/styles'
 import { withStyles } from '@material-ui/core';
+import endOfDay from 'date-fns/endOfDay';
+import startOfDay from 'date-fns/startOfDay';
 
 import { API_URL, STATIC_URL, CURRENCY } from '../../constants';
 
@@ -37,6 +39,7 @@ class CashierClosingBalance extends Component {
     super();
     this.state = {
       loading: true,
+      readOnly: JSON.parse(localStorage.getItem('cashierLogged')).staff.read_only,
       payBillsPopup: false,
       searchBillsPopup: false,
       receiptPopup:false,
@@ -192,7 +195,7 @@ class CashierClosingBalance extends Component {
       .then(res => {
         if (res.status == 200) {
           const today = new Date();
-          const closingDate = new Date(res.data.closingTime);
+          const closingDate = startOfDay(new Date(res.data.closingTime));
           var Difference_In_Time = today.getTime() - closingDate.getTime();
           // To calculate the no. of days between two dates 
           var Difference_In_Days = Math.trunc(Difference_In_Time / (1000 * 3600 * 24)); 
@@ -351,7 +354,9 @@ class CashierClosingBalance extends Component {
     const dis = this;
     return (
       <Card marginBottom="54px" buttonMarginTop="32px" bigPadding smallValue>
-        <Row>
+        {!this.state.readOnly ? (
+          <div>
+             <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
           {this.state.tomorrow ? (
             <div>
@@ -390,6 +395,9 @@ class CashierClosingBalance extends Component {
           )}
           </Col>
         </Row>
+          </div>
+        ):""}
+       
         <Row>
           <Col style={{ width: '100%', marginTop: '5px' }} cw="100%">
             <Button dashBtn onClick={() => { this.onSearchBillsPopupOpen() }}>
