@@ -46,14 +46,14 @@ function BranchSettingsPage(props) {
 
             <h2 style={{ margintop: "" }}>{branchInfo.name}</h2>
 
-            <Button
+            {/* <Button
               className="addBankButton"
               style={{ padding: '2px' }}
               onClick={() => setEditBranchPopup(true)}
               flex
             >
               <span>Edit</span>
-            </Button>
+            </Button> */}
           </ActionBar>
           <Card bigPadding bordered>
             <div className="cardBody">

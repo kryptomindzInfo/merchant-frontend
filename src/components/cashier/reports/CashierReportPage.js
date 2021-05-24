@@ -199,45 +199,76 @@ const CashierReportPage = (props) => {
               <Card marginBottom="20px" buttonMarginTop="32px" smallValue style={{height:'150px'}}>
                 <Container>
                 
-                <h2 style={{color:"green"}}><b>Date</b></h2> 
+                <h2 style={{color:"green"}}><b>Date Range</b></h2> 
                   <Row>
-                    <Col cW='60%'>
-                  <FormGroup>
-                    <MuiPickersUtilsProvider
-                      utils={DateFnsUtils}
-                    >
-                      <KeyboardDatePicker
-                        id="date-picker-dialog"
-                        size="small"
-                        fullWidth
-                        maxDate={new Date()}
-                        inputVariant="outlined"
-                        format="dd/MM/yyyy"
-                        required
-                        InputLabelProps={{
-                        shrink: true,
-                        }}
-                        value={
-                          formdate
+                    <Col cW='50%'>
+                      <FormGroup>
+                        <MuiPickersUtilsProvider
+                          utils={DateFnsUtils}
+                        >
+                        <KeyboardDatePicker
+                          id="date-picker-dialog"
+                          size="small"
+                          fullWidth
+                          maxDate={new Date()}
+                          inputVariant="outlined"
+                          format="dd/MM/yyyy"
+                          required
+                          InputLabelProps={{
+                          shrink: true,
+                          }}
+                          value={
+                            formdate
                           }
-                        onChange={date =>
-                        setFormdate(date)
-                        }
-                         KeyboardButtonProps={{
-                        'aria-label': 'change date',
+                          onChange={date =>
+                          setFormdate(date)
+                          }
+                          KeyboardButtonProps={{
+                          'aria-label': 'change date',
                                                     }}
-                      />
-                    </MuiPickersUtilsProvider>
-                  </FormGroup>
-                </Col>
-                    <Col cW='40%'> 
+                        />
+                        </MuiPickersUtilsProvider>
+                      </FormGroup>
+                    </Col>
+                    <Col cW='50%'>
+                      <FormGroup>
+                        <MuiPickersUtilsProvider
+                          utils={DateFnsUtils}
+                        >
+                        <KeyboardDatePicker
+                          id="date-picker-dialog"
+                          size="small"
+                          fullWidth
+                          maxDate={new Date()}
+                          inputVariant="outlined"
+                          format="dd/MM/yyyy"
+                          required
+                          InputLabelProps={{
+                          shrink: true,
+                          }}
+                          value={
+                            formdate
+                          }
+                          onChange={date =>
+                          setFormdate(date)
+                          }
+                          KeyboardButtonProps={{
+                          'aria-label': 'change date',
+                                                    }}
+                        />
+                        </MuiPickersUtilsProvider>
+                      </FormGroup>
+                    </Col>
+                  </Row>
+                  <Row>  
+                  <Col cW='40%'> 
                       <Button
                         style={{padding:'9px'}}
                         onClick={()=>getReport()}
                       >
                         Get Report
                       </Button>
-                </Col>
+                     </Col>
                   </Row>
                 </Container>
               </Card>

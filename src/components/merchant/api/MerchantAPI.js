@@ -340,9 +340,17 @@ const uploadOffering = async (props, offeringList) => {
       if (res.data.status === 0) {
         notify(res.data.message, 'error');
       } else {
-        notify(res.data.message, 'success');
-        props.refreshOfferingList();
-        props.onClose();
+        if(res.data.failed.length>0){
+          notify(JSON.stringify(res.data.failed), 'warn');
+          props.refreshOfferingList();
+          props.onClose();
+        }else{
+          notify(res.data.message, 'success');
+          props.refreshOfferingList();
+          props.onClose();
+
+        }
+        
       }
     } else {
       notify(res.data.message, 'error');

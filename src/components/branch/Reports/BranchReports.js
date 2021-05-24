@@ -20,6 +20,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import endOfDay from 'date-fns/endOfDay';
 import startOfDay from 'date-fns/startOfDay';
 import Footer from '../../Footer';
+import ReactPaginate from 'react-paginate';
 import A from '../../shared/A';
 import {
   getMerchantSettings,
@@ -50,6 +51,9 @@ const BranchReport = (props) => {
   const [periodList, setPeriodList] = useState([]);
   const [periodTableList, setPeriodTableList] = useState([]);
   const [dateTableList, setDateTableList] = useState([]);
+  const [periodTableListCopy, setPeriodTableListCopy] = useState([]);
+  const [dateTableListCopy, setDateTableListCopy] = useState([]);
+  const [invoiceListCopy, setInvoiceListCopy] = useState([]);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [periodStartDate, setPeriodStartDate] = useState("");
@@ -66,6 +70,7 @@ const BranchReport = (props) => {
   const [counterAmount, setCounterAmount] = useState(0);
   const [amountPaid, setAmountPaid] = useState(0);
   const [periodEnd, setPeriodEnd] = useState('');
+  const [pagecount, setPagecount] = useState(0);
   
   const [formdate, setFormdate] = useState(new Date());
   const [csvData, setcsvData] = useState([
@@ -299,6 +304,7 @@ const BranchReport = (props) => {
     const predata = await preProcessPeriodTableData(res.list);
     const tabledata = await setPeriodTable(predata.res);
     const data = await setData(res.list);
+    setPagecount(Math.ceil(tabledata.res.length / 10));
     setBillRaised(data.raised);
     setBillPending(data.pending);
     setBillPaid(data.paid);
@@ -308,6 +314,7 @@ const BranchReport = (props) => {
     setAmountPending(data.amountPending);
     setCounterAmount(data.counterAmount);
     setPeriodTableList(tabledata.res);
+    setPeriodTableListCopy(tabledata.res);
     setLoading(data.loading);
   };
 
@@ -321,7 +328,9 @@ const BranchReport = (props) => {
   const predata = await preProcessDateTableData(datelist,res.list);
   const tabledata = await setDateTable(predata.res);
   const data = await setData(res.list);
+  setPagecount(Math.ceil(tabledata.res.length / 10));
   setDateTableList(tabledata.res);
+  setDateTableListCopy(tabledata.res);
   setBillRaised(data.raised);
   setBillPending(data.pending);
   setBillPaid(data.paid);
@@ -331,6 +340,27 @@ const BranchReport = (props) => {
   setAmountPending(data.amountPending);
   setCounterAmount(data.counterAmount);
   setLoading(data.loading);
+};
+
+const handlePageClickDate = (data) =>{
+  const start = data.selected*10;
+  const end = data.selected*10 + 10;
+  const array = invoiceListCopy.slice(start, end);
+  setInvoiceList(array);
+};
+
+const handlePageClickDateRange = (data) =>{
+  const start = data.selected*10;
+  const end = data.selected*10 + 10;
+  const array = dateTableListCopy.slice(start, end);
+  setDateTableList(array);
+};
+
+const handlePageClickPeriod = (data) =>{
+  const start = data.selected*10;
+  const end = data.selected*10 + 10;
+  const array = periodTableListCopy.slice(start, end);
+  setPeriodTableList(array);
 };
 
   const getReportByDate = async() => { 
@@ -349,7 +379,9 @@ const BranchReport = (props) => {
       }, 0));
       setcsvData([["BillNo","Name","Amount","Mobile","DueDate"],...csvDATA.res])
       setInvoiceList(res.list);
+      setInvoiceListCopy(res.list);
       const data = await setData(res.list);
+      setPagecount(Math.ceil(res.list.length / 10));
       setBillRaised(data.raised);
       setBillPending(data.pending);
       setBillPaid(data.paid);
@@ -725,6 +757,7 @@ const BranchReport = (props) => {
                {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
                      <h3 style={{color:"green" ,textAlign:"left"}}><b>Period List</b></h3>
                      {periodTableList && periodTableList.length > 0 ? (
+                       <div>
                        <Table marginTop="34px">
                          <thead>
                            <tr>
@@ -743,6 +776,20 @@ const BranchReport = (props) => {
                          </thead>
                          <tbody>{getPeriods()}</tbody>
                        </Table>
+                          <ReactPaginate
+                          previousLabel={'previous'}
+                          nextLabel={'next'}
+                          breakLabel={'...'}
+                          breakClassName={'break-me'}
+                          pageCount={pagecount}
+                          marginPagesDisplayed={10}
+                          pageRangeDisplayed={10}
+                          onPageChange={handlePageClickPeriod}
+                          containerClassName={'pagination'}
+                          subContainerClassName={'pages pagination'}
+                          activeClassName={'active'}
+                        />
+                        </div>
                      ) : (
                          <h3
                            style={{
@@ -761,6 +808,7 @@ const BranchReport = (props) => {
                {/* <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button> */}
                      <h3 style={{color:"green" ,textAlign:"left"}}><b>Date List</b></h3>
                      {dateTableList && dateTableList.length > 0 ? (
+                       <div>
                        <Table marginTop="34px">
                          <thead>
                            <tr>
@@ -779,6 +827,20 @@ const BranchReport = (props) => {
                          </thead>
                          <tbody>{getDates()}</tbody>
                        </Table>
+                       <ReactPaginate
+                       previousLabel={'previous'}
+                       nextLabel={'next'}
+                       breakLabel={'...'}
+                       breakClassName={'break-me'}
+                       pageCount={pagecount}
+                       marginPagesDisplayed={10}
+                       pageRangeDisplayed={10}
+                       onPageChange={handlePageClickDateRange}
+                       containerClassName={'pagination'}
+                       subContainerClassName={'pages pagination'}
+                       activeClassName={'active'}
+                     />
+                     </div>
                      ) : (
                          <h3
                            style={{
@@ -797,6 +859,7 @@ const BranchReport = (props) => {
         <Button style={{float:'right'}}><CSVLink data={csvData}>Download as CSV</CSVLink></Button>
               <h3 style={{color:"green" ,textAlign:"left"}}><b>Invoice List</b></h3>
               {invoiceList && invoiceList.length > 0 ? (
+                <div>
                 <Table marginTop="34px">
                   <thead>
                     <tr>
@@ -809,6 +872,20 @@ const BranchReport = (props) => {
                   </thead>
                   <tbody>{getInvoices()}</tbody>
                 </Table>
+                 <ReactPaginate
+                 previousLabel={'previous'}
+                 nextLabel={'next'}
+                 breakLabel={'...'}
+                 breakClassName={'break-me'}
+                 pageCount={pagecount}
+                 marginPagesDisplayed={10}
+                 pageRangeDisplayed={10}
+                 onPageChange={handlePageClickDate}
+                 containerClassName={'pagination'}
+                 subContainerClassName={'pages pagination'}
+                 activeClassName={'active'}
+               />
+               </div>
               ) : (
                   <h3
                     style={{
