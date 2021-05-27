@@ -157,12 +157,16 @@ function CreateInvoicePopup(props) {
                 setUserName('');
                 setUserEmail('');
                 setUserCode('');
+                setUserLastName('');
+                setUserAddress('');
                 setCreateUser(true);
                 return false;
               }
               setUserName(res.data.customer.name);
               setUserEmail(res.data.customer.email);
               setUserCode(res.data.customer.customer_code);
+              setUserLastName(res.data.customer.last_name);
+              setUserAddress(res.data.customer.address);
               setCreateUser(false);
             })
             .catch((err) => {
