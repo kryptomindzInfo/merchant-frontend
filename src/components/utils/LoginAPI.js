@@ -35,6 +35,7 @@ const redirectUser = (type, response) => {
         if(response.data.position.type === 'staff') {
           history.push(`/staff/dashboard`);
         } else {
+          console.log(response);
           history.push(`/cashier/dashboard`);
         }
       }

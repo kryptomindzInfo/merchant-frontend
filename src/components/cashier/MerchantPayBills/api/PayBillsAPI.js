@@ -2,10 +2,13 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { API_URL } from '../../constants';
 
+const token = localStorage.getItem('cashierLogged');
+
 const getUserInvoices = async (mobile) => {
   try {
     const res = await axios.post(`${API_URL}/merchantStaff/getInvoicesByMobile`, {
       mobile,
+      token:JSON.parse(localStorage.getItem('cashierLogged')).token ,
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
@@ -26,6 +29,7 @@ const getInvoiceDetails = async (number) => {
   try {
     const res = await axios.post(`${API_URL}/merchantStaff/getInvoicesByNumber`, {
       number,
+      token:localStorage.getItem('cashierLogged') ,
     });
     if (res.status === 200) {
       if (res.data.status === 0) {
@@ -48,6 +52,7 @@ const getInvoiceByCustomerCode = async (customerCode, merchantId) => {
       `${API_URL}/merchantStaff/getInvoicesByCustomerCode`,
       {
         customer_code: customerCode,
+        token:localStorage.getItem('cashierLogged') ,
       },
     );
     if (res.status === 200) {
