@@ -28,12 +28,14 @@ export const LOAD_REPOS_ERROR = 'boilerplate/App/LOAD_REPOS_ERROR';
 // export const CONTRACT_URL = 'http://91d90ac373dc.sn.mynetname.net:2020/ipfs/';
 export const CURRENCY = 'XOF';
 
-export const MERCHANT_API =
-  'http://localhost:3001/api/merchant';
-  export const API_URL = 'http://localhost:3001/api';
-export const STATIC_URL = 'http://localhost:3001/uploads/';
+// export const MERCHANT_API =
+//   'http://localhost:3001/api/merchant';
+//   export const API_URL = 'http://localhost:3001/api';
+// export const STATIC_URL = 'http://localhost:3001/uploads/';
 
-// export const API_URL = 'http://91d90ac373dc.sn.mynetname.net:40301/api';
+export const API_URL = 'http://91d90ac373dc.sn.mynetname.net:40301/api';
 export const CONTRACT_URL = 'http://91d90ac373dc.sn.mynetname.net:40880/ipfs/';
-// export const STATIC_URL =
-//   'http://91d90ac373dc.sn.mynetname.net:40301/api/uploads/';
+export const STATIC_URL =
+  'http://91d90ac373dc.sn.mynetname.net:40301/api/uploads/';
+  export const MERCHANT_API =
+  'http://91d90ac373dc.sn.mynetname.net:40301/api/merchant';
